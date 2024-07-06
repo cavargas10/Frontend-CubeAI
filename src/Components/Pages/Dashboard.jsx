@@ -6,10 +6,10 @@ import { TutorialDash } from "../Dashboard/TutorialDash";
 import { DocumDash } from "../Dashboard/DocumDash";
 import { Route, Routes } from "react-router-dom";
 import { ConfigDash } from "../Dashboard/ConfigDash";
-import { PredictionForm } from "../prediction/PredictionForm";
-import { Texto3D } from "../prediction/Texto3D";
-import { TextImg3D } from "../prediction/TextImg3D";
-import { Unico3D } from "../prediction/Unico3D";
+import { Imagen3D } from "../Prediction/Imagen3D";
+import { Texto3D } from "../Prediction/Texto3D";
+import { TextImg3D } from "../Prediction/TextImg3D";
+import { Unico3D } from "../Prediction/Unico3D";
 
 export const Dashboard = ({
   userData,
@@ -56,7 +56,7 @@ export const Dashboard = ({
           <Route
             path="imagen3D"
             element={
-              <PredictionForm
+              <Imagen3D
                 user={user}
                 setPredictionResult={setPredictionResult}
                 setLoading={setLoading}

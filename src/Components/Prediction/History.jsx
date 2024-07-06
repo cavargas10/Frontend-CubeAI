@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { auth } from "../../config/firebaseConfig";
-import { GenerationCard } from "../ui/GenerationCard";
+import { auth } from "../../Config/firebaseConfig";
+import { GenerationCard } from "../Ui/GenerationCard";
 import { DeleteConfirmationModal } from "../Modals/DeleteConfirmationModal";
 import { SuccessModal } from "../Modals/SuccessModal";
 

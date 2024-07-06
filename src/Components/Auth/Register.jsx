@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { auth, googleProvider } from "../../config/firebaseConfig";
+import { auth, googleProvider } from "../../Config/firebaseConfig";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
