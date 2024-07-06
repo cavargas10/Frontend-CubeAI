@@ -42,7 +42,7 @@ export const Unico3DResult = ({ predictionResult, error }) => {
       )}
       <div className={`${isResultReady ? "col-span-4" : "col-span-6"} mt`}>
         <div className="h-[355px]">
-          <Canvas camera={{ position: [0, 0, -1.7] }}>
+          <Canvas camera={{ position: [0, 0, -1.2] }}>
             <Suspense fallback={null}>
               {predictionResult && predictionResult.obj_glb && (
                 <Model url={predictionResult.obj_glb} />
