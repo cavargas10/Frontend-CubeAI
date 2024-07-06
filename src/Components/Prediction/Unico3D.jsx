@@ -37,8 +37,6 @@ export const Unico3D = ({
     setError(null);
     setLocalError(null);
 
-    console.log(imageFile, generationName);
-
     try {
       const token = await user.getIdToken();
       const formData = new FormData();

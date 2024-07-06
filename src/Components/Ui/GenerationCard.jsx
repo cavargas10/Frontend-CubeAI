@@ -24,7 +24,7 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
           </Suspense>
         </Canvas>
       ) : generation.obj_glb ? (
-        <Canvas camera={{ position: [0, 0, 0.8] }}>
+        <Canvas camera={{ position: [0, 0, -1.2] }}>
           <ambientLight intensity={1} />
           <Suspense fallback={null}>
             <Environment preset="sunset" />

@@ -22,12 +22,12 @@ export const Unico3DResult = ({ predictionResult, error }) => {
           {predictionResult && (
             <div className="mt-4 text-center">
               <h3 className=" text-xl ">Resultado de la Generación </h3>
-              {predictionResult.make3d && (
+              {predictionResult.obj_glb && (
                 <div className="flex justify-center gap-10 border-t-2 mt-1">
                   <div className="flex items-center justify-around w-[200px] mt-4 px-4 py-2 text-white rounded-md shadow-md bg-gradient-to-r from-azul-gradient to-morado-gradient hover:from-morado-gradient hover:to-azul-gradient">
                     <DownloadSimple size={32} color="white" />
                     <a
-                      href={predictionResult.make3d[0]}
+                      href={predictionResult.obj_glb}
                       download="make3d.glb"
                       className="text-xl"
                     >
@@ -42,12 +42,12 @@ export const Unico3DResult = ({ predictionResult, error }) => {
       )}
       <div className={`${isResultReady ? "col-span-4" : "col-span-6"} mt`}>
         <div className="h-[355px]">
-          <Canvas camera={{ position: [0, 0, 1.7] }}>
+          <Canvas camera={{ position: [0, 0, -1.7] }}>
             <Suspense fallback={null}>
-              {predictionResult && predictionResult.make3d && (
-                <Model url={predictionResult.make3d[0]} />
+              {predictionResult && predictionResult.obj_glb && (
+                <Model url={predictionResult.obj_glb} />
               )}
-              <OrbitControls minDistance={1} maxDistance={3} />
+              <OrbitControls minDistance={0.8} maxDistance={2} />
               <ambientLight intensity={1} />
               <Environment preset="sunset" />
             </Suspense>
