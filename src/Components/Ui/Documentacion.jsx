@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import client from "../../graphqlClient";
-import { GET_HYGRAPH } from "../../queries";
+import client from "../../Config/graphqlClient";
+import { GET_HYGRAPH } from "../../Config/queries";
 import { Link, useLocation } from "react-router-dom";
 
 const Documentacion = () => {

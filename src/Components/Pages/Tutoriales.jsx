@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import hygraphClient from "../../graphqlClient";
-import { GET_HYGRAPH } from "../../queries";
+import hygraphClient from "../../Config/graphqlClient";
+import { GET_HYGRAPH } from "../../Config/queries";
 import { TutorialCard } from "../Ui/TutorialCard";
 
 export const Tutoriales = () => {
