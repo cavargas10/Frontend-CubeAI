@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Pencil } from "@phosphor-icons/react";
+import { DeleteAccount } from "../Modals/DeleteAccount";
 
 export const ConfigDash = ({ BASE_URL, user }) => {
   const [userData, setUserData] = useState({});
@@ -9,6 +10,7 @@ export const ConfigDash = ({ BASE_URL, user }) => {
   const [isNameChanged, setIsNameChanged] = useState(false);
   const [nameError, setNameError] = useState("");
   const [profilePicture, setProfilePicture] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -110,6 +112,13 @@ export const ConfigDash = ({ BASE_URL, user }) => {
     }
   };
 
+  const openModal = () => setShowModal(true);
+  const closeModal = () => setShowModal(false);
+  const confirmDelete = () => {
+    handleDeleteAccount();
+    navigate("http://localhost:5173/");
+  };
+
   return (
     <section className="w-full ml-60 pl-2 pr-8 mt-2 border-l-2 border-linea bg-fondologin">
       <div className="ml-8 mt-8">
@@ -133,7 +142,7 @@ export const ConfigDash = ({ BASE_URL, user }) => {
                     placeholder={userData.name || "Cargando..."}
                     value={newName}
                     onChange={handleNameChange}
-                    className={`p-2 w-72 rounded-lg bg-principal border-2 ${
+                    className={`p-2 rounded-lg bg-principal border-2 ${
                       nameError ? "border-red-500" : "border-linea"
                     }`}
                   />
@@ -156,15 +165,14 @@ export const ConfigDash = ({ BASE_URL, user }) => {
               <div className="mb-5">
                 <h2 className="text-2xl">Correo electrónico</h2>
                 <p className="mt-1">
-                  La dirección de correo electrónico utilizada para registrarse
-                  en CV3D.AI
+                  La dirección de correo electrónico utilizada para registrarse enCV3D.AI
                 </p>
                 <div className="mt-3">
                   <input
                     type="email"
                     value={userData.email || ""}
                     readOnly
-                    className="p-2 w-72 rounded-lg bg-principal border-2 border-linea"
+                    className="p-2 rounded-lg bg-principal border-2 border-linea"
                   />
                 </div>
               </div>
@@ -177,7 +185,7 @@ export const ConfigDash = ({ BASE_URL, user }) => {
                 <div className="mt-3">
                   <button
                     type="button"
-                    onClick={handleDeleteAccount}
+                    onClick={openModal}
                     className="px-4 py-3 rounded-lg bg-red-500 hover:bg-red-600 text-white"
                   >
                     Borrar mi cuenta
@@ -202,8 +210,7 @@ export const ConfigDash = ({ BASE_URL, user }) => {
                     <button
                       type="button"
                       onClick={handleProfilePictureClick}
-                      className="absolute bottom-0 right-0 p-1 bg-gradient-to-r from-azul-gradient to-morado-gradient 
-                      hover:bg-gradient-to-tr rounded-full"
+                      className="absolute bottom-0 right-0 p-1 bg-white rounded-full shadow-lg"
                     >
                       <Pencil size={24} />
                     </button>
@@ -221,6 +228,11 @@ export const ConfigDash = ({ BASE_URL, user }) => {
           </div>
         </form>
       </div>
+      <DeleteAccount
+        showModal={showModal}
+        closeModal={closeModal}
+        confirmDelete={confirmDelete}
+      />
     </section>
   );
 };
