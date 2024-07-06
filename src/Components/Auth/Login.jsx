@@ -1,11 +1,12 @@
 import { useState } from "react";
 import logo from "../../Assets/logo.png";
-import { auth, googleProvider } from "../../Config/firebaseConfig";
+import { auth, googleProvider, db } from "../../Config/firebaseConfig";
 import {
   signInWithPopup,
   signInWithEmailAndPassword,
   fetchSignInMethodsForEmail,
 } from "firebase/auth";
+import { getDoc, doc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { RegistrationModal } from "../Modals/RegistrationModal";
 
@@ -17,14 +18,21 @@ export const Login = () => {
   const [googleEmail, setGoogleEmail] = useState("");
   const navigate = useNavigate();
 
+  const checkUserInFirestore = async (user) => {
+    const userRef = doc(db, "users", user.uid);
+    const userSnap = await getDoc(userRef);
+
+    return userSnap.exists();
+  };
+
   const handleGoogleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
 
-      const signInMethods = await fetchSignInMethodsForEmail(auth, user.email);
+      const userExists = await checkUserInFirestore(user);
 
-      if (signInMethods.length === 0) {
+      if (!userExists) {
         setGoogleEmail(user.email);
         setShowModal(true);
       } else {
@@ -74,7 +82,7 @@ export const Login = () => {
   };
 
   return (
-    <div className="flex h-screen  justify-center ">
+    <div className="flex h-screen justify-center ">
       <div className="w-1/2 flex items-center justify-center mt-10">
         <div className="w-full max-w-md">
           <div className="border-2 border-linea bg-fondologin shadow-md rounded-lg p-10">
