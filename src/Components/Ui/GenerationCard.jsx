@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect, useRef } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import { Environment } from "@react-three/drei";
 import { DownloadSimple, Trash } from "@phosphor-icons/react";
@@ -6,11 +6,16 @@ import { Model } from "../Prediction/Model";
 
 const CameraSetup = ({ position }) => {
   const { camera } = useThree();
-  camera.position.set(...position);
+  useEffect(() => {
+    camera.position.set(...position);
+    camera.lookAt(0, 0, 0); // Ajustar la cámara para que mire al centro
+  }, [position, camera]);
   return null;
 };
 
 export const GenerationCard = ({ generation, formatDate, openModal }) => {
+  const canvasRef = useRef();
+
   const getCameraPosition = () => {
     if (generation.make3d && generation.make3d[0]) {
       return [0, 0, 1.7];
@@ -19,13 +24,20 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
     } else if (generation.obj_glb) {
       return [0, 0, -1.2];
     } else {
-      return [0, 0, 0]; 
+      return [0, 0, 5]; // posición por defecto
     }
   };
 
+  useEffect(() => {
+    if (canvasRef.current) {
+      canvasRef.current.style.width = "100%";
+      canvasRef.current.style.height = "100%";
+    }
+  }, []);
+
   return (
     <div className="relative w-[230px] h-[230px] overflow-hidden rounded-xl shadow-lg group cursor-pointer">
-      <Canvas>
+      <Canvas ref={canvasRef}>
         <CameraSetup position={getCameraPosition()} />
         <ambientLight intensity={1} />
         <Suspense fallback={null}>
