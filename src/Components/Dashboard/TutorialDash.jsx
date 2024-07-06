@@ -20,7 +20,7 @@ export const TutorialDash = () => {
 
   return (
     <>
-      <section className="ml-[250px] w-full pr-6  bg-fondologin border-l-2  border-linea">
+      <section className="ml-60 pr-5 w-full  bg-fondologin border-l-2  border-linea">
         <div className=" mt-8  ml-8 flex justify-center ">
           <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-screen-xl">
             {tutoriales.map((tutorial) => (

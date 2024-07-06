@@ -10,8 +10,7 @@ export const Visualizador = () => {
 
   return (
     <section
-      className="ml-[250px] w-full border-l-2  border-linea bg-fondologin 
-    "
+      className="ml-60 w-full border-l-2 pr-8 border-linea bg-fondologin"
     >
       <div className="ml-10  fixed z-30 bg  w-full bg-fondologin ">
         <div className="mt-10">

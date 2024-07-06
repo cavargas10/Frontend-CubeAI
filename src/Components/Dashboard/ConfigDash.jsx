@@ -111,107 +111,112 @@ export const ConfigDash = ({ BASE_URL, user }) => {
   };
 
   return (
-    <section className="col-span-8 ml-[250px] border-l-2 border-linea">
+    <section className="w-full ml-60 pl-2 pr-8 mt-2 border-l-2 border-linea bg-fondologin">
       <div className="ml-8 mt-8">
         <div>
           <h1 className="text-4xl">Perfil</h1>
-          <p className="mt-4">Gestiona tu perfil personal en CV3D.AI</p>
+          <p className="mt-3">Gestiona tu perfil personal en CV3D.AI</p>
           <hr className="mt-4" />
         </div>
 
-        <form className="mt-4">
-          <div>
-            <h2 className="text-3xl">Nombre</h2>
-            <p className="mt-3">
-              Nombre de usuario con el que usted se registró, si desea puede
-              cambiarlo por como desea que lo conozcan en CV3D.AI
-            </p>
-            <div className="flex mt-5">
-              <input
-                type="text"
-                placeholder={userData.name || "Cargando..."}
-                value={newName}
-                onChange={handleNameChange}
-                className={`p-2 rounded-lg bg-principal border-2 w-1/4 ${
-                  nameError ? "border-red-500" : "border-linea"
-                }`}
-              />
-              <button
-                type="button"
-                onClick={handleNameSubmit}
-                disabled={!isNameChanged || !!nameError}
-                className={`ml-5 p-2 w-1/12 text-center rounded-lg ${
-                  isNameChanged && !nameError
-                    ? "bg-gradient-to-r from-azul-gradient to-morado-gradient"
-                    : "bg-gray-400 cursor-not-allowed"
-                }`}
-              >
-                Guardar
-              </button>
-            </div>
-            {nameError && <p className="text-red-500 mt-2">{nameError}</p>}
-          </div>
-
-          <div className="mt-4">
-            <h2 className="text-3xl">Correo electrónico</h2>
-            <p className="mt-3">
-              La dirección de correo electrónico utilizada para registrarse en
-              CV3D.AI
-            </p>
-            <div className="mt-4">
-              <input
-                type="email"
-                value={userData.email || ""}
-                readOnly
-                className="p-2 rounded-lg bg-principal border-2 w-1/4 border-linea"
-              />
-            </div>
-          </div>
-
-          <div className="mt-4">
-            <h2 className="text-3xl">Imagen de perfil</h2>
-            <p className="mt-3">Actualiza tu imagen de perfil</p>
-            <div className="mt-4 flex items-center">
-              <div className="relative">
-                {userData.profile_picture && (
-                  <img
-                    src={userData.profile_picture}
-                    alt="Profile"
-                    className="w-24 h-24 rounded-full object-cover"
+        <form className="mt-8">
+          <div className="flex flex-col lg:flex-row">
+            <div className="lg:w-1/2 pr-4">
+              <div className="mb-5">
+                <h2 className="text-2xl">Nombre</h2>
+                <p className="mt-1">
+                  Nombre de usuario con el que usted se registró.
+                </p>
+                <div className="flex mt-3">
+                  <input
+                    type="text"
+                    placeholder={userData.name || "Cargando..."}
+                    value={newName}
+                    onChange={handleNameChange}
+                    className={`p-2 w-72 rounded-lg bg-principal border-2 ${
+                      nameError ? "border-red-500" : "border-linea"
+                    }`}
                   />
-                )}
-                <button
-                  type="button"
-                  onClick={handleProfilePictureClick}
-                  className="absolute bottom-0 right-0 p-1 bg-white rounded-full shadow-lg"
-                >
-                  <Pencil size={24} />
-                </button>
+                  <button
+                    type="button"
+                    onClick={handleNameSubmit}
+                    disabled={!isNameChanged || !!nameError}
+                    className={`ml-5 p-2 text-center rounded-lg ${
+                      isNameChanged && !nameError
+                        ? "bg-gradient-to-r from-azul-gradient to-morado-gradient"
+                        : "bg-gray-400 cursor-not-allowed"
+                    }`}
+                  >
+                    Guardar
+                  </button>
+                </div>
+                {nameError && <p className="text-red-500 mt-2">{nameError}</p>}
               </div>
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleProfilePictureChange}
-                accept="image/*"
-                className="hidden"
-              />
-            </div>
-          </div>
 
-          <div className="mt-4">
-            <h2 className="text-3xl">Borrar cuenta</h2>
-            <p className="mt-3">
-              Eliminar su cuenta eliminará permanentemente todos sus activos y
-              no se puede deshacer. Esta acción es irreversible.
-            </p>
-            <div className="mt-7">
-              <button
-                type="button"
-                onClick={handleDeleteAccount}
-                className="px-4 py-4 rounded-lg bg-red-500 text-white"
-              >
-                Borrar mi cuenta
-              </button>
+              <div className="mb-5">
+                <h2 className="text-2xl">Correo electrónico</h2>
+                <p className="mt-1">
+                  La dirección de correo electrónico utilizada para registrarse
+                  en CV3D.AI
+                </p>
+                <div className="mt-3">
+                  <input
+                    type="email"
+                    value={userData.email || ""}
+                    readOnly
+                    className="p-2 w-72 rounded-lg bg-principal border-2 border-linea"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <h2 className="text-2xl">Borrar cuenta</h2>
+                <p className="mt-1">
+                  Eliminar su cuenta. Esta acción es irreversible.
+                </p>
+                <div className="mt-3">
+                  <button
+                    type="button"
+                    onClick={handleDeleteAccount}
+                    className="px-4 py-3 rounded-lg bg-red-500 hover:bg-red-600 text-white"
+                  >
+                    Borrar mi cuenta
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:w-1/2 pl-4">
+              <div className="mb-6">
+                <h2 className="text-2xl">Imagen de perfil</h2>
+                <p className="mt-1">Actualiza tu imagen de perfil</p>
+                <div className="mt-3 flex items-center">
+                  <div className="relative">
+                    {userData.profile_picture && (
+                      <img
+                        src={userData.profile_picture}
+                        alt="Profile"
+                        className="w-28 h-28 rounded-full object-cover"
+                      />
+                    )}
+                    <button
+                      type="button"
+                      onClick={handleProfilePictureClick}
+                      className="absolute bottom-0 right-0 p-1 bg-gradient-to-r from-azul-gradient to-morado-gradient 
+                      hover:bg-gradient-to-tr rounded-full"
+                    >
+                      <Pencil size={24} />
+                    </button>
+                  </div>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleProfilePictureChange}
+                    accept="image/*"
+                    className="hidden"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </form>
