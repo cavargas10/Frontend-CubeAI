@@ -8,7 +8,7 @@ const CameraSetup = ({ position }) => {
   const { camera } = useThree();
   useEffect(() => {
     camera.position.set(...position);
-    camera.lookAt(0, 0, 0); // Ajustar la cámara para que mire al centro
+    camera.lookAt(0, 0, 0);
   }, [position, camera]);
   return null;
 };
@@ -24,7 +24,7 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
     } else if (generation.obj_glb) {
       return [0, 0, -1.2];
     } else {
-      return [0, 0, 5]; // posición por defecto
+      return [0, 0, 5];
     }
   };
 
@@ -35,20 +35,35 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
     }
   }, []);
 
+  const getModelUrl = () => {
+    if (generation.make3d && generation.make3d[1]) {
+      return generation.make3d[1];
+    } else if (generation.obj_model) {
+      return generation.obj_model;
+    } else if (generation.obj_glb) {
+      return generation.obj_glb;
+    }
+    return null;
+  };
+
+  const modelUrl = getModelUrl();
+
   return (
     <div className="relative w-[230px] h-[230px] overflow-hidden rounded-xl shadow-lg group cursor-pointer">
-      <Canvas ref={canvasRef}>
-        <CameraSetup position={getCameraPosition()} />
-        <ambientLight intensity={1} />
-        <Suspense fallback={null}>
-          <Environment preset="sunset" />
-          {generation.make3d && generation.make3d[0] && (
-            <Model url={generation.make3d[1]} />
-          )}
-          {generation.obj_model && <Model url={generation.obj_model} />}
-          {generation.obj_glb && <Model url={generation.obj_glb} />}
-        </Suspense>
-      </Canvas>
+      {modelUrl ? (
+        <Canvas ref={canvasRef}>
+          <CameraSetup position={getCameraPosition()} />
+          <ambientLight intensity={1} />
+          <Suspense fallback={null}>
+            <Environment preset="sunset" />
+            <Model url={modelUrl} />
+          </Suspense>
+        </Canvas>
+      ) : (
+        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+          No image or 3D model available
+        </div>
+      )}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/80 group-hover:via-black/60 group-hover:to-black/70"></div>
       <div className="absolute inset-0 flex translate-y-[100%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
         <div className="text-white py-2">
@@ -112,11 +127,7 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
               </a>
             </div>
           </div>
-        ) : (
-          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-            No image or 3D model available
-          </div>
-        )}
+        ) : null}
       </div>
     </div>
   );

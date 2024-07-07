@@ -13,8 +13,6 @@ const History = ({ selectedTab }) => {
   const [showModal, setShowModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [generationToDelete, setGenerationToDelete] = useState(null);
-  const [allModelsLoaded, setAllModelsLoaded] = useState(false);
-  const [loadingModels, setLoadingModels] = useState(0);
 
   useEffect(() => {
     const fetchGenerations = async () => {
@@ -74,12 +72,6 @@ const History = ({ selectedTab }) => {
     fetchGenerations();
   }, []);
 
-  useEffect(() => {
-    if (loadingModels === generations.length && generations.length > 0) {
-      setAllModelsLoaded(true);
-    }
-  }, [loadingModels, generations]);
-
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleDateString();
@@ -135,27 +127,28 @@ const History = ({ selectedTab }) => {
     (generation) => generation.generation_type === selectedTab
   );
 
-  const handleModelLoaded = () => {
-    setLoadingModels((prevCount) => prevCount + 1);
-  };
-
   return (
-    <div className="">
+    <div className="w-full">
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      {!allModelsLoaded && <p>Cargando modelos...</p>}
-
-      <div className="flex gap-10 w-full flex-wrap">
-        {filteredGenerations.map((generation, index) => (
-          <GenerationCard
-            key={index}
-            generation={generation}
-            formatDate={formatDate}
-            openModal={openModal}
-            onModelLoad={handleModelLoaded}
-          />
-        ))}
-      </div>
+      {filteredGenerations.length === 0 ? (
+        <div className="flex justify-center items-center h-64">
+          <p className="text-xl text-gray-500">
+            Aún no se ha generado ningún objeto en la categoría {selectedTab}.
+          </p>
+        </div>
+      ) : (
+        <div className="flex gap-10 w-full flex-wrap">
+          {filteredGenerations.map((generation, index) => (
+            <GenerationCard
+              key={index}
+              generation={generation}
+              formatDate={formatDate}
+              openModal={openModal}
+            />
+          ))}
+        </div>
+      )}
 
       {generationToDelete && (
         <DeleteConfirmationModal
