@@ -9,11 +9,13 @@ import {
 import { getDoc, doc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { RegistrationModal } from "../Modals/RegistrationModal";
+import { ErrorModal } from "../Modals/ErrorModal";  // Import ErrorModal
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [showErrorModal, setShowErrorModal] = useState(false); // State for ErrorModal visibility
   const [showModal, setShowModal] = useState(false);
   const [googleEmail, setGoogleEmail] = useState("");
   const navigate = useNavigate();
@@ -42,6 +44,7 @@ export const Login = () => {
           setError(
             "Por favor, verifica tu correo electrónico antes de iniciar sesión."
           );
+          setShowErrorModal(true);  // Show error modal
         }
       }
     } catch (error) {
@@ -49,12 +52,14 @@ export const Login = () => {
       setError(
         "Hubo un error al intentar iniciar sesión con Google. Por favor, inténtalo de nuevo."
       );
+      setShowErrorModal(true);  // Show error modal
     }
   };
 
   const handleLogin = async () => {
     if (!email || !password) {
       setError("Todos los campos son obligatorios.");
+      setShowErrorModal(true);  // Show error modal
       return;
     }
     try {
@@ -70,15 +75,23 @@ export const Login = () => {
         setError(
           "Por favor, verifica tu correo electrónico antes de iniciar sesión."
         );
+        setShowErrorModal(true);  // Show error modal
       }
     } catch (error) {
-      setError(error.message);
+      // Intercept Firebase errors and replace with a custom message
+      setError("Acceso denegado: Verifica tu correo y contraseña");
+      setShowErrorModal(true);  // Show error modal
     }
   };
 
   const closeModal = () => {
     setShowModal(false);
     setGoogleEmail("");
+  };
+
+  const closeErrorModal = () => {
+    setShowErrorModal(false);
+    setError(null);
   };
 
   return (
@@ -111,7 +124,6 @@ export const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              {error && <p className="text-red-600">{error}</p>}
               <p className="text-end text-slate-400 hover:text-slate-50 text-sm">
                 <a href="/reset-password">¿Olvidaste tu contraseña?</a>
               </p>
@@ -149,6 +161,11 @@ export const Login = () => {
           showModal={showModal}
           closeModal={closeModal}
           email={googleEmail}
+        />
+        <ErrorModal
+          showModal={showErrorModal}
+          closeModal={closeErrorModal}
+          errorMessage={error || "Acceso denegado: Verifica tu correo y contraseña"}
         />
       </div>
 

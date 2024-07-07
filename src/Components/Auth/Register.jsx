@@ -9,12 +9,14 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import logo from "../../Assets/logo.png";
+import { ErrorModal } from "../Modals/ErrorModal"; 
 
 export const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [error, setError] = useState(null);
+  const [showErrorModal, setShowErrorModal] = useState(false); 
   const navigate = useNavigate();
 
   const handleGoogleSignUp = async () => {
@@ -24,13 +26,15 @@ export const Register = () => {
       await sendUserDataToBackend(user);
       navigate("/dashboard");
     } catch (error) {
-      setError(error.message);
+      setError("Hubo un error al intentar registrarse con Google. Por favor, inténtalo de nuevo.");
+      setShowErrorModal(true);  
     }
   };
 
   const handleRegister = async () => {
     if (!email || !password || !name) {
       setError("Todos los campos son obligatorios.");
+      setShowErrorModal(true);  
       return;
     }
     try {
@@ -45,7 +49,8 @@ export const Register = () => {
       await sendUserDataToBackend(user);
       navigate("/verify-email");
     } catch (error) {
-      setError(error.message);
+      setError("Error al registrar el usuario. Por favor, inténtalo de nuevo.");
+      setShowErrorModal(true);  
     }
   };
 
@@ -68,11 +73,17 @@ export const Register = () => {
     } catch (error) {
       console.error("Error sending user data to backend:", error);
       setError("Error al registrar el usuario en el backend");
+      setShowErrorModal(true); 
     }
   };
 
+  const closeErrorModal = () => {
+    setShowErrorModal(false);
+    setError(null);
+  };
+
   return (
-    <div className=" flex h-screen justify-center">
+    <div className="flex h-screen justify-center">
       <div className="w-1/2 flex items-center justify-center mt-16">
         <div className="w-full max-w-md">
           <div className="border-2 border-linea bg-fondologin shadow-md rounded-lg px-16 pt-10 pb-10 mb-7">
@@ -109,7 +120,6 @@ export const Register = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              {error && <p className="text-red-600">{error}</p>}
             </div>
             <div className="flex items-center justify-between">
               <button
@@ -139,9 +149,15 @@ export const Register = () => {
         </div>
       </div>
 
-      <div className="w-1/2 flex  items-center justify-center">
+      <div className="w-1/2 flex items-center justify-center">
         <img src={logo} alt="Logo" />
       </div>
+
+      <ErrorModal
+        showModal={showErrorModal}
+        closeModal={closeErrorModal}
+        errorMessage={error || "Error desconocido. Por favor, inténtalo de nuevo."}
+      />
     </div>
   );
 };
