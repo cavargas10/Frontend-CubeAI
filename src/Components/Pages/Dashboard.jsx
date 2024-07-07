@@ -3,7 +3,6 @@ import { NavDash } from "../Dashboard/NavDash";
 import { HeaderDash } from "../Dashboard/HeaderDash";
 import { Visualizador } from "../Dashboard/Visualizador";
 import { TutorialDash } from "../Dashboard/TutorialDash";
-import { DocumDash } from "../Dashboard/DocumDash";
 import { Route, Routes } from "react-router-dom";
 import { ConfigDash } from "../Dashboard/ConfigDash";
 import { Imagen3D } from "../Prediction/Imagen3D";
@@ -45,7 +44,6 @@ export const Dashboard = ({
             }
           />
           <Route path="tutorialdash" element={<TutorialDash />} />
-          <Route path="documdash" element={<DocumDash />} />
           <Route
             path="configdash"
             element={
