@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavDash } from "../Dashboard/NavDash";
 import { HeaderDash } from "../Dashboard/HeaderDash";
 import { Visualizador } from "../Dashboard/Visualizador";
@@ -9,9 +9,9 @@ import { Imagen3D } from "../Prediction/Imagen3D";
 import { Texto3D } from "../Prediction/Texto3D";
 import { TextImg3D } from "../Prediction/TextImg3D";
 import { Unico3D } from "../Prediction/Unico3D";
+import axios from "axios";
 
 export const Dashboard = ({
-  userData,
   predictionResult,
   setPredictionResult,
   error,
@@ -22,13 +22,38 @@ export const Dashboard = ({
   setError,
   BASE_URL,
 }) => {
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = await user.getIdToken();
+        const response = await axios.get(`${BASE_URL}/user_data`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUserData(response.data);
+      } catch (error) {
+        console.error("Error fetching user data", error);
+        setError("Error al cargar los datos del usuario");
+      }
+    };
+
+    if (user) {
+      fetchUserData();
+    }
+  }, [user, BASE_URL, setError]);
+
+  const updateUserData = (newData) => {
+    setUserData((prevData) => ({ ...prevData, ...newData }));
+  };
+
   return (
-    <div className="text-white ">
+    <div className="text-white">
       <HeaderDash userData={userData} />
 
-      <main
-        className="flex  mt-16"
-      >
+      <main className="flex mt-16">
         <NavDash handleLogout={handleLogout} />
         <Routes>
           <Route
@@ -47,7 +72,12 @@ export const Dashboard = ({
           <Route
             path="configdash"
             element={
-              <ConfigDash user={user} BASE_URL={BASE_URL} userData={userData} />
+              <ConfigDash
+                user={user}
+                BASE_URL={BASE_URL}
+                userData={userData}
+                updateUserData={updateUserData}
+              />
             }
           />
 

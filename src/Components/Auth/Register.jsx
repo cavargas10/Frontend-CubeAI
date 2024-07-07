@@ -56,7 +56,7 @@ export const Register = () => {
         "http://localhost:8080/register_user",
         {
           name: user.displayName || name,
-          profile_picture: user.photoURL || "../../Assets/usuario.png",
+          profile_picture: user.photoURL || "/public/usuario.png",
           email: user.email,
         },
         {

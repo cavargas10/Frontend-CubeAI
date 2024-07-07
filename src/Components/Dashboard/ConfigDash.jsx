@@ -1,41 +1,21 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Pencil } from "@phosphor-icons/react";
 import { DeleteAccount } from "../Modals/DeleteAccount";
 
-export const ConfigDash = ({ BASE_URL, user }) => {
-  const [userData, setUserData] = useState({});
+export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
   const [newName, setNewName] = useState("");
   const [isNameChanged, setIsNameChanged] = useState(false);
   const [nameError, setNameError] = useState("");
-  const [profilePicture, setProfilePicture] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = await user.getIdToken();
-        const response = await axios.get(`${BASE_URL}/user_data`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setUserData(response.data);
-        setNewName("");
-      } catch (error) {
-        console.error("Error fetching user data", error);
-      }
-    };
-    fetchData();
-  }, [BASE_URL, user]);
-
   const handleNameChange = (event) => {
     const value = event.target.value.trim();
     setNewName(value);
-    setIsNameChanged(value !== userData.name);
+    setIsNameChanged(userData && value !== userData.name);
     setNameError(value === "" ? "El nombre no puede estar vacío" : "");
   };
 
@@ -53,7 +33,7 @@ export const ConfigDash = ({ BASE_URL, user }) => {
           },
         }
       );
-      setUserData(response.data);
+      updateUserData({ name: response.data.name });
       setNewName("");
       setIsNameChanged(false);
     } catch (error) {
@@ -68,7 +48,6 @@ export const ConfigDash = ({ BASE_URL, user }) => {
   const handleProfilePictureChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setProfilePicture(file);
       handleProfilePictureSubmit(file);
     }
   };
@@ -89,10 +68,7 @@ export const ConfigDash = ({ BASE_URL, user }) => {
           },
         }
       );
-      setUserData((prevUserData) => ({
-        ...prevUserData,
-        profile_picture: response.data.profile_picture,
-      }));
+      updateUserData({ profile_picture: response.data.profile_picture });
     } catch (error) {
       console.error("Error updating profile picture", error);
     }
@@ -119,6 +95,10 @@ export const ConfigDash = ({ BASE_URL, user }) => {
     navigate("http://localhost:5173/");
   };
 
+  if (!userData) {
+    return <div className="w-full ml-60 pl-2 pr-8 mt-2 border-l-2 border-linea bg-fondologin">Cargando datos del usuario...</div>;
+  }
+
   return (
     <section className="w-full ml-60 pl-2 pr-8 mt-2 border-l-2 border-linea bg-fondologin">
       <div className="ml-8 mt-8">
@@ -142,7 +122,7 @@ export const ConfigDash = ({ BASE_URL, user }) => {
                     placeholder={userData.name || "Cargando..."}
                     value={newName}
                     onChange={handleNameChange}
-                    className={`p-2 rounded-lg bg-principal border-2 ${
+                    className={`p-2 rounded-lg w-80 bg-principal border-2 ${
                       nameError ? "border-red-500" : "border-linea"
                     }`}
                   />
@@ -172,7 +152,7 @@ export const ConfigDash = ({ BASE_URL, user }) => {
                     type="email"
                     value={userData.email || ""}
                     readOnly
-                    className="p-2 rounded-lg bg-principal border-2 border-linea"
+                    className="p-2 rounded-lg w-80 bg-principal border-2 border-linea"
                   />
                 </div>
               </div>
