@@ -3,6 +3,7 @@ import axios from "axios";
 import { Imagen3DResult } from "../Prediction/Imagen3DResult";
 import { Sparkle } from "@phosphor-icons/react";
 import { FileInput, Button } from "flowbite-react";
+import { ErrorModal } from "../Modals/ErrorModal";
 
 export const Imagen3D = ({
   user,
@@ -15,6 +16,8 @@ export const Imagen3D = ({
 }) => {
   const [imageFile, setImageFile] = useState(null);
   const [generationName, setGenerationName] = useState("");
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleFileChange = (event) => {
     setImageFile(event.target.files[0]);
@@ -23,6 +26,8 @@ export const Imagen3D = ({
   const handlePrediction = async () => {
     if (!imageFile) {
       setError("No se ha seleccionado ninguna imagen");
+      setErrorMessage(error);
+      setErrorModalVisible(true);
       return;
     }
 
@@ -50,68 +55,81 @@ export const Imagen3D = ({
       setPredictionResult(response.data);
     } catch (error) {
       if (error.response) {
-        setError(
+        const backendError =
           error.response.data.error ||
-            "Error desconocido al realizar la predicción"
-        );
+          "Error desconocido al realizar la predicción";
+        setError(backendError);
+        setErrorMessage(backendError);
       } else if (error.request) {
-        setError(
-          "No se pudo contactar al servidor. Por favor, inténtelo más tarde."
-        );
+        const requestError =
+          "No se pudo contactar al servidor. Por favor, inténtelo más tarde.";
+        setError(requestError);
+        setErrorMessage(requestError);
       } else {
-        setError(
-          "Error al configurar la solicitud. Por favor, inténtelo más tarde."
-        );
+        const configError =
+          "Error al configurar la solicitud. Por favor, inténtelo más tarde.";
+        setError(configError);
+        setErrorMessage(configError);
       }
+      setErrorModalVisible(true); 
     } finally {
       setLoading(false);
     }
   };
 
+  const closeErrorModal = () => {
+    setErrorModalVisible(false);
+    setErrorMessage("");
+  };
+
   return (
-    <div className=" ml-[250px] w-full border-l-2  border-linea bg-fondologin h-[569px] ">
-      <div className="mt-6">
-        <div className="border-solid border-b-2 border-linea pb-4">
-          <p className="text-center text-2xl">Imagen a 3D</p>
-        </div>
-        <div className="flex flex-wrap gap-4 px-4 mt-2">
-          <div className="flex items-center justify-center gap-4 grow">
-            <p>Nombre</p>
-
-            <input
-              type="text"
-              placeholder="Nombre de la generación"
-              value={generationName}
-              onChange={(e) => setGenerationName(e.target.value)}
-              disabled={loading}
-              className="mt-3 bg-transparent border p-2 rounded-md w-[200px] grow"
-            />
-          </div>
-
-          <div className="flex items-center justify-center grow mt-2">
-            <FileInput
-              accept="image/*"
-              onChange={handleFileChange}
-              disabled={loading}
-              label="Seleccionar archivo"
-              className="grow"
-            />
-          </div>
-
-          <div className="mt-2">
-            <Sparkle size={32} color="#fff" className="absolute mt-1 z-20" />
-            <Button
-              onClick={handlePrediction}
-              disabled={loading}
-              className="text-lg bg-gradient-to-r flex justify-end from-azul-gradient to-morado-gradient py-1 px-6 rounded-lg border-none"
-            >
-              {loading ? "Realizando Predicción..." : "Generar"}
-            </Button>
-          </div>
-        </div>
-
-        <Imagen3DResult predictionResult={predictionResult} />
+    <div className=" ml-[250px] w-full border-l-2  border-linea bg-fondologin h-72 ">
+      <div className="border-solid pt-6 border-b-2 bg-principal  border-linea pb-4">
+        <p className="text-center text-2xl">Imagen a 3D</p>
       </div>
+      <div className="flex flex-wrap gap-4 px-4 mt-2">
+        <div className="flex items-center justify-center gap-4 grow">
+          <p className="mt-3">Nombre</p>
+
+          <input
+            type="text"
+            placeholder="Nombre de la generación"
+            value={generationName}
+            onChange={(e) => setGenerationName(e.target.value)}
+            disabled={loading}
+            className="mt-3 bg-transparent border p-2 rounded-md w-[200px] grow"
+          />
+        </div>
+
+        <div className="flex items-center justify-center grow mt-2">
+          <FileInput
+            accept="image/*"
+            onChange={handleFileChange}
+            disabled={loading}
+            label="Seleccionar archivo"
+            className="grow"
+          />
+        </div>
+
+        <div className="mt-2">
+          <Sparkle size={32} color="#fff" className="absolute mt-1 z-20" />
+          <Button
+            onClick={handlePrediction}
+            disabled={loading}
+            className="text-lg bg-gradient-to-r flex justify-end from-azul-gradient to-morado-gradient py-1 px-6 rounded-lg border-none"
+          >
+            {loading ? "Realizando Predicción..." : "Generar"}
+          </Button>
+        </div>
+      </div>
+
+      <Imagen3DResult predictionResult={predictionResult} />
+
+      <ErrorModal
+        showModal={errorModalVisible}
+        closeModal={closeErrorModal}
+        errorMessage={errorMessage}
+      />
     </div>
   );
 };

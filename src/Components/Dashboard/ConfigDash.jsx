@@ -210,7 +210,7 @@ export const ConfigDash = ({ BASE_URL, user }) => {
                     <button
                       type="button"
                       onClick={handleProfilePictureClick}
-                      className="absolute bottom-0 right-0 p-1 bg-white rounded-full shadow-lg"
+                      className="absolute bottom-0 right-0 p-1 bg-gradient-to-r from-azul-gradient to-morado-gradient rounded-full hover:bg-gradient-to-tr shadow-lg"
                     >
                       <Pencil size={24} />
                     </button>
