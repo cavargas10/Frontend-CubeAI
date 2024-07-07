@@ -71,7 +71,6 @@ export const Register = () => {
         }
       );
     } catch (error) {
-      console.error("Error sending user data to backend:", error);
       setError("Error al registrar el usuario en el backend");
       setShowErrorModal(true); 
     }

@@ -48,7 +48,6 @@ export const Login = () => {
         }
       }
     } catch (error) {
-      console.error("Error al iniciar sesión con Google:", error);
       setError(
         "Hubo un error al intentar iniciar sesión con Google. Por favor, inténtalo de nuevo."
       );

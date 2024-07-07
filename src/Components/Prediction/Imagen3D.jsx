@@ -25,19 +25,18 @@ export const Imagen3D = ({
 
   const handlePrediction = async () => {
     if (!imageFile) {
-      setError("No se ha seleccionado ninguna imagen");
-      setErrorMessage(error);
+      setErrorMessage("No se ha seleccionado ninguna imagen");
       setErrorModalVisible(true);
       return;
     }
 
     if (!generationName) {
-      setError("Por favor, ingrese un nombre para la generación");
+      setErrorMessage("Por favor, ingrese un nombre para la generación");
+      setErrorModalVisible(true);
       return;
     }
 
     setLoading(true);
-    setError(null);
 
     try {
       const token = await user.getIdToken();
@@ -58,20 +57,17 @@ export const Imagen3D = ({
         const backendError =
           error.response.data.error ||
           "Error desconocido al realizar la predicción";
-        setError(backendError);
         setErrorMessage(backendError);
       } else if (error.request) {
         const requestError =
           "No se pudo contactar al servidor. Por favor, inténtelo más tarde.";
-        setError(requestError);
         setErrorMessage(requestError);
       } else {
         const configError =
           "Error al configurar la solicitud. Por favor, inténtelo más tarde.";
-        setError(configError);
         setErrorMessage(configError);
       }
-      setErrorModalVisible(true); 
+      setErrorModalVisible(true);
     } finally {
       setLoading(false);
     }

@@ -49,7 +49,6 @@ export const UseAuth = () => {
       setUser(null);
       setUserData(null);
     } catch (error) {
-      console.error("Error al cerrar sesión:", error);
       setError("Error al cerrar sesión.");
     }
   };

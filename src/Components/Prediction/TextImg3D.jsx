@@ -8,7 +8,6 @@ export const TextImg3D = ({
   user,
   setPredictionResult,
   setLoading,
-  setError,
   loading,
   BASE_URL,
   predictionResult,
@@ -27,14 +26,12 @@ export const TextImg3D = ({
   const handlePrediction = async () => {
     if (!generationName || !subject || !style || !additionalDetails) {
       const error = "Todos los campos son obligatorios";
-      setError(error);
       setErrorMessage(error);
       setErrorModalVisible(true); 
       return;
     }
 
     setLoading(true);
-    setError(null);
 
     try {
       const token = await user.getIdToken();
@@ -57,15 +54,12 @@ export const TextImg3D = ({
     } catch (error) {
       if (error.response) {
         const backendError = error.response.data.error || "Error desconocido al realizar la predicción";
-        setError(backendError);
         setErrorMessage(backendError);
       } else if (error.request) {
         const requestError = "No se pudo contactar al servidor. Por favor, inténtelo más tarde.";
-        setError(requestError);
         setErrorMessage(requestError);
       } else {
         const configError = "Error al configurar la solicitud. Por favor, inténtelo más tarde.";
-        setError(configError);
         setErrorMessage(configError);
       }
       setErrorModalVisible(true); // Show the error modal

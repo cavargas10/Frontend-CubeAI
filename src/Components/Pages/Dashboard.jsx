@@ -35,7 +35,6 @@ export const Dashboard = ({
         });
         setUserData(response.data);
       } catch (error) {
-        console.error("Error fetching user data", error);
         setError("Error al cargar los datos del usuario");
       }
     };
@@ -88,7 +87,6 @@ export const Dashboard = ({
                 user={user}
                 setPredictionResult={setPredictionResult}
                 setLoading={setLoading}
-                setError={setError}
                 loading={loading}
                 BASE_URL={BASE_URL}
                 predictionResult={predictionResult}
@@ -103,7 +101,6 @@ export const Dashboard = ({
                 user={user}
                 setPredictionResult={setPredictionResult}
                 setLoading={setLoading}
-                setError={setError}
                 loading={loading}
                 BASE_URL={BASE_URL}
                 predictionResult={predictionResult}
@@ -117,7 +114,6 @@ export const Dashboard = ({
                 user={user}
                 setPredictionResult={setPredictionResult}
                 setLoading={setLoading}
-                setError={setError}
                 loading={loading}
                 BASE_URL={BASE_URL}
                 predictionResult={predictionResult}
@@ -131,7 +127,6 @@ export const Dashboard = ({
                 user={user}
                 setPredictionResult={setPredictionResult}
                 setLoading={setLoading}
-                setError={setError}
                 loading={loading}
                 BASE_URL={BASE_URL}
                 predictionResult={predictionResult}

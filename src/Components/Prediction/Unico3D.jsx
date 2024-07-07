@@ -2,43 +2,42 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Unico3DResult } from "./Unico3DResult";
 import { Sparkle } from "@phosphor-icons/react";
-import { FileInput, Button, Alert } from "flowbite-react";
+import { FileInput, Button } from "flowbite-react";
 import { ErrorModal } from "../Modals/ErrorModal";
 
 export const Unico3D = ({
   user,
   setPredictionResult,
   setLoading,
-  setError,
   loading,
   BASE_URL,
   predictionResult,
 }) => {
   const [imageFile, setImageFile] = useState(null);
   const [generationName, setGenerationName] = useState("");
-  const [localError, setLocalError] = useState(null);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleFileChange = (event) => {
     setImageFile(event.target.files[0]);
-    setLocalError(null);
   };
 
   const handlePrediction = async () => {
     if (!imageFile) {
-      setLocalError("No se ha seleccionado ninguna imagen");
+      const error = "No se ha seleccionado ninguna imagen";
+      setErrorMessage(error);
+      setErrorModalVisible(true);
       return;
     }
 
     if (!generationName) {
-      setLocalError("Por favor, ingrese un nombre para la generación");
+      const error = "Por favor, ingrese un nombre para la generación";
+      setErrorMessage(error);
+      setErrorModalVisible(true);
       return;
     }
 
     setLoading(true);
-    setError(null);
-    setLocalError(null);
 
     try {
       const token = await user.getIdToken();
@@ -60,17 +59,14 @@ export const Unico3D = ({
         const backendError =
           error.response.data.error ||
           "Error desconocido al realizar la predicción";
-        setLocalError(backendError);
         setErrorMessage(backendError);
       } else if (error.request) {
         const requestError =
           "No se pudo contactar al servidor. Por favor, inténtelo más tarde.";
-        setLocalError(requestError);
         setErrorMessage(requestError);
       } else {
         const configError =
           "Error al configurar la solicitud. Por favor, inténtelo más tarde.";
-        setLocalError(configError);
         setErrorMessage(configError);
       }
       setErrorModalVisible(true);
@@ -89,13 +85,8 @@ export const Unico3D = ({
       <div className="col-span-1 border-r-2 border-linea">
         <div>
           <div className="border-solid border-b-2 bg-principal border-linea pb-4">
-            <p className="text-center pt-6 text-2xl ">Unico3D</p>
+            <p className="text-center pt-6 text-2xl">Unico3D</p>
           </div>
-          {localError && (
-            <Alert color="failure" className="mt-2">
-              {localError}
-            </Alert>
-          )}
           <div className="flex flex-col gap-4 px-4 mt-2">
             <div className="flex items-center justify-center gap-4">
               <p className="mt-3">Nombre</p>
