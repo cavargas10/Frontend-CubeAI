@@ -13,11 +13,10 @@ export const DeleteAccount = ({
       size="md"
       popup={true}
       onClose={closeModal}
-      className="flex items-center justify-center min-h-screen bg-slate-900 bg-opacity-70"
     >
-      <div className="flex items-center justify-center w-full h-full mt-32">
+      <div className="fixed inset-0 flex items-center justify-center bg-slate-900 bg-opacity-70">
         <Modal.Body>
-          <div className="text-center z-100 bg-[#171735] rounded-xl py-8 px-6 w-96">
+          <div className="text-center z-50 bg-[#171735] rounded-xl py-8 px-6 w-96">
             <XCircle size={40} color="#ff0000" className="mx-auto mb-4" />
             <h3 className="mb-5 text-lg font-normal text-gray-50 dark:text-gray-400">
               ¿Estás seguro de que deseas eliminar tu cuenta?

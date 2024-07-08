@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Sparkle } from "@phosphor-icons/react";
 import { Texto3DResult } from "./Texto3DResult";
-import { ErrorModal } from "../Modals/ErrorModal"; 
+import { ErrorModal } from "../Modals/ErrorModal";
+import { LoadingModal } from "../Modals/LoadingModal"; 
+import { Button } from "flowbite-react";
 
 export const Texto3D = ({
   user,
@@ -17,6 +19,7 @@ export const Texto3D = ({
   const [selectedStyle, setSelectedStyle] = useState("");
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [loadingModalVisible, setLoadingModalVisible] = useState(false);
 
   const handleStyleChange = (event) => {
     setSelectedStyle(event.target.value);
@@ -30,6 +33,7 @@ export const Texto3D = ({
       return;
     }
 
+    setLoadingModalVisible(true);
     setLoading(true);
 
     try {
@@ -50,7 +54,9 @@ export const Texto3D = ({
 
       setPrediction_text3d_result(response.data);
     } catch (error) {
+      console.error("Error completo:", error);
       if (error.response) {
+        console.log("Respuesta de error del servidor:", error.response.data);
         const backendError = error.response.data.error || "Error desconocido al realizar la predicción";
         setErrorMessage(backendError);
       } else if (error.request) {
@@ -63,6 +69,7 @@ export const Texto3D = ({
       setErrorModalVisible(true); 
     } finally {
       setLoading(false);
+      setLoadingModalVisible(false);
     }
   };
 
@@ -123,17 +130,15 @@ export const Texto3D = ({
           </div>
 
           <div className="flex items-center justify-end grow">
-            <button
+            <Sparkle size={24} color="#fff" className="absolute left-28 z-20" />
+            <Button
               onClick={handlePrediction}
               disabled={loading}
-              className="w-full relative text-lg bg-gradient-to-r from-azul-gradient to-morado-gradient py-2 rounded-lg border-none flex items-center justify-center"
+              className="w-full text-lg bg-gradient-to-r from-azul-gradient to-morado-gradient py-2 rounded-lg border-none flex items-center justify-center"
             >
-              <Sparkle size={24} color="#fff" className="absolute left-28" />
-              <span className="">{loading ? "Generando..." : "Generar"}</span>
-            </button>
+              Generar
+            </Button>
           </div>
-
-
         </div>
 
         <Texto3DResult prediction_text3d_result={prediction_text3d_result} />
@@ -144,6 +149,8 @@ export const Texto3D = ({
         closeModal={closeErrorModal}
         errorMessage={errorMessage}
       />
+
+      <LoadingModal showLoadingModal={loadingModalVisible} />
     </div>
   );
 };

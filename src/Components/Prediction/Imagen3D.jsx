@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Imagen3DResult } from "../Prediction/Imagen3DResult";
+import { Imagen3DResult } from "./Imagen3DResult";
 import { Sparkle } from "@phosphor-icons/react";
 import { FileInput, Button } from "flowbite-react";
 import { ErrorModal } from "../Modals/ErrorModal";
+import { LoadingModal } from "../Modals/LoadingModal";
 
 export const Imagen3D = ({
   user,
@@ -17,6 +18,7 @@ export const Imagen3D = ({
   const [generationName, setGenerationName] = useState("");
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [loadingModalVisible, setLoadingModalVisible] = useState(false);
 
   const handleFileChange = (event) => {
     setImageFile(event.target.files[0]);
@@ -35,6 +37,7 @@ export const Imagen3D = ({
       return;
     }
 
+    setLoadingModalVisible(true);
     setLoading(true);
 
     try {
@@ -51,13 +54,14 @@ export const Imagen3D = ({
       });
 
       console.log("Respuesta del servidor:", response.data);
-      
-      // Verificar si setPrediction_img3d_result es una función
-      if (typeof setPrediction_img3d_result === 'function') {
+
+      if (typeof setPrediction_img3d_result === "function") {
         setPrediction_img3d_result(response.data);
       } else {
         console.error("setPrediction_img3d_result no es una función");
-        setErrorMessage("Error interno de la aplicación. Por favor, intente de nuevo más tarde.");
+        setErrorMessage(
+          "Error interno de la aplicación. Por favor, intente de nuevo más tarde."
+        );
         setErrorModalVisible(true);
       }
     } catch (error) {
@@ -80,6 +84,7 @@ export const Imagen3D = ({
       setErrorModalVisible(true);
     } finally {
       setLoading(false);
+      setLoadingModalVisible(false);
     }
   };
 
@@ -88,16 +93,14 @@ export const Imagen3D = ({
     setErrorMessage("");
   };
 
-
   return (
-    <div className=" ml-[250px] w-full border-l-2  border-linea bg-fondologin h-72 ">
-      <div className="border-solid pt-6 border-b-2 bg-principal  border-linea pb-4">
+    <div className="ml-[250px] w-full border-l-2 border-linea bg-fondologin h-72">
+      <div className="border-solid pt-6 border-b-2 bg-principal border-linea pb-4">
         <p className="text-center text-2xl">Imagen a 3D</p>
       </div>
       <div className="flex flex-wrap gap-4 px-4 mt-2">
         <div className="flex items-center justify-center gap-4 grow">
           <p className="mt-3">Nombre</p>
-
           <input
             type="text"
             placeholder="Nombre de la generación"
@@ -107,7 +110,6 @@ export const Imagen3D = ({
             className="mt-3 bg-transparent border p-2 rounded-md w-[200px] grow"
           />
         </div>
-
         <div className="flex items-center justify-center grow mt-2">
           <FileInput
             accept="image/*"
@@ -117,7 +119,6 @@ export const Imagen3D = ({
             className="grow"
           />
         </div>
-
         <div className="mt-2">
           <Sparkle size={32} color="#fff" className="absolute mt-1 z-20" />
           <Button
@@ -125,7 +126,7 @@ export const Imagen3D = ({
             disabled={loading}
             className="text-lg bg-gradient-to-r flex justify-end from-azul-gradient to-morado-gradient py-1 px-6 rounded-lg border-none"
           >
-            {loading ? "Realizando Predicción..." : "Generar"}
+            Generar
           </Button>
         </div>
       </div>
@@ -137,6 +138,8 @@ export const Imagen3D = ({
         closeModal={closeErrorModal}
         errorMessage={errorMessage}
       />
+
+      <LoadingModal showLoadingModal={loadingModalVisible} />
     </div>
   );
 };

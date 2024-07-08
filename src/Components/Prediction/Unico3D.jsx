@@ -4,6 +4,7 @@ import { Unico3DResult } from "./Unico3DResult";
 import { Sparkle } from "@phosphor-icons/react";
 import { FileInput, Button } from "flowbite-react";
 import { ErrorModal } from "../Modals/ErrorModal";
+import { LoadingModal } from "../Modals/LoadingModal"; 
 
 export const Unico3D = ({
   user,
@@ -17,6 +18,7 @@ export const Unico3D = ({
   const [generationName, setGenerationName] = useState("");
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [loadingModalVisible, setLoadingModalVisible] = useState(false); 
 
   const handleFileChange = (event) => {
     setImageFile(event.target.files[0]);
@@ -37,6 +39,7 @@ export const Unico3D = ({
       return;
     }
 
+    setLoadingModalVisible(true); 
     setLoading(true);
 
     try {
@@ -72,6 +75,7 @@ export const Unico3D = ({
       setErrorModalVisible(true);
     } finally {
       setLoading(false);
+      setLoadingModalVisible(false); 
     }
   };
 
@@ -119,7 +123,7 @@ export const Unico3D = ({
                 disabled={loading}
                 className="text-lg bg-gradient-to-r flex justify-end from-azul-gradient to-morado-gradient py-1 mt-1 px-6 rounded-lg border-none"
               >
-                {loading ? "Realizando Predicción..." : "Generar"}
+                Generar
               </Button>
             </div>
           </div>
@@ -154,6 +158,7 @@ export const Unico3D = ({
         closeModal={closeErrorModal}
         errorMessage={errorMessage}
       />
+      <LoadingModal showLoadingModal={loadingModalVisible} /> 
     </div>
   );
 };
