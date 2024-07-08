@@ -81,6 +81,7 @@ export const Dashboard = ({
                 prediction_text3d_result={prediction_text3d_result}
                 prediction_textimg3d_result={prediction_textimg3d_result}
                 prediction_unico3d_result={prediction_unico3d_result}
+                BASE_URL={BASE_URL}
                 error={error}
               />
             }

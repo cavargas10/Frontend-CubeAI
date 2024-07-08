@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import History from "../Prediction/History";
 
-export const Visualizador = () => {
+export const Visualizador = ({BASE_URL}) => {
   const [selectedTab, setSelectedTab] = useState("Texto3D");
 
   const handleTabClick = (tab) => {
@@ -60,7 +60,7 @@ export const Visualizador = () => {
       </div>
 
       <div className="ml-10 mt-[280px] bg-fondologin ">
-        <History selectedTab={selectedTab} />
+        <History selectedTab={selectedTab} BASE_URL={BASE_URL} />
       </div>
     </section>
   );

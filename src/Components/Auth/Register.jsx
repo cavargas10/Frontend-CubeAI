@@ -9,15 +9,18 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import logo from "../../Assets/logo.png";
-import { ErrorModal } from "../Modals/ErrorModal"; 
+import { ErrorModal } from "../Modals/ErrorModal";
 
-export const Register = () => {
+export const Register = ({ BASE_URL }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [error, setError] = useState(null);
-  const [showErrorModal, setShowErrorModal] = useState(false); 
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const navigate = useNavigate();
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 
   const handleGoogleSignUp = async () => {
     try {
@@ -26,17 +29,34 @@ export const Register = () => {
       await sendUserDataToBackend(user);
       navigate("/dashboard");
     } catch (error) {
-      setError("Hubo un error al intentar registrarse con Google. Por favor, inténtalo de nuevo.");
-      setShowErrorModal(true);  
+      setError(
+        "Hubo un error al intentar registrarse con Google. Por favor, inténtalo de nuevo."
+      );
+      setShowErrorModal(true);
     }
   };
 
   const handleRegister = async () => {
     if (!email || !password || !name) {
       setError("Todos los campos son obligatorios.");
-      setShowErrorModal(true);  
+      setShowErrorModal(true);
       return;
     }
+
+    if (!emailRegex.test(email)) {
+      setError("Por favor, introduce un correo electrónico válido.");
+      setShowErrorModal(true);
+      return;
+    }
+
+    if (!passwordRegex.test(password)) {
+      setError(
+        "La contraseña debe contener al menos una mayúscula, una minúscula, un número, un carácter especial y tener más de 6 caracteres."
+      );
+      setShowErrorModal(true);
+      return;
+    }
+
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -49,8 +69,10 @@ export const Register = () => {
       await sendUserDataToBackend(user);
       navigate("/verify-email");
     } catch (error) {
-      setError("Error al registrar el usuario. Por favor, inténtalo de nuevo.");
-      setShowErrorModal(true);  
+      setError(
+        "Error al registrar el usuario. Por favor, inténtalo de nuevo."
+      );
+      setShowErrorModal(true);
     }
   };
 
@@ -58,7 +80,7 @@ export const Register = () => {
     const token = await user.getIdToken();
     try {
       await axios.post(
-        "http://localhost:8080/register_user",
+        `${BASE_URL}/register_user`,
         {
           name: user.displayName || name,
           profile_picture: user.photoURL || "/public/usuario.png",
@@ -72,7 +94,7 @@ export const Register = () => {
       );
     } catch (error) {
       setError("Error al registrar el usuario en el backend");
-      setShowErrorModal(true); 
+      setShowErrorModal(true);
     }
   };
 
@@ -89,9 +111,7 @@ export const Register = () => {
             <div className="flex-grow text-center">
               <h1 className="text-2xl">Registro</h1>
               <h2 className="text-3xl">Bienvenido a CV3D</h2>
-              <p className="px-3 pb-4">
-                Ingresa tus datos para crear una cuenta
-              </p>
+              <p className="px-3 pb-4">Ingresa tus datos para crear una cuenta</p>
             </div>
             <div className="mb-4">
               <input
@@ -100,6 +120,7 @@ export const Register = () => {
                 placeholder="Nombre"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                required
               />
             </div>
             <div className="mb-4">
@@ -109,6 +130,7 @@ export const Register = () => {
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
             <div className="mb-1">
@@ -118,6 +140,7 @@ export const Register = () => {
                 placeholder="Contraseña"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
             </div>
             <div className="flex items-center justify-between">
@@ -155,7 +178,9 @@ export const Register = () => {
       <ErrorModal
         showModal={showErrorModal}
         closeModal={closeErrorModal}
-        errorMessage={error || "Error desconocido. Por favor, inténtalo de nuevo."}
+        errorMessage={
+          error || "Error desconocido. Por favor, inténtalo de nuevo."
+        }
       />
     </div>
   );

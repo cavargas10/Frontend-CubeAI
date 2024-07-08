@@ -37,7 +37,7 @@ function App() {
           <Route path="/" element={<Home />} />
 
           <Route path="/tutoriales" element={<Tutoriales />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/register" element={<Register BASE_URL={import.meta.env.VITE_BASE_URL} />} />
           <Route path="/documentos/*" element={<Documentos />} />
           <Route path="/login" element={<Login />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
@@ -62,7 +62,7 @@ function App() {
                   setLoading={setLoading}
                   setError={setError}
                   handleLogout={handleLogout}
-                  BASE_URL={"http://localhost:8080"} 
+                  BASE_URL={import.meta.env.VITE_BASE_URL} 
                   user={user}
                 />
               ) : (

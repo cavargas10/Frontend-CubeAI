@@ -5,9 +5,7 @@ import { GenerationCard } from "../Ui/GenerationCard";
 import { DeleteConfirmationModal } from "../Modals/DeleteConfirmationModal";
 import { SuccessModal } from "../Modals/SuccessModal";
 
-const BASE_URL = "http://localhost:8080";
-
-const History = ({ selectedTab }) => {
+const History = ({ selectedTab, BASE_URL }) => {
   const [generations, setGenerations] = useState([]);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);

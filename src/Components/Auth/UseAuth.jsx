@@ -3,6 +3,8 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import axios from "axios";
 import { auth } from "../../Config/firebaseConfig"; 
 
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 export const UseAuth = () => {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
@@ -25,7 +27,7 @@ export const UseAuth = () => {
 
         try {
           const token = await user.getIdToken();
-          const response = await axios.get("http://localhost:8080/user_data", {
+          const response = await axios.get(`${BASE_URL}/user_data`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
