@@ -29,8 +29,9 @@ export const Texto3D = ({
   }, [activeTab]);
 
   const resetState = () => {
-    setImageFile(null);
     setGenerationName("");
+    setUserPrompt("");
+    setSelectedStyle("");
     setErrorModalVisible(false);
     setErrorMessage("");
     setLoadingModalVisible(false);

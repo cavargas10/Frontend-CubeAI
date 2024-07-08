@@ -30,8 +30,10 @@ export const TextImg3D = ({
   }, [activeTab]);
 
   const resetState = () => {
-    setImageFile(null);
     setGenerationName("");
+    setSubject("");
+    setStyle("");
+    setAdditionalDetails("");
     setErrorModalVisible(false);
     setErrorMessage("");
     setLoadingModalVisible(false);
