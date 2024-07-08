@@ -55,8 +55,7 @@ export const TextImg3DResult = ({ prediction_textimg3d_result, error }) => {
                    flex items-center justify-around
                     w-[200px]
 
-                  mt-4 px-4 py-2  text-white rounded-md shadow-md  bg-gradient-to-r  from-azul-gradient to-morado-gradient
-                      hover:from-morado-gradient hover:to-azul-gradient"
+                  mt-4 px-4 py-2  text-white rounded-md shadow-md  bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient"
                   >
                     <DownloadSimple size={32} color="white" />
                     <a

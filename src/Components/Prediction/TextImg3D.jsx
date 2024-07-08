@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Sparkle } from "@phosphor-icons/react";
 import { TextImg3DResult } from "./TextImg3DResult";
@@ -13,6 +13,7 @@ export const TextImg3D = ({
   loading,
   BASE_URL,
   prediction_textimg3d_result,
+  activeTab 
 }) => {
   const [generationName, setGenerationName] = useState("");
   const [subject, setSubject] = useState("");
@@ -21,6 +22,22 @@ export const TextImg3D = ({
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loadingModalVisible, setLoadingModalVisible] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      resetState();
+    };
+  }, [activeTab]);
+
+  const resetState = () => {
+    setImageFile(null);
+    setGenerationName("");
+    setErrorModalVisible(false);
+    setErrorMessage("");
+    setLoadingModalVisible(false);
+    setPrediction_textimg3d_result(null);
+    setLoading(false);
+  };
 
   const handleStyleChange = (event) => {
     setStyle(event.target.value);
@@ -146,7 +163,7 @@ export const TextImg3D = ({
           <Button
             onClick={handlePrediction}
             disabled={loading}
-            className="text-lg bg-gradient-to-r flex justify-end from-azul-gradient to-morado-gradient py-1 px-6 rounded-lg border-none"
+            className="text-lg bg-gradient-to-r hover:bg-gradient-to-tr flex justify-end from-azul-gradient to-morado-gradient py-1 px-6 rounded-lg border-none"
           >
             Generar
           </Button>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Imagen3DResult } from "./Imagen3DResult";
 import { Sparkle } from "@phosphor-icons/react";
@@ -13,12 +13,29 @@ export const Imagen3D = ({
   loading,
   BASE_URL,
   prediction_img3d_result,
+  activeTab 
 }) => {
   const [imageFile, setImageFile] = useState(null);
   const [generationName, setGenerationName] = useState("");
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loadingModalVisible, setLoadingModalVisible] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      resetState();
+    };
+  }, [activeTab]);
+
+  const resetState = () => {
+    setImageFile(null);
+    setGenerationName("");
+    setErrorModalVisible(false);
+    setErrorMessage("");
+    setLoadingModalVisible(false);
+    setPrediction_img3d_result(null);
+    setLoading(false);
+  };
 
   const handleFileChange = (event) => {
     setImageFile(event.target.files[0]);
@@ -124,7 +141,7 @@ export const Imagen3D = ({
           <Button
             onClick={handlePrediction}
             disabled={loading}
-            className="text-lg bg-gradient-to-r flex justify-end from-azul-gradient to-morado-gradient py-1 px-6 rounded-lg border-none"
+            className="text-lg bg-gradient-to-r hover:bg-gradient-to-tr flex justify-end from-azul-gradient to-morado-gradient py-1 px-6 rounded-lg border-none"
           >
             Generar
           </Button>

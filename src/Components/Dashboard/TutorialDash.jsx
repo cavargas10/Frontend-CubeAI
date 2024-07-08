@@ -23,7 +23,7 @@ export const TutorialDash = () => {
   }, []);
 
   return (
-    <section className="ml-60 pr-5 w-full bg-fondologin border-l-2 border-linea">
+    <section className="ml-60 pb-8 pr-5 w-full bg-fondologin border-l-2 border-linea">
       <div className="mt-8 ml-8 flex justify-center">
         {loading ? (
           <div className="flex items-center justify-center h-64">

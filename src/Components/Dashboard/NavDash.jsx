@@ -54,7 +54,7 @@ import {
   
           <div className="mt-2 ml-6 flex-grow">
             <p>Herramientas de IA</p>
-            <ul className="mt-4 ml-3 pr-2 flex-grow">
+            <ul className="mt-3 ml-1 pr-6 flex-grow">
               <li className="my-1">
                 <Link
                   to="texto3D"
@@ -97,7 +97,7 @@ import {
                 </Link>
               </li>
   
-              <li className="my-1 ">
+              <li className="my-1 mb-3">
                 <Link
                   to="unico3D"
                   className={

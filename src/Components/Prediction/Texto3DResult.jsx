@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment } from "@react-three/drei";
 import { Model } from "./Model";
 import { Suspense } from "react";
 
-export const Texto3DResult = ({ prediction_text3d_result, error }) => {
+export const Texto3DResult = ({ prediction_text3d_result }) => {
   return (
     <div className=" w-[700px]">
       <Canvas camera={{ position: [0, 0, 1.7] }}>

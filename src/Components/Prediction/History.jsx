@@ -6,6 +6,7 @@ import { DeleteConfirmationModal } from "../Modals/DeleteConfirmationModal";
 import { SuccessModal } from "../Modals/SuccessModal";
 
 const History = ({ selectedTab, BASE_URL }) => {
+
   const [generations, setGenerations] = useState([]);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -18,6 +19,7 @@ const History = ({ selectedTab, BASE_URL }) => {
         const user = auth.currentUser;
         if (user) {
           const token = await user.getIdToken();
+          console.log('BASE_URL:', BASE_URL);
           const response = await axios.get(`${BASE_URL}/generations`, {
             headers: {
               Authorization: `Bearer ${token}`,

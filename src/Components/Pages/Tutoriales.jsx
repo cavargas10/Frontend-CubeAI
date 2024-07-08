@@ -20,10 +20,10 @@ export const Tutoriales = () => {
 
   return (
     <div className="text-center ">
-      <div className="mt-16">
-        <h2 className="font-bold text-3xl  ">Tutoriales </h2>
+      <div className="pt-20">
+        <h2 className="font-bold text-3xl">Tutoriales </h2>
         <div className="flex justify-center mt-8"></div>
-        <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-screen-xl px-14">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-screen-xl px-14 pb-10">
           {tutoriales.map((tutorial) => (
             <TutorialCard
               key={tutorial.id || tutorial.titulo}

@@ -20,7 +20,7 @@ export const Documentos = () => {
           </div>
         </nav>
 
-        <main className="col-span-10   bg-fondologin px-20 pt-10 ">
+        <main className="col-span-10   bg-fondologin px-20 pt-10 pb-10">
           <Routes>
             <Route
               path="/"

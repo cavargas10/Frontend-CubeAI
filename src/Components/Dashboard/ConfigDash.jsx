@@ -132,7 +132,7 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
                     disabled={!isNameChanged || !!nameError}
                     className={`ml-5 p-2 text-center rounded-lg ${
                       isNameChanged && !nameError
-                        ? "bg-gradient-to-r from-azul-gradient to-morado-gradient"
+                        ? "bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient"
                         : "bg-gray-400 cursor-not-allowed"
                     }`}
                   >

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Unico3DResult } from "./Unico3DResult";
 import { Sparkle } from "@phosphor-icons/react";
@@ -13,12 +13,29 @@ export const Unico3D = ({
   loading,
   BASE_URL,
   prediction_unico3d_result,
+  activeTab
 }) => {
   const [imageFile, setImageFile] = useState(null);
   const [generationName, setGenerationName] = useState("");
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loadingModalVisible, setLoadingModalVisible] = useState(false); 
+
+  useEffect(() => {
+    return () => {
+      resetState();
+    };
+  }, [activeTab]);
+
+  const resetState = () => {
+    setImageFile(null);
+    setGenerationName("");
+    setErrorModalVisible(false);
+    setErrorMessage("");
+    setLoadingModalVisible(false);
+    setPrediction_unico3d_result(null);
+    setLoading(false);
+  };
 
   const handleFileChange = (event) => {
     setImageFile(event.target.files[0]);
@@ -121,7 +138,7 @@ export const Unico3D = ({
               <Button
                 onClick={handlePrediction}
                 disabled={loading}
-                className="text-lg bg-gradient-to-r flex justify-end from-azul-gradient to-morado-gradient py-1 mt-1 px-6 rounded-lg border-none"
+                className="text-lg bg-gradient-to-r hover:bg-gradient-to-tr flex justify-end from-azul-gradient to-morado-gradient py-1 mt-1 px-6 rounded-lg border-none"
               >
                 Generar
               </Button>
@@ -138,7 +155,7 @@ export const Unico3D = ({
             <h3 className="text-xl text-center">Resultado de la Generación</h3>
             {prediction_unico3d_result.obj_glb && (
               <div className="flex justify-center gap-10 mt-4">
-                <div className="flex items-center justify-around w-full px-4 py-2 text-white rounded-md shadow-md bg-gradient-to-r from-azul-gradient to-morado-gradient hover:from-morado-gradient hover:to-azul-gradient">
+                <div className="flex items-center justify-around w-full px-4 py-2 text-white rounded-md shadow-md bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient hover:from-morado-gradient hover:to-azul-gradient">
                   <DownloadSimple size={32} color="white" />
                   <a
                     href={prediction_unico3d_result.obj_glb}

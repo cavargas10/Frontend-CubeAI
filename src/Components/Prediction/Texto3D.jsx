@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Sparkle } from "@phosphor-icons/react";
 import { Texto3DResult } from "./Texto3DResult";
@@ -13,6 +13,7 @@ export const Texto3D = ({
   loading,
   BASE_URL,
   prediction_text3d_result,
+  activeTab 
 }) => {
   const [generationName, setGenerationName] = useState("");
   const [userPrompt, setUserPrompt] = useState("");
@@ -20,6 +21,22 @@ export const Texto3D = ({
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loadingModalVisible, setLoadingModalVisible] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      resetState();
+    };
+  }, [activeTab]);
+
+  const resetState = () => {
+    setImageFile(null);
+    setGenerationName("");
+    setErrorModalVisible(false);
+    setErrorMessage("");
+    setLoadingModalVisible(false);
+    setPrediction_text3d_result(null);
+    setLoading(false);
+  };
 
   const handleStyleChange = (event) => {
     setSelectedStyle(event.target.value);
@@ -134,7 +151,7 @@ export const Texto3D = ({
             <Button
               onClick={handlePrediction}
               disabled={loading}
-              className="w-full text-lg bg-gradient-to-r from-azul-gradient to-morado-gradient py-2 rounded-lg border-none flex items-center justify-center"
+              className="w-full text-lg bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient py-2 rounded-lg border-none flex items-center justify-center"
             >
               Generar
             </Button>

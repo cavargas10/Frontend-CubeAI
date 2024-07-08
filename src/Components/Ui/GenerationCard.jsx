@@ -61,7 +61,7 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
         </Canvas>
       ) : (
         <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-          No image or 3D model available
+          No está disponible el modelo 3D model
         </div>
       )}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/80 group-hover:via-black/60 group-hover:to-black/70"></div>
@@ -114,11 +114,13 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
           </div>
         ) : generation.obj_glb ? (
           <div className="flex gap-4 justify-around">
-            <div
-              className="bg-red-500 px-2 py-2 rounded-xl"
-              onClick={() => openModal(generation)}
-            >
-              <Trash size={24} color="white" />
+            <div className="absolute top-0 right-0 mr-2 mt-2">
+              <div
+                className="bg-red-500 px-2 py-2 rounded-xl"
+                onClick={() => openModal(generation)}
+              >
+                <Trash size={24} color="white" />
+              </div>
             </div>
             <div className="flex bg-[#6666ff] items-center gap-2 px-3 py-1 rounded-xl">
               <DownloadSimple size={24} color="white" />
