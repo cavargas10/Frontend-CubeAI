@@ -2,13 +2,19 @@ import React, { useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Pencil } from "@phosphor-icons/react";
-import { DeleteAccount } from "../Modals/DeleteAccount";
+import { DeleteConfirmationModal } from "../Modals/DeleteConfirmationModal";
+import { LoadingModal } from "../Modals/LoadingModal";
+import { SuccessModal } from "../Modals/SuccessModal";
 
 export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
   const [newName, setNewName] = useState("");
   const [isNameChanged, setIsNameChanged] = useState(false);
   const [nameError, setNameError] = useState("");
-  const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showLoadingModal, setShowLoadingModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -21,6 +27,9 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
 
   const handleNameSubmit = async () => {
     if (!isNameChanged || newName.trim() === "") return;
+
+    setLoadingMessage("Actualizando su usuario");
+    setShowLoadingModal(true);
 
     try {
       const token = await user.getIdToken();
@@ -36,8 +45,12 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
       updateUserData({ name: response.data.name });
       setNewName("");
       setIsNameChanged(false);
+      setShowLoadingModal(false);
+      setSuccessMessage("Su usuario se ha actualizado");
+      setShowSuccessModal(true);
     } catch (error) {
       console.error("Error updating name", error);
+      setShowLoadingModal(false);
     }
   };
 
@@ -53,6 +66,9 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
   };
 
   const handleProfilePictureSubmit = async (file) => {
+    setLoadingMessage("Actualizando su imagen de perfil");
+    setShowLoadingModal(true);
+
     const formData = new FormData();
     formData.append("profile_picture", file);
 
@@ -69,8 +85,12 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
         }
       );
       updateUserData({ profile_picture: response.data.profile_picture });
+      setShowLoadingModal(false);
+      setSuccessMessage("Su imagen se ha actualizado");
+      setShowSuccessModal(true);
     } catch (error) {
       console.error("Error updating profile picture", error);
+      setShowLoadingModal(false);
     }
   };
 
@@ -88,15 +108,21 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
     }
   };
 
-  const openModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
+  const openDeleteModal = () => setShowDeleteModal(true);
+  const closeDeleteModal = () => setShowDeleteModal(false);
   const confirmDelete = () => {
     handleDeleteAccount();
     navigate("http://localhost:5173/");
   };
 
+  const closeSuccessModal = () => setShowSuccessModal(false);
+
   if (!userData) {
-    return <div className="w-full ml-60 pl-2 pr-8 mt-2 border-l-2 border-linea bg-fondologin">Cargando datos del usuario...</div>;
+    return (
+      <div className="w-full ml-60 pl-2 pr-8 mt-2 border-l-2 border-linea bg-fondologin">
+        Cargando datos del usuario...
+      </div>
+    );
   }
 
   return (
@@ -145,7 +171,8 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
               <div className="mb-5">
                 <h2 className="text-2xl">Correo electrónico</h2>
                 <p className="mt-1">
-                  La dirección de correo electrónico utilizada para registrarse enCV3D.AI
+                  La dirección de correo electrónico utilizada para registrarse
+                  enCV3D.AI
                 </p>
                 <div className="mt-3">
                   <input
@@ -165,7 +192,7 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
                 <div className="mt-3">
                   <button
                     type="button"
-                    onClick={openModal}
+                    onClick={openDeleteModal}
                     className="px-4 py-3 rounded-lg bg-red-500 hover:bg-red-600 text-white"
                   >
                     Borrar mi cuenta
@@ -208,10 +235,20 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
           </div>
         </form>
       </div>
-      <DeleteAccount
-        showModal={showModal}
-        closeModal={closeModal}
+      <DeleteConfirmationModal
+        showModal={showDeleteModal}
+        closeModal={closeDeleteModal}
         confirmDelete={confirmDelete}
+        message="¿Estás seguro de que deseas eliminar tu cuenta?"
+      />
+      <LoadingModal
+        showLoadingModal={showLoadingModal}
+        message={loadingMessage}
+      />
+      <SuccessModal
+        showSuccessModal={showSuccessModal}
+        closeSuccessModal={closeSuccessModal}
+        message={successMessage}
       />
     </section>
   );

@@ -13,7 +13,7 @@ export const Imagen3D = ({
   loading,
   BASE_URL,
   prediction_img3d_result,
-  activeTab 
+  activeTab,
 }) => {
   const [imageFile, setImageFile] = useState(null);
   const [generationName, setGenerationName] = useState("");
@@ -156,7 +156,10 @@ export const Imagen3D = ({
         errorMessage={errorMessage}
       />
 
-      <LoadingModal showLoadingModal={loadingModalVisible} />
+      <LoadingModal
+        showLoadingModal={loadingModalVisible}
+        message="Generando el modelo 3D..."
+      />
     </div>
   );
 };

@@ -6,6 +6,7 @@ export const SuccessModal = ({
   showSuccessModal,
   closeSuccessModal,
   generationToDelete,
+  message
 }) => {
   return (
     <Modal
@@ -19,8 +20,7 @@ export const SuccessModal = ({
           <div className="text-center z-50 bg-[#171735] rounded-xl py-8 px-6 w-96">
             <CheckCircle size={40} color="#00ff00" className="mx-auto mb-4" />
             <h3 className="mb-5 text-lg font-normal text-gray-50 dark:text-gray-400">
-              El objeto {generationToDelete?.generation_name} ha sido eliminado
-              con éxito.
+              {message}
             </h3>
             <div className="flex justify-center">
               <Button

@@ -13,7 +13,7 @@ export const TextImg3D = ({
   loading,
   BASE_URL,
   prediction_textimg3d_result,
-  activeTab 
+  activeTab,
 }) => {
   const [generationName, setGenerationName] = useState("");
   const [subject, setSubject] = useState("");
@@ -182,7 +182,10 @@ export const TextImg3D = ({
         errorMessage={errorMessage}
       />
 
-      <LoadingModal showLoadingModal={loadingModalVisible} />
+      <LoadingModal
+        showLoadingModal={loadingModalVisible}
+        message="Generando el modelo 3D..."
+      />
     </div>
   );
 };

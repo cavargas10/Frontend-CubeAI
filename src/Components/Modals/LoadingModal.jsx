@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal } from "flowbite-react";
 
-export const LoadingModal = ({ showLoadingModal }) => {
+export const LoadingModal = ({ showLoadingModal, message }) => {
   return (
     <Modal
       show={showLoadingModal}
@@ -13,7 +13,7 @@ export const LoadingModal = ({ showLoadingModal }) => {
           <div className="text-center z-50 bg-[#171735] rounded-xl py-8 px-6 w-96">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
             <h3 className="mb-5 text-lg font-normal text-gray-50 dark:text-gray-400">
-              Generando objeto 3D...
+            {message}
             </h3>
           </div>
         </Modal.Body>

@@ -13,7 +13,7 @@ const CameraSetup = ({ position }) => {
   return null;
 };
 
-export const GenerationCard = ({ generation, formatDate, openModal }) => {
+export const GenerationCard = ({ generation, formatDate, openModal}) => {
   const canvasRef = useRef();
 
   const getCameraPosition = () => {

@@ -3,7 +3,7 @@ import axios from "axios";
 import { Sparkle } from "@phosphor-icons/react";
 import { Texto3DResult } from "./Texto3DResult";
 import { ErrorModal } from "../Modals/ErrorModal";
-import { LoadingModal } from "../Modals/LoadingModal"; 
+import { LoadingModal } from "../Modals/LoadingModal";
 import { Button } from "flowbite-react";
 
 export const Texto3D = ({
@@ -13,7 +13,7 @@ export const Texto3D = ({
   loading,
   BASE_URL,
   prediction_text3d_result,
-  activeTab 
+  activeTab,
 }) => {
   const [generationName, setGenerationName] = useState("");
   const [userPrompt, setUserPrompt] = useState("");
@@ -47,7 +47,7 @@ export const Texto3D = ({
     if (!generationName || !userPrompt || !selectedStyle) {
       const error = "Todos los campos son obligatorios";
       setErrorMessage(error);
-      setErrorModalVisible(true); 
+      setErrorModalVisible(true);
       return;
     }
 
@@ -75,16 +75,20 @@ export const Texto3D = ({
       console.error("Error completo:", error);
       if (error.response) {
         console.log("Respuesta de error del servidor:", error.response.data);
-        const backendError = error.response.data.error || "Error desconocido al realizar la predicción";
+        const backendError =
+          error.response.data.error ||
+          "Error desconocido al realizar la predicción";
         setErrorMessage(backendError);
       } else if (error.request) {
-        const requestError = "No se pudo contactar al servidor. Por favor, inténtelo más tarde.";
+        const requestError =
+          "No se pudo contactar al servidor. Por favor, inténtelo más tarde.";
         setErrorMessage(requestError);
       } else {
-        const configError = "Error al configurar la solicitud. Por favor, inténtelo más tarde.";
+        const configError =
+          "Error al configurar la solicitud. Por favor, inténtelo más tarde.";
         setErrorMessage(configError);
       }
-      setErrorModalVisible(true); 
+      setErrorModalVisible(true);
     } finally {
       setLoading(false);
       setLoadingModalVisible(false);
@@ -161,14 +165,17 @@ export const Texto3D = ({
 
         <Texto3DResult prediction_text3d_result={prediction_text3d_result} />
       </div>
-      
+
       <ErrorModal
         showModal={errorModalVisible}
         closeModal={closeErrorModal}
         errorMessage={errorMessage}
       />
 
-      <LoadingModal showLoadingModal={loadingModalVisible} />
+      <LoadingModal
+        showLoadingModal={loadingModalVisible}
+        message="Generando el modelo 3D..."
+      />
     </div>
   );
 };

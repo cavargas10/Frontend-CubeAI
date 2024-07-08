@@ -4,7 +4,7 @@ import { Unico3DResult } from "./Unico3DResult";
 import { Sparkle } from "@phosphor-icons/react";
 import { FileInput, Button } from "flowbite-react";
 import { ErrorModal } from "../Modals/ErrorModal";
-import { LoadingModal } from "../Modals/LoadingModal"; 
+import { LoadingModal } from "../Modals/LoadingModal";
 
 export const Unico3D = ({
   user,
@@ -13,13 +13,13 @@ export const Unico3D = ({
   loading,
   BASE_URL,
   prediction_unico3d_result,
-  activeTab
+  activeTab,
 }) => {
   const [imageFile, setImageFile] = useState(null);
   const [generationName, setGenerationName] = useState("");
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [loadingModalVisible, setLoadingModalVisible] = useState(false); 
+  const [loadingModalVisible, setLoadingModalVisible] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -56,7 +56,7 @@ export const Unico3D = ({
       return;
     }
 
-    setLoadingModalVisible(true); 
+    setLoadingModalVisible(true);
     setLoading(true);
 
     try {
@@ -92,7 +92,7 @@ export const Unico3D = ({
       setErrorModalVisible(true);
     } finally {
       setLoading(false);
-      setLoadingModalVisible(false); 
+      setLoadingModalVisible(false);
     }
   };
 
@@ -145,7 +145,9 @@ export const Unico3D = ({
             </div>
           </div>
           <div className="border-t-2 border-linea mt-4 pt-4 w-full">
-            <Unico3DResult prediction_unico3d_result={prediction_unico3d_result} />
+            <Unico3DResult
+              prediction_unico3d_result={prediction_unico3d_result}
+            />
           </div>
         </div>
       </div>
@@ -175,7 +177,10 @@ export const Unico3D = ({
         closeModal={closeErrorModal}
         errorMessage={errorMessage}
       />
-      <LoadingModal showLoadingModal={loadingModalVisible} /> 
+      <LoadingModal
+        showLoadingModal={loadingModalVisible}
+        message="Generando el modelo 3D..."
+      />
     </div>
   );
 };

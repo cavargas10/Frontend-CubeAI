@@ -6,7 +6,8 @@ export const DeleteConfirmationModal = ({
   showModal,
   closeModal,
   handleDeleteGeneration,
-  generationToDelete,
+  confirmDelete,
+  message
 }) => {
   return (
     <Modal
@@ -20,13 +21,12 @@ export const DeleteConfirmationModal = ({
           <div className="text-center z-50 bg-[#171735] rounded-xl py-8 px-6 w-96">
             <XCircle size={40} color="#ff0000" className="mx-auto mb-4" />
             <h3 className="mb-5 text-lg font-normal text-gray-50 dark:text-gray-400">
-              ¿Estás seguro de que deseas eliminar el objeto llamado:{" "}
-              {generationToDelete.generation_name}?
+              {message}
             </h3>
             <div className="flex justify-center gap-4">
               <Button
                 className="bg-red-600 text-white hover:bg-red-700 rounded-xl"
-                onClick={handleDeleteGeneration}
+                onClick={handleDeleteGeneration||confirmDelete}
               >
                 Sí, claro
               </Button>

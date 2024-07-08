@@ -4,13 +4,14 @@ import { auth } from "../../Config/firebaseConfig";
 import { GenerationCard } from "../Ui/GenerationCard";
 import { DeleteConfirmationModal } from "../Modals/DeleteConfirmationModal";
 import { SuccessModal } from "../Modals/SuccessModal";
+import { LoadingModal } from "../Modals/LoadingModal";
 
 const History = ({ selectedTab, BASE_URL }) => {
-
   const [generations, setGenerations] = useState([]);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showLoadingModal, setShowLoadingModal] = useState(false);
   const [generationToDelete, setGenerationToDelete] = useState(null);
 
   useEffect(() => {
@@ -79,6 +80,9 @@ const History = ({ selectedTab, BASE_URL }) => {
 
   const handleDeleteGeneration = async () => {
     try {
+      setShowModal(false);
+      setShowLoadingModal(true);
+      
       const user = auth.currentUser;
       if (user && generationToDelete) {
         const token = await user.getIdToken();
@@ -100,10 +104,12 @@ const History = ({ selectedTab, BASE_URL }) => {
             (gen) => gen.generation_name !== generationToDelete.generation_name
           )
         );
-        setShowModal(false);
+        
+        setShowLoadingModal(false);
         setShowSuccessModal(true);
       }
     } catch (error) {
+      setShowLoadingModal(false);
       setError("Error al eliminar la generación.");
       console.error("Error deleting generation:", error);
     }
@@ -156,13 +162,20 @@ const History = ({ selectedTab, BASE_URL }) => {
           closeModal={closeModal}
           handleDeleteGeneration={handleDeleteGeneration}
           generationToDelete={generationToDelete}
+          message={`¿Estás seguro de que deseas eliminar el objeto llamado: ${generationToDelete.generation_name}?`}
         />
       )}
+
+      <LoadingModal 
+        showLoadingModal={showLoadingModal} 
+        message="Eliminando objeto..."
+      />
 
       <SuccessModal
         showSuccessModal={showSuccessModal}
         closeSuccessModal={closeSuccessModal}
         generationToDelete={generationToDelete}
+        message="El objeto ha sido eliminado con exito"
       />
     </div>
   );
