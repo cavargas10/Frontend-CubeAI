@@ -8,7 +8,10 @@ export const UseAuth = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [predictionResult, setPredictionResult] = useState(null);
+  const [prediction_img3d_result, setPrediction_img3d_result] = useState(null);
+  const [prediction_text3d_result, setPrediction_text3d_result] = useState(null);
+  const [prediction_textimg3d_result, setPrediction_textimg3d_result] = useState(null);
+  const [prediction_unico3d_result, setPrediction_unico3d_result] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -58,8 +61,14 @@ export const UseAuth = () => {
     userData,
     loading,
     error,
-    predictionResult,
-    setPredictionResult,
+    prediction_img3d_result,
+    prediction_text3d_result,
+    prediction_textimg3d_result,
+    prediction_unico3d_result,
+    setPrediction_img3d_result,
+    setPrediction_text3d_result,
+    setPrediction_textimg3d_result,
+    setPrediction_unico3d_result,
     setLoading,
     setError,
     handleLogout,

@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Sparkle } from "@phosphor-icons/react";
 import { TextImg3DResult } from "./TextImg3DResult";
-import { ErrorModal } from "../Modals/ErrorModal"; // Import the ErrorModal component
+import { ErrorModal } from "../Modals/ErrorModal"; 
 
 export const TextImg3D = ({
   user,
-  setPredictionResult,
+  setPrediction_textimg3d_result,
   setLoading,
   loading,
   BASE_URL,
-  predictionResult,
+  prediction_textimg3d_result,
 }) => {
   const [generationName, setGenerationName] = useState("");
   const [subject, setSubject] = useState("");
@@ -50,7 +50,7 @@ export const TextImg3D = ({
         }
       );
 
-      setPredictionResult(response.data);
+      setPrediction_textimg3d_result(response.data);
     } catch (error) {
       if (error.response) {
         const backendError = error.response.data.error || "Error desconocido al realizar la predicción";
@@ -62,7 +62,7 @@ export const TextImg3D = ({
         const configError = "Error al configurar la solicitud. Por favor, inténtelo más tarde.";
         setErrorMessage(configError);
       }
-      setErrorModalVisible(true); // Show the error modal
+      setErrorModalVisible(true); 
     } finally {
       setLoading(false);
     }
@@ -144,7 +144,7 @@ export const TextImg3D = ({
         </div>
       </div>
 
-      <TextImg3DResult predictionResult={predictionResult} />
+      <TextImg3DResult prediction_textimg3d_result={prediction_textimg3d_result} />
 
       <ErrorModal
         showModal={errorModalVisible}

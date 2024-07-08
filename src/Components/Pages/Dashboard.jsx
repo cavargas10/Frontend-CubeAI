@@ -12,8 +12,14 @@ import { Unico3D } from "../Prediction/Unico3D";
 import axios from "axios";
 
 export const Dashboard = ({
-  predictionResult,
-  setPredictionResult,
+  prediction_img3d_result,
+  prediction_text3d_result,
+  prediction_textimg3d_result,
+  prediction_unico3d_result,
+  setPrediction_img3d_result,
+  setPrediction_text3d_result,
+  setPrediction_textimg3d_result,
+  setPrediction_unico3d_result,
   error,
   loading,
   setLoading,
@@ -58,13 +64,25 @@ export const Dashboard = ({
           <Route
             path="/"
             element={
-              <Visualizador predictionResult={predictionResult} error={error} />
+              <Visualizador
+                prediction_img3d_result={prediction_img3d_result}
+                prediction_text3d_result={prediction_text3d_result}
+                prediction_textimg3d_result={prediction_textimg3d_result}
+                prediction_unico3d_result={prediction_unico3d_result}
+                error={error}
+              />
             }
           />
           <Route
             path="visualizador/*"
             element={
-              <Visualizador predictionResult={predictionResult} error={error} />
+              <Visualizador
+                prediction_img3d_result={prediction_img3d_result}
+                prediction_text3d_result={prediction_text3d_result}
+                prediction_textimg3d_result={prediction_textimg3d_result}
+                prediction_unico3d_result={prediction_unico3d_result}
+                error={error}
+              />
             }
           />
           <Route path="tutorialdash" element={<TutorialDash />} />
@@ -85,11 +103,11 @@ export const Dashboard = ({
             element={
               <Imagen3D
                 user={user}
-                setPredictionResult={setPredictionResult}
+                setPrediction_img3d_result={setPrediction_img3d_result}
                 setLoading={setLoading}
                 loading={loading}
                 BASE_URL={BASE_URL}
-                predictionResult={predictionResult}
+                prediction_img3d_result={prediction_img3d_result}
               />
             }
           />
@@ -99,11 +117,11 @@ export const Dashboard = ({
             element={
               <Texto3D
                 user={user}
-                setPredictionResult={setPredictionResult}
+                setPrediction_text3d_result={setPrediction_text3d_result}
                 setLoading={setLoading}
                 loading={loading}
                 BASE_URL={BASE_URL}
-                predictionResult={predictionResult}
+                prediction_text3d_result={prediction_text3d_result}
               />
             }
           />
@@ -112,11 +130,11 @@ export const Dashboard = ({
             element={
               <TextImg3D
                 user={user}
-                setPredictionResult={setPredictionResult}
+                setPrediction_textimg3d_result={setPrediction_textimg3d_result}
                 setLoading={setLoading}
                 loading={loading}
                 BASE_URL={BASE_URL}
-                predictionResult={predictionResult}
+                prediction_textimg3d_result={prediction_textimg3d_result}
               />
             }
           />
@@ -125,11 +143,11 @@ export const Dashboard = ({
             element={
               <Unico3D
                 user={user}
-                setPredictionResult={setPredictionResult}
+                setPrediction_unico3d_result={setPrediction_unico3d_result}
                 setLoading={setLoading}
                 loading={loading}
                 BASE_URL={BASE_URL}
-                predictionResult={predictionResult}
+                prediction_unico3d_result={prediction_unico3d_result}
               />
             }
           />

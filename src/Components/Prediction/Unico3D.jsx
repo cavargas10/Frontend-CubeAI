@@ -7,11 +7,11 @@ import { ErrorModal } from "../Modals/ErrorModal";
 
 export const Unico3D = ({
   user,
-  setPredictionResult,
+  setPrediction_unico3d_result,
   setLoading,
   loading,
   BASE_URL,
-  predictionResult,
+  prediction_unico3d_result,
 }) => {
   const [imageFile, setImageFile] = useState(null);
   const [generationName, setGenerationName] = useState("");
@@ -53,7 +53,7 @@ export const Unico3D = ({
         },
       });
 
-      setPredictionResult(response.data);
+      setPrediction_unico3d_result(response.data);
     } catch (error) {
       if (error.response) {
         const backendError =
@@ -124,20 +124,20 @@ export const Unico3D = ({
             </div>
           </div>
           <div className="border-t-2 border-linea mt-4 pt-4 w-full">
-            <Unico3DResult predictionResult={predictionResult} />
+            <Unico3DResult prediction_unico3d_result={prediction_unico3d_result} />
           </div>
         </div>
       </div>
       <div className="col-span-1">
-        {predictionResult && (
+        {prediction_unico3d_result && (
           <div className="mt-4">
             <h3 className="text-xl text-center">Resultado de la Generación</h3>
-            {predictionResult.obj_glb && (
+            {prediction_unico3d_result.obj_glb && (
               <div className="flex justify-center gap-10 mt-4">
                 <div className="flex items-center justify-around w-full px-4 py-2 text-white rounded-md shadow-md bg-gradient-to-r from-azul-gradient to-morado-gradient hover:from-morado-gradient hover:to-azul-gradient">
                   <DownloadSimple size={32} color="white" />
                   <a
-                    href={predictionResult.obj_glb}
+                    href={prediction_unico3d_result.obj_glb}
                     download="make3d.glb"
                     className="text-xl"
                   >

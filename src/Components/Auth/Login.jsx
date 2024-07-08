@@ -9,13 +9,13 @@ import {
 import { getDoc, doc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { RegistrationModal } from "../Modals/RegistrationModal";
-import { ErrorModal } from "../Modals/ErrorModal";  // Import ErrorModal
+import { ErrorModal } from "../Modals/ErrorModal";  
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const [showErrorModal, setShowErrorModal] = useState(false); // State for ErrorModal visibility
+  const [showErrorModal, setShowErrorModal] = useState(false); 
   const [showModal, setShowModal] = useState(false);
   const [googleEmail, setGoogleEmail] = useState("");
   const navigate = useNavigate();
@@ -44,21 +44,21 @@ export const Login = () => {
           setError(
             "Por favor, verifica tu correo electrónico antes de iniciar sesión."
           );
-          setShowErrorModal(true);  // Show error modal
+          setShowErrorModal(true);  
         }
       }
     } catch (error) {
       setError(
         "Hubo un error al intentar iniciar sesión con Google. Por favor, inténtalo de nuevo."
       );
-      setShowErrorModal(true);  // Show error modal
+      setShowErrorModal(true);  
     }
   };
 
   const handleLogin = async () => {
     if (!email || !password) {
       setError("Todos los campos son obligatorios.");
-      setShowErrorModal(true);  // Show error modal
+      setShowErrorModal(true);  
       return;
     }
     try {
@@ -74,12 +74,11 @@ export const Login = () => {
         setError(
           "Por favor, verifica tu correo electrónico antes de iniciar sesión."
         );
-        setShowErrorModal(true);  // Show error modal
+        setShowErrorModal(true);  
       }
     } catch (error) {
-      // Intercept Firebase errors and replace with a custom message
       setError("Acceso denegado: Verifica tu correo y contraseña");
-      setShowErrorModal(true);  // Show error modal
+      setShowErrorModal(true);  
     }
   };
 

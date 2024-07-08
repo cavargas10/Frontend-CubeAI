@@ -7,12 +7,11 @@ import { ErrorModal } from "../Modals/ErrorModal";
 
 export const Imagen3D = ({
   user,
-  setPredictionResult,
+  setPrediction_img3d_result,
   setLoading,
-  setError,
   loading,
   BASE_URL,
-  predictionResult,
+  prediction_img3d_result,
 }) => {
   const [imageFile, setImageFile] = useState(null);
   const [generationName, setGenerationName] = useState("");
@@ -51,9 +50,20 @@ export const Imagen3D = ({
         },
       });
 
-      setPredictionResult(response.data);
+      console.log("Respuesta del servidor:", response.data);
+      
+      // Verificar si setPrediction_img3d_result es una función
+      if (typeof setPrediction_img3d_result === 'function') {
+        setPrediction_img3d_result(response.data);
+      } else {
+        console.error("setPrediction_img3d_result no es una función");
+        setErrorMessage("Error interno de la aplicación. Por favor, intente de nuevo más tarde.");
+        setErrorModalVisible(true);
+      }
     } catch (error) {
+      console.error("Error completo:", error);
       if (error.response) {
+        console.log("Respuesta de error del servidor:", error.response.data);
         const backendError =
           error.response.data.error ||
           "Error desconocido al realizar la predicción";
@@ -77,6 +87,7 @@ export const Imagen3D = ({
     setErrorModalVisible(false);
     setErrorMessage("");
   };
+
 
   return (
     <div className=" ml-[250px] w-full border-l-2  border-linea bg-fondologin h-72 ">
@@ -119,7 +130,7 @@ export const Imagen3D = ({
         </div>
       </div>
 
-      <Imagen3DResult predictionResult={predictionResult} />
+      <Imagen3DResult prediction_img3d_result={prediction_img3d_result} />
 
       <ErrorModal
         showModal={errorModalVisible}

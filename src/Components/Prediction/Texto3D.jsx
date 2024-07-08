@@ -2,16 +2,15 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Sparkle } from "@phosphor-icons/react";
 import { Texto3DResult } from "./Texto3DResult";
-import { BtnObj } from "../Ui/BtnObj";
 import { ErrorModal } from "../Modals/ErrorModal"; 
 
 export const Texto3D = ({
   user,
-  setPredictionResult,
+  setPrediction_text3d_result,
   setLoading,
   loading,
   BASE_URL,
-  predictionResult,
+  prediction_text3d_result,
 }) => {
   const [generationName, setGenerationName] = useState("");
   const [userPrompt, setUserPrompt] = useState("");
@@ -49,7 +48,7 @@ export const Texto3D = ({
         }
       );
 
-      setPredictionResult(response.data);
+      setPrediction_text3d_result(response.data);
     } catch (error) {
       if (error.response) {
         const backendError = error.response.data.error || "Error desconocido al realizar la predicción";
@@ -134,10 +133,10 @@ export const Texto3D = ({
             </button>
           </div>
 
-          <BtnObj predictionResult={predictionResult} />
+
         </div>
 
-        <Texto3DResult predictionResult={predictionResult} />
+        <Texto3DResult prediction_text3d_result={prediction_text3d_result} />
       </div>
       
       <ErrorModal

@@ -16,8 +16,14 @@ function App() {
     userData,
     loading,
     error,
-    predictionResult,
-    setPredictionResult,
+    prediction_img3d_result,
+    prediction_text3d_result,
+    prediction_textimg3d_result,
+    prediction_unico3d_result,
+    setPrediction_img3d_result,
+    setPrediction_text3d_result,
+    setPrediction_textimg3d_result,
+    setPrediction_unico3d_result,
     setLoading,
     setError,
     handleLogout,
@@ -43,8 +49,14 @@ function App() {
               user ? (
                 <Dashboard
                   userData={userData}
-                  predictionResult={predictionResult}
-                  setPredictionResult={setPredictionResult}
+                  prediction_img3d_result={prediction_img3d_result}
+                  prediction_text3d_result={prediction_text3d_result}
+                  prediction_textimg3d_result={prediction_textimg3d_result}
+                  prediction_unico3d_result={prediction_unico3d_result}
+                  setPrediction_img3d_result={setPrediction_img3d_result}
+                  setPrediction_text3d_result={setPrediction_text3d_result}
+                  setPrediction_textimg3d_result={setPrediction_textimg3d_result}
+                  setPrediction_unico3d_result={setPrediction_unico3d_result}
                   error={error}
                   loading={loading}
                   setLoading={setLoading}

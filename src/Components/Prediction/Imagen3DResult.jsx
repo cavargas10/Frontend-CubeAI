@@ -3,47 +3,47 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment } from "@react-three/drei";
 import { Model } from "./Model";
 import { Suspense } from "react";
-import { CloudSlash, DownloadSimple } from "@phosphor-icons/react";
+import { DownloadSimple } from "@phosphor-icons/react";
 
-export const Imagen3DResult = ({ predictionResult, error }) => {
+export const Imagen3DResult = ({ prediction_img3d_result, error }) => {
   const [isResultReady, setIsResultReady] = useState(false);
 
   useEffect(() => {
-    if (predictionResult) {
+    if (prediction_img3d_result) {
       setIsResultReady(true);
     }
-  }, [predictionResult]);
+  }, [prediction_img3d_result]);
 
   return (
     <div className="grid grid-cols-6 mt-4 border-t-2  border-linea">
       {isResultReady && (
         <div className="col-span-2 border-r-2  border-linea">
           {error && <p style={{ color: "red" }}>{error}</p>}
-          {predictionResult && (
+          {prediction_img3d_result && (
             <div className="mt-4 text-center">
               <h3 className=" text-xl ">Resultado de la Generación </h3>
-              {predictionResult.preprocess && (
+              {prediction_img3d_result.preprocess && (
                 <div className="flex justify-center border-y-2  border-linea  mt-3">
                   <img
-                    src={predictionResult.preprocess}
+                    src={prediction_img3d_result.preprocess}
                     alt="Preprocessed"
                     className="w-[105px]"
                   />
                 </div>
               )}
 
-              {predictionResult.generate_mvs && (
+              {prediction_img3d_result.generate_mvs && (
                 <div className="flex flex-col items-center mt-2 mb-2">
                   <h4 className="text-xl">Generación Multi-Vistas</h4>
                   <img
-                    src={predictionResult.generate_mvs}
+                    src={prediction_img3d_result.generate_mvs}
                     alt="Generated MVS"
                     className="mt-3 w-[105px]"
                   />
                 </div>
               )}
 
-              {predictionResult.make3d && (
+              {prediction_img3d_result.make3d && (
                 <div className="flex justify-center gap-10 border-t-2 mt-1">
                   <div
                     className=" 
@@ -55,7 +55,7 @@ export const Imagen3DResult = ({ predictionResult, error }) => {
                   >
                     <DownloadSimple size={32} color="white" />
                     <a
-                      href={predictionResult.make3d[0]}
+                      href={prediction_img3d_result.make3d[0]}
                       download="make3d.obj"
                       className="text-xl"
                     >
@@ -72,7 +72,7 @@ export const Imagen3DResult = ({ predictionResult, error }) => {
                   >
                     <DownloadSimple size={32} color="white" />
                     <a
-                      href={predictionResult.make3d[1]}
+                      href={prediction_img3d_result.make3d[1]}
                       download="make3d.glb"
                       className="text-xl"
                     >
@@ -90,8 +90,8 @@ export const Imagen3DResult = ({ predictionResult, error }) => {
         <div className="h-[355px] ">
           <Canvas camera={{ position: [0, 0, 1.7] }}>
             <Suspense fallback={null}>
-              {predictionResult && predictionResult.make3d && (
-                <Model url={predictionResult.make3d[1]} />
+              {prediction_img3d_result && prediction_img3d_result.make3d && (
+                <Model url={prediction_img3d_result.make3d[1]} />
               )}
               <OrbitControls minDistance={1} maxDistance={3} />
               <ambientLight intensity={1} />
