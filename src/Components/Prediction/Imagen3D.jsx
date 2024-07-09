@@ -111,33 +111,39 @@ export const Imagen3D = ({
   };
 
   return (
-    <div className="ml-[250px] w-full border-l-2 border-linea bg-fondologin h-72">
-      <div className="border-solid pt-6 border-b-2 bg-principal border-linea pb-4">
+    <div className="ml-[250px] w-full  bg-fondologin">
+      <div className=" pt-6  bg-principal  pb-4">
         <p className="text-center text-2xl">Imagen a 3D</p>
       </div>
-      <div className="flex flex-wrap gap-4 px-4 mt-2">
-        <div className="flex items-center justify-center gap-4 grow">
-          <p className="mt-3">Nombre</p>
+
+      <div className=" flex  gap-4 py-4 px-4 justify-between items-center border-y-2 border-linea">
+        <div className="flex justify-center items-center gap-4 grow">
+          <p className="">Nombre</p>
           <input
             type="text"
             placeholder="Nombre de la generación"
             value={generationName}
             onChange={(e) => setGenerationName(e.target.value)}
             disabled={loading}
-            className="mt-3 bg-transparent border p-2 rounded-md w-[200px] grow"
+            className=" bg-transparent border p-2 rounded-md grow"
           />
         </div>
-        <div className="flex items-center justify-center grow mt-2">
+        <div className="flex-grow">
           <FileInput
             accept="image/*"
             onChange={handleFileChange}
             disabled={loading}
             label="Seleccionar archivo"
-            className="grow"
+            className="w-full"
           />
         </div>
-        <div className="mt-2">
-          <Sparkle size={32} color="#fff" className="absolute mt-1 z-20" />
+
+        <div className="">
+          <Sparkle
+            size={24}
+            color="#fff"
+            className="absolute ml-4 mt-2  z-20"
+          />
           <Button
             onClick={handlePrediction}
             disabled={loading}

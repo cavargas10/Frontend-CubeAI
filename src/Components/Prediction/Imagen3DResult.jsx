@@ -15,36 +15,27 @@ export const Imagen3DResult = ({ prediction_img3d_result, error }) => {
   }, [prediction_img3d_result]);
 
   return (
-    <div className="grid grid-cols-6 mt-4 border-t-2  border-linea">
+    <div className="grid grid-cols-6  ">
       {isResultReady && (
         <div className="col-span-2 border-r-2  border-linea">
           {error && <p style={{ color: "red" }}>{error}</p>}
           {prediction_img3d_result && (
             <div className="mt-4 text-center">
-              <h3 className=" text-xl ">Resultado de la Generación </h3>
-              {prediction_img3d_result.preprocess && (
-                <div className="flex justify-center border-y-2  border-linea  mt-3">
-                  <img
-                    src={prediction_img3d_result.preprocess}
-                    alt="Preprocessed"
-                    className="w-[105px]"
-                  />
-                </div>
-              )}
+              <h3 className=" text-xl border-b-2 border-linea pb-5 ">Resultado de la Generación </h3>
 
               {prediction_img3d_result.generate_mvs && (
                 <div className="flex flex-col items-center mt-2 mb-2">
-                  <h4 className="text-xl">Generación Multi-Vistas</h4>
+            
                   <img
                     src={prediction_img3d_result.generate_mvs}
                     alt="Generated MVS"
-                    className="mt-3 w-[105px]"
+                    className="mt-3 w-[275px]"
                   />
                 </div>
               )}
 
               {prediction_img3d_result.make3d && (
-                <div className="flex justify-center gap-10 border-t-2 mt-1">
+                <div className="flex justify-center gap-10 border-t-2 border-linea mt-[77px] px-10">
                   <div
                     className=" 
                    flex items-center justify-around
@@ -85,8 +76,8 @@ export const Imagen3DResult = ({ prediction_img3d_result, error }) => {
         </div>
       )}
 
-      <div className={` ${isResultReady ? "col-span-4" : "col-span-6"} mt`}>
-        <div className="h-[355px] ">
+      <div className={` ${isResultReady ? "col-span-4" : "col-span-6"} `}>
+        <div className="h-[434px]  ">
           <Canvas camera={{ position: [0, 0, 1.7] }}>
             <Suspense fallback={null}>
               {prediction_img3d_result && prediction_img3d_result.make3d && (

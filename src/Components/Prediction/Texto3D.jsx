@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Sparkle } from "@phosphor-icons/react";
+import { Sparkle, DownloadSimple } from "@phosphor-icons/react";
 import { Texto3DResult } from "./Texto3DResult";
 import { ErrorModal } from "../Modals/ErrorModal";
 import { LoadingModal } from "../Modals/LoadingModal";
@@ -100,78 +100,100 @@ export const Texto3D = ({
     setErrorMessage("");
   };
 
+  const handleDownload = () => {
+    if (prediction_text3d_result && prediction_text3d_result.obj_model) {
+      window.open(prediction_text3d_result.obj_model, "_blank");
+    }
+  };
+
   return (
-    <div className="ml-[250px] w-full bg-fondologin h-[569px]">
-      <div className="pt-6 border-r-2 bg-principal pb-4 border-linea">
+    <div className="ml-[250px] w-full bg-fondologin ">
+      <div className="pt-6 bg-principal pb-4 ">
         <p className="text-center text-2xl">Texto a 3D</p>
       </div>
 
-      <div className="flex mt border border-linea">
-        <div className="w-96 border-r-2 border-linea flex flex-col gap-10 p-6">
-          <div className="flex items-center justify-center gap-4 grow">
-            <p>Nombre</p>
-            <input
-              type="text"
-              placeholder="Nombre de la generación"
-              value={generationName}
-              onChange={(e) => setGenerationName(e.target.value)}
-              disabled={loading}
-              className="mt-3 bg-transparent border p-2 rounded-md w-full"
-            />
-          </div>
-
-          <div className="flex items-center justify-center grow mt-2">
-            <p className="me-2">Prompt</p>
-            <input
-              type="text"
-              placeholder="Prompt de la generación"
-              value={userPrompt}
-              onChange={(e) => setUserPrompt(e.target.value)}
-              disabled={loading}
-              className="bg-transparent border p-2 rounded-md w-full"
-            />
-          </div>
-
-          <div className="flex items-center gap-2 grow">
-            <p>Estilo</p>
-            <select
-              value={selectedStyle}
-              onChange={handleStyleChange}
-              disabled={loading}
-              className="bg-transparent border p-2 rounded-md w-full text-white custom-select"
-            >
-              <option value="" disabled>
-                Selecciona un estilo
-              </option>
-              <option value="disney">Disney</option>
-              <option value="pixar">Pixar</option>
-              <option value="realista">Realista</option>
-              <option value="anime">Anime</option>
-              <option value="chibi">Chibi</option>
-            </select>
-          </div>
-
-          <div className="flex items-center justify-end grow">
-            <Sparkle size={24} color="#fff" className="absolute left-28 z-20" />
-            <Button
-              onClick={handlePrediction}
-              disabled={loading}
-              className="w-full text-lg bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient py-2 rounded-lg border-none flex items-center justify-center"
-            >
-              Generar
-            </Button>
-          </div>
+      <div className="flex gap-4 px-4 border-y-2 border-linea py-4 justify-between">
+        <div className="flex items-center justify-center gap-4 grow ">
+          <p>Nombre</p>
+          <input
+            type="text"
+            placeholder="Nombre de la generación"
+            value={generationName}
+            onChange={(e) => setGenerationName(e.target.value)}
+            disabled={loading}
+            className="mt- bg-transparent border p-2 rounded-md w-[200px] grow"
+          />
         </div>
 
-        <Texto3DResult prediction_text3d_result={prediction_text3d_result} />
+        <div className="flex items-center justify-center grow ">
+          <p className="me-2">Prompt</p>
+          <input
+            type="text"
+            placeholder="Prompt de la generación"
+            value={userPrompt}
+            onChange={(e) => setUserPrompt(e.target.value)}
+            disabled={loading}
+            className="bg-transparent border p-2 rounded-md w-full"
+          />
+        </div>
+
+        <div className="flex items-center gap-2 grow">
+          <p>Estilo</p>
+          <select
+            value={selectedStyle}
+            onChange={handleStyleChange}
+            disabled={loading}
+            className="bg-transparent border p-2 rounded-md w-full text-white custom-select"
+          >
+            <option value="" disabled>
+              Selecciona un estilo
+            </option>
+            <option value="disney">Disney</option>
+            <option value="pixar">Pixar</option>
+            <option value="realista">Realista</option>
+            <option value="anime">Anime</option>
+            <option value="chibi">Chibi</option>
+          </select>
+        </div>
+
+        <div className="">
+          <Sparkle size={24} color="#fff" className="absolute ml-4 mt-2 z-20" />
+
+          <Button
+            onClick={handlePrediction}
+            disabled={loading}
+            className="w-full bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient px-6  py-1 rounded-lg border-none flex items-center justify-center"
+          >
+            Generar
+          </Button>
+        </div>
       </div>
 
+      <Texto3DResult prediction_text3d_result={prediction_text3d_result} />
+      <div className="w-96 mx-auto ">
+        <DownloadSimple
+          size={32}
+          color="#fff"
+          className="absolute ml-28 z-20"
+        />
+
+        <Button
+          onClick={handleDownload}
+          disabled={!prediction_text3d_result}
+          className={`text-lg py-1 mt-3 px-6 rounded-lg border-none  w-full ${
+            prediction_text3d_result
+              ? "bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient cursor-pointer"
+              : "bg-gray-400 cursor-not-allowed"
+          }`}
+        >
+          Descargar GLB
+        </Button>
+      </div>
       <ErrorModal
         showModal={errorModalVisible}
         closeModal={closeErrorModal}
         errorMessage={errorMessage}
       />
-
       <LoadingModal
         showLoadingModal={loadingModalVisible}
         message="Generando el modelo 3D..."

@@ -14,7 +14,6 @@ export const Unico3D = ({
   BASE_URL,
   prediction_unico3d_result,
   activeTab,
-  isGenerationComplete
 }) => {
   const [imageFile, setImageFile] = useState(null);
   const [generationName, setGenerationName] = useState("");
@@ -104,82 +103,81 @@ export const Unico3D = ({
 
   const handleDownload = () => {
     if (prediction_unico3d_result && prediction_unico3d_result.obj_glb) {
-      window.open(prediction_unico3d_result.obj_glb, '_blank');
+      window.open(prediction_unico3d_result.obj_glb, "_blank");
     }
   };
 
   return (
-    <div className="grid grid-cols-2 gap-4 ml-[250px] w-full border-l-2 h-full bg-fondologin border-linea">
-      <div className="col-span-1 border-r-2 border-linea">
-        <div>
-          <div className="border-solid border-b-2 bg-principal border-linea pb-4">
-            <p className="text-center pt-6 text-2xl">Unico3D</p>
-          </div>
-          <div className="flex flex-col gap-4 px-4 mt-2">
-            <div className="flex items-center justify-center gap-4">
-              <p className="mt-3">Nombre</p>
-              <input
-                type="text"
-                placeholder="Nombre de la generación"
-                value={generationName}
-                onChange={(e) => setGenerationName(e.target.value)}
-                disabled={loading}
-                className="mt-3 bg-transparent border p-2 rounded-md w-[200px] grow"
-              />
-            </div>
-            <div className="flex items-center justify-center">
-              <FileInput
-                accept="image/*"
-                onChange={handleFileChange}
-                disabled={loading}
-                label="Seleccionar archivo"
-                className="grow"
-              />
-            </div>
-            <div className="mt-2">
-              <Sparkle
-                size={32}
-                color="#fff"
-                className="absolute mt-2 ml-2 z-20"
-              />
-              <Button
-                onClick={handlePrediction}
-                disabled={loading}
-                className="text-lg bg-gradient-to-r hover:bg-gradient-to-tr flex justify-end from-azul-gradient to-morado-gradient py-1 mt-1 px-6 rounded-lg border-none w-full"
-              >
-                Generar
-              </Button>
-            </div>
-            <div className="mt-2">
-              <DownloadSimple
-                size={32}
-                color="#fff"
-                className="absolute mt-2 ml-2 z-20"
-              />
-              <Button
-                onClick={handleDownload}
-                disabled={!prediction_unico3d_result}
-                className={`text-lg flex justify-end py-1 mt-1 px-6 rounded-lg border-none w-full ${
-                  prediction_unico3d_result
-                    ? 'bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient cursor-pointer'
-                    : 'bg-gray-400 cursor-not-allowed'
-                }`}
-              >
-                Descargar GLB
-              </Button>
-            </div>
-          </div>
+    <div className=" ml-[250px] w-full  bg-fondologin">
+      <div className="pt-6  bg-principal  pb-4">
+        <p className="text-center  text-2xl">Unico3D</p>
+      </div>
+
+      <div className="flex  gap-4 py-4 px-4 justify-between items-center border-y-2 border-linea">
+        <div className="flex items-center justify-center gap-4 flex-grow">
+          <p className="">Nombre</p>
+          <input
+            type="text"
+            placeholder="Nombre de la generación"
+            value={generationName}
+            onChange={(e) => setGenerationName(e.target.value)}
+            disabled={loading}
+            className=" bg-transparent border p-2 rounded-md w-full"
+          />
+        </div>
+        <div className="flex-grow">
+          <FileInput
+            accept="image/*"
+            onChange={handleFileChange}
+            disabled={loading}
+            label="Seleccionar archivo"
+            className="w-full"
+          />
+        </div>
+        <div className=" ">
+          <Sparkle
+            size={24}
+            color="#fff"
+            className="absolute ml-4 mt-2  z-20"
+          />
+          <Button
+            onClick={handlePrediction}
+            disabled={loading}
+            className="text-lg bg-gradient-to-r hover:bg-gradient-to-tr  from-azul-gradient to-morado-gradient py-1  px-6 rounded-lg border-none w-full"
+          >
+            Generar
+          </Button>
         </div>
       </div>
-      <div className="col-span-1">
-        <Unico3DResult prediction_unico3d_result={prediction_unico3d_result} 
-        isGenerationComplet={isGenerationComplete} />
+
+      <Unico3DResult prediction_unico3d_result={prediction_unico3d_result} />
+
+      <div className="w-96 mx-auto ">
+        <DownloadSimple
+          size={32}
+          color="#fff"
+          className="absolute ml-28 z-20"
+        />
+
+        <Button
+          onClick={handleDownload}
+          disabled={!prediction_unico3d_result}
+          className={`text-lg py-1 mt-3 px-6 rounded-lg border-none  w-full ${
+            prediction_unico3d_result
+              ? "bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient cursor-pointer"
+              : "bg-gray-400 cursor-not-allowed"
+          }`}
+        >
+          Descargar GLB
+        </Button>
       </div>
+
       <ErrorModal
         showModal={errorModalVisible}
         closeModal={closeErrorModal}
         errorMessage={errorMessage}
       />
+
       <LoadingModal
         showLoadingModal={loadingModalVisible}
         message="Generando el modelo 3D..."

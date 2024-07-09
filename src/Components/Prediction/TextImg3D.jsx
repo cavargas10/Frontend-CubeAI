@@ -104,51 +104,52 @@ export const TextImg3D = ({
   };
 
   return (
-    <div className="col-span-8 ml-[250px] w-full border-l-2 bg-fondologin border-linea">
-      <div className="border-solid border-b-2 pt-6 bg-principal border-linea pb-4">
+    <div className=" ml-[250px] w-full  bg-fondologin">
+      <div className="bg-principal pt-6 pb-4">
         <p className="text-center text-2xl">Texto e Imagen a 3D</p>
       </div>
-      <div className="flex flex-wrap gap-4 px-4 mt-2">
-        <div className="flex items-center gap-2 grow">
-          <p className="mt-3">Nombre</p>
+
+      <div className="flex  gap-4 py-4 px-4 justify-between items-center border-y-2 border-linea">
+        <div className="flex flex-grow justify-center items-center gap-4 ">
+          <p className="">Nombre</p>
           <input
             type="text"
             placeholder="Ingrese un nombre"
             value={generationName}
             onChange={(e) => setGenerationName(e.target.value)}
             disabled={loading}
-            className="bg-transparent border p-2 rounded-md w-full mt-3"
+            className="bg-transparent border p-2 rounded-md  w-full"
           />
         </div>
-        <div className="flex items-center gap-2 grow">
-          <p className="mt-3">Prompt</p>
+        <div className="flex flex-grow justify-center items-center gap-4 ">
+          <p className="">Prompt</p>
           <input
             type="text"
             placeholder="Ingrese Prompt"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             disabled={loading}
-            className="bg-transparent border p-2 rounded-md w-full mt-3"
+            className="bg-transparent border p-2 rounded-md   w-full"
           />
         </div>
-        <div className="flex items-center gap-2 grow">
-          <p className="mt-3">Detalles</p>
+        <div className="flex flex-grow justify-center items-center gap-4">
+          <p className="">Detalles</p>
           <input
             type="text"
             placeholder="Detalles adicionales"
             value={additionalDetails}
             onChange={(e) => setAdditionalDetails(e.target.value)}
             disabled={loading}
-            className="bg-transparent border p-2 rounded-md w-full mt-3"
+            className="bg-transparent border p-2 rounded-md w-full "
           />
         </div>
-        <div className="flex items-center gap-2 grow">
-          <p className="mt-3">Estilo</p>
+        <div className="flex flex-grow justify-center items-center gap-4 ">
+          <p className="">Estilo</p>
           <select
             value={style}
             onChange={handleStyleChange}
             disabled={loading}
-            className="bg-transparent border p-2 rounded-md w-full text-white custom-select mt-3"
+            className="bg-transparent border p-2 rounded-md w-full text-white custom-select"
           >
             <option value="" disabled>
               Selecciona un estilo
@@ -160,8 +161,9 @@ export const TextImg3D = ({
             <option value="chibi">Chibi</option>
           </select>
         </div>
-        <div className="flex items-center justify-end grow mt-2">
-          <Sparkle size={32} color="#fff" className="absolute mt-1 z-20" />
+
+        <div className="">
+          <Sparkle size={32} color="#fff" className="absolute mt-1 ml-2 z-20" />
           <Button
             onClick={handlePrediction}
             disabled={loading}

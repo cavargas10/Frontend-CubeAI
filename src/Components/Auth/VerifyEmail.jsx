@@ -9,10 +9,10 @@ export const VerifyEmail = () => {
   };
 
   return (
-    <div className="text-white h-screen grid grid-cols-4">
-      <div className="col-span-2">
-        <div className="flex justify-center items-center mt-5">
-          <div className="border-2 border-linea bg-fondologin shadow-md rounded-lg px-16 pt-10 pb-10 mb-7">
+    <div className="flex h-screen justify-center  px-12">
+      <div className="w-1/2 flex items-center justify-center ">
+        <div className="">
+          <div className="border-2 border-linea bg-fondologin shadow-md rounded-lg px-16 pt-10 pb-10 ">
             <div className="flex-grow text-center">
               <h1 className="pb-3 text-2xl">Verifica tu correo electrónico</h1>
               <h2 className="pb-3 text-3xl">
@@ -33,7 +33,7 @@ export const VerifyEmail = () => {
         </div>
       </div>
 
-      <div className="col-span-2">
+      <div className="w-1/2 flex  items-center justify-center ">
         <div className="flex justify-center items-center">
           <img src={logo} alt="Logo" />
         </div>

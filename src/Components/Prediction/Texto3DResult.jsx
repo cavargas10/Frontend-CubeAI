@@ -6,7 +6,7 @@ import { Suspense } from "react";
 
 export const Texto3DResult = ({ prediction_text3d_result }) => {
   return (
-    <div className=" w-[700px]">
+    <div className="w-[700px]  mx-auto min-h-[345px] mt-2">
       <Canvas camera={{ position: [0, 0, 1.7] }}>
         <Suspense fallback={null}>
           {prediction_text3d_result && prediction_text3d_result.obj_model && (

@@ -15,24 +15,26 @@ export const TextImg3DResult = ({ prediction_textimg3d_result, error }) => {
   }, [prediction_textimg3d_result]);
 
   return (
-    <div className="grid grid-cols-6 mt-4 border-t-2  border-linea">
+    <div className="grid grid-cols-6">
       {isResultReady && (
         <div className="col-span-2 border-r-2  border-linea">
           {error && <p style={{ color: "red" }}>{error}</p>}
           {prediction_textimg3d_result && (
             <div className="mt-4 text-center">
-              <h3 className=" text-xl ">Resultado de la Generación </h3>
+              <h3 className=" text-xl  border-b-2 border-linea pb-5">
+                Resultado de la Generación{" "}
+              </h3>
               {prediction_textimg3d_result.generate_image && (
-                <div className="flex justify-center border-y-2  border-linea  mt-3">
+                <div className="flex flex-col items-center py-[3px]">
                   <img
                     src={prediction_textimg3d_result.generate_image}
                     alt="Imagen"
-                    className="w-[250px]"
+                    className="w-[274px]"
                   />
                 </div>
               )}
               {prediction_textimg3d_result.make3d && (
-                <div className="flex justify-center gap-10 border-t-2 mt-1">
+                <div className="flex justify-center gap-10 border-t-2 border-linea  px-10">
                   <div
                     className=" 
                    flex items-center justify-around
@@ -74,12 +76,13 @@ export const TextImg3DResult = ({ prediction_textimg3d_result, error }) => {
       )}
 
       <div className={` ${isResultReady ? "col-span-4" : "col-span-6"} mt`}>
-        <div className="h-[355px] ">
+        <div className="h-[434px] ">
           <Canvas camera={{ position: [0, 0, 1.7] }}>
             <Suspense fallback={null}>
-              {prediction_textimg3d_result && prediction_textimg3d_result.make3d && (
-                <Model url={prediction_textimg3d_result.make3d[1]} />
-              )}
+              {prediction_textimg3d_result &&
+                prediction_textimg3d_result.make3d && (
+                  <Model url={prediction_textimg3d_result.make3d[1]} />
+                )}
               <OrbitControls minDistance={1} maxDistance={3} />
               <ambientLight intensity={1} />
               <Environment preset="sunset" />
