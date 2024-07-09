@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Environment } from "@react-three/drei";
+import { OrbitControls, Environment} from "@react-three/drei";
 import { Model } from "./Model";
 import { Suspense } from "react";
 
-export const Unico3DResult = ({ prediction_unico3d_result }) => {
+export const Unico3DResult = ({ prediction_unico3d_result, isGenerationComplete }) => {
   const [isResultReady, setIsResultReady] = useState(false);
 
   useEffect(() => {
-    if (prediction_unico3d_result) {
+    if (prediction_unico3d_result && isGenerationComplete) {
       setIsResultReady(true);
     }
-  }, [prediction_unico3d_result]);
+  }, [prediction_unico3d_result, isGenerationComplete]);
 
   return (
     <div className="grid grid-cols-1">

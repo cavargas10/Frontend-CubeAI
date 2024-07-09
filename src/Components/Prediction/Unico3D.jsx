@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Unico3DResult } from "./Unico3DResult";
-import { Sparkle } from "@phosphor-icons/react";
+import { Sparkle, DownloadSimple } from "@phosphor-icons/react";
 import { FileInput, Button } from "flowbite-react";
 import { ErrorModal } from "../Modals/ErrorModal";
 import { LoadingModal } from "../Modals/LoadingModal";
@@ -14,6 +14,7 @@ export const Unico3D = ({
   BASE_URL,
   prediction_unico3d_result,
   activeTab,
+  isGenerationComplete
 }) => {
   const [imageFile, setImageFile] = useState(null);
   const [generationName, setGenerationName] = useState("");
@@ -101,6 +102,12 @@ export const Unico3D = ({
     setErrorMessage("");
   };
 
+  const handleDownload = () => {
+    if (prediction_unico3d_result && prediction_unico3d_result.obj_glb) {
+      window.open(prediction_unico3d_result.obj_glb, '_blank');
+    }
+  };
+
   return (
     <div className="grid grid-cols-2 gap-4 ml-[250px] w-full border-l-2 h-full bg-fondologin border-linea">
       <div className="col-span-1 border-r-2 border-linea">
@@ -138,39 +145,35 @@ export const Unico3D = ({
               <Button
                 onClick={handlePrediction}
                 disabled={loading}
-                className="text-lg bg-gradient-to-r hover:bg-gradient-to-tr flex justify-end from-azul-gradient to-morado-gradient py-1 mt-1 px-6 rounded-lg border-none"
+                className="text-lg bg-gradient-to-r hover:bg-gradient-to-tr flex justify-end from-azul-gradient to-morado-gradient py-1 mt-1 px-6 rounded-lg border-none w-full"
               >
                 Generar
               </Button>
             </div>
-          </div>
-          <div className="border-t-2 border-linea mt-4 pt-4 w-full">
-            <Unico3DResult
-              prediction_unico3d_result={prediction_unico3d_result}
-            />
+            <div className="mt-2">
+              <DownloadSimple
+                size={32}
+                color="#fff"
+                className="absolute mt-2 ml-2 z-20"
+              />
+              <Button
+                onClick={handleDownload}
+                disabled={!prediction_unico3d_result}
+                className={`text-lg flex justify-end py-1 mt-1 px-6 rounded-lg border-none w-full ${
+                  prediction_unico3d_result
+                    ? 'bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient cursor-pointer'
+                    : 'bg-gray-400 cursor-not-allowed'
+                }`}
+              >
+                Descargar GLB
+              </Button>
+            </div>
           </div>
         </div>
       </div>
       <div className="col-span-1">
-        {prediction_unico3d_result && (
-          <div className="mt-4">
-            <h3 className="text-xl text-center">Resultado de la Generación</h3>
-            {prediction_unico3d_result.obj_glb && (
-              <div className="flex justify-center gap-10 mt-4">
-                <div className="flex items-center justify-around w-full px-4 py-2 text-white rounded-md shadow-md bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient hover:from-morado-gradient hover:to-azul-gradient">
-                  <DownloadSimple size={32} color="white" />
-                  <a
-                    href={prediction_unico3d_result.obj_glb}
-                    download="make3d.glb"
-                    className="text-xl"
-                  >
-                    GLB
-                  </a>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+        <Unico3DResult prediction_unico3d_result={prediction_unico3d_result} 
+        isGenerationComplet={isGenerationComplete} />
       </div>
       <ErrorModal
         showModal={errorModalVisible}
