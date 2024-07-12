@@ -72,9 +72,7 @@ export const Texto3D = ({
 
       setPrediction_text3d_result(response.data);
     } catch (error) {
-      console.error("Error completo:", error);
       if (error.response) {
-        console.log("Respuesta de error del servidor:", error.response.data);
         const backendError =
           error.response.data.error ||
           "Error desconocido al realizar la predicción";
@@ -107,13 +105,13 @@ export const Texto3D = ({
   };
 
   return (
-    <div className="ml-[250px] w-full bg-fondologin ">
-      <div className="pt-6 bg-principal pb-4 ">
+    <div className=" w-full  sm:ml-[250px] sm:w-full xl:ml-[250px] 2xl:ml-[300px] xl:w-full  bg-fondologin ">
+      <div className="pt-6 bg-principal pb-4 border-b-2 border-linea xl:border-none  ">
         <p className="text-center text-2xl">Texto a 3D</p>
       </div>
 
-      <div className="flex gap-4 px-4 border-y-2 border-linea py-4 justify-between">
-        <div className="flex items-center justify-center gap-4 grow ">
+      <div className="flex flex-col gap-4 px-4 py-2 sm:w-5/4  sm:mt-4 sm:px-4 sm:flex sm:flex-col sm:gap-4  xl:mt-0 xl:ml-0 xl:flex-row xl:w-full xl:flex  xl:gap-4 xl:py-4 xl:px-4 xl:justify-between xl:items-center xl:border-y-2 xl:border-linea">
+        <div className=" flex items-center justify-center gap-4 grow ">
           <p>Nombre</p>
           <input
             type="text"
@@ -121,7 +119,7 @@ export const Texto3D = ({
             value={generationName}
             onChange={(e) => setGenerationName(e.target.value)}
             disabled={loading}
-            className="mt- bg-transparent border p-2 rounded-md w-[200px] grow"
+            className="mt- bg-transparent border p-2 rounded-md w-full xl:grow"
           />
         </div>
 
@@ -157,7 +155,11 @@ export const Texto3D = ({
         </div>
 
         <div className="">
-          <Sparkle size={24} color="#fff" className="absolute ml-4 mt-2 z-20" />
+          <Sparkle
+            size={24}
+            color="#fff"
+            className="absolute xl:ml-4 mt-2 z-20 sm:ml-52 "
+          />
 
           <Button
             onClick={handlePrediction}
@@ -168,9 +170,13 @@ export const Texto3D = ({
           </Button>
         </div>
       </div>
-
+      <div
+        className="sm:mt-4 border-t-2 border-linea xl:border-none
+      "
+      ></div>
       <Texto3DResult prediction_text3d_result={prediction_text3d_result} />
-      <div className="w-96 mx-auto ">
+
+      <div className="w-96 mx-auto xl:mx-auto sm:ml-24 ">
         <DownloadSimple
           size={32}
           color="#fff"

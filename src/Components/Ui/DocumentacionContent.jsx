@@ -11,7 +11,6 @@ const DocumentacionContent = () => {
         const data = await client.request(GET_HYGRAPH);
         setCategorias(data.categorias);
       } catch (error) {
-        console.error(error);
       }
     };
 
@@ -19,7 +18,7 @@ const DocumentacionContent = () => {
   }, []);
 
   return (
-    <div>
+    <div className="">
       {categorias.map((categoria) => (
         <div key={categoria.slug}>
           <h2>{categoria.titulo}</h2>

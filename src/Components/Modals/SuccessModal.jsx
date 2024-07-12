@@ -5,7 +5,6 @@ import { Modal, Button } from "flowbite-react";
 export const SuccessModal = ({
   showSuccessModal,
   closeSuccessModal,
-  generationToDelete,
   message
 }) => {
   return (

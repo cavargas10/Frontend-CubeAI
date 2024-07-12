@@ -64,7 +64,6 @@ export const Unico3D = ({
       const formData = new FormData();
       formData.append("image", imageFile);
       formData.append("generationName", generationName);
-      console.log([...formData.entries()]);
 
       const response = await axios.post(`${BASE_URL}/unico3D`, formData, {
         headers: {
@@ -108,13 +107,13 @@ export const Unico3D = ({
   };
 
   return (
-    <div className=" ml-[250px] w-full  bg-fondologin">
-      <div className="pt-6  bg-principal  pb-4">
+    <div className="w-full sm:ml-[250px] sm:w-full xl:ml-[250px] 2xl:ml-[300px] xl:w-full  bg-fondologin">
+      <div className="pt-6  bg-principal  pb-4 border-b-2 border-linea xl:border-none ">
         <p className="text-center  text-2xl">Unico3D</p>
       </div>
 
-      <div className="flex  gap-4 py-4 px-4 justify-between items-center border-y-2 border-linea">
-        <div className="flex items-center justify-center gap-4 flex-grow">
+      <div className=" flex flex-col gap-4 px-4 py-4 sm:w-full  sm:px-4 sm:mt-4  sm:flex sm:flex-col sm:gap-4  xl:mt-0 xl:ml-0 xl:flex-row xl:w-full xl:flex  xl:gap-4 xl:py-4 xl:px-4 xl:justify-between xl:items-center xl:border-y-2 xl:border-linea">
+        <div className="flex items-center justify-center gap-4 grow ">
           <p className="">Nombre</p>
           <input
             type="text"
@@ -122,7 +121,7 @@ export const Unico3D = ({
             value={generationName}
             onChange={(e) => setGenerationName(e.target.value)}
             disabled={loading}
-            className=" bg-transparent border p-2 rounded-md w-full"
+            className=" bg-transparent border p-2 rounded-md w-full  xl:grow"
           />
         </div>
         <div className="flex-grow">
@@ -134,11 +133,11 @@ export const Unico3D = ({
             className="w-full"
           />
         </div>
-        <div className=" ">
+        <div className="">
           <Sparkle
             size={24}
             color="#fff"
-            className="absolute ml-4 mt-2  z-20"
+            className="absolute xl:ml-4 mt-2  z-20 sm:ml-52 "
           />
           <Button
             onClick={handlePrediction}
@@ -150,13 +149,18 @@ export const Unico3D = ({
         </div>
       </div>
 
+      <div
+        className="sm:mt-4 border-t-2 border-linea xl:border-none
+      "
+      ></div>
+
       <Unico3DResult prediction_unico3d_result={prediction_unico3d_result} />
 
-      <div className="w-96 mx-auto ">
+      <div className="w-96 mx-auto sm:ml-24">
         <DownloadSimple
           size={32}
           color="#fff"
-          className="absolute ml-28 z-20"
+          className="absolute ml-28 z-20 "
         />
 
         <Button

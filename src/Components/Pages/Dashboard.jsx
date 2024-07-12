@@ -29,7 +29,8 @@ export const Dashboard = ({
   BASE_URL,
 }) => {
   const [userData, setUserData] = useState(null);
-
+ const [menuOpen, setMenuOpen] = useState(false);`
+ `
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -54,12 +55,21 @@ export const Dashboard = ({
     setUserData((prevData) => ({ ...prevData, ...newData }));
   };
 
+   const toggleMenu = () => {
+     setMenuOpen(!menuOpen);
+   };
+
   return (
     <div className="text-white">
-      <HeaderDash userData={userData} />
+      <HeaderDash userData={userData} toggleMenu={toggleMenu} />
 
-      <main className="flex mt-16">
-        <NavDash handleLogout={handleLogout} />
+      <main className="flex mt-16 ">
+        <NavDash
+          handleLogout={handleLogout}
+          menuOpen={menuOpen}
+          toggleMenu={toggleMenu}
+        />
+
         <Routes>
           <Route
             path="/"

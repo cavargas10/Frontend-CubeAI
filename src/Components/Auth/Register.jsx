@@ -104,14 +104,16 @@ export const Register = ({ BASE_URL }) => {
   };
 
   return (
-    <div className="flex h-screen justify-center">
-      <div className="w-1/2 flex items-center justify-center mt-16">
-        <div className="w-full max-w-md">
-          <div className="border-2 border-linea bg-fondologin shadow-md rounded-lg px-16 pt-10 pb-10 mb-7">
+    <div className="flex flex-col sm:flex-row h-screen justify-center items-center">
+      <div className="w-full sm:w-1/2 flex items-center justify-center mt-10 sm:mt-0 px-4 ">
+        <div className="w-full max-w-md lg:max-w-lg">
+          <div className="border-2 border-linea bg-fondologin shadow-md rounded-lg px-16 pt-10 pb-10 mb-7  telefono:p-3">
             <div className="flex-grow text-center">
               <h1 className="text-2xl">Registro</h1>
               <h2 className="text-3xl">Bienvenido a CV3D</h2>
-              <p className="px-3 pb-4">Ingresa tus datos para crear una cuenta</p>
+              <p className="px-3 pb-4">
+                Ingresa tus datos para crear una cuenta
+              </p>
             </div>
             <div className="mb-4">
               <input
@@ -171,7 +173,7 @@ export const Register = ({ BASE_URL }) => {
         </div>
       </div>
 
-      <div className="w-1/2 flex items-center justify-center">
+      <div className="sm:hidden xl:w-1/2 xl:flex xl:items-center xl:justify-center telefono:hidden">
         <img src={logo} alt="Logo" />
       </div>
 

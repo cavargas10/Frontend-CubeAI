@@ -49,7 +49,6 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
       setSuccessMessage("Su usuario se ha actualizado");
       setShowSuccessModal(true);
     } catch (error) {
-      console.error("Error updating name", error);
       setShowLoadingModal(false);
     }
   };
@@ -89,7 +88,6 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
       setSuccessMessage("Su imagen se ha actualizado");
       setShowSuccessModal(true);
     } catch (error) {
-      console.error("Error updating profile picture", error);
       setShowLoadingModal(false);
     }
   };
@@ -104,7 +102,6 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
       });
       navigate("/");
     } catch (error) {
-      console.error("Error deleting account", error);
     }
   };
 
@@ -119,14 +116,14 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
 
   if (!userData) {
     return (
-      <div className="w-full ml-60 pl-2 pr-8 mt-2 border-l-2 border-linea bg-fondologin">
+      <div className="w-full sm:ml-60 pl-2 pr-8 mt-2 border-l-2 border-linea bg-fondologin">
         Cargando datos del usuario...
       </div>
     );
   }
 
   return (
-    <section className="w-full ml-60 pl-2 pr-8 mt-2 border-l-2 border-linea bg-fondologin">
+    <section className="w-full 2xl:ml-72 sm:ml-60 pl-2 pr-8 mt-2 sm:border-l-2 sm:border-linea bg-fondologin">
       <div className="ml-8 mt-8">
         <div>
           <h1 className="text-4xl">Perfil</h1>
@@ -134,10 +131,10 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
           <hr className="mt-4" />
         </div>
 
-        <form className="mt-8">
+        <form className="mt-3 sm:mt-8">
           <div className="flex flex-col lg:flex-row">
             <div className="lg:w-1/2 pr-4">
-              <div className="mb-5">
+              <div className="mb-3 sm:mb-5">
                 <h2 className="text-2xl">Nombre</h2>
                 <p className="mt-1">
                   Nombre de usuario con el que usted se registró.
@@ -168,7 +165,7 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
                 {nameError && <p className="text-red-500 mt-2">{nameError}</p>}
               </div>
 
-              <div className="mb-5">
+              <div className="mb-3 sm:mb-5">
                 <h2 className="text-2xl">Correo electrónico</h2>
                 <p className="mt-1">
                   La dirección de correo electrónico utilizada para registrarse
@@ -201,12 +198,12 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
               </div>
             </div>
 
-            <div className="lg:w-1/2 pl-4">
+            <div className="mt-3 sm:w-1/2 xl:pl-4 sm:mt-5 xl:mt-0">
               <div className="mb-6">
                 <h2 className="text-2xl">Imagen de perfil</h2>
                 <p className="mt-1">Actualiza tu imagen de perfil</p>
                 <div className="mt-3 flex items-center">
-                  <div className="relative">
+                  <div className="relative  mx-auto sm:mx-0">
                     {userData.profile_picture && (
                       <img
                         src={userData.profile_picture}

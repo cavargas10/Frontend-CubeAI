@@ -12,7 +12,6 @@ export const Tutoriales = () => {
         const data = await hygraphClient.request(GET_HYGRAPH);
         setTutoriales(data.tutoriales);
       } catch (error) {
-        console.error("Error fetching tutoriales:", error);
       }
     };
     fetchTutoriales();
@@ -23,7 +22,7 @@ export const Tutoriales = () => {
       <div className="pt-20">
         <h2 className="font-bold text-3xl">Tutoriales </h2>
         <div className="flex justify-center mt-8"></div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-screen-xl px-14 pb-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full  px-14 pb-10">
           {tutoriales.map((tutorial) => (
             <TutorialCard
               key={tutorial.id || tutorial.titulo}

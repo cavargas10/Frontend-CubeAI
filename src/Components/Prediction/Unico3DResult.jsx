@@ -6,7 +6,7 @@ import { Suspense } from "react";
 
 export const Unico3DResult = ({ prediction_unico3d_result }) => {
   return (
-    <div className="w-[700px]  mx-auto min-h-[345px] mt-2">
+    <div className="h-96">
       <Canvas camera={{ position: [0, 0, -1.2] }}>
         <Suspense fallback={null}>
           {prediction_unico3d_result && prediction_unico3d_result.obj_model && (

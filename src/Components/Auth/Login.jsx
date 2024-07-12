@@ -1,21 +1,17 @@
 import { useState } from "react";
 import logo from "../../Assets/logo.png";
 import { auth, googleProvider, db } from "../../Config/firebaseConfig";
-import {
-  signInWithPopup,
-  signInWithEmailAndPassword,
-  fetchSignInMethodsForEmail,
-} from "firebase/auth";
+import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import { getDoc, doc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { RegistrationModal } from "../Modals/RegistrationModal";
-import { ErrorModal } from "../Modals/ErrorModal";  
+import { ErrorModal } from "../Modals/ErrorModal";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const [showErrorModal, setShowErrorModal] = useState(false); 
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [googleEmail, setGoogleEmail] = useState("");
   const navigate = useNavigate();
@@ -44,21 +40,21 @@ export const Login = () => {
           setError(
             "Por favor, verifica tu correo electrónico antes de iniciar sesión."
           );
-          setShowErrorModal(true);  
+          setShowErrorModal(true);
         }
       }
     } catch (error) {
       setError(
         "Hubo un error al intentar iniciar sesión con Google. Por favor, inténtalo de nuevo."
       );
-      setShowErrorModal(true);  
+      setShowErrorModal(true);
     }
   };
 
   const handleLogin = async () => {
     if (!email || !password) {
       setError("Todos los campos son obligatorios.");
-      setShowErrorModal(true);  
+      setShowErrorModal(true);
       return;
     }
     try {
@@ -74,11 +70,11 @@ export const Login = () => {
         setError(
           "Por favor, verifica tu correo electrónico antes de iniciar sesión."
         );
-        setShowErrorModal(true);  
+        setShowErrorModal(true);
       }
     } catch (error) {
       setError("Acceso denegado: Verifica tu correo y contraseña");
-      setShowErrorModal(true);  
+      setShowErrorModal(true);
     }
   };
 
@@ -93,13 +89,17 @@ export const Login = () => {
   };
 
   return (
-    <div className="flex h-screen justify-center ">
-      <div className="w-1/2 flex items-center justify-center mt-10">
-        <div className="w-full max-w-md">
-          <div className="border-2 border-linea bg-fondologin shadow-md rounded-lg p-10">
-            <div className="flex-grow text-center">
-              <h1 className="text-2xl">Inicio de sesión</h1>
-              <h2 className=" text-3xl">Bienvenido a CV3D</h2>
+    <div className="flex flex-col sm:flex-row h-screen justify-center items-center">
+      <div className="w-full sm:w-1/2 flex items-center justify-center mt-10 sm:mt-0 px-4">
+        <div className="w-full max-w-md lg:max-w-lg">
+          <div className="border-2 border-linea bg-fondologin shadow-md rounded-lg p-4 sm:p-10 lg:p-12">
+            <div className="text-center mb-4">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl">
+                Inicio de sesión
+              </h1>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl">
+                Bienvenido a CV3D
+              </h2>
               <p className="px-3 pb-4">
                 Ingresa tu correo y contraseña para comenzar
               </p>
@@ -128,7 +128,7 @@ export const Login = () => {
             </div>
             <div className="flex items-center justify-between">
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 lg:py-3 lg:px-6 rounded-lg focus:outline-none focus:shadow-outline w-full"
                 type="button"
                 onClick={handleLogin}
               >
@@ -148,7 +148,7 @@ export const Login = () => {
             <div className="flex items-center justify-between">
               <button
                 onClick={handleGoogleLogin}
-                className="bg-blue-500 text-center hover:bg-blue-700 text-white font-bold py-4 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full mt-4"
+                className="bg-blue-500 text-center hover:bg-blue-700 text-white font-bold py-2 px-4 lg:py-3 lg:px-6 rounded-lg focus:outline-none focus:shadow-outline w-full mt-4"
               >
                 Iniciar sesión con Google
               </button>
@@ -163,12 +163,14 @@ export const Login = () => {
         <ErrorModal
           showModal={showErrorModal}
           closeModal={closeErrorModal}
-          errorMessage={error || "Acceso denegado: Verifica tu correo y contraseña"}
+          errorMessage={
+            error || "Acceso denegado: Verifica tu correo y contraseña"
+          }
         />
       </div>
 
-      <div className="w-1/2 flex  items-center justify-center ">
-        <img src={logo} alt="Logo" />
+      <div className="hidden  sm:w-1/2 xl:flex xl:items-center xl:justify-center">
+        <img src={logo} alt="Logo" className="max-w-xs lg:max-w-md" />
       </div>
     </div>
   );

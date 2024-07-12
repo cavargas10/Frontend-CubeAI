@@ -13,7 +13,7 @@ const CameraSetup = ({ position }) => {
   return null;
 };
 
-export const GenerationCard = ({ generation, formatDate, openModal}) => {
+export const GenerationCard = ({ generation, formatDate, openModal }) => {
   const canvasRef = useRef();
 
   const getCameraPosition = () => {
@@ -49,7 +49,7 @@ export const GenerationCard = ({ generation, formatDate, openModal}) => {
   const modelUrl = getModelUrl();
 
   return (
-    <div className="relative w-[230px] h-[230px] overflow-hidden rounded-xl shadow-lg group cursor-pointer">
+    <div className="relative mt-5 sm:mt-0 w-full h-[250px] sm:w-[230px] sm:h-[230px] 2xl:w-[260px] 2xl:h-[260px] overflow-hidden rounded-xl shadow-lg group cursor-pointer  ">
       {modelUrl ? (
         <Canvas ref={canvasRef}>
           <CameraSetup position={getCameraPosition()} />
@@ -64,8 +64,8 @@ export const GenerationCard = ({ generation, formatDate, openModal}) => {
           No está disponible el modelo 3D model
         </div>
       )}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/80 group-hover:via-black/60 group-hover:to-black/70"></div>
-      <div className="absolute inset-0 flex translate-y-[100%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/60 to-black/60 sm:from-transparent sm:via-transparent sm:to-black/60 group-hover:from-black/80 group-hover:via-black/60 group-hover:to-black/70"></div>
+      <div className="absolute inset-0 flex sm:translate-y-[100%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
         <div className="text-white py-2">
           <h3 className="text-center text-2xl">{generation.generation_name}</h3>
           <p>Generado el: {formatDate(generation.timestamp)}</p>

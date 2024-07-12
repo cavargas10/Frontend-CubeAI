@@ -18,7 +18,7 @@ export default {
         "bg-btn-dash": "#131539",
       },
       screens: {
-        telefono: "390px",
+        'telefono': '384px',
         tablet: "810px",
         laptop: "1366px",
         desktop: "1920px",

@@ -75,9 +75,7 @@ export const TextImg3D = ({
 
       setPrediction_textimg3d_result(response.data);
     } catch (error) {
-      console.error("Error completo:", error);
       if (error.response) {
-        console.log("Respuesta de error del servidor:", error.response.data);
         const backendError =
           error.response.data.error ||
           "Error desconocido al realizar la predicción";
@@ -104,13 +102,13 @@ export const TextImg3D = ({
   };
 
   return (
-    <div className=" ml-[250px] w-full  bg-fondologin">
-      <div className="bg-principal pt-6 pb-4">
+    <div className="w-full sm:ml-[250px] sm:w-full xl:ml-[250px] 2xl:ml-[300px] xl:w-full bg-fondologin">
+      <div className="bg-principal pt-6 pb-4 border-b-2 border-linea xl:border-none">
         <p className="text-center text-2xl">Texto e Imagen a 3D</p>
       </div>
 
-      <div className="flex  gap-4 py-4 px-4 justify-between items-center border-y-2 border-linea">
-        <div className="flex flex-grow justify-center items-center gap-4 ">
+      <div className=" px-4 py-4 flex flex-col gap-4 sm:w-4/3 sm:mt-4 sm:px-4  sm:flex sm:flex-col sm:gap-4  xl:mt-0 xl:ml-0 xl:flex-row xl:w-full xl:flex  xl:gap-4 xl:py-4 xl:px-4 xl:justify-between xl:items-center xl:border-y-2 xl:border-linea">
+        <div className="flex justify-between items-center gap-4 grow xl:flex xl:justify-center xl:items-center xl:gap-4 xl:grow">
           <p className="">Nombre</p>
           <input
             type="text"
@@ -118,7 +116,7 @@ export const TextImg3D = ({
             value={generationName}
             onChange={(e) => setGenerationName(e.target.value)}
             disabled={loading}
-            className="bg-transparent border p-2 rounded-md  w-full"
+            className="bg-transparent border p-2 rounded-md  w-full  xl:grow"
           />
         </div>
         <div className="flex flex-grow justify-center items-center gap-4 ">
@@ -163,17 +161,25 @@ export const TextImg3D = ({
         </div>
 
         <div className="">
-          <Sparkle size={32} color="#fff" className="absolute mt-1 ml-2 z-20" />
+          <Sparkle
+            size={24}
+            color="#fff"
+            className="absolute xl:ml-4 mt-2  z-20 sm:ml-52"
+          />
           <Button
             onClick={handlePrediction}
             disabled={loading}
-            className="text-lg bg-gradient-to-r hover:bg-gradient-to-tr flex justify-end from-azul-gradient to-morado-gradient py-1 px-6 rounded-lg border-none"
+            className="w-full sm:justify-center text-lg bg-gradient-to-r hover:bg-gradient-to-tr flex justify-end from-azul-gradient to-morado-gradient py-1 px-6 rounded-lg border-none"
           >
             Generar
           </Button>
         </div>
       </div>
 
+      <div
+        className="sm:mt-4 border-t-2 border-linea xl:border-none
+      "
+      ></div>
       <TextImg3DResult
         prediction_textimg3d_result={prediction_textimg3d_result}
       />

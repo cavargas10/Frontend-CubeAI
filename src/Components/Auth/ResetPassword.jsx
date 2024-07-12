@@ -26,9 +26,9 @@ export const ResetPassword = () => {
   };
 
   return (
-    <div className="flex h-screen justify-center">
-      <div className="w-8/12 flex items-center justify-center mt-10">
-        <div className="border-2 border-linea bg-fondologin shadow-md rounded-lg px-16 pt-10 pb-10 mb-7">
+    <div className="flex flex-col sm:flex-row h-screen justify-center items-center">
+      <div className="w-full sm:w-1/2 flex items-center justify-center mt-10 sm:mt-0 px-4">
+        <div className="border-2 border-linea bg-fondologin shadow-md rounded-lg p-4 sm:p-10 ">
           <div className="flex-grow text-center">
             <h1 className="pb-3 text-2xl">Restablecer contraseña</h1>
             <h2 className="pb-3 text-3xl">Ingresa tu correo electrónico</h2>
@@ -64,7 +64,7 @@ export const ResetPassword = () => {
           </div>
         </div>
       </div>
-      <div className="w-1/2 flex  items-center justify-center">
+      <div className="sm:hidden xl:w-1/2 xl:flex  xl:items-center xl:justify-center telefono:hidden">
         <img src={logo} alt="Logo" />
       </div>
     </div>

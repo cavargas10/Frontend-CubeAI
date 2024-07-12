@@ -70,21 +70,16 @@ export const Imagen3D = ({
         },
       });
 
-      console.log("Respuesta del servidor:", response.data);
-
       if (typeof setPrediction_img3d_result === "function") {
         setPrediction_img3d_result(response.data);
       } else {
-        console.error("setPrediction_img3d_result no es una función");
         setErrorMessage(
           "Error interno de la aplicación. Por favor, intente de nuevo más tarde."
         );
         setErrorModalVisible(true);
       }
     } catch (error) {
-      console.error("Error completo:", error);
       if (error.response) {
-        console.log("Respuesta de error del servidor:", error.response.data);
         const backendError =
           error.response.data.error ||
           "Error desconocido al realizar la predicción";
@@ -111,13 +106,13 @@ export const Imagen3D = ({
   };
 
   return (
-    <div className="ml-[250px] w-full  bg-fondologin">
-      <div className=" pt-6  bg-principal  pb-4">
+    <div className="w-full sm:ml-[250px] sm:w-full xl:ml-[250px] 2xl:ml-[300px] xl:w-full  bg-fondologin">
+      <div className=" pt-6  bg-principal  pb-4  border-b-2 border-linea xl:border-none">
         <p className="text-center text-2xl">Imagen a 3D</p>
       </div>
 
-      <div className=" flex  gap-4 py-4 px-4 justify-between items-center border-y-2 border-linea">
-        <div className="flex justify-center items-center gap-4 grow">
+      <div className="flex flex-col gap-4 py-4 px-4 sm:w-5/4 sm:px-4 sm:mt-4  sm:flex sm:flex-col sm:gap-4  xl:mt-0 xl:ml-0 xl:flex-row xl:w-full xl:flex  xl:gap-4 xl:py-4 xl:px-4 xl:justify-between xl:items-center xl:border-y-2 xl:border-linea">
+        <div className="flex justify-between items-center gap-4 xl:flex xl:justify-center xl:items-center xl:gap-4 xl:grow">
           <p className="">Nombre</p>
           <input
             type="text"
@@ -125,7 +120,7 @@ export const Imagen3D = ({
             value={generationName}
             onChange={(e) => setGenerationName(e.target.value)}
             disabled={loading}
-            className=" bg-transparent border p-2 rounded-md grow"
+            className=" bg-transparent border p-2 rounded-md w-full  xl:grow"
           />
         </div>
         <div className="flex-grow">
@@ -142,17 +137,22 @@ export const Imagen3D = ({
           <Sparkle
             size={24}
             color="#fff"
-            className="absolute ml-4 mt-2  z-20"
+            className="absolute xl:ml-4 mt-2  z-20 sm:ml-52"
           />
           <Button
             onClick={handlePrediction}
             disabled={loading}
-            className="text-lg bg-gradient-to-r hover:bg-gradient-to-tr flex justify-end from-azul-gradient to-morado-gradient py-1 px-6 rounded-lg border-none"
+            className="w-full sm:justify-center text-lg bg-gradient-to-r hover:bg-gradient-to-tr flex justify-end from-azul-gradient to-morado-gradient py-1 px-6 rounded-lg border-none"
           >
             Generar
           </Button>
         </div>
       </div>
+
+      <div
+        className="sm:mt-4 border-t-2 border-linea xl:border-none
+      "
+      ></div>
 
       <Imagen3DResult prediction_img3d_result={prediction_img3d_result} />
 

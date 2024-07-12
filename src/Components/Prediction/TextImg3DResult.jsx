@@ -15,7 +15,7 @@ export const TextImg3DResult = ({ prediction_textimg3d_result, error }) => {
   }, [prediction_textimg3d_result]);
 
   return (
-    <div className="grid grid-cols-6">
+    <div className="xl:grid xl:grid-cols-6">
       {isResultReady && (
         <div className="col-span-2 border-r-2  border-linea">
           {error && <p style={{ color: "red" }}>{error}</p>}
@@ -25,7 +25,7 @@ export const TextImg3DResult = ({ prediction_textimg3d_result, error }) => {
                 Resultado de la Generación{" "}
               </h3>
               {prediction_textimg3d_result.generate_image && (
-                <div className="flex flex-col items-center py-[3px]">
+                <div className="flex flex-col items-center sm:py-6 ">
                   <img
                     src={prediction_textimg3d_result.generate_image}
                     alt="Imagen"
@@ -34,13 +34,13 @@ export const TextImg3DResult = ({ prediction_textimg3d_result, error }) => {
                 </div>
               )}
               {prediction_textimg3d_result.make3d && (
-                <div className="flex justify-center gap-10 border-t-2 border-linea  px-10">
+                <div className="flex justify-center gap-10 sm:border-y-2 xl:border-t-2 border-linea  px-10">
                   <div
                     className=" 
                    flex items-center justify-around
                     w-[200px]
 
-                  mt-4 px-4 py-2  text-white rounded-md shadow-md  bg-gradient-to-r  from-azul-gradient to-morado-gradient
+                  mt-4 sm:mb-4 px-4 py-2  text-white rounded-md shadow-md  bg-gradient-to-r  from-azul-gradient to-morado-gradient
                       hover:from-morado-gradient hover:to-azul-gradient"
                   >
                     <DownloadSimple size={32} color="white" />
@@ -57,7 +57,7 @@ export const TextImg3DResult = ({ prediction_textimg3d_result, error }) => {
                    flex items-center justify-around
                     w-[200px]
 
-                  mt-4 px-4 py-2  text-white rounded-md shadow-md  bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient"
+                  mt-4 sm:mb-4 px-4 py-2  text-white rounded-md shadow-md  bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient"
                   >
                     <DownloadSimple size={32} color="white" />
                     <a

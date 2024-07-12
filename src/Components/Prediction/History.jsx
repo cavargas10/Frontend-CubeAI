@@ -20,7 +20,6 @@ const History = ({ selectedTab, BASE_URL }) => {
         const user = auth.currentUser;
         if (user) {
           const token = await user.getIdToken();
-          console.log('BASE_URL:', BASE_URL);
           const response = await axios.get(`${BASE_URL}/generations`, {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -66,7 +65,6 @@ const History = ({ selectedTab, BASE_URL }) => {
         }
       } catch (error) {
         setError("Error al obtener el historial de generaciones.");
-        console.error("Error fetching generations:", error);
       }
     };
 
@@ -82,7 +80,7 @@ const History = ({ selectedTab, BASE_URL }) => {
     try {
       setShowModal(false);
       setShowLoadingModal(true);
-      
+
       const user = auth.currentUser;
       if (user && generationToDelete) {
         const token = await user.getIdToken();
@@ -104,14 +102,13 @@ const History = ({ selectedTab, BASE_URL }) => {
             (gen) => gen.generation_name !== generationToDelete.generation_name
           )
         );
-        
+
         setShowLoadingModal(false);
         setShowSuccessModal(true);
       }
     } catch (error) {
       setShowLoadingModal(false);
       setError("Error al eliminar la generación.");
-      console.error("Error deleting generation:", error);
     }
   };
 
@@ -134,7 +131,7 @@ const History = ({ selectedTab, BASE_URL }) => {
   );
 
   return (
-    <div className="w-full">
+    <div className="w-full  ">
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       {filteredGenerations.length === 0 ? (
@@ -144,7 +141,7 @@ const History = ({ selectedTab, BASE_URL }) => {
           </p>
         </div>
       ) : (
-        <div className="flex gap-10 w-full flex-wrap">
+        <div className="  sm:flex  sm:gap-8   w-full sm:flex-wrap">
           {filteredGenerations.map((generation, index) => (
             <GenerationCard
               key={index}
@@ -166,8 +163,8 @@ const History = ({ selectedTab, BASE_URL }) => {
         />
       )}
 
-      <LoadingModal 
-        showLoadingModal={showLoadingModal} 
+      <LoadingModal
+        showLoadingModal={showLoadingModal}
         message="Eliminando objeto..."
       />
 

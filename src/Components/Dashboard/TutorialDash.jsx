@@ -14,7 +14,6 @@ export const TutorialDash = () => {
         const data = await hygraphClient.request(GET_HYGRAPH);
         setTutoriales(data.tutoriales);
       } catch (error) {
-        console.error("Error fetching tutoriales:", error);
       } finally {
         setLoading(false);
       }
@@ -23,7 +22,7 @@ export const TutorialDash = () => {
   }, []);
 
   return (
-    <section className="ml-60 pb-8 pr-5 w-full bg-fondologin border-l-2 border-linea">
+    <section className="sm:ml-60 pb-8 pr-5 w-full bg-fondologin sm:border-l-2 sm:border-linea">
       <div className="mt-8 ml-8 flex justify-center">
         {loading ? (
           <div className="flex items-center justify-center h-64">
