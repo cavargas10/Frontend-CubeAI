@@ -4,5 +4,13 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  envDir: './',
+  assetsInclude: ['**/*.hdr'],
+  resolve: {
+    alias: {
+      'three': 'three',
+    },
+  },
+  optimizeDeps: {
+    include: ['three'],
+  },
 })
