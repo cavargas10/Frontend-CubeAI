@@ -4,6 +4,7 @@ import { OrbitControls, Environment } from "@react-three/drei";
 import { Model } from "./Model";
 import { Suspense } from "react";
 import { DownloadSimple } from "@phosphor-icons/react";
+import { HDREnvironment } from "./HDREnvironment";
 
 export const Imagen3DResult = ({ prediction_img3d_result, error }) => {
   const [isResultReady, setIsResultReady] = useState(false);
@@ -87,7 +88,7 @@ export const Imagen3DResult = ({ prediction_img3d_result, error }) => {
               )}
               <OrbitControls minDistance={1} maxDistance={3} />
               <ambientLight intensity={1} />
-              <Environment preset="sunset" />
+              <HDREnvironment />
             </Suspense>
           </Canvas>
         </div>

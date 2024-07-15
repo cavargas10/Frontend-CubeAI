@@ -55,7 +55,7 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
           <CameraSetup position={getCameraPosition()} />
           <ambientLight intensity={1} />
           <Suspense fallback={null}>
-            <Environment preset="sunset" />
+          <HDREnvironment />
             <Model url={modelUrl} />
           </Suspense>
         </Canvas>

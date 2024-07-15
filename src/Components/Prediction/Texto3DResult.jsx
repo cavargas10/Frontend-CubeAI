@@ -3,6 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment } from "@react-three/drei";
 import { Model } from "./Model";
 import { Suspense } from "react";
+import { HDREnvironment } from "./HDREnvironment";
 
 export const Texto3DResult = ({ prediction_text3d_result }) => {
   return (
@@ -14,7 +15,7 @@ export const Texto3DResult = ({ prediction_text3d_result }) => {
           )}
           <OrbitControls minDistance={0.2} maxDistance={0.9} />
           <ambientLight intensity={1} />
-          <Environment preset="sunset" />
+          <HDREnvironment />
         </Suspense>
       </Canvas>
     </div>
