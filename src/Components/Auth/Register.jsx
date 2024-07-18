@@ -20,7 +20,8 @@ export const Register = ({ BASE_URL }) => {
   const navigate = useNavigate();
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 
   const handleGoogleSignUp = async () => {
     try {
@@ -69,9 +70,7 @@ export const Register = ({ BASE_URL }) => {
       await sendUserDataToBackend(user);
       navigate("/verify-email");
     } catch (error) {
-      setError(
-        "Error al registrar el usuario. Por favor, inténtalo de nuevo."
-      );
+      setError("Error al registrar el usuario. Por favor, inténtalo de nuevo.");
       setShowErrorModal(true);
     }
   };
@@ -104,76 +103,70 @@ export const Register = ({ BASE_URL }) => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row h-screen justify-center items-center">
-      <div className="w-full sm:w-1/2 flex items-center justify-center mt-10 sm:mt-0 px-4 ">
-        <div className="w-full max-w-md lg:max-w-lg">
-          <div className="border-2 border-linea bg-fondologin shadow-md rounded-lg px-16 pt-10 pb-10 mb-7  telefono:p-3">
-            <div className="flex-grow text-center">
-              <h1 className="text-2xl">Registro</h1>
-              <h2 className="text-3xl">Bienvenido a CV3D</h2>
-              <p className="px-3 pb-4">
-                Ingresa tus datos para crear una cuenta
-              </p>
-            </div>
-            <div className="mb-4">
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                placeholder="Nombre"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-1">
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                type="password"
-                placeholder="Contraseña"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <div className="flex items-center justify-between">
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full"
-                type="button"
-                onClick={handleRegister}
-              >
-                Registrarse
-              </button>
-            </div>
-            <div className="flex mt-1 py-2 border-b-2 border-linea justify-between">
-              <p>¿Ya tienes una cuenta?</p>
-              <a className="text-slate-400 hover:text-slate-50" href="/login">
-                Inicia sesión aquí
-              </a>
-            </div>
+    <div className="flex h-screen justify-center gap-32 items-center">
+      <div className="border-2 border-linea bg-fondologin rounded-lg p-6">
+        <div className="flex-grow text-center">
+          <h1 className="text-2xl">Registro</h1>
+          <h2 className="text-3xl">Bienvenido a CV3D</h2>
+          <p className="px-3 pb-4">Ingresa tus datos para crear una cuenta</p>
+        </div>
+        <div className="mb-4">
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            placeholder="Nombre"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div className="mb-1">
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            type="password"
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <div className="flex items-center justify-between">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full"
+            type="button"
+            onClick={handleRegister}
+          >
+            Registrarse
+          </button>
+        </div>
+        <div className="flex mt-1 py-2 border-b-2 border-linea justify-between">
+          <p>¿Ya tienes una cuenta?</p>
+          <a className="text-slate-400 hover:text-slate-50" href="/login">
+            Inicia sesión aquí
+          </a>
+        </div>
 
-            <div className="flex items-center justify-between">
-              <button
-                onClick={handleGoogleSignUp}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full mt-4"
-              >
-                Regístrate con Google
-              </button>
-            </div>
-          </div>
+        <div className="flex items-center justify-between">
+          <button
+            onClick={handleGoogleSignUp}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full mt-4"
+          >
+            Regístrate con Google
+          </button>
         </div>
       </div>
 
-      <div className="sm:hidden xl:w-1/2 xl:flex xl:items-center xl:justify-center telefono:hidden">
+      <div className="hidden lg:block">
         <img src={logo} alt="Logo" />
       </div>
 

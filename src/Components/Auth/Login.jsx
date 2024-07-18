@@ -89,88 +89,80 @@ export const Login = () => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row h-screen justify-center items-center">
-      <div className="w-full sm:w-1/2 flex items-center justify-center mt-10 sm:mt-0 px-4">
-        <div className="w-full max-w-md lg:max-w-lg">
-          <div className="border-2 border-linea bg-fondologin shadow-md rounded-lg p-4 sm:p-10 lg:p-12">
-            <div className="text-center mb-4">
-              <h1 className="text-xl sm:text-2xl lg:text-3xl">
-                Inicio de sesión
-              </h1>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl">
-                Bienvenido a CV3D
-              </h2>
-              <p className="px-3 pb-4">
-                Ingresa tu correo y contraseña para comenzar
-              </p>
-            </div>
-
-            <div className="mb-4">
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className="mb-4">
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                type="password"
-                placeholder="Contraseña"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <p className="text-end text-slate-400 hover:text-slate-50 text-sm">
-                <a href="/reset-password">¿Olvidaste tu contraseña?</a>
-              </p>
-            </div>
-            <div className="flex items-center justify-between">
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 lg:py-3 lg:px-6 rounded-lg focus:outline-none focus:shadow-outline w-full"
-                type="button"
-                onClick={handleLogin}
-              >
-                Iniciar sesión
-              </button>
-            </div>
-            <div className="flex mt-1 py-2 border-b-2 border-linea justify-between">
-              <p>¿No tienes una cuenta?</p>
-              <a
-                className="text-slate-400 hover:text-slate-50"
-                href="/register"
-              >
-                Inscríbete aquí
-              </a>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <button
-                onClick={handleGoogleLogin}
-                className="bg-blue-500 text-center hover:bg-blue-700 text-white font-bold py-2 px-4 lg:py-3 lg:px-6 rounded-lg focus:outline-none focus:shadow-outline w-full mt-4"
-              >
-                Iniciar sesión con Google
-              </button>
-            </div>
-          </div>
+    <div className="flex h-screen justify-center gap-32 items-center">
+      <div className="border-2 border-linea bg-fondologin rounded-lg p-6">
+        <div className="text-center mb-4">
+          <h1 className="text-xl lg:text-2xl xl:text-3xl">Inicio de sesión</h1>
+          <h2 className="text-2xl xl:text-3xl lg:text-4xl">
+            Bienvenido a CV3D
+          </h2>
+          <p className="px-3 pb-4">
+            Ingresa tu correo y contraseña para comenzar
+          </p>
         </div>
-        <RegistrationModal
-          showModal={showModal}
-          closeModal={closeModal}
-          email={googleEmail}
-        />
-        <ErrorModal
-          showModal={showErrorModal}
-          closeModal={closeErrorModal}
-          errorMessage={
-            error || "Acceso denegado: Verifica tu correo y contraseña"
-          }
-        />
+
+        <div className="mb-4">
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <div className="mb-4">
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            type="password"
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <p className="text-end text-slate-400 hover:text-slate-50 text-sm">
+            <a href="/reset-password">¿Olvidaste tu contraseña?</a>
+          </p>
+        </div>
+        <div className="flex items-center justify-between">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 lg:py-3 lg:px-6 rounded-lg focus:outline-none focus:shadow-outline w-full"
+            type="button"
+            onClick={handleLogin}
+          >
+            Iniciar sesión
+          </button>
+        </div>
+        <div className="flex mt-1 py-2 border-b-2 border-linea justify-between">
+          <p>¿No tienes una cuenta?</p>
+          <a className="text-slate-400 hover:text-slate-50" href="/register">
+            Inscríbete aquí
+          </a>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <button
+            onClick={handleGoogleLogin}
+            className="bg-blue-500 text-center hover:bg-blue-700 text-white font-bold py-2 px-4 lg:py-3 lg:px-6 rounded-lg focus:outline-none focus:shadow-outline w-full mt-4"
+          >
+            Iniciar sesión con Google
+          </button>
+        </div>
       </div>
 
-      <div className="hidden  sm:w-1/2 xl:flex xl:items-center xl:justify-center">
-        <img src={logo} alt="Logo" className="max-w-xs lg:max-w-md" />
+      <RegistrationModal
+        showModal={showModal}
+        closeModal={closeModal}
+        email={googleEmail}
+      />
+      <ErrorModal
+        showModal={showErrorModal}
+        closeModal={closeErrorModal}
+        errorMessage={
+          error || "Acceso denegado: Verifica tu correo y contraseña"
+        }
+      />
+
+      <div className="hidden lg:block">
+        <img src={logo} alt="Logo" className="" />
       </div>
     </div>
   );

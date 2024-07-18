@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useRef } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
-import { Environment } from "@react-three/drei";
+import { HDREnvironment } from "../Prediction/HDREnvironment";
 import { DownloadSimple, Trash } from "@phosphor-icons/react";
 import { Model } from "../Prediction/Model";
 

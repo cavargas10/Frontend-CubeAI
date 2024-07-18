@@ -13,8 +13,7 @@ const Documentacion = () => {
       try {
         const data = await client.request(GET_HYGRAPH);
         setCategorias(data.categorias);
-      } catch (error) {
-      }
+      } catch (error) {}
     };
 
     fetchData();
@@ -30,16 +29,15 @@ const Documentacion = () => {
 
   return (
     <div className="relative">
-  
       <button
-        className={`block relative mr-10 md:hidden ${isMenuButtonActive ? "outline outline-linea rounded-lg bg-gray-700" : ""}`}
+        className={`block relative mr-10 sm:hidden ${isMenuButtonActive ? "outline outline-linea rounded-lg bg-gray-700" : ""}`}
         onClick={toggleMenu}
       >
         <Queue size={32} color="#ffffff" />
       </button>
 
       {isMenuOpen && (
-        <ul className="mt-4 md:hidden top-12 left-0 bg-fondologin z-50 w-[357px] border border-linea rounded-lg shadow-lg">
+        <ul className="mt-4  sm:hidden top-12 left-0 bg-fondologin z-50 w-[357px] border border-linea rounded-lg shadow-lg ">
           {categorias.map((categoria) => (
             <li key={categoria.slug} className="ml-3">
               <span className="sidebar-title font-bold">
@@ -68,7 +66,7 @@ const Documentacion = () => {
         </ul>
       )}
 
-      <div className="hidden md:block ">
+      <div className="hidden sm:block  sm:mt-10  ">
         {categorias.map((categoria) => (
           <div key={categoria.slug} className="ml-3">
             <span className="sidebar-title font-bold">{categoria.titulo}</span>
