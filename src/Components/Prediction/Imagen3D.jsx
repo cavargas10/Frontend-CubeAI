@@ -133,16 +133,16 @@ export const Imagen3D = ({
           />
         </div>
 
-        <div className="">
+        <div className="flex justify-center items-center">
           <Sparkle
             size={24}
             color="#fff"
-            className="absolute xl:ml-4 mt-2  z-20 sm:ml-52"
+            className="absolute z-20 mr-20"
           />
           <Button
             onClick={handlePrediction}
             disabled={loading}
-            className="w-full sm:justify-center text-lg bg-gradient-to-r hover:bg-gradient-to-tr flex justify-end from-azul-gradient to-morado-gradient py-1 px-6 rounded-lg border-none"
+            className="w-full sm:justify-center text-lg bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient py-1 px-6 rounded-lg border-none flex items-center justify-center"
           >
             Generar
           </Button>

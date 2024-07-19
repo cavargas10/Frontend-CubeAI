@@ -7,7 +7,7 @@ import { HDREnvironment } from "./HDREnvironment";
 
 export const Texto3DResult = ({ prediction_text3d_result }) => {
   return (
-    <div className="h-96  ">
+    <div className="sm:h-[345px] h-96 ">
       <Canvas camera={{ position: [0, 0, 1.7] }}>
         <Suspense fallback={null}>
           {prediction_text3d_result && prediction_text3d_result.obj_model && (

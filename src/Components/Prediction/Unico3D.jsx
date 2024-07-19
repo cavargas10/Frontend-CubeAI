@@ -133,16 +133,16 @@ export const Unico3D = ({
             className="w-full"
           />
         </div>
-        <div className="">
+        <div className="flex justify-center items-center">
           <Sparkle
             size={24}
             color="#fff"
-            className="absolute xl:ml-4 mt-2  z-20 sm:ml-52 "
+            className="absolute z-20 mr-20"
           />
           <Button
             onClick={handlePrediction}
             disabled={loading}
-            className="text-lg bg-gradient-to-r hover:bg-gradient-to-tr  from-azul-gradient to-morado-gradient py-1  px-6 rounded-lg border-none w-full"
+            className="text-lg bg-gradient-to-r hover:bg-gradient-to-tr  from-azul-gradient to-morado-gradient py-1  px-6 rounded-lg border-none w-full flex items-center justify-center"
           >
             Generar
           </Button>
@@ -156,17 +156,17 @@ export const Unico3D = ({
 
       <Unico3DResult prediction_unico3d_result={prediction_unico3d_result} />
 
-      <div className="w-96 mx-auto sm:ml-24">
+      <div className="flex justify-center items-center sm:w-96 sm:mx-auto">
         <DownloadSimple
           size={32}
           color="#fff"
-          className="absolute ml-28 z-20 "
+          className="absolute mr-32 z-20"
         />
 
         <Button
           onClick={handleDownload}
           disabled={!prediction_unico3d_result}
-          className={`text-lg py-1 mt-3 px-6 rounded-lg border-none  w-full ${
+          className={`text-lg py-1 mt-3 px-6 rounded-lg border-none sm:w-full ${
             prediction_unico3d_result
               ? "bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient cursor-pointer"
               : "bg-gray-400 cursor-not-allowed"

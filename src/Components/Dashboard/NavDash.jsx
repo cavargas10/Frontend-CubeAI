@@ -152,7 +152,7 @@ export const NavDash = ({ handleLogout, menuOpen, toggleMenu }) => {
               </Link>
             </li>
 
-            <li className=" my-4 sm:my-3">
+            <li className=" my-3 sm:my-2">
               <Link
                 to="configdash"
                 className={

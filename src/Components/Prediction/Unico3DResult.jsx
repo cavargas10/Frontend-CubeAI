@@ -7,7 +7,7 @@ import { HDREnvironment } from "./HDREnvironment";
 
 export const Unico3DResult = ({ prediction_unico3d_result }) => {
   return (
-    <div className="h-96">
+    <div className="sm:h-[345px] h-96">
       <Canvas camera={{ position: [0, 0, -1.2] }}>
         <Suspense fallback={null}>
           {prediction_unico3d_result && prediction_unico3d_result.obj_model && (

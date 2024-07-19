@@ -154,11 +154,11 @@ export const Texto3D = ({
           </select>
         </div>
 
-        <div className="">
+        <div className="flex justify-center items-center">
           <Sparkle
             size={24}
             color="#fff"
-            className="absolute xl:ml-4 mt-2 z-20 sm:ml-52 "
+            className="absolute z-20 mr-20"
           />
 
           <Button
@@ -176,11 +176,11 @@ export const Texto3D = ({
       ></div>
       <Texto3DResult prediction_text3d_result={prediction_text3d_result} />
 
-      <div className="w-96 mx-auto xl:mx-auto sm:ml-24 ">
+      <div className="flex justify-center items-center sm:w-96 sm:mx-auto ">
         <DownloadSimple
           size={32}
           color="#fff"
-          className="absolute ml-28 z-20"
+          className="absolute mr-32 mt-3 z-20"
         />
 
         <Button

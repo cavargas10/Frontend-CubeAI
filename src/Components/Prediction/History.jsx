@@ -141,7 +141,7 @@ const History = ({ selectedTab, BASE_URL }) => {
           </p>
         </div>
       ) : (
-        <div className="  sm:flex  sm:gap-8   w-full sm:flex-wrap">
+        <div className="  sm:flex  sm:gap-8 gap-0 w-full sm:flex-wrap">
           {filteredGenerations.map((generation, index) => (
             <GenerationCard
               key={index}
