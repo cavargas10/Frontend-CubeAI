@@ -10,8 +10,8 @@ export const Visualizador = ({ BASE_URL }) => {
   };
 
   return (
-    <section className=" 2xl:ml-72 sm:ml-52 w-full sm:border-l-2 px-4 sm:pr-8 border-linea bg-fondologin 2xl:text-xl text-lg">
-      <div className="sm:px-4 sm:ml-10 fixed z-30 bg  w-full bg-fondologin ">
+    <section className=" 2xl:ml-72 sm:ml-52 w-full sm:border-l-2 sm:pr-8 border-linea bg-fondologin 2xl:text-xl text-lg">
+      <div className="px-4 sm:ml-10 fixed z-30 bg w-full bg-fondologin ">
         <div className="mt-10 sm:w-3/5">
           <h1 className="text-4xl">Mis Objetos</h1>
           <p className="mt-4 text-lg">
@@ -59,7 +59,7 @@ export const Visualizador = ({ BASE_URL }) => {
         </div>
       </div>
 
-      <div className=" sm:px-0 mt-20 sm:ml-10 sm:mt-[320px] xl:mt-[280px] bg-fondologin ">
+      <div className="px-4 sm:px-0 mt-[360px] sm:ml-10 sm:mt-[320px] xl:mt-[280px] bg-fondologin ">
         <History selectedTab={selectedTab} BASE_URL={BASE_URL} />
       </div>
     </section>
