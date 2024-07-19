@@ -31,7 +31,6 @@ function App() {
   } = UseAuth();
 
   return (
-    <SpeedInsights>
       <div className="bg-principal text-white">
         <BrowserRouter>
           <Header />
@@ -74,8 +73,8 @@ function App() {
             />
           </Routes>
         </BrowserRouter>
+        <SpeedInsights />
       </div>
-    </SpeedInsights>
   );
 }
 
