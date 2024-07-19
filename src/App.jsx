@@ -1,3 +1,4 @@
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Home } from "./Components/Pages/Home";
 import { Header } from "./Components/Headers/Header";
@@ -30,49 +31,51 @@ function App() {
   } = UseAuth();
 
   return (
-    <div className="bg-principal text-white">
-      <BrowserRouter>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
+    <SpeedInsights>
+      <div className="bg-principal text-white">
+        <BrowserRouter>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
 
-          <Route path="/tutoriales" element={<Tutoriales />} />
-          <Route path="/register" element={<Register BASE_URL={import.meta.env.VITE_BASE_URL} />} />
-          <Route path="/documentos/*" element={<Documentos />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/verify-email" element={<VerifyEmail />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/tutoriales" element={<Tutoriales />} />
+            <Route path="/register" element={<Register BASE_URL={import.meta.env.VITE_BASE_URL} />} />
+            <Route path="/documentos/*" element={<Documentos />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/verify-email" element={<VerifyEmail />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
 
-          <Route
-            path="/dashboard/*"
-            element={
-              user ? (
-                <Dashboard
-                  userData={userData}
-                  prediction_img3d_result={prediction_img3d_result}
-                  prediction_text3d_result={prediction_text3d_result}
-                  prediction_textimg3d_result={prediction_textimg3d_result}
-                  prediction_unico3d_result={prediction_unico3d_result}
-                  setPrediction_img3d_result={setPrediction_img3d_result}
-                  setPrediction_text3d_result={setPrediction_text3d_result}
-                  setPrediction_textimg3d_result={setPrediction_textimg3d_result}
-                  setPrediction_unico3d_result={setPrediction_unico3d_result}
-                  error={error}
-                  loading={loading}
-                  setLoading={setLoading}
-                  setError={setError}
-                  handleLogout={handleLogout}
-                  BASE_URL={import.meta.env.VITE_BASE_URL} 
-                  user={user}
-                />
-              ) : (
-                <Home />
-              )
-            }
-          />
-        </Routes>
-      </BrowserRouter>
-    </div>
+            <Route
+              path="/dashboard/*"
+              element={
+                user ? (
+                  <Dashboard
+                    userData={userData}
+                    prediction_img3d_result={prediction_img3d_result}
+                    prediction_text3d_result={prediction_text3d_result}
+                    prediction_textimg3d_result={prediction_textimg3d_result}
+                    prediction_unico3d_result={prediction_unico3d_result}
+                    setPrediction_img3d_result={setPrediction_img3d_result}
+                    setPrediction_text3d_result={setPrediction_text3d_result}
+                    setPrediction_textimg3d_result={setPrediction_textimg3d_result}
+                    setPrediction_unico3d_result={setPrediction_unico3d_result}
+                    error={error}
+                    loading={loading}
+                    setLoading={setLoading}
+                    setError={setError}
+                    handleLogout={handleLogout}
+                    BASE_URL={import.meta.env.VITE_BASE_URL} 
+                    user={user}
+                  />
+                ) : (
+                  <Home />
+                )
+              }
+            />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </SpeedInsights>
   );
 }
 

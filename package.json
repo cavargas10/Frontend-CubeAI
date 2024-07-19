@@ -13,6 +13,7 @@
     "@phosphor-icons/react": "^2.1.7",
     "@react-three/drei": "^9.108.1",
     "@react-three/fiber": "^8.16.8",
+    "@vercel/speed-insights": "^1.0.12",
     "axios": "^1.7.2",
     "firebase": "^10.12.3",
     "flowbite": "^2.4.1",
