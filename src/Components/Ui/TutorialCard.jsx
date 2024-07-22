@@ -3,7 +3,6 @@ import { CardPlayer } from "./CardPlayer";
 
 export const TutorialCard = ({ tutorial }) => {
   const { titulo, subtitulo, tipos, youtubeId } = tutorial;
-  const [isLoaded, setIsLoaded] = useState(false);
 
   const formatTipos = (text) => {
     return text.includes("_") ? text.split("_").join(" a ") : text;
@@ -11,8 +10,8 @@ export const TutorialCard = ({ tutorial }) => {
 
   return (
     <div className="text-left">
-      <div className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-        <CardPlayer videoId={youtubeId} onLoad={() => setIsLoaded(true)} />
+      <div className="">
+        <CardPlayer videoId={youtubeId}/>
       </div>
       <p className="mt-4 bg-[#292faa] bg-opacity-60 inline-block p-2 rounded-lg uppercase">
         {formatTipos(tipos)}
