@@ -1,4 +1,4 @@
-import fondo from "../../Assets/fondo.png";
+import fondo from "../../Assets/fondo.webp";
 import { Button } from "../Ui/Button";
 export const SeccionFondo = () => {
   return (

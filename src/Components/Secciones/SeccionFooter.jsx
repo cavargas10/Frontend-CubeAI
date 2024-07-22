@@ -1,4 +1,4 @@
-import logo from "../../Assets/logo.png";
+import logo from "../../Assets/logo.webp";
 import { Button } from "../Ui/Button";
 
 export const SeccionFooter = () => {

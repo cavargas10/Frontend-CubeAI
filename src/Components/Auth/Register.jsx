@@ -8,7 +8,7 @@ import {
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import logo from "../../Assets/logo.png";
+import logo from "../../Assets/logo.webp";
 import { ErrorModal } from "../Modals/ErrorModal";
 import { RequirementsModal } from "../Modals/RequirementsModal";
 
@@ -89,7 +89,7 @@ export const Register = ({ BASE_URL }) => {
         `${BASE_URL}/register_user`,
         {
           name: user.displayName || name,
-          profile_picture: user.photoURL || "/public/usuario.png",
+          profile_picture: user.photoURL || "/usuario.webp",
           email: user.email,
         },
         {

@@ -1,5 +1,5 @@
 import { Button } from "../Ui/Button";
-import logo from "../../Assets/logo.png";
+import logo from "../../Assets/logo.webp";
 export const SeccionOne = () => {
   return (
     <section className="mt-20 sm:flex-col sm:mt-10 xl:grid xl:grid-cols-4 xl:w-full xl:mt-0 2xl:-20">

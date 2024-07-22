@@ -79,7 +79,7 @@ const modelSectionData = [
     description: "Nuestra herramienta de Único a 3D permite a los usuarios crear modelos tridimensionales personalizados y únicos, combinando diferentes técnicas de IA para generar resultados verdaderamente originales y creativos.",
     videoPath: "/Groot.webm",
     inputType: "image",
-    inputContent: "/Groot.png"
+    inputContent: "/Groot.webp"
   }
 ];
 

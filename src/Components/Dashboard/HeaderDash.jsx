@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../../Assets/logo.png";
+import logo from "../../Assets/logo.webp";
 
 import UserProfile from "../Auth/UserProfile";
 

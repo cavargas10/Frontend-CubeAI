@@ -1,5 +1,5 @@
 import { useState } from "react";
-import logo from "../../Assets/logo.png";
+import logo from "../../Assets/logo.webp";
 import { auth } from "../../Config/firebaseConfig";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { useNavigate } from "react-router-dom";

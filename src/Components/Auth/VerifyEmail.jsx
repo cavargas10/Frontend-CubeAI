@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import logo from "../../Assets/logo.png";
+import logo from "../../Assets/logo.webp";
 
 export const VerifyEmail = () => {
   const navigate = useNavigate();

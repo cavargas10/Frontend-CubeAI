@@ -1,5 +1,5 @@
 import { useState } from "react";
-import logo from "../../Assets/logo.png";
+import logo from "../../Assets/logo.webp";
 import { auth, googleProvider, db } from "../../Config/firebaseConfig";
 import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import { getDoc, doc } from "firebase/firestore";
