@@ -1,10 +1,17 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import compression from 'vite-plugin-compression';
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  assetsInclude: ['**/*.hdr'],
+  plugins: [
+    react(),
+    compression({
+      algorithm: 'gzip', 
+      threshold: 10240, 
+      deleteOriginFile: false, 
+    }),
+  ],
+  assetsInclude: ['/*.hdr'],
   resolve: {
     alias: {
       'three': 'three',
@@ -12,5 +19,5 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ['three'],
-  },
-})
+  },
+});

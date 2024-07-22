@@ -1,6 +1,5 @@
 import { SeccionOne } from "../Secciones/SeccionOne";
 import { SeccionIA } from "../Secciones/SeccionIA";
-
 import { SeccionFuncionamiento } from "../Secciones/SeccionFuncionamiento";
 import { SeccionFondo } from "../Secciones/SeccionFondo";
 import { SeccionCarrusel } from "../Secciones/SeccionCarrusel";
