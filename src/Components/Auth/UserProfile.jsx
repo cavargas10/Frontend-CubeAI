@@ -14,7 +14,7 @@ const UserProfile = ({ userData, toggleMenu }) => {
               className="w-[36px] rounded-2xl "
             />
           )}
-          <button onClick={toggleMenu} className="block md:hidden ">
+          <button name="menu dashboard" onClick={toggleMenu} className="block md:hidden ">
             <List size={32} color="#ffffff" />
           </button>
         </div>

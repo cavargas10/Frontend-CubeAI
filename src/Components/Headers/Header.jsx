@@ -53,6 +53,7 @@ export const Header = ({ user }) => {
             <Button />
 
             <button
+              name="menu"
               className={`block md:hidden ${isMenuButtonActive ? "outline outline-linea rounded-lg  bg-gray-700" : ""}`}
               onClick={() => {
                 setIsMenuOpen(!isMenuOpen);
