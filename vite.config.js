@@ -11,7 +11,7 @@ export default defineConfig({
       deleteOriginFile: false, 
     }),
   ],
-  assetsInclude: ['/*.hdr'],
+  assetsInclude: ['**/*.hdr'],
   resolve: {
     alias: {
       'three': 'three',
