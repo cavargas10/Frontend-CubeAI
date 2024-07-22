@@ -71,7 +71,7 @@ const modelSectionData = [
   {
     title: "Texto a 3D",
     description: "Nuestra herramienta de conversión de texto a 3D brinda a los creadores la capacidad de generar modelos tridimensionales en un minuto, incluso para aquellos sin experiencia previa en el ámbito, utilizando simplemente la entrada de texto.",
-    modelPath: "/public/Hamburguesa.obj",
+    modelPath: "/Hamburguesa.obj",
     cameraPosition: [0, 0, 1],
     inputType: "text",
     inputContent: "Una hamburguesa"
@@ -79,28 +79,28 @@ const modelSectionData = [
   {
     title: "Imagen a 3D",
     description: "Nuestra herramienta de conversión de imagen a 3D permite a los usuarios transformar imágenes 2D en modelos tridimensionales detallados, abriendo nuevas posibilidades para diseñadores y creadores de contenido.",
-    modelPath: "/public/Lion.glb",
+    modelPath: "/Lion.glb",
     cameraPosition: [0, 0, 2],
     inputType: "image",
-    inputContent: "/public/Tigre.webp"
+    inputContent: "/Tigre.webp"
   },
   {
     title: "Texto a Imagen a 3D",
     description: "Nuestro innovador proceso de texto a imagen a 3D permite a los usuarios describir una escena o objeto con palabras, generar una imagen basada en esa descripción, y luego transformar esa imagen en un modelo 3D completo.",
-    modelPath: "/public/CristianoRonaldo.glb",
+    modelPath: "/CristianoRonaldo.glb",
     cameraPosition: [0, 0, 2],
     inputType: "text",
     inputContent: "Cristiano Ronaldo",
     secondInputType: "image",
-    secondInputContent: "/public/CristianoRonaldo.webp"
+    secondInputContent: "/CristianoRonaldo.webp"
   },
   {
     title: "Único a 3D",
     description: "Nuestra herramienta de Único a 3D permite a los usuarios crear modelos tridimensionales personalizados y únicos, combinando diferentes técnicas de IA para generar resultados verdaderamente originales y creativos.",
-    modelPath: "/public/Groot.glb",
+    modelPath: "/Groot.glb",
     cameraPosition: [0, 0, -1.1],
     inputType: "image",
-    inputContent: "/public/Groot.png"
+    inputContent: "/Groot.png"
   }
 ];
 
