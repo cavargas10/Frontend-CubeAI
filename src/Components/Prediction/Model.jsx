@@ -1,15 +1,25 @@
-import React, { useMemo } from "react";
-import { useLoader } from "@react-three/fiber";
+import React, { useState, useEffect, useMemo } from "react";
+import { useLoader, useThree } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 
-export const Model = ({ url }) => {
-  if (!url) {
-    console.error("Model URL is undefined");
-    return null;
-  }
+export const Model = ({ url, onLoad }) => {
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const { camera } = useThree();
 
-  const fileExtension = url.split(".").pop().toLowerCase();
+  useEffect(() => {
+    setIsLoading(true);
+    setError(null);
+  }, [url]);
+
+  const fileExtension = useMemo(() => {
+    if (!url) {
+      console.error("Model URL is undefined");
+      return null;
+    }
+    return url.split(".").pop().toLowerCase();
+  }, [url]);
 
   const loader = useMemo(() => {
     switch (fileExtension) {
@@ -24,11 +34,26 @@ export const Model = ({ url }) => {
     }
   }, [fileExtension]);
 
-  if (!loader) {
-    return null;
-  }
+  const model = useLoader(
+    loader,
+    url,
+    undefined,
+    (xhr) => {
+      console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+    },
+    (error) => {
+      console.error("An error occurred loading the model:", error);
+      setError(error);
+      setIsLoading(false);
+    }
+  );
 
-  const model = useLoader(loader, url);
+  useEffect(() => {
+    if (model) {
+      setIsLoading(false);
+      if (onLoad) onLoad();
+    }
+  }, [model, camera, onLoad]);
 
   const object = fileExtension === "obj" ? model : model.scene;
 
@@ -37,6 +62,7 @@ export const Model = ({ url }) => {
       object={object}
       position={[0, 0, 0]}
       rotation={[0, Math.PI, 0]}
+      scale={[1, 1, 1]}
     />
   );
 };

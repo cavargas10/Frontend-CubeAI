@@ -9,7 +9,7 @@ import { SeccionFooter } from "../Secciones/SeccionFooter";
 export const Home = () => {
   return (
     <main className="pt-24">
-      <div className="w-full px-12 2xl:px-44">
+      <div className="w-full px-10 2xl:px-44">
         <SeccionOne />
         <SeccionIA />
         <SeccionCarrusel />

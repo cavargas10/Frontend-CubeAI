@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useRef } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import { HDREnvironment } from "../Prediction/HDREnvironment";
 import { DownloadSimple, Trash } from "@phosphor-icons/react";
@@ -48,6 +48,20 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
 
   const modelUrl = getModelUrl();
 
+  const [isLoading, setIsLoading] = useState(true);
+
+// In the Model component
+<Suspense fallback={<div>Loading...</div>}>
+  <Model url={modelUrl} onLoad={() => setIsLoading(false)} />
+</Suspense>
+
+// Add a loading overlay
+{isLoading && (
+  <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
+    Loading 3D model...
+  </div>
+)}
+
   return (
     <div className="relative mt-5 sm:mt-0 w-full h-[250px] sm:w-[230px] sm:h-[230px] 2xl:w-[260px] 2xl:h-[260px] overflow-hidden rounded-xl shadow-lg group cursor-pointer  ">
       {modelUrl ? (
@@ -69,7 +83,6 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
         <div className="text-white py-2">
           <h3 className="text-center text-2xl">{generation.generation_name}</h3>
           <p>Generado el: {formatDate(generation.timestamp)}</p>
-          <p>{generation.prediction_type}</p>
         </div>
         {generation.make3d && generation.make3d[0] ? (
           <div className="flex gap-4 justify-around">

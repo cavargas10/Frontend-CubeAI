@@ -36,7 +36,7 @@ export const Header = ({ user }) => {
         <div className="sm:justify-between flex xl:flex-row xl:w-[100%] xl:mx-auto xl:px-10 sm:px-10 telefono:justify-between telefono:px-6">
           <div className="flex items-center">
             <img src={logo} alt="" className="w-[70px] rounded-full" />
-            <span className="">CubeIA</span>
+            <span className="">INSTANT3D</span>
           </div>
 
           <nav className="flex items-center gap-4 xl:flex-row xl:w-[100%] xl:text-xl xl:mt-0 xl:mx-auto xl:justify-end">

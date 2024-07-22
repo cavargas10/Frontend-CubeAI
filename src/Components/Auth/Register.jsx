@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import logo from "../../Assets/logo.png";
 import { ErrorModal } from "../Modals/ErrorModal";
+import { RequirementsModal } from "../Modals/RequirementsModal";
 
 export const Register = ({ BASE_URL }) => {
   const [email, setEmail] = useState("");
@@ -17,11 +18,15 @@ export const Register = ({ BASE_URL }) => {
   const [name, setName] = useState("");
   const [error, setError] = useState(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [showRequirementsModal, setShowRequirementsModal] = useState(false);
   const navigate = useNavigate();
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+  const passwordLengthRegex = /.{6,}/;
+  const passwordUppercaseRegex = /(?=.*[A-Z])/;
+  const passwordLowercaseRegex = /(?=.*[a-z])/;
+  const passwordNumberRegex = /(?=.*\d)/;
+  const passwordSpecialCharRegex = /(?=.*[@$!%*?&])/;
 
   const handleGoogleSignUp = async () => {
     try {
@@ -39,8 +44,7 @@ export const Register = ({ BASE_URL }) => {
 
   const handleRegister = async () => {
     if (!email || !password || !name) {
-      setError("Todos los campos son obligatorios.");
-      setShowErrorModal(true);
+      setShowRequirementsModal(true);
       return;
     }
 
@@ -50,11 +54,14 @@ export const Register = ({ BASE_URL }) => {
       return;
     }
 
-    if (!passwordRegex.test(password)) {
-      setError(
-        "La contraseña debe contener al menos una mayúscula, una minúscula, un número, un carácter especial y tener más de 6 caracteres."
-      );
-      setShowErrorModal(true);
+    if (
+      !passwordLengthRegex.test(password) ||
+      !passwordUppercaseRegex.test(password) ||
+      !passwordLowercaseRegex.test(password) ||
+      !passwordNumberRegex.test(password) ||
+      !passwordSpecialCharRegex.test(password)
+    ) {
+      setShowRequirementsModal(true);
       return;
     }
 
@@ -102,13 +109,17 @@ export const Register = ({ BASE_URL }) => {
     setError(null);
   };
 
+  const closeRequirementsModal = () => {
+    setShowRequirementsModal(false);
+  };
+
   return (
-    <div className="flex h-screen justify-center gap-32 items-center">
+    <div className="flex h-screen w-full justify-center gap-32 items-center">
       <div className="border-2 border-linea bg-fondologin rounded-lg p-6">
         <div className="flex-grow text-center">
           <h1 className="text-2xl">Registro</h1>
-          <h2 className="text-3xl">Bienvenido a CV3D</h2>
-          <p className="px-3 pb-4">Ingresa tus datos para crear una cuenta</p>
+          <h2 className="text-3xl">Bienvenido a INSTANT3D</h2>
+          <p className="px-3 pb-4">Introduce tus datos para crear tu cuenta aquí</p>
         </div>
         <div className="mb-4">
           <input
@@ -142,7 +153,7 @@ export const Register = ({ BASE_URL }) => {
         </div>
         <div className="flex items-center justify-between">
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full"
             type="button"
             onClick={handleRegister}
           >
@@ -159,7 +170,7 @@ export const Register = ({ BASE_URL }) => {
         <div className="flex items-center justify-between">
           <button
             onClick={handleGoogleSignUp}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full mt-4"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full mt-4"
           >
             Regístrate con Google
           </button>
@@ -176,6 +187,20 @@ export const Register = ({ BASE_URL }) => {
         errorMessage={
           error || "Error desconocido. Por favor, inténtalo de nuevo."
         }
+      />
+
+      <RequirementsModal
+        showModal={showRequirementsModal}
+        closeModal={closeRequirementsModal}
+        email={email}
+        password={password}
+        name={name}
+        emailRegex={emailRegex}
+        passwordLengthRegex={passwordLengthRegex}
+        passwordUppercaseRegex={passwordUppercaseRegex}
+        passwordLowercaseRegex={passwordLowercaseRegex}
+        passwordNumberRegex={passwordNumberRegex}
+        passwordSpecialCharRegex={passwordSpecialCharRegex}
       />
     </div>
   );

@@ -94,7 +94,7 @@ export const Login = () => {
         <div className="text-center mb-4">
           <h1 className="text-xl lg:text-2xl xl:text-3xl">Inicio de sesión</h1>
           <h2 className="text-2xl xl:text-3xl lg:text-4xl">
-            Bienvenido a CV3D
+            Bienvenido a INSTANT3D
           </h2>
           <p className="px-3 pb-4">
             Ingresa tu correo y contraseña para comenzar

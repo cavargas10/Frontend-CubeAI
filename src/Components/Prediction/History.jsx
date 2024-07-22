@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { auth } from "../../Config/firebaseConfig";
 import { GenerationCard } from "../Ui/GenerationCard";
@@ -14,62 +14,46 @@ const History = ({ selectedTab, BASE_URL }) => {
   const [showLoadingModal, setShowLoadingModal] = useState(false);
   const [generationToDelete, setGenerationToDelete] = useState(null);
 
-  useEffect(() => {
-    const fetchGenerations = async () => {
-      try {
-        const user = auth.currentUser;
-        if (user) {
-          const token = await user.getIdToken();
-          const response = await axios.get(`${BASE_URL}/generations`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+  const fetchGenerations = useCallback(async () => {
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        const token = await user.getIdToken();
+        const response = await axios.get(`${BASE_URL}/generations`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-          if (
-            response.data &&
-            Array.isArray(response.data.imagen3D) &&
-            Array.isArray(response.data.texto3D) &&
-            Array.isArray(response.data.textimg3D) &&
-            Array.isArray(response.data.unico3D)
-          ) {
-            const imagen3D = response.data.imagen3D.map((gen) => ({
-              ...gen,
-              generation_type: "Imagen3D",
-            }));
-            const texto3D = response.data.texto3D.map((gen) => ({
-              ...gen,
-              generation_type: "Texto3D",
-            }));
-            const textimg3D = response.data.textimg3D.map((gen) => ({
-              ...gen,
-              generation_type: "TextImg3D",
-            }));
-            const unico3D = response.data.unico3D.map((gen) => ({
-              ...gen,
-              generation_type: "Unico3D",
-            }));
-            const combinedGenerations = [
-              ...imagen3D,
-              ...texto3D,
-              ...textimg3D,
-              ...unico3D,
-            ];
-            const sortedGenerations = combinedGenerations.sort(
-              (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-            );
-            setGenerations(sortedGenerations);
-          } else {
-            setError("Los datos recibidos no son válidos.");
-          }
+        if (
+          response.data &&
+          Array.isArray(response.data.imagen3D) &&
+          Array.isArray(response.data.texto3D) &&
+          Array.isArray(response.data.textimg3D) &&
+          Array.isArray(response.data.unico3D)
+        ) {
+          const combinedGenerations = [
+            ...response.data.imagen3D.map(gen => ({ ...gen, generation_type: "Imagen3D" })),
+            ...response.data.texto3D.map(gen => ({ ...gen, generation_type: "Texto3D" })),
+            ...response.data.textimg3D.map(gen => ({ ...gen, generation_type: "TextImg3D" })),
+            ...response.data.unico3D.map(gen => ({ ...gen, generation_type: "Unico3D" })),
+          ];
+          const sortedGenerations = combinedGenerations.sort(
+            (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+          );
+          setGenerations(sortedGenerations);
+        } else {
+          setError("Los datos recibidos no son válidos.");
         }
-      } catch (error) {
-        setError("Error al obtener el historial de generaciones.");
       }
-    };
+    } catch (error) {
+      setError("Error al obtener el historial de generaciones.");
+    }
+  }, [BASE_URL]);
 
+  useEffect(() => {
     fetchGenerations();
-  }, []);
+  }, [fetchGenerations]);
 
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -97,11 +81,9 @@ const History = ({ selectedTab, BASE_URL }) => {
             },
           }
         );
-        setGenerations(
-          generations.filter(
-            (gen) => gen.generation_name !== generationToDelete.generation_name
-          )
-        );
+        
+        // Refresh the generations after deletion
+        await fetchGenerations();
 
         setShowLoadingModal(false);
         setShowSuccessModal(true);
@@ -131,7 +113,7 @@ const History = ({ selectedTab, BASE_URL }) => {
   );
 
   return (
-    <div className="w-full  ">
+    <div className="w-full">
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       {filteredGenerations.length === 0 ? (
@@ -141,10 +123,10 @@ const History = ({ selectedTab, BASE_URL }) => {
           </p>
         </div>
       ) : (
-        <div className="  sm:flex  sm:gap-8 gap-0 w-full sm:flex-wrap">
+        <div className="sm:flex sm:gap-8 gap-0 w-full sm:flex-wrap">
           {filteredGenerations.map((generation, index) => (
             <GenerationCard
-              key={index}
+              key={`${generation.generation_name}-${index}`}
               generation={generation}
               formatDate={formatDate}
               openModal={openModal}

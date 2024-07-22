@@ -1,6 +1,6 @@
 import React from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Environment } from "@react-three/drei";
+import { OrbitControls} from "@react-three/drei";
 import { Model } from "./Model";
 import { Suspense } from "react";
 import { HDREnvironment } from "./HDREnvironment";

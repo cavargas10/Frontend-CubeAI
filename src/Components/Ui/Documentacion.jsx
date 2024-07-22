@@ -28,7 +28,7 @@ const Documentacion = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative mb-4">
       <button
         className={`block relative mr-10 sm:hidden ${isMenuButtonActive ? "outline outline-linea rounded-lg bg-gray-700" : ""}`}
         onClick={toggleMenu}
