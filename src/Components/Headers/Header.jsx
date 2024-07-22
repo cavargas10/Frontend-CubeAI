@@ -54,6 +54,7 @@ export const Header = ({ user }) => {
 
             <button
               name="menu"
+              aria-label="Open menu"
               className={`block md:hidden ${isMenuButtonActive ? "outline outline-linea rounded-lg  bg-gray-700" : ""}`}
               onClick={() => {
                 setIsMenuOpen(!isMenuOpen);
