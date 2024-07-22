@@ -1,33 +1,16 @@
-import React, { useRef, memo } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import React, { memo } from 'react';
 import { Button } from "../Ui/Button";
-import { Model } from "../Prediction/Model"; 
-import { HDREnvironment } from "../Prediction/HDREnvironment";
 
-const RotatingModel = memo(({ url, rotationSpeed = 0.015 }) => {
-  const groupRef = useRef();
-
-  useFrame(() => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y += rotationSpeed;
-    }
-  });
-
-  return (
-    <group ref={groupRef}>
-      <Model url={url} />
-    </group>
-  );
-});
-
-const Canvas3D = memo(({ modelPath, cameraPosition }) => (
+const VideoPlayer = memo(({ videoPath }) => (
   <div className="h-[300px] w-full">
-    <Canvas camera={{ position: cameraPosition }}>
-      <ambientLight intensity={1} />
-      <pointLight position={[10, 10, 10]} />
-      <RotatingModel url={modelPath} />
-      <HDREnvironment />
-    </Canvas>
+    <video
+      src={videoPath}
+      autoPlay
+      loop
+      muted
+      playsInline
+      className="w-full h-full object-cover rounded-md"
+    />
   </div>
 ));
 
@@ -42,7 +25,7 @@ const InputVisualization = memo(({ type, content }) => (
   </div>
 ));
 
-const ModelSection = memo(({ title, description, modelPath, cameraPosition, inputType, inputContent, secondInputType, secondInputContent }) => (
+const ModelSection = memo(({ title, description, videoPath, inputType, inputContent, secondInputType, secondInputContent }) => (
   <div className="sm:flex xl:grid xl:grid-cols-4 xl:gap-4 mt-10">
     <div className="sm:w-96 xl:col-span-2 xl:w-full">
       <h3 className="text-center text-2xl sm:text-center sm:text-4xl xl:text-5xl bg-gradient-to-r from-azul-gradient to-morado-gradient text-transparent bg-clip-text py-2">
@@ -56,7 +39,7 @@ const ModelSection = memo(({ title, description, modelPath, cameraPosition, inpu
       </div>
     </div>
     <div className="sm:ml-10 xl:ml-0 xl:flex xl:justify-center xl:items-center xl:col-span-2 relative">
-      <Canvas3D modelPath={modelPath} cameraPosition={cameraPosition} />
+      <VideoPlayer videoPath={videoPath} />
       <div className="absolute bottom-4 left-4 flex flex-col space-y-2 max-w-[calc(100%-2rem)]">
         <InputVisualization type={inputType} content={inputContent} />
         {secondInputType && (
@@ -71,24 +54,21 @@ const modelSectionData = [
   {
     title: "Texto a 3D",
     description: "Nuestra herramienta de conversión de texto a 3D brinda a los creadores la capacidad de generar modelos tridimensionales en un minuto, incluso para aquellos sin experiencia previa en el ámbito, utilizando simplemente la entrada de texto.",
-    modelPath: "/Hamburguesa.obj",
-    cameraPosition: [0, 0, 1],
+    videoPath: "/public/Hamburguesa.webm",
     inputType: "text",
     inputContent: "Una hamburguesa"
   },
   {
     title: "Imagen a 3D",
     description: "Nuestra herramienta de conversión de imagen a 3D permite a los usuarios transformar imágenes 2D en modelos tridimensionales detallados, abriendo nuevas posibilidades para diseñadores y creadores de contenido.",
-    modelPath: "/Lion.glb",
-    cameraPosition: [0, 0, 2],
+    videoPath: "/Lion.webm",
     inputType: "image",
     inputContent: "/Tigre.webp"
   },
   {
     title: "Texto a Imagen a 3D",
     description: "Nuestro innovador proceso de texto a imagen a 3D permite a los usuarios describir una escena o objeto con palabras, generar una imagen basada en esa descripción, y luego transformar esa imagen en un modelo 3D completo.",
-    modelPath: "/CristianoRonaldo.glb",
-    cameraPosition: [0, 0, 2],
+    videoPath: "/CR7.webm",
     inputType: "text",
     inputContent: "Cristiano Ronaldo",
     secondInputType: "image",
@@ -97,8 +77,7 @@ const modelSectionData = [
   {
     title: "Único a 3D",
     description: "Nuestra herramienta de Único a 3D permite a los usuarios crear modelos tridimensionales personalizados y únicos, combinando diferentes técnicas de IA para generar resultados verdaderamente originales y creativos.",
-    modelPath: "/Groot.glb",
-    cameraPosition: [0, 0, -1.1],
+    videoPath: "/Groot.webm",
     inputType: "image",
     inputContent: "/Groot.png"
   }
