@@ -54,7 +54,7 @@ const modelSectionData = [
   {
     title: "Texto a 3D",
     description: "Nuestra herramienta de conversión de texto a 3D brinda a los creadores la capacidad de generar modelos tridimensionales en un minuto, incluso para aquellos sin experiencia previa en el ámbito, utilizando simplemente la entrada de texto.",
-    videoPath: "/public/Hamburguesa.webm",
+    videoPath: "/Hamburguesa.webm",
     inputType: "text",
     inputContent: "Una hamburguesa"
   },
