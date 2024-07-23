@@ -33,6 +33,7 @@ const Documento = () => {
           "alt",
           img.getAttribute("alt") || "Descripción de imagen"
         );
+        img.setAttribute("rel", "preload");
       });
     }
   }, [documento]);
