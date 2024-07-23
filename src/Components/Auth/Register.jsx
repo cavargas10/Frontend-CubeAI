@@ -153,7 +153,7 @@ export const Register = ({ BASE_URL }) => {
         </div>
         <div className="flex items-center justify-between">
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full"
+            className="bg-[#074FCA] hover:bg-[#0641A7] text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full"
             type="button"
             onClick={handleRegister}
           >
@@ -170,7 +170,7 @@ export const Register = ({ BASE_URL }) => {
         <div className="flex items-center justify-between">
           <button
             onClick={handleGoogleSignUp}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full mt-4"
+            className="bg-[#074FCA] hover:bg-[#0641A7] text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full mt-4"
           >
             Regístrate con Google
           </button>

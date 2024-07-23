@@ -124,7 +124,7 @@ export const Login = () => {
         </div>
         <div className="flex items-center justify-between">
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 lg:py-3 lg:px-6 rounded-lg focus:outline-none focus:shadow-outline w-full"
+            className="bg-[#074FCA] hover:bg-[#0641A7] text-white font-bold py-2 px-4 lg:py-3 lg:px-6 rounded-lg focus:outline-none focus:shadow-outline w-full"
             type="button"
             onClick={handleLogin}
           >
@@ -141,7 +141,7 @@ export const Login = () => {
         <div className="flex items-center justify-between">
           <button
             onClick={handleGoogleLogin}
-            className="bg-blue-500 text-center hover:bg-blue-700 text-white font-bold py-2 px-4 lg:py-3 lg:px-6 rounded-lg focus:outline-none focus:shadow-outline w-full mt-4"
+            className="bg-[#074FCA] text-center hover:bg-[#0641A7] text-white font-bold py-2 px-4 lg:py-3 lg:px-6 rounded-lg focus:outline-none focus:shadow-outline w-full mt-4"
           >
             Iniciar sesión con Google
           </button>
