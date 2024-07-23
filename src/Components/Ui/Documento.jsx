@@ -12,30 +12,42 @@ const Documento = () => {
       try {
         const data = await client.request(GET_HYGRAPH);
         const documentoEncontrado = data.categorias
-
           .flatMap((categoria) => categoria.documentos)
-
           .find((doc) => doc.slug === slug);
         setDocumento(documentoEncontrado);
         window.scrollTo({ top: 0, behavior: "smooth" });
       } catch (error) {
+        console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
   }, [slug]);
 
+  useEffect(() => {
+    if (documento) {
+      const images = document.querySelectorAll(".documento img");
+      images.forEach((img) => {
+        img.setAttribute("loading", "lazy");
+        img.setAttribute(
+          "alt",
+          img.getAttribute("alt") || "Descripción de imagen"
+        );
+      });
+    }
+  }, [documento]);
+
   if (!documento) {
     return <div>Cargando...</div>;
   }
 
   return (
-    <div className="documento ">
-      <h2 className="font-bold text-xl ">{documento.titulo}</h2>
+    <div className="documento">
+      <h2 className="font-bold text-xl">{documento.titulo}</h2>
       <div
         className="prose"
         dangerouslySetInnerHTML={{ __html: documento.contenido.html }}
-      />{" "}
+      />
     </div>
   );
 };
