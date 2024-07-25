@@ -28,7 +28,7 @@ const Documentacion = () => {
   };
 
   return (
-    <div className="relative mb-4">
+    <div className="relative mb-2 mt-8 mr-4">
       <button
         className={`block relative mr-4 sm:hidden ${isMenuButtonActive ? "outline outline-linea rounded-lg bg-gray-700" : ""}`}
         onClick={toggleMenu}
@@ -37,7 +37,7 @@ const Documentacion = () => {
       </button>
 
       {isMenuOpen && (
-        <ul className="mt-4  sm:hidden top-12 left-0 bg-fondologin z-50 sm:w-[357px] border border-linea rounded-lg shadow-lg ">
+        <ul className="mt-4 sm:hidden top-12 left-0 bg-fondologin z-50 sm:w-[357px] border border-linea rounded-lg shadow-lg ">
           {categorias.map((categoria) => (
             <li key={categoria.slug} className="ml-3">
               <span className="sidebar-title font-bold">
