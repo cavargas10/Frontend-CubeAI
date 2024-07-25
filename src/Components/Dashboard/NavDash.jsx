@@ -28,10 +28,10 @@ export const NavDash = ({ handleLogout, menuOpen, toggleMenu }) => {
 
   return (
     <section
-      className={`w-full fixed z-40 2xl:w-[300px] md:w-[252px] mt-2 sm:border-r-2 sm:border-linea bg-principal h-screen 2xl:text-xl ${menuOpen ? "block" : "hidden"} sm:block`}
+      className={`w-full fixed z-40 2xl:w-[300px] md:w-[267px] mt-2 sm:border-r-2 sm:border-linea bg-principal h-screen 2xl:text-xl ${menuOpen ? "block" : "hidden"} sm:block`}
     >
       <div className="flex-grow flex flex-col ">
-        <ul className="text-lg w-5/6 mt-2 ml-4 flex-grow">
+        <ul className="text-lg w-5/6 mt-3 ml-4 flex-grow">
           <li>
             <Link
               to="visualizador"
@@ -48,7 +48,7 @@ export const NavDash = ({ handleLogout, menuOpen, toggleMenu }) => {
               </span>
             </Link>
           </li>
-          <li className="mt-2">
+          <li className="mt-3">
             <Link
               to="tutorialdash"
               className={
@@ -66,9 +66,9 @@ export const NavDash = ({ handleLogout, menuOpen, toggleMenu }) => {
           </li>
         </ul>
 
-        <div className="mt-4 sm:mt-1 ml-6 flex-grow">
+        <div className="mt-4 sm:mt-2 ml-6 flex-grow">
           <p className="text-xl sm:text-xl 2xl:text-lg ">Herramientas de IA</p>
-          <ul className="mt-3 ml-1 pr-6 flex-grow">
+          <ul className="mt-4 ml-1 pr-6 flex-grow">
             <li className="my-4 sm:my-1">
               <Link
                 to="texto3D"
@@ -134,7 +134,7 @@ export const NavDash = ({ handleLogout, menuOpen, toggleMenu }) => {
 
       <div className="border-t-2 border-linea flex-grow ">
         <div className="border-b-2 border-linea">
-          <ul className="text-lg w-5/6 mt-2 ml-4">
+          <ul className="text-lg w-5/6 mt-3 ml-4">
             <li className="my-4 sm:my-1">
               <Link
                 to="/documentos/documento/titulo1"
@@ -170,7 +170,7 @@ export const NavDash = ({ handleLogout, menuOpen, toggleMenu }) => {
         </div>
       </div>
 
-      <div className="group mt-4 sm:mt-2 flex text-lg py-2 w-5/6 ml-4 hover:bg-red-500 rounded-lg">
+      <div className="group mt-4 sm:mt-3 flex text-lg py-2 w-5/6 ml-4 hover:bg-red-500 rounded-lg">
         <SignOut
           size={30}
           className="mr-2 transform scale-x-[-1] text-[#6666ff] group-hover:text-white"

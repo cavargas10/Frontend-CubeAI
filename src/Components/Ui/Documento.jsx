@@ -44,7 +44,7 @@ const Documento = () => {
 
   return (
     <div className="documento">
-      <h2 className="font-bold text-xl">{documento.titulo}</h2>
+      <h2 className="font-bold text-2xl">{documento.titulo}</h2>
       <div
         className="prose"
         dangerouslySetInnerHTML={{ __html: documento.contenido.html }}

@@ -106,12 +106,12 @@ export const Imagen3D = ({
   };
 
   return (
-    <div className="w-full sm:ml-[250px] sm:w-full xl:ml-[250px] 2xl:ml-[300px] xl:w-full  bg-fondologin">
+    <div className="w-full sm:ml-[264px] sm:w-full xl:ml-[250px] 2xl:ml-[300px] xl:w-full  bg-fondologin">
       <div className=" pt-6  bg-principal  pb-4  border-b-2 border-linea xl:border-none">
         <p className="text-center text-2xl">Imagen a 3D</p>
       </div>
 
-      <div className="flex flex-col gap-4 py-4 px-4 sm:w-5/4 sm:px-4 sm:mt-4  sm:flex sm:flex-col sm:gap-4  xl:mt-0 xl:ml-0 xl:flex-row xl:w-full xl:flex  xl:gap-4 xl:py-4 xl:px-4 xl:justify-between xl:items-center xl:border-y-2 xl:border-linea">
+      <div className="flex flex-col gap-4 py-4 px-4 sm:w-5/4 sm:px-4 sm:mt-0  sm:flex sm:flex-col sm:gap-4  xl:mt-0 xl:ml-0 xl:flex-row xl:w-full xl:flex  xl:gap-4 xl:py-4 xl:px-4 xl:justify-between xl:items-center xl:border-y-2 xl:border-linea">
         <div className="flex justify-between items-center gap-4 xl:flex xl:justify-center xl:items-center xl:gap-4 xl:grow">
           <p className="">Nombre</p>
           <input
@@ -150,7 +150,7 @@ export const Imagen3D = ({
       </div>
 
       <div
-        className="sm:mt-4 border-t-2 border-linea xl:border-none
+        className="sm:mt-0 border-t-2 border-linea xl:border-none
       "
       ></div>
 

@@ -37,13 +37,13 @@ export const Imagen3DResult = ({ prediction_img3d_result, error }) => {
               )}
 
               {prediction_img3d_result.make3d && (
-                <div className="flex justify-center gap-10 sm:border-y-2 xl:border-t-2 border-linea sm:mt-5 xl:mt-[77px] px-10">
+                <div className="flex justify-center gap-10 py-1 sm:py-0 border-y-2 xl:border-t-2 border-linea sm:mt-5 xl:mt-[77px] px-10">
                   <div
                     className=" 
                    flex items-center justify-around
                     w-[200px]
 
-                  sm:mb-4 mt-4 px-4 py-2  text-white rounded-md shadow-md  bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient"
+                  sm:mb-4 my-4 px-4 py-2  text-white rounded-md shadow-md  bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient"
                   >
                     <DownloadSimple size={32} color="white" />
                     <a
@@ -60,7 +60,7 @@ export const Imagen3DResult = ({ prediction_img3d_result, error }) => {
                    flex items-center justify-around
                     w-[200px]
 
-                  mt-4  sm:mb-4 px-4 py-2  text-white rounded-md shadow-md  bg-gradient-to-r  from-azul-gradient to-morado-gradient
+                 sm:mb-4 my-4 px-4 py-2  text-white rounded-md shadow-md  bg-gradient-to-r  from-azul-gradient to-morado-gradient
                       hover:from-morado-gradient hover:to-azul-gradient"
                   >
                     <DownloadSimple size={32} color="white" />

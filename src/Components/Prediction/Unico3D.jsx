@@ -107,7 +107,7 @@ export const Unico3D = ({
   };
 
   return (
-    <div className="w-full sm:ml-[250px] sm:w-full xl:ml-[250px] 2xl:ml-[300px] xl:w-full  bg-fondologin">
+    <div className="w-full sm:ml-[264px] sm:w-full xl:ml-[250px] 2xl:ml-[300px] xl:w-full  bg-fondologin">
       <div className="pt-6  bg-principal  pb-4 border-b-2 border-linea xl:border-none ">
         <p className="text-center  text-2xl">Unico3D</p>
       </div>
@@ -150,7 +150,7 @@ export const Unico3D = ({
       </div>
 
       <div
-        className="sm:mt-4 border-t-2 border-linea xl:border-none
+        className="sm:mt-0 border-t-2 border-linea xl:border-none
       "
       ></div>
 

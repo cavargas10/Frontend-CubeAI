@@ -82,7 +82,6 @@ const History = ({ selectedTab, BASE_URL }) => {
           }
         );
         
-        // Refresh the generations after deletion
         await fetchGenerations();
 
         setShowLoadingModal(false);

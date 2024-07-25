@@ -116,14 +116,14 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
 
   if (!userData) {
     return (
-      <div className="w-full sm:ml-60 pl-2 pr-8 mt-2 border-l-2 border-linea bg-fondologin">
+      <div className="w-full sm:ml-64 pl-2 pr-8 mt-2 border-l-2 border-linea bg-fondologin">
         Cargando datos del usuario...
       </div>
     );
   }
 
   return (
-    <section className="w-full 2xl:ml-72 sm:ml-60 pl-2 pr-8 mt-2 sm:border-l-2 sm:border-linea bg-fondologin">
+    <section className="w-full 2xl:ml-72 sm:ml-64 pl-2 pr-8 mt-2 sm:border-l-2 sm:border-linea bg-fondologin">
       <div className="ml-8 mt-8">
         <div>
           <h1 className="text-4xl">Perfil</h1>
