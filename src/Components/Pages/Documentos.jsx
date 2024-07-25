@@ -6,12 +6,12 @@ import Documento from "../Ui/Documento";
 
 export const Documentos = () => {
   return (
-    <div className="sm:grid sm:grid-cols-[275px_1fr] h-screen   ">
+    <div className="sm:grid sm:grid-cols-[320px_1fr] h-screen">
       <div className=" fixed border-t-2 border-linea w-full mt-[70px]"></div>
-      <nav className="border-r-2 border-linea overflow-y-auto pt-20 ml-4 sm:ml-10 px-4">
+      <nav className="border-r-2 border-linea overflow-y-auto pt-14 ml-4 sm:ml-10 ">
         <Documentacion />
       </nav>
-      <main className="overflow-y-auto sm:pt-28 px-10 bg-fondologin ">
+      <main className="overflow-y-auto sm:pt-24 px-10 bg-fondologin ">
         <Routes>
           <Route
             path="/"

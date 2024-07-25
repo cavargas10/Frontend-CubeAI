@@ -137,7 +137,7 @@ export const NavDash = ({ handleLogout, menuOpen, toggleMenu }) => {
           <ul className="text-lg w-5/6 mt-3 ml-4">
             <li className="my-4 sm:my-1">
               <Link
-                to="/documentos/documento/titulo1"
+                to="/documentos/documento/empezar"
                 target="_blank"
                 className={
                   isActiveRoute("/documentos/documento/titulo1")

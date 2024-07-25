@@ -10,7 +10,7 @@ export const HeaderDash = ({ userData, toggleMenu }) => {
         <div className="flex items-center ml-3">
           <img src={logo} alt="" className="w-[70px]" />
           <div className="">
-            <h1 className="items-center justify-center">Cu3d.IA</h1>
+            <h1 className="items-center justify-center">INSTANT3D</h1>
           </div>
         </div>
 

@@ -68,7 +68,7 @@ const Documentacion = () => {
 
       <div className="hidden sm:block  sm:mt-10  ">
         {categorias.map((categoria) => (
-          <div key={categoria.slug} className="ml-3">
+          <div key={categoria.slug} className="ml-0">
             <span className="sidebar-title font-bold">{categoria.titulo}</span>
             <ul className="border-l-2 border-slate-500 text-slate-400">
               {categoria.documentos.map((documento) => {
