@@ -29,8 +29,9 @@ export const Dashboard = ({
   BASE_URL,
 }) => {
   const [userData, setUserData] = useState(null);
- const [menuOpen, setMenuOpen] = useState(false);`
- `
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isNavCollapsed, setIsNavCollapsed] = useState(false);
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -55,9 +56,9 @@ export const Dashboard = ({
     setUserData((prevData) => ({ ...prevData, ...newData }));
   };
 
-   const toggleMenu = () => {
-     setMenuOpen(!menuOpen);
-   };
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
 
   return (
     <div className="text-white">
@@ -68,6 +69,8 @@ export const Dashboard = ({
           handleLogout={handleLogout}
           menuOpen={menuOpen}
           toggleMenu={toggleMenu}
+          isCollapsed={isNavCollapsed}
+          setIsCollapsed={setIsNavCollapsed}
         />
 
         <Routes>
@@ -120,6 +123,7 @@ export const Dashboard = ({
                 loading={loading}
                 BASE_URL={BASE_URL}
                 prediction_img3d_result={prediction_img3d_result}
+                isNavCollapsed={isNavCollapsed}
               />
             }
           />
