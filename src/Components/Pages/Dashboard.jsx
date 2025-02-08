@@ -9,6 +9,8 @@ import { Imagen3D } from "../Prediction/Imagen3D";
 import { Texto3D } from "../Prediction/Texto3D";
 import { TextImg3D } from "../Prediction/TextImg3D";
 import { Unico3D } from "../Prediction/Unico3D";
+import { MultiImagen3D } from "../Prediction/MultiImagen3D";
+import { Boceto3D } from "../Prediction/Boceto3D";
 import axios from "axios";
 
 export const Dashboard = ({
@@ -16,10 +18,12 @@ export const Dashboard = ({
   prediction_text3d_result,
   prediction_textimg3d_result,
   prediction_unico3d_result,
+  prediction_multiimg3d_result,
   setPrediction_img3d_result,
   setPrediction_text3d_result,
   setPrediction_textimg3d_result,
   setPrediction_unico3d_result,
+  setPrediction_multiimg3d_result,
   error,
   loading,
   setLoading,
@@ -31,6 +35,7 @@ export const Dashboard = ({
   const [userData, setUserData] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -62,11 +67,14 @@ export const Dashboard = ({
 
   return (
     <div className="text-white">
-      <HeaderDash userData={userData} toggleMenu={toggleMenu} />
+      <HeaderDash
+        userData={userData}
+        toggleMenu={toggleMenu}
+        handleLogout={handleLogout}
+      />
 
       <main className="flex mt-16 ">
         <NavDash
-          handleLogout={handleLogout}
           menuOpen={menuOpen}
           toggleMenu={toggleMenu}
           isCollapsed={isNavCollapsed}
@@ -82,8 +90,10 @@ export const Dashboard = ({
                 prediction_text3d_result={prediction_text3d_result}
                 prediction_textimg3d_result={prediction_textimg3d_result}
                 prediction_unico3d_result={prediction_unico3d_result}
+                prediction_multiimg3d_result={prediction_multiimg3d_result}
                 BASE_URL={BASE_URL}
                 error={error}
+                isCollapsed={isNavCollapsed}
               />
             }
           />
@@ -95,12 +105,17 @@ export const Dashboard = ({
                 prediction_text3d_result={prediction_text3d_result}
                 prediction_textimg3d_result={prediction_textimg3d_result}
                 prediction_unico3d_result={prediction_unico3d_result}
+                prediction_multiimg3d_result={prediction_multiimg3d_result}
                 BASE_URL={BASE_URL}
                 error={error}
+                isCollapsed={isNavCollapsed}
               />
             }
           />
-          <Route path="tutorialdash" element={<TutorialDash />} />
+          <Route
+            path="tutorialdash"
+            element={<TutorialDash isCollapsed={isNavCollapsed} />}
+          />
           <Route
             path="configdash"
             element={
@@ -109,6 +124,7 @@ export const Dashboard = ({
                 BASE_URL={BASE_URL}
                 userData={userData}
                 updateUserData={updateUserData}
+                isCollapsed={isNavCollapsed}
               />
             }
           />
@@ -123,7 +139,7 @@ export const Dashboard = ({
                 loading={loading}
                 BASE_URL={BASE_URL}
                 prediction_img3d_result={prediction_img3d_result}
-                isNavCollapsed={isNavCollapsed}
+                isCollapsed={isNavCollapsed}
               />
             }
           />
@@ -138,6 +154,7 @@ export const Dashboard = ({
                 loading={loading}
                 BASE_URL={BASE_URL}
                 prediction_text3d_result={prediction_text3d_result}
+                isCollapsed={isNavCollapsed}
               />
             }
           />
@@ -151,6 +168,7 @@ export const Dashboard = ({
                 loading={loading}
                 BASE_URL={BASE_URL}
                 prediction_textimg3d_result={prediction_textimg3d_result}
+                isCollapsed={isNavCollapsed}
               />
             }
           />
@@ -164,6 +182,37 @@ export const Dashboard = ({
                 loading={loading}
                 BASE_URL={BASE_URL}
                 prediction_unico3d_result={prediction_unico3d_result}
+                isCollapsed={isNavCollapsed}
+              />
+            }
+          />
+
+          <Route
+            path="multiimagen3D"
+            element={
+              <MultiImagen3D
+                user={user}
+                setPrediction_img3d_result={setPrediction_multiimg3d_result}
+                setLoading={setLoading}
+                loading={loading}
+                BASE_URL={BASE_URL}
+                prediction_img3d_result={prediction_multiimg3d_result}
+                isCollapsed={isNavCollapsed}
+              />
+            }
+          />
+
+          <Route
+            path="boceto3D"
+            element={
+              <Boceto3D
+                user={user}
+                setPrediction_img3d_result={setPrediction_img3d_result}
+                setLoading={setLoading}
+                loading={loading}
+                BASE_URL={BASE_URL}
+                prediction_img3d_result={prediction_img3d_result}
+                isCollapsed={isNavCollapsed}
               />
             }
           />

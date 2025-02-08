@@ -14,6 +14,7 @@ export const Imagen3D = ({
   BASE_URL,
   prediction_img3d_result,
   activeTab,
+  isCollapsed
 }) => {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -125,12 +126,18 @@ export const Imagen3D = ({
   };
 
   return (
-    <div className="w-full sm:ml-[264px] xl:ml-[265px] 2xl:ml-[300px] bg-fondologin">
+    <div className={`w-full sm:ml-[264px] xl:ml-[265px] 2xl:ml-[300px] bg-fondologin
+      transition-all duration-300 ease-in-out${
+      isCollapsed
+        ? "sm:ml-[80px] xl:ml-[80px] 2xl:ml-[80px]"
+        : "sm:ml-[264px] md:ml-[267px] xl:ml-[250px] 2xl:ml-[300px]"
+      }`}
+    >
       <div className="pt-6 bg-principal pb-4 border-b-2 border-linea ">
         <p className="text-center text-2xl">Imagen a 3D</p>
       </div>
 
-      <div className="flex flex-col xl:flex-row w-full min-h-[calc(100vh-200px)]">
+      <div className="flex flex-col xl:flex-row w-full min-h-[calc(100vh-200px)] bg-fondologin">
         {/* Formulario (Lado izquierdo) */}
         <div className="w-full xl:w-1/3 p-6 border-r border-linea">
           <div className="flex flex-col gap-6">
@@ -148,7 +155,7 @@ export const Imagen3D = ({
             </div>
 
             <div
-              className={`relative border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors min-h-[16rem] flex flex-col items-center justify-center
+              className={`relative border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-colors min-h-[16.5rem] flex flex-col items-center justify-center
                 ${isDragging ? 'border-azul-gradient bg-opacity-10' : 'border-linea'}
                 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:border-azul-gradient'}`}
               onDragOver={handleDragOver}
@@ -172,9 +179,6 @@ export const Imagen3D = ({
                     alt="Vista previa" 
                     className="max-w-full max-h-48 object-contain rounded-lg"
                   />
-                  <p className="text-sm text-gray-400">
-                    {imageFile?.name}
-                  </p>
                 </div>
               ) : (
                 <>
@@ -193,7 +197,7 @@ export const Imagen3D = ({
             <Button
               onClick={handlePrediction}
               disabled={loading}
-              className="w-full text-lg bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient py-3 rounded-lg border-none flex items-center justify-center gap-2"
+              className="w-full text-base bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient py-2 rounded-md border-none flex items-center justify-center gap-2"
             >
               <Sparkle size={24} weight="fill" />
               Generar

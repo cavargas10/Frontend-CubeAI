@@ -3,7 +3,7 @@ import hygraphClient from "../../Config/graphqlClient";
 import { GET_HYGRAPH } from "../../Config/queries";
 import { TutorialCard } from "../Ui/TutorialCard";
 
-export const TutorialDash = () => {
+export const TutorialDash = ({ isCollapsed }) => {
   const [tutoriales, setTutoriales] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -22,7 +22,13 @@ export const TutorialDash = () => {
   }, []);
 
   return (
-    <section className="sm:ml-64 pb-8 pr-5 w-full bg-fondologin sm:border-l-2 sm:border-linea">
+    <section
+      className={`sm:ml-64 pb-8 pr-5 w-full bg-fondologin transition-all duration-300 ease-in-out ${
+        isCollapsed
+          ? "sm:ml-[80px] xl:ml-[80px] 2xl:ml-[80px]"
+          : "sm:ml-[264px] md:ml-[267px] xl:ml-[250px] 2xl:ml-[300px]"
+      }`}
+    >
       <div className="mt-8 ml-8 flex justify-center">
         {loading ? (
           <div className="flex items-center justify-center h-64">

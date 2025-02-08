@@ -6,7 +6,7 @@ import { DeleteConfirmationModal } from "../Modals/DeleteConfirmationModal";
 import { LoadingModal } from "../Modals/LoadingModal";
 import { SuccessModal } from "../Modals/SuccessModal";
 
-export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
+export const ConfigDash = ({ BASE_URL, user, userData, updateUserData, isCollapsed }) => {
   const [newName, setNewName] = useState("");
   const [isNameChanged, setIsNameChanged] = useState(false);
   const [nameError, setNameError] = useState("");
@@ -123,7 +123,11 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData }) => {
   }
 
   return (
-    <section className="w-full 2xl:ml-72 sm:ml-64 pl-2 pr-8 mt-2 sm:border-l-2 sm:border-linea bg-fondologin">
+    <section className={`sm:ml-64 pb-8 pr-5 w-full bg-fondologin transition-all duration-300 ease-in-out ${
+        isCollapsed
+          ? "sm:ml-[80px] xl:ml-[80px] 2xl:ml-[80px]"
+          : "sm:ml-[264px] md:ml-[267px] xl:ml-[267px] 2xl:ml-[300px]"
+      }`}>
       <div className="ml-8 mt-8">
         <div>
           <h1 className="text-4xl">Perfil</h1>

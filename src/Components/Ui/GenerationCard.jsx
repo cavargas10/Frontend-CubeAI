@@ -15,18 +15,25 @@ const CameraSetup = ({ position }) => {
 
 export const GenerationCard = ({ generation, formatDate, openModal }) => {
   const canvasRef = useRef();
+  const [isLoading, setIsLoading] = useState(true);
 
   const getCameraPosition = () => {
-    if (generation.make3d && generation.make3d[0]) {
-      return [0, 0, 1.7];
-    } else if (generation.obj_model) {
-      return [0, 0, 0.8];
-    } else if (generation.obj_glb) {
-      return [0, 0, -1.2];
-    } else {
-      return [0, 0, 5];
-    }
+    if (generation.glb_model_i23d) return [0, 0, -0.9];
+    if (generation.glb_model_t23d) return [0, 0, -0.9];
+    if (generation.glb_model) return [0, 0, -2];
+    if (generation.obj_glb) return [0, 0, -1.2];
+    return [0, 0, 5];
   };
+
+  const getModelUrl = () => {
+    if (generation.glb_model_i23d) return generation.glb_model_i23d;
+    if (generation.glb_model_t23d) return generation.glb_model_t23d;
+    if (generation.glb_model) return generation.glb_model;
+    if (generation.obj_glb) return generation.obj_glb;
+    return null;
+  };
+
+  const modelUrl = getModelUrl();
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -35,114 +42,129 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
     }
   }, []);
 
-  const getModelUrl = () => {
-    if (generation.make3d && generation.make3d[1]) {
-      return generation.make3d[1];
-    } else if (generation.obj_model) {
-      return generation.obj_model;
-    } else if (generation.obj_glb) {
-      return generation.obj_glb;
+  const handleDownload = (url, filename) => {
+    console.log("Intentando descargar:", url, "como", filename); // Depuración
+    if (!url) {
+      console.error("URL no válida para descargar.");
+      return;
     }
-    return null;
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename || "archivo";
+    document.body.appendChild(link); // Necesario para algunos navegadores
+    link.click();
+    document.body.removeChild(link); // Limpiar después de usar
   };
 
-  const modelUrl = getModelUrl();
+  const renderDownloadButtons = () => {
+    const buttons = [];
 
-  const [isLoading, setIsLoading] = useState(true);
+    if (generation.glb_model_i23d) {
+      buttons.push(
+        <button
+          key="glb"
+          onClick={() => handleDownload(generation.glb_model_i23d, "glb_model_i23d.glb")}
+          className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-full shadow-lg hover:shadow-xl transition-all text-xs"
+          aria-label="Descargar modelo GLB"
+        >
+          <DownloadSimple size={16} weight="bold" />
+          GLB
+        </button>
+      );
+    } else if (generation.glb_model_t23d) {
+      buttons.push(
+        <button
+          key="obj"
+          onClick={() => handleDownload(generation.glb_model_t23d, "glb_model.obj")}
+          className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-full shadow-lg hover:shadow-xl transition-all text-xs"
+          aria-label="Descargar modelo GLB"
+        >
+          <DownloadSimple size={16} weight="bold" />
+          GLB
+        </button>
+      );
+    } else if (generation.glb_model) {
+      buttons.push(
+        <button
+          key="obj"
+          onClick={() => handleDownload(generation.glb_model, "glb_model.obj")}
+          className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-full shadow-lg hover:shadow-xl transition-all text-xs"
+          aria-label="Descargar modelo GLB"
+        >
+          <DownloadSimple size={16} weight="bold" />
+          GLB
+        </button>
+      );
+    } else if (generation.obj_glb) {
+      buttons.push(
+        <button
+          key="glb"
+          onClick={() => handleDownload(generation.obj_glb, "obj_glb.glb")}
+          className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-full shadow-lg hover:shadow-xl transition-all text-xs"
+          aria-label="Descargar modelo GLB"
+        >
+          <DownloadSimple size={16} weight="bold" />
+          GLB
+        </button>
+      );
+    }
 
-// In the Model component
-<Suspense fallback={<div>Loading...</div>}>
-  <Model url={modelUrl} onLoad={() => setIsLoading(false)} />
-</Suspense>
-
-// Add a loading overlay
-{isLoading && (
-  <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
-    Loading 3D model...
-  </div>
-)}
+    return buttons;
+  };
 
   return (
-    <div className="relative mt-5 sm:mt-0 w-full h-[250px] sm:w-[230px] sm:h-[230px] 2xl:w-[260px] 2xl:h-[260px] overflow-hidden rounded-xl shadow-lg group cursor-pointer  ">
+    <div className="relative w-full h-[200px] sm:w-[220px] sm:h-[220px] rounded-2xl overflow-hidden shadow-lg bg-principal group cursor-pointer">
+      {/* Neon Border Effect */}
+      <div className="absolute inset-0 border-2 border-transparent group-hover:border-purple-600 rounded-2xl animate-pulse transition-all duration-500 z-10 pointer-events-none"></div>
+
+      {/* Canvas or Fallback */}
       {modelUrl ? (
         <Canvas ref={canvasRef}>
           <CameraSetup position={getCameraPosition()} />
           <ambientLight intensity={1} />
           <Suspense fallback={null}>
-          <HDREnvironment />
-            <Model url={modelUrl} />
+            <HDREnvironment />
+            <Model url={modelUrl} onLoad={() => setIsLoading(false)} />
           </Suspense>
         </Canvas>
       ) : (
-        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-          No está disponible el modelo 3D model
+        <div className="w-full h-full flex items-center justify-center bg-gray-900 text-gray-400 text-sm font-medium">
+          Modelo 3D no disponible
         </div>
       )}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/60 to-black/60 sm:from-transparent sm:via-transparent sm:to-black/60 group-hover:from-black/80 group-hover:via-black/60 group-hover:to-black/70"></div>
-      <div className="absolute inset-0 flex sm:translate-y-[100%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
-        <div className="text-white py-2">
-          <h3 className="text-center text-2xl">{generation.generation_name}</h3>
-          <p>Generado el: {formatDate(generation.timestamp)}</p>
-        </div>
-        {generation.make3d && generation.make3d[0] ? (
-          <div className="flex gap-4 justify-around">
-            <div className="absolute top-0 right-0 mr-2 mt-2">
-              <div
-                className="bg-red-500 px-2 py-2 rounded-xl relative"
-                onClick={() => openModal(generation)}
-              >
-                <Trash size={24} color="white" />
-              </div>
-            </div>
 
-            <div className="flex bg-[#6666ff] items-center gap-2 px-3 py-1 rounded-xl">
-              <DownloadSimple size={24} color="white" />
-              <a href={generation.make3d[0]} download="make3d.obj">
-                obj
-              </a>
-            </div>
-            <div className="flex bg-[#6666ff] items-center gap-2 px-2 py-1 rounded-xl">
-              <DownloadSimple size={24} color="white" />
-              <a href={generation.make3d[1]} download="make3d.glb">
-                glb
-              </a>
-            </div>
+      {/* Loading Overlay */}
+      {isLoading && (
+        <div className="absolute inset-0 bg-black bg-opacity-90 flex items-center justify-center text-white text-sm font-semibold z-20">
+          <div className="animate-pulse">Cargando...</div>
+        </div>
+      )}
+
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20"></div>
+
+      {/* Card Content */}
+      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-b from-black/80 via-black/60 to-transparent backdrop-blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-30">
+        <h3 className="text-white text-base font-bold mb-1">{generation.generation_name}</h3>
+        <p className="text-gray-300 text-xs">Generado el: {formatDate(generation.timestamp)}</p>
+
+        {/* Actions */}
+        <div className="mt-3 flex justify-between items-center">
+          <div className="flex gap-2">
+            {renderDownloadButtons()}
           </div>
-        ) : generation.obj_model ? (
-          <div className="flex gap-4 justify-around">
-            <div className="absolute top-0 right-0 mr-2 mt-2">
-              <div
-                className="bg-red-500 px-2 py-2 rounded-xl"
-                onClick={() => openModal(generation)}
-              >
-                <Trash size={24} color="white" />
-              </div>
-            </div>
-            <div className="flex bg-[#6666ff] items-center gap-2 px-3 py-1 rounded-xl">
-              <DownloadSimple size={24} color="white" />
-              <a href={generation.obj_model} download="make3d.obj">
-                obj
-              </a>
-            </div>
-          </div>
-        ) : generation.obj_glb ? (
-          <div className="flex gap-4 justify-around">
-            <div className="absolute top-0 right-0 mr-2 mt-2">
-              <div
-                className="bg-red-500 px-2 py-2 rounded-xl"
-                onClick={() => openModal(generation)}
-              >
-                <Trash size={24} color="white" />
-              </div>
-            </div>
-            <div className="flex bg-[#6666ff] items-center gap-2 px-3 py-1 rounded-xl">
-              <DownloadSimple size={24} color="white" />
-              <a href={generation.obj_glb} download="obj_glb.glb">
-                glb
-              </a>
-            </div>
-          </div>
-        ) : null}
+          <button
+            className="p-2 bg-red-600 rounded-full hover:bg-red-700 transition-colors shadow-lg hover:shadow-xl"
+            onClick={() => {
+              console.log("Eliminar generación:", generation); // Depuración
+              openModal(generation);
+            }}
+            aria-label="Eliminar generación"
+          >
+            <Trash size={16} color="white" weight="bold" />
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -6,6 +6,14 @@ import { ErrorModal } from "../Modals/ErrorModal";
 import { LoadingModal } from "../Modals/LoadingModal";
 import { Button } from "flowbite-react";
 
+const styles = [
+  { name: "Disney", value: "disney"},
+  { name: "Pixar", value: "pixar"},
+  { name: "Realista", value: "realista"},
+  { name: "Anime", value: "anime"},
+  { name: "Chibi", value: "chibi"},
+];
+
 export const Texto3D = ({
   user,
   setPrediction_text3d_result,
@@ -14,10 +22,11 @@ export const Texto3D = ({
   BASE_URL,
   prediction_text3d_result,
   activeTab,
+  isCollapsed,
 }) => {
   const [generationName, setGenerationName] = useState("");
   const [userPrompt, setUserPrompt] = useState("");
-  const [selectedStyle, setSelectedStyle] = useState("");
+  const [selectedStyle, setSelectedStyle] = useState(null);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loadingModalVisible, setLoadingModalVisible] = useState(false);
@@ -31,7 +40,7 @@ export const Texto3D = ({
   const resetState = () => {
     setGenerationName("");
     setUserPrompt("");
-    setSelectedStyle("");
+    setSelectedStyle(null);
     setErrorModalVisible(false);
     setErrorMessage("");
     setLoadingModalVisible(false);
@@ -39,14 +48,9 @@ export const Texto3D = ({
     setLoading(false);
   };
 
-  const handleStyleChange = (event) => {
-    setSelectedStyle(event.target.value);
-  };
-
   const handlePrediction = async () => {
     if (!generationName || !userPrompt || !selectedStyle) {
-      const error = "Todos los campos son obligatorios";
-      setErrorMessage(error);
+      setErrorMessage("Todos los campos son obligatorios");
       setErrorModalVisible(true);
       return;
     }
@@ -58,34 +62,16 @@ export const Texto3D = ({
       const token = await user.getIdToken();
       const response = await axios.post(
         `${BASE_URL}/texto3D`,
-        {
-          generationName,
-          prompt: userPrompt,
-          selectedStyle,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { generationName, prompt: userPrompt, selectedStyle },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       setPrediction_text3d_result(response.data);
     } catch (error) {
-      if (error.response) {
-        const backendError =
-          error.response.data.error ||
-          "Error desconocido al realizar la predicción";
-        setErrorMessage(backendError);
-      } else if (error.request) {
-        const requestError =
-          "No se pudo contactar al servidor. Por favor, inténtelo más tarde.";
-        setErrorMessage(requestError);
-      } else {
-        const configError =
-          "Error al configurar la solicitud. Por favor, inténtelo más tarde.";
-        setErrorMessage(configError);
-      }
+      setErrorMessage(
+        error.response?.data?.error ||
+          "Error al generar el modelo. Intente nuevamente."
+      );
       setErrorModalVisible(true);
     } finally {
       setLoading(false);
@@ -93,111 +79,90 @@ export const Texto3D = ({
     }
   };
 
-  const closeErrorModal = () => {
-    setErrorModalVisible(false);
-    setErrorMessage("");
-  };
-
-  const handleDownload = () => {
-    if (prediction_text3d_result && prediction_text3d_result.obj_model) {
-      window.open(prediction_text3d_result.obj_model, "_blank");
-    }
-  };
-
   return (
-    <div className=" w-full sm:ml-[264px] sm:w-full xl:ml-[250px] 2xl:ml-[300px] xl:w-full  bg-fondologin ">
-      <div className="pt-6 bg-principal pb-4 border-b-2 border-linea xl:border-none  ">
+    <div
+      className={`w-full sm:ml-[264px] xl:ml-[265px] 2xl:ml-[300px] bg-fondologin 
+        transition-all duration-300 ease-in-out${
+        isCollapsed ? "sm:ml-[80px] xl:ml-[80px] 2xl:ml-[80px]" : ""
+      }`}
+    >
+      <div className="pt-6 bg-principal pb-4 border-b-2 border-linea">
         <p className="text-center text-2xl">Texto a 3D</p>
       </div>
 
-      <div className="flex flex-col gap-4 px-4 py-2 sm:w-5/4  sm:mt-4 sm:px-4 sm:flex sm:flex-col sm:gap-4  xl:mt-0 xl:ml-0 xl:flex-row xl:w-full xl:flex  xl:gap-4 xl:py-4 xl:px-4 xl:justify-between xl:items-center xl:border-y-2 xl:border-linea">
-        <div className=" flex items-center justify-center gap-4 grow ">
-          <p>Nombre</p>
-          <input
-            type="text"
-            placeholder="Nombre de la generación"
-            value={generationName}
-            onChange={(e) => setGenerationName(e.target.value)}
-            disabled={loading}
-            className="mt- bg-transparent border p-2 rounded-md w-full xl:grow"
-          />
+      <div className="flex flex-col xl:flex-row w-full min-h-[calc(100vh-200px)] bg-fondologin">
+        {/* Formulario (Izquierda) */}
+        <div className="w-full xl:w-1/3 p-6 border-r border-linea">
+          <div className="flex flex-col gap-6">
+            {/* Nombre */}
+            <div className="flex flex-col gap-2">
+              <label className="text-lg">Nombre de la generación</label>
+              <input
+                type="text"
+                placeholder="Ingrese un nombre"
+                value={generationName}
+                onChange={(e) => setGenerationName(e.target.value)}
+                disabled={loading}
+                className="bg-transparent border p-3 rounded-lg w-full"
+              />
+            </div>
+
+            {/* Prompt */}
+            <div className="flex flex-col gap-2">
+              <label className="text-lg">Prompt</label>
+              <input
+                type="text"
+                placeholder="Describa el modelo 3D"
+                value={userPrompt}
+                onChange={(e) => setUserPrompt(e.target.value)}
+                disabled={loading}
+                className="bg-transparent border p-3 rounded-lg w-full"
+              />
+            </div>
+
+            {/* Estilos (Nuevos botones visuales) */}
+            <div className="flex flex-col gap-2">
+              <label className="text-lg">Estilo</label>
+              <div className="grid grid-cols-3 gap-4">
+                {styles.map((style) => (
+                  <button
+                    key={style.value}
+                    onClick={() => setSelectedStyle(style.value)}
+                    disabled={loading}
+                    className={`relative border-2 rounded-lg p-2 flex flex-col items-center justify-center transition-all 
+                      ${
+                        selectedStyle === style.value
+                          ? "border-azul-gradient shadow-lg scale-105"
+                          : "border-gray-500 hover:border-azul-gradient"
+                      }`}
+                  >
+                    <span className="text-sm">{style.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Botón de generación */}
+            <Button
+              onClick={handlePrediction}
+              disabled={loading}
+              className="w-full text-lg bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient py-3 rounded-lg border-none flex items-center justify-center gap-2"
+            >
+              <Sparkle size={24} weight="fill" />
+              Generar
+            </Button>
+          </div>
         </div>
 
-        <div className="flex items-center justify-center grow ">
-          <p className="me-2">Prompt</p>
-          <input
-            type="text"
-            placeholder="Prompt de la generación"
-            value={userPrompt}
-            onChange={(e) => setUserPrompt(e.target.value)}
-            disabled={loading}
-            className="bg-transparent border p-2 rounded-md w-full"
-          />
-        </div>
-
-        <div className="flex items-center gap-2 grow">
-          <p>Estilo</p>
-          <select
-            value={selectedStyle}
-            onChange={handleStyleChange}
-            disabled={loading}
-            className="bg-transparent border p-2 rounded-md w-full text-white custom-select"
-          >
-            <option value="" disabled>
-              Selecciona un estilo
-            </option>
-            <option value="disney">Disney</option>
-            <option value="pixar">Pixar</option>
-            <option value="realista">Realista</option>
-            <option value="anime">Anime</option>
-            <option value="chibi">Chibi</option>
-          </select>
-        </div>
-
-        <div className="flex justify-center items-center">
-          <Sparkle
-            size={24}
-            color="#fff"
-            className="absolute z-20 mr-20"
-          />
-
-          <Button
-            onClick={handlePrediction}
-            disabled={loading}
-            className="w-full bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient px-6  py-1 rounded-lg border-none flex items-center justify-center"
-          >
-            Generar
-          </Button>
+        {/* Resultado (Derecha) */}
+        <div className="w-full xl:w-2/3">
+          <Texto3DResult prediction_text3d_result={prediction_text3d_result} />
         </div>
       </div>
-      <div
-        className="sm:mt-0 border-t-2 border-linea xl:border-none
-      "
-      ></div>
-      <Texto3DResult prediction_text3d_result={prediction_text3d_result} />
 
-      <div className="flex justify-center items-center sm:w-96 sm:mx-auto ">
-        <DownloadSimple
-          size={32}
-          color="#fff"
-          className="absolute mr-32 mt-3 z-20"
-        />
-
-        <Button
-          onClick={handleDownload}
-          disabled={!prediction_text3d_result}
-          className={`text-lg py-1 mt-3 px-6 rounded-lg border-none  w-full ${
-            prediction_text3d_result
-              ? "bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient cursor-pointer"
-              : "bg-gray-400 cursor-not-allowed"
-          }`}
-        >
-          Descargar GLB
-        </Button>
-      </div>
       <ErrorModal
         showModal={errorModalVisible}
-        closeModal={closeErrorModal}
+        closeModal={() => setErrorModalVisible(false)}
         errorMessage={errorMessage}
       />
       <LoadingModal

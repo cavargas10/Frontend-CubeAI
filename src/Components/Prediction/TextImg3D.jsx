@@ -6,6 +6,14 @@ import { ErrorModal } from "../Modals/ErrorModal";
 import { LoadingModal } from "../Modals/LoadingModal";
 import { Button } from "flowbite-react";
 
+const styles = [
+  { name: "Disney", value: "disney", image: "/styles/disney.png" },
+  { name: "Pixar", value: "pixar", image: "/styles/pixar.png" },
+  { name: "Realista", value: "realista", image: "/styles/realista.png" },
+  { name: "Anime", value: "anime", image: "/styles/anime.png" },
+  { name: "Chibi", value: "chibi", image: "/styles/chibi.png" },
+];
+
 export const TextImg3D = ({
   user,
   setPrediction_textimg3d_result,
@@ -14,10 +22,11 @@ export const TextImg3D = ({
   BASE_URL,
   prediction_textimg3d_result,
   activeTab,
+  isCollapsed,
 }) => {
   const [generationName, setGenerationName] = useState("");
   const [subject, setSubject] = useState("");
-  const [style, setStyle] = useState("");
+  const [style, setStyle] = useState(null);
   const [additionalDetails, setAdditionalDetails] = useState("");
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -32,7 +41,7 @@ export const TextImg3D = ({
   const resetState = () => {
     setGenerationName("");
     setSubject("");
-    setStyle("");
+    setStyle(null);
     setAdditionalDetails("");
     setErrorModalVisible(false);
     setErrorMessage("");
@@ -41,14 +50,9 @@ export const TextImg3D = ({
     setLoading(false);
   };
 
-  const handleStyleChange = (event) => {
-    setStyle(event.target.value);
-  };
-
   const handlePrediction = async () => {
     if (!generationName || !subject || !style || !additionalDetails) {
-      const error = "Todos los campos son obligatorios";
-      setErrorMessage(error);
+      setErrorMessage("Todos los campos son obligatorios");
       setErrorModalVisible(true);
       return;
     }
@@ -75,20 +79,10 @@ export const TextImg3D = ({
 
       setPrediction_textimg3d_result(response.data);
     } catch (error) {
-      if (error.response) {
-        const backendError =
-          error.response.data.error ||
-          "Error desconocido al realizar la predicción";
-        setErrorMessage(backendError);
-      } else if (error.request) {
-        const requestError =
-          "No se pudo contactar al servidor. Por favor, inténtelo más tarde.";
-        setErrorMessage(requestError);
-      } else {
-        const configError =
-          "Error al configurar la solicitud. Por favor, inténtelo más tarde.";
-        setErrorMessage(configError);
-      }
+      setErrorMessage(
+        error.response?.data?.error ||
+          "Error al generar el modelo. Intente nuevamente."
+      );
       setErrorModalVisible(true);
     } finally {
       setLoading(false);
@@ -96,97 +90,101 @@ export const TextImg3D = ({
     }
   };
 
-  const closeErrorModal = () => {
-    setErrorModalVisible(false);
-    setErrorMessage("");
-  };
-
   return (
-    <div className="w-full sm:ml-[264px] sm:w-full xl:ml-[250px] 2xl:ml-[300px] xl:w-full bg-fondologin">
-      <div className="bg-principal pt-6 pb-4 border-b-2 border-linea xl:border-none">
+    <div className={`w-full sm:ml-[264px] xl:ml-[265px] 2xl:ml-[300px] bg-fondologin 
+      transition-all duration-300 ease-in-out${
+      isCollapsed ? "sm:ml-[80px] xl:ml-[80px] 2xl:ml-[80px]" : ""
+    }`}>
+      <div className="bg-principal pt-6 pb-4 border-b-2 border-linea">
         <p className="text-center text-2xl">Texto e Imagen a 3D</p>
       </div>
 
-      <div className=" px-4 py-4 flex flex-col gap-4 sm:w-4/3 sm:mt-4 sm:px-4  sm:flex sm:flex-col sm:gap-4  xl:mt-0 xl:ml-0 xl:flex-row xl:w-full xl:flex  xl:gap-4 xl:py-4 xl:px-4 xl:justify-between xl:items-center xl:border-y-2 xl:border-linea">
-        <div className="flex justify-between items-center gap-4 grow xl:flex xl:justify-center xl:items-center xl:gap-4 xl:grow">
-          <p className="">Nombre</p>
-          <input
-            type="text"
-            placeholder="Ingrese un nombre"
-            value={generationName}
-            onChange={(e) => setGenerationName(e.target.value)}
-            disabled={loading}
-            className="bg-transparent border p-2 rounded-md  w-full  xl:grow"
-          />
-        </div>
-        <div className="flex flex-grow justify-center items-center gap-4 ">
-          <p className="">Prompt</p>
-          <input
-            type="text"
-            placeholder="Ingrese Prompt"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-            disabled={loading}
-            className="bg-transparent border p-2 rounded-md   w-full"
-          />
-        </div>
-        <div className="flex flex-grow justify-center items-center gap-4">
-          <p className="">Detalles</p>
-          <input
-            type="text"
-            placeholder="Detalles adicionales"
-            value={additionalDetails}
-            onChange={(e) => setAdditionalDetails(e.target.value)}
-            disabled={loading}
-            className="bg-transparent border p-2 rounded-md w-full "
-          />
-        </div>
-        <div className="flex flex-grow justify-center items-center gap-4 ">
-          <p className="">Estilo</p>
-          <select
-            value={style}
-            onChange={handleStyleChange}
-            disabled={loading}
-            className="bg-transparent border p-2 rounded-md w-full text-white custom-select"
-          >
-            <option value="" disabled>
-              Selecciona un estilo
-            </option>
-            <option value="disney">Disney</option>
-            <option value="pixar">Pixar-like</option>
-            <option value="realista">Realista</option>
-            <option value="anime">Anime</option>
-            <option value="chibi">Chibi</option>
-          </select>
+      <div className="flex flex-col xl:flex-row w-full min-h-[calc(100vh-200px)] bg-fondologin">
+        {/* Formulario (Izquierda) */}
+        <div className="w-full xl:w-1/3 p-6 border-r border-linea">
+          <div className="flex flex-col gap-4">
+            {/* Nombre */}
+            <div className="flex flex-col gap-3">
+              <label className="text-base">Nombre de la generación</label>
+              <input
+                type="text"
+                placeholder="Ingrese un nombre"
+                value={generationName}
+                onChange={(e) => setGenerationName(e.target.value)}
+                disabled={loading}
+                className="bg-transparent border p-2 rounded-md w-full text-sm"
+              />
+            </div>
+
+            {/* Prompt */}
+            <div className="flex flex-col gap-3">
+              <label className="text-base">Prompt</label>
+              <input
+                type="text"
+                placeholder="Ingrese descripción"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                disabled={loading}
+                className="bg-transparent border p-2 rounded-md w-full text-sm"
+              />
+            </div>
+
+            {/* Detalles adicionales */}
+            <div className="flex flex-col gap-3">
+              <label className="text-base">Detalles adicionales</label>
+              <input
+                type="text"
+                placeholder="Ingrese detalles adicionales"
+                value={additionalDetails}
+                onChange={(e) => setAdditionalDetails(e.target.value)}
+                disabled={loading}
+                className="bg-transparent border p-2 rounded-md w-full text-sm"
+              />
+            </div>
+
+            {/* Estilos (Botones visuales en lugar de combo box) */}
+            <div className="flex flex-col gap-2">
+              <label className="text-base">Estilo</label>
+              <div className="grid grid-cols-3 gap-2">
+                {styles.map((s) => (
+                  <button
+                    key={s.value}
+                    onClick={() => setStyle(s.value)}
+                    disabled={loading}
+                    className={`relative border rounded-md p-2 flex flex-col items-center justify-center transition-all text-sm
+                      ${
+                        style === s.value
+                          ? "border-azul-gradient shadow-md scale-105"
+                          : "border-gray-500 hover:border-azul-gradient"
+                      }`}
+                  >
+                    <span className="">{s.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Botón de generación */}
+            <Button
+              onClick={handlePrediction}
+              disabled={loading}
+              className="w-full text-base bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient py-2 rounded-lg border-none flex items-center justify-center gap-1"
+            >
+              <Sparkle size={20} weight="fill" />
+              Generar
+            </Button>
+          </div>
         </div>
 
-        <div className="flex justify-center items-center">
-          <Sparkle
-            size={24}
-            color="#fff"
-            className="absolute z-20 mr-20"
-          />
-          <Button
-            onClick={handlePrediction}
-            disabled={loading}
-            className="w-full sm:justify-center text-lg bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient py-1 px-6 rounded-lg border-none flex items-center justify-center"
-          >
-            Generar
-          </Button>
+        {/* Resultado (Derecha) */}
+        <div className="w-full xl:w-2/3">
+          <TextImg3DResult prediction_textimg3d_result={prediction_textimg3d_result} />
         </div>
       </div>
 
-      <div
-        className="sm:mt-0 border-t-2 border-linea xl:border-none
-      "
-      ></div>
-      <TextImg3DResult
-        prediction_textimg3d_result={prediction_textimg3d_result}
-      />
-
       <ErrorModal
         showModal={errorModalVisible}
-        closeModal={closeErrorModal}
+        closeModal={() => setErrorModalVisible(false)}
         errorMessage={errorMessage}
       />
 
