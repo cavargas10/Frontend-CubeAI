@@ -219,7 +219,6 @@ export const Imagen3D = ({
 
       <LoadingModal
         showLoadingModal={loadingModalVisible}
-        message="Generando el modelo 3D..."
       />
     </div>
   );

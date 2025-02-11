@@ -14,7 +14,7 @@ export function HDREnvironment() {
       const gen = gl.capabilities.isWebGL2 ? 1 : 0;
       texture.mapping = THREE.EquirectangularReflectionMapping;
       gl.toneMapping = THREE.ACESFilmicToneMapping;
-      gl.toneMappingExposure = 0.8;
+      gl.toneMappingExposure = 3;
       gl.outputEncoding = THREE.sRGBEncoding;
     }, [texture, gl]);
   

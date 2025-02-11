@@ -19,11 +19,13 @@ export const Dashboard = ({
   prediction_textimg3d_result,
   prediction_unico3d_result,
   prediction_multiimg3d_result,
+  prediction_boceto3d_result,
   setPrediction_img3d_result,
   setPrediction_text3d_result,
   setPrediction_textimg3d_result,
   setPrediction_unico3d_result,
   setPrediction_multiimg3d_result,
+  setPrediction_boceto3d_result,
   error,
   loading,
   setLoading,
@@ -91,6 +93,7 @@ export const Dashboard = ({
                 prediction_textimg3d_result={prediction_textimg3d_result}
                 prediction_unico3d_result={prediction_unico3d_result}
                 prediction_multiimg3d_result={prediction_multiimg3d_result}
+                prediction_boceto3d_result={prediction_boceto3d_result}
                 BASE_URL={BASE_URL}
                 error={error}
                 isCollapsed={isNavCollapsed}
@@ -106,6 +109,7 @@ export const Dashboard = ({
                 prediction_textimg3d_result={prediction_textimg3d_result}
                 prediction_unico3d_result={prediction_unico3d_result}
                 prediction_multiimg3d_result={prediction_multiimg3d_result}
+                prediction_boceto3d_result={prediction_boceto3d_result}
                 BASE_URL={BASE_URL}
                 error={error}
                 isCollapsed={isNavCollapsed}
@@ -192,11 +196,11 @@ export const Dashboard = ({
             element={
               <MultiImagen3D
                 user={user}
-                setPrediction_img3d_result={setPrediction_multiimg3d_result}
+                setPrediction_multiimg3d_result={setPrediction_multiimg3d_result}
                 setLoading={setLoading}
                 loading={loading}
                 BASE_URL={BASE_URL}
-                prediction_img3d_result={prediction_multiimg3d_result}
+                prediction_multiimg3d_result={prediction_multiimg3d_result}
                 isCollapsed={isNavCollapsed}
               />
             }
@@ -207,11 +211,11 @@ export const Dashboard = ({
             element={
               <Boceto3D
                 user={user}
-                setPrediction_img3d_result={setPrediction_img3d_result}
+                setPrediction_boceto3d_result={setPrediction_boceto3d_result}
                 setLoading={setLoading}
                 loading={loading}
                 BASE_URL={BASE_URL}
-                prediction_img3d_result={prediction_img3d_result}
+                prediction_boceto3d_result={prediction_boceto3d_result}
                 isCollapsed={isNavCollapsed}
               />
             }

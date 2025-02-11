@@ -18,16 +18,20 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const getCameraPosition = () => {
-    if (generation.glb_model_i23d) return [0, 0, -0.9];
+    if (generation.glb_model_i23d) return [0, 0.15, -0.9];
     if (generation.glb_model_t23d) return [0, 0, -0.9];
+    if (generation.glb_model_multi3d) return [0, 0, -0.8];
+    if (generation.glb_model_b3d) return [0, 0, -0.9];
     if (generation.glb_model) return [0, 0, -2];
-    if (generation.obj_glb) return [0, 0, -1.2];
+    if (generation.obj_glb) return [0, 0.15, -1.2];
     return [0, 0, 5];
   };
 
   const getModelUrl = () => {
     if (generation.glb_model_i23d) return generation.glb_model_i23d;
     if (generation.glb_model_t23d) return generation.glb_model_t23d;
+    if (generation.glb_model_multi3d) return generation.glb_model_multi3d;
+    if (generation.glb_model_b3d) return generation.glb_model_b3d;
     if (generation.glb_model) return generation.glb_model;
     if (generation.obj_glb) return generation.obj_glb;
     return null;
@@ -84,6 +88,30 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
           GLB
         </button>
       );
+    } else if (generation.glb_model_multi3d) {
+      buttons.push(
+        <button
+          key="obj"
+          onClick={() => handleDownload(generation.glb_model_multi3d, "glb_model.obj")}
+          className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-full shadow-lg hover:shadow-xl transition-all text-xs"
+          aria-label="Descargar modelo GLB"
+        >
+          <DownloadSimple size={16} weight="bold" />
+          GLB
+        </button>
+      );
+    } else if (generation.glb_model_b3d) {
+      buttons.push(
+        <button
+          key="obj"
+          onClick={() => handleDownload(generation.glb_model_b3d, "glb_model.obj")}
+          className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-full shadow-lg hover:shadow-xl transition-all text-xs"
+          aria-label="Descargar modelo GLB"
+        >
+          <DownloadSimple size={16} weight="bold" />
+          GLB
+        </button>
+      );
     } else if (generation.glb_model) {
       buttons.push(
         <button
@@ -114,7 +142,7 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
   };
 
   return (
-    <div className="relative w-full h-[200px] sm:w-[220px] sm:h-[220px] rounded-2xl overflow-hidden shadow-lg bg-principal group cursor-pointer">
+    <div className="relative w-full mt-1 h-[200px] sm:w-[220px] sm:h-[220px] rounded-2xl overflow-hidden shadow-lg bg-principal group cursor-pointer">
       {/* Neon Border Effect */}
       <div className="absolute inset-0 border-2 border-transparent group-hover:border-purple-600 rounded-2xl animate-pulse transition-all duration-500 z-10 pointer-events-none"></div>
 

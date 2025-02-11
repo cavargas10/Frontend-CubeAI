@@ -7,11 +7,11 @@ import { LoadingModal } from "../Modals/LoadingModal";
 import { Button } from "flowbite-react";
 
 const styles = [
-  { name: "Disney", value: "disney", image: "/styles/disney.png" },
-  { name: "Pixar", value: "pixar", image: "/styles/pixar.png" },
-  { name: "Realista", value: "realista", image: "/styles/realista.png" },
-  { name: "Anime", value: "anime", image: "/styles/anime.png" },
-  { name: "Chibi", value: "chibi", image: "/styles/chibi.png" },
+  { name: "Disney", value: "disney"},
+  { name: "Pixar", value: "pixar"},
+  { name: "Realista", value: "realista"},
+  { name: "Anime", value: "anime"},
+  { name: "Chibi", value: "chibi"},
 ];
 
 export const TextImg3D = ({

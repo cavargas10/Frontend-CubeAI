@@ -30,13 +30,17 @@ const History = ({ selectedTab, BASE_URL }) => {
           Array.isArray(response.data.imagen3D) &&
           Array.isArray(response.data.texto3D) &&
           Array.isArray(response.data.textimg3D) &&
-          Array.isArray(response.data.unico3D)
+          Array.isArray(response.data.unico3D) &&
+          Array.isArray(response.data.multiimg3D) &&
+          Array.isArray(response.data.boceto3D)
         ) {
           const combinedGenerations = [
             ...response.data.imagen3D.map(gen => ({ ...gen, generation_type: "Imagen3D" })),
             ...response.data.texto3D.map(gen => ({ ...gen, generation_type: "Texto3D" })),
             ...response.data.textimg3D.map(gen => ({ ...gen, generation_type: "TextImg3D" })),
             ...response.data.unico3D.map(gen => ({ ...gen, generation_type: "Unico3D" })),
+            ...response.data.multiimg3D.map(gen => ({ ...gen, generation_type: "MultiImagen3D" })),
+            ...response.data.boceto3D.map(gen => ({ ...gen, generation_type: "Boceto3D" })),
           ];
           const sortedGenerations = combinedGenerations.sort(
             (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
