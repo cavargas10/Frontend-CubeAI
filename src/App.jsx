@@ -78,7 +78,7 @@ function App() {
   } = UseAuth();
 
   return (
-    <div className="bg-principal text-white">
+    <div className="text-white">
       <ErrorBoundary>
         <BrowserRouter>
           <Header />

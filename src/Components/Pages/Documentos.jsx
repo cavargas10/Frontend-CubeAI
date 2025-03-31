@@ -7,7 +7,7 @@ import Documento from "../Ui/Documento";
 export const Documentos = () => {
   return (
     <div className="z-auto sm:grid sm:grid-cols-[320px_1fr] h-screen">
-      <div className=" fixed border-t-2 border-linea w-full mt-[70px]"></div>
+      <div className=" fixed border-t-2 border-linea w-full mt-[64px]"></div>
       <nav className="sm:border-r-2 border-linea overflow-y-auto pt-14 ml-4 sm:ml-10">
         <Documentacion />
       </nav>

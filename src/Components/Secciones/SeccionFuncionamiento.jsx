@@ -1,64 +1,88 @@
-import {
-  CloudArrowUp,
-  Download,
-  MagicWand,
-  Brain,
-  PaintBrush,
-} from "@phosphor-icons/react";
+import { StackSimple, Lightning, Clock } from "@phosphor-icons/react";
 
-export const SeccionFuncionamiento = () => {
+export function SeccionFuncionamiento() {
   return (
-    <div className="text-white font-inter font-bold mt-15 mb-20">
-      <div className="sm:flex sm:flex-col xl:grid xl:grid-cols-8 gap-10">
-        <h3 className="telefono:text-3xl flex justify-center items-center xl:col-span-5 text-5xl bg-gradient-to-r from-azul-gradient to-morado-gradient text-transparent bg-clip-text font-inter font-bold">
-          Funcionamiento del Generador de Imágenes con Inteligencia Artificial
-        </h3>
-
-        <p className="mt-4 2xl:text-2xl xl:col-span-3 xl:text-justify xl:flex xl:flex-col xl:justify-center text-lg">
-          Este servicio brinda una plataforma para la creación de modelos 3D
-          empleando inteligencia artificial, capaz de convertir textos e
-          imágenes en modelos 3D completamente operativos, acorde a tus
-          requerimientos específicos.
-        </p>
-      </div>
-
-      <div className="mt-10 sm:grid sm:grid-cols-2 xl:grid xl:grid-cols-5 xl:mt-20 gap-6">
-        {[
-          {
-            icon: <Brain size={60} color="#6666ff" />,
-            title: "IA",
-            description: "Deja de perder días modelando. El 3D se puede hacer en sólo unos minutos utilizando nuestra IA."
-          },
-          {
-            icon: <MagicWand size={60} color="#6666ff" />,
-            title: "Amigable",
-            description: "Interfaz sencilla e intuitiva. No es necesario convertirse en un experto en modelaje o en avisos."
-          },
-          {
-            icon: <Download size={60} color="#6666ff" />,
-            title: "Descargar",
-            description: "Exporte su modelo 3D como un archivo OBJ o GLB para usarlo sin problemas donde quieras."
-          },
-          {
-            icon: <CloudArrowUp size={60} color="#6666ff" />,
-            title: "Guardar",
-            description: "Genera el objeto 3D que necesites y guárdalo en nuestra base de datos, para que lo puedas utilizar en un futuro"
-          },
-          {
-            icon: <PaintBrush size={60} color="#6666ff" />,
-            title: "Estilos",
-            description: "Elige entre varios estilos como: Anime, Pixar, Disney, Realista, Chibi para personalizar tus creaciones 3D."
-          }
-        ].map((item, index) => (
-          <div key={index} className="sm:mt-10 xl:mt-0 col-span-1 border-l-2 border-linea flex flex-col items-start justify-between px-6 h-full py-6">
-            <div>
-              {item.icon}
-              <h1 className="text-2xl 2xl:text-3xl mt-4">{item.title}</h1>
+    <section id="como-funciona" className="py-20 bg-secondary/5">
+      <div className="container px-4 md:px-6">
+        {/* Encabezado */}
+        <div className="flex flex-col items-center justify-center space-y-4 text-center">
+          <div className="space-y-2">
+            <div className="inline-block rounded-lg bg-primary/10 border border-primary/20 px-3 py-1 text-sm font-bold text-primary mb-2 bg-azul-gradient">
+              Proceso
             </div>
-            <p className="2xl:text-lg mt-4">{item.description}</p>
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tighter bg-gradient-to-r from-azul-gradient to-morado-gradient bg-clip-text text-transparent">
+              Cómo Funciona
+            </h2>
+            <p className="max-w-[900px] text-white md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+              Nuestra avanzada IA hace que crear objetos 3D sea simple e
+              intuitivo.
+            </p>
           </div>
-        ))}
+        </div>
+
+        {/* Tarjetas de Pasos */}
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {/* Paso 1 */}
+          <div className="relative flex flex-col items-center space-y-4 rounded-2xl border border-gray-700 backdrop-blur-xl p-6 shadow-lg">
+            <div className="absolute top-[-1rem] left-1/2 transform -translate-x-1/2 rounded-full bg-azul-gradient px-3 py-1 text-base font-bold text-white font-heading">
+              Paso 1
+            </div>
+            <div className="rounded-full bg-gradient-to-r from-azul-gradient to-morado-gradient p-6">
+              <StackSimple
+                className="h-8 w-8 text-white transition-transform duration-300 hover:scale-125"
+                weight="bold"
+              />
+            </div>
+            <h3 className="text-xl font-bold font-heading text-white">
+              Sube o Crea
+            </h3>
+            <p className="text-center text-white">
+              Sube una imagen, escribe una descripción o dibuja un boceto de lo
+              que quieres crear.
+            </p>
+          </div>
+
+          {/* Paso 2 */}
+          <div className="relative flex flex-col items-center space-y-4 rounded-2xl border border-gray-700 backdrop-blur-xl p-6 shadow-lg">
+            <div className="absolute top-[-1rem] left-1/2 transform -translate-x-1/2 rounded-full bg-azul-gradient px-3 py-1 text-base font-bold text-white font-heading">
+              Paso 2
+            </div>
+            <div className="rounded-full bg-gradient-to-r from-azul-gradient to-morado-gradient p-6">
+              <Lightning
+                className="h-8 w-8 text-white transition-transform duration-300 hover:scale-125"
+                weight="bold"
+              />
+            </div>
+            <h3 className="text-xl font-bold font-heading text-white">
+              Procesamiento IA
+            </h3>
+            <p className="text-center text-white">
+              Nuestra avanzada IA analiza tu entrada y genera un modelo 3D
+              detallado en tiempo real.
+            </p>
+          </div>
+
+          {/* Paso 3 */}
+          <div className="relative flex flex-col items-center space-y-4 rounded-2xl border border-gray-700 backdrop-blur-xl p-6 shadow-lg">
+            <div className="absolute top-[-1rem] left-1/2 transform -translate-x-1/2 rounded-full bg-azul-gradient px-3 py-1 text-base font-bold text-white font-heading">
+              Paso 3
+            </div>
+            <div className="rounded-full bg-gradient-to-r from-azul-gradient to-morado-gradient p-6">
+              <Clock
+                className="h-8 w-8 text-white transition-transform duration-300 hover:scale-125"
+                weight="bold"
+              />
+            </div>
+            <h3 className="text-xl font-bold font-heading text-white">
+              Descarga y Usa
+            </h3>
+            <p className="text-center text-white">
+              Descarga tu modelo 3D en varios formatos para usar en juegos,
+              AR/VR, impresión y más.
+            </p>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
-};
+}
