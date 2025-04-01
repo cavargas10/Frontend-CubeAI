@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import axios from "axios";
-import { auth } from "../../Config/firebaseConfig"; 
+import { auth } from "../../Config/firebaseConfig";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -11,11 +11,16 @@ export const UseAuth = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [prediction_img3d_result, setPrediction_img3d_result] = useState(null);
-  const [prediction_text3d_result, setPrediction_text3d_result] = useState(null);
-  const [prediction_textimg3d_result, setPrediction_textimg3d_result] = useState(null);
-  const [prediction_unico3d_result, setPrediction_unico3d_result] = useState(null);
-  const [prediction_multiimg3d_result, setPrediction_multiimg3d_result] = useState(null);
-  const [prediction_boceto3d_result, setPrediction_boceto3d_result] = useState(null);
+  const [prediction_text3d_result, setPrediction_text3d_result] =
+    useState(null);
+  const [prediction_textimg3d_result, setPrediction_textimg3d_result] =
+    useState(null);
+  const [prediction_unico3d_result, setPrediction_unico3d_result] =
+    useState(null);
+  const [prediction_multiimg3d_result, setPrediction_multiimg3d_result] =
+    useState(null);
+  const [prediction_boceto3d_result, setPrediction_boceto3d_result] =
+    useState(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {

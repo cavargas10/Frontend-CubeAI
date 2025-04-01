@@ -13,6 +13,9 @@ const Dashboard = lazy(() => import('./Components/Pages/Dashboard').then(module 
 const Register = lazy(() => import('./Components/Auth/Register').then(module => ({ default: module.Register })));
 const VerifyEmail = lazy(() => import('./Components/Auth/VerifyEmail').then(module => ({ default: module.VerifyEmail })));
 const ResetPassword = lazy(() => import('./Components/Auth/ResetPassword').then(module => ({ default: module.ResetPassword })));
+const ChangePassword = lazy(() => import('./Components/Auth/ChangePassword').then(module => ({ default: module.ChangePassword })));
+const CorrectEmail = lazy(() => import('./Components/Auth/CorrectEmail').then(module => ({ default: module.CorrectEmail })));
+const ActionHandler = lazy(() => import('./Components/Auth/ActionHandler').then(module => ({ default: module.ActionHandler })));
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
@@ -91,6 +94,9 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/verify-email" element={<VerifyEmail />} />
               <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/action-handler" element={<ActionHandler />} />
+              <Route path="/change-password" element={<ChangePassword />} />
+              <Route path="/correct-email" element={<CorrectEmail />} />
               <Route
                 path="/dashboard/*"
                 element={

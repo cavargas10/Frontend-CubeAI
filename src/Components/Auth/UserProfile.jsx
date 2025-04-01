@@ -15,10 +15,10 @@ const UserProfile = ({ userData, toggleMenu }) => {
         {/* Contenedor principal */}
         <div className="flex items-center gap-2">
           {/* Nombre de usuario */}
-          <p className="sm:block hidden text-white mt-5">
+          <p className="sm:block hidden text-white mt-5 z-50">
             Bienvenido, {userData.name}
           </p>
-          
+
           {/* Imagen de perfil */}
           {userData.profile_picture ? (
             <img
@@ -33,7 +33,7 @@ const UserProfile = ({ userData, toggleMenu }) => {
               {userData.name?.charAt(0).toUpperCase()}
             </div>
           )}
-          
+
           {/* Botón de menú */}
           <button
             name="menu dashboard"
