@@ -1,6 +1,7 @@
 import React from "react";
 
-const Modal = ({ isOpen, onClose, children }) => {
+// Exporta el componente directamente como un named export
+export const ModalBase = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
   return (
@@ -24,5 +25,3 @@ const Modal = ({ isOpen, onClose, children }) => {
     </div>
   );
 };
-
-export default Modal;

@@ -4,7 +4,7 @@ import { OrbitControls, Grid } from "@react-three/drei";
 import { DownloadSimple, ArrowsClockwise, Aperture, Image, X } from "@phosphor-icons/react";
 import { Model } from "./Model";
 import { HDREnvironment } from "./HDREnvironment";
-import Modal from "../Modals/Modal";
+import { ModalBase } from "../modals/ModalBase";
 
 export const Unico3DResult = ({ prediction_unico3d_result }) => {
   const [showWireframe, setShowWireframe] = useState(false);

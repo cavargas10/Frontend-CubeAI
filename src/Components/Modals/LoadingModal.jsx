@@ -14,7 +14,7 @@ export const LoadingModal = ({ showLoadingModal, onComplete }) => {
 
   const simulateProgress = () => {
     let currentProgress = 0;
-    const totalTimeInSeconds = 100 + Math.random() * 80; // Tiempo total entre 100 y 180 segundos
+    const totalTimeInSeconds = 200 + Math.random() * 80; // Tiempo total entre 100 y 180 segundos
     const intervalTime = 1000; // Actualizar cada segundo (1000ms)
     const incrementPerStep = 100 / (totalTimeInSeconds); // Incremento por paso para llegar al 100%
     const messages = [

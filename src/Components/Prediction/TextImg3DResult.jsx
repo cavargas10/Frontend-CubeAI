@@ -10,7 +10,7 @@ import {
 } from "@phosphor-icons/react";
 import { HDREnvironment } from "./HDREnvironment";
 import { Model } from "./Model";
-import Modal from "../Modals/Modal";
+import { ModalBase } from "../modals/ModalBase";
 
 export const TextImg3DResult = ({ prediction_textimg3d_result, error }) => {
   const [isResultReady, setIsResultReady] = useState(false);

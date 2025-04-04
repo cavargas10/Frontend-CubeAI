@@ -3,8 +3,8 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Grid } from "@react-three/drei";
 import { DownloadSimple, ArrowsClockwise, Aperture, Image, X } from "@phosphor-icons/react";
 import { HDREnvironment } from "./HDREnvironment";
-import { Model } from "./Model";  // Ahora usamos el componente Model
-import Modal from "../Modals/Modal"; // Mueve el Modal a su propio archivo para reusabilidad
+import { Model } from "./Model"; 
+import { ModalBase } from "../modals/ModalBase";
 
 export const MultiImagen3DResult = ({ prediction_multiimg3d_result }) => {
   const [showWireframe, setShowWireframe] = useState(false);
@@ -92,14 +92,14 @@ export const MultiImagen3DResult = ({ prediction_multiimg3d_result }) => {
           </Suspense>
         </Canvas>
 
-        <Modal isOpen={isTextureZoomed} onClose={() => setIsTextureZoomed(false)}>
+        <ModalBase isOpen={isTextureZoomed} onClose={() => setIsTextureZoomed(false)}>
           <div className="relative">
             <img src={texturePreview} alt="Vista completa de textura" className="max-w-full max-h-[80vh] object-contain rounded-lg" />
             <button onClick={() => setIsTextureZoomed(false)} className="absolute top-2 right-2 p-2 bg-black/20 hover:bg-black/40 rounded-full transition-colors">
               <X size={20} />
             </button>
           </div>
-        </Modal>
+        </ModalBase>
       </div>
     </div>
   );
