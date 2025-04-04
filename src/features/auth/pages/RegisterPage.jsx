@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { auth, googleProvider } from "../../Config/firebaseConfig";
+import { auth, googleProvider } from "../../config/firebase";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
@@ -16,10 +16,10 @@ import {
   EyeSlash,
   GoogleChromeLogo,
 } from "@phosphor-icons/react";
-import { ErrorModal } from "../Modals/ErrorModal";
-import GeometricParticles from "../Ui/GeometryParticles";
+import { ErrorModal } from "../../../components/modals/ErrorModal";
+import GeometricParticles from "../../../components/ui/GeometricParticles";
 
-export const Register = ({ BASE_URL }) => {
+export const RegisterPage = ({ BASE_URL }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");

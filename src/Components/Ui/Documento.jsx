@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import client from "../../Config/graphqlClient";
-import { GET_HYGRAPH } from "../../Config/queries";
+import client from "../../config/client";
+import { GET_HYGRAPH } from "../../lib/hygraph/queries";
 
 const Documento = () => {
   const { slug } = useParams();

@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { NavDash } from "../Dashboard/NavDash";
-import { HeaderDash } from "../Dashboard/HeaderDash";
-import { Visualizador } from "../Dashboard/Visualizador";
-import { TutorialDash } from "../Dashboard/TutorialDash";
+import { NavDash } from "../dashboard/NavDash";
+import { HeaderDash } from "../dashboard/HeaderDash";
+import { Visualizador } from "../dashboard/Visualizador";
+import { TutorialDash } from "../dashboard/TutorialDash";
 import { Route, Routes } from "react-router-dom";
-import { ConfigDash } from "../Dashboard/ConfigDash";
-import { Imagen3D } from "../Prediction/Imagen3D";
-import { Texto3D } from "../Prediction/Texto3D";
-import { TextImg3D } from "../Prediction/TextImg3D";
-import { Unico3D } from "../Prediction/Unico3D";
-import { MultiImagen3D } from "../Prediction/MultiImagen3D";
-import { Boceto3D } from "../Prediction/Boceto3D";
+import { ConfigDash } from "../dashboard/ConfigDash";
+import { Imagen3D } from "../prediction/Imagen3D";
+import { Texto3D } from "../prediction/Texto3D";
+import { TextImg3D } from "../prediction/TextImg3D";
+import { Unico3D } from "../prediction/Unico3D";
+import { MultiImagen3D } from "../prediction/MultiImagen3D";
+import { Boceto3D } from "../prediction/Boceto3D";
 import axios from "axios";
 
 export const Dashboard = ({

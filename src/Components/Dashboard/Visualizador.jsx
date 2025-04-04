@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import History from "../Prediction/History";
+import History from "../prediction/History";
 
 export const Visualizador = ({ BASE_URL, isCollapsed }) => {
   const [selectedTab, setSelectedTab] = useState("Texto3D");

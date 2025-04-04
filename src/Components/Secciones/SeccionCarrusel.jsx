@@ -1,6 +1,6 @@
 import React from "react";
 
-import { CarruselItem } from "../Ui/CarruselItem";
+import { CarruselItem } from "../ui/CarruselItem";
 
 export const SeccionCarrusel = () => {
   const upperMarquee = [

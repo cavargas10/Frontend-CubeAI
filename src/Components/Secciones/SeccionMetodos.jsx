@@ -5,7 +5,7 @@ import {
   ImagesSquare,
   Cube,
 } from "@phosphor-icons/react";
-import GenerationMethod from "../Ui/GenerationMethod"; // Importar como default
+import GenerationMethod from "../ui/GenerationMethod"; // Importar como default
 
 export function SeccionMetodos() {
   return (

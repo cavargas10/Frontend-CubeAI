@@ -1,5 +1,5 @@
-import logo from "../../Assets/logo.webp";
-import { Button } from "../Ui/Button.jsx";
+import logo from "../../assets/logo.webp";
+import { Button } from "../ui/Button.jsx";
 import { CaretRight } from "@phosphor-icons/react";
 
 export function SeccionHero() {

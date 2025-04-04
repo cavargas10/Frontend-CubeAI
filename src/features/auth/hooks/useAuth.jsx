@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import axios from "axios";
-import { auth } from "../../Config/firebaseConfig";
+import { auth } from "../../../config/firebase";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-export const UseAuth = () => {
+export const useAuth = () => {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);

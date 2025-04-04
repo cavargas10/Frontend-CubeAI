@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Envelope, ArrowLeft } from "@phosphor-icons/react";
-import { auth } from "../../Config/firebaseConfig";
+import { auth } from "../../../config/firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
-import GeometricParticles from "../Ui/GeometryParticles";
-import { ErrorModal } from "../Modals/ErrorModal";
+import GeometricParticles from "../../../components/ui/GeometricParticles";
+import { ErrorModal } from "../../../components/modals/ErrorModal";
 
-export const ResetPassword = () => {
+export const ResetPasswordPage = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState(null);

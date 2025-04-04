@@ -1,8 +1,8 @@
 import React, { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
-import { HDREnvironment } from "../Prediction/HDREnvironment";
+import { HDREnvironment } from "../prediction/HDREnvironment";
 import { DownloadSimple, Trash } from "@phosphor-icons/react";
-import { Model } from "../Prediction/Model";
+import { Model } from "../prediction/Model";
 
 const CameraSetup = ({ position }) => {
   const { camera } = useThree();

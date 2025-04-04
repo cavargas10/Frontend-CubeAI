@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Sparkle, DownloadSimple } from "@phosphor-icons/react";
 import { Texto3DResult } from "./Texto3DResult";
-import { ErrorModal } from "../Modals/ErrorModal";
-import { LoadingModal } from "../Modals/LoadingModal";
+import { ErrorModal } from "../modals/ErrorModal";
+import { LoadingModal } from "../modals/LoadingModal";
 import { Button } from "flowbite-react";
 
 const styles = [

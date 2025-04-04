@@ -5,10 +5,10 @@ import {
   verifyPasswordResetCode,
   confirmPasswordReset,
 } from "firebase/auth";
-import { auth } from "../../Config/firebaseConfig"; // Importa tu configuración de Firebase
+import { auth } from "../../../config/firebase"; 
 import { Eye, EyeSlash, Lock } from "@phosphor-icons/react";
 
-export const ChangePassword = () => {
+export const ChangePasswordPage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);

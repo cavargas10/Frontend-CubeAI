@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import { auth } from "../../Config/firebaseConfig";
-import { GenerationCard } from "../Ui/GenerationCard";
-import { DeleteConfirmationModal } from "../Modals/DeleteConfirmationModal";
-import { SuccessModal } from "../Modals/SuccessModal";
-import { LoadingModal } from "../Modals/LoadingModal";
+import { auth } from "../../config/firebase";
+import { GenerationCard } from "../ui/GenerationCard";
+import { DeleteConfirmationModal } from "../modals/DeleteConfirmationModal";
+import { SuccessModal } from "../modals/SuccessModal";
+import { LoadingModal } from "../modals/LoadingModal";
 
 const History = ({ selectedTab, BASE_URL }) => {
   const [generations, setGenerations] = useState([]);

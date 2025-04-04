@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { getAuth, applyActionCode } from "firebase/auth";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-export const CorrectEmail = () => {
+export const CorrectEmailPage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const auth = getAuth();

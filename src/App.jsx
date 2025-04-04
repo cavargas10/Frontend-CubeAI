@@ -1,21 +1,21 @@
 import React, { lazy, Suspense } from "react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Header } from "./Components/Headers/Header";
-import { UseAuth } from "./Components/Auth/UseAuth";
+import { Header } from "./components/headers/Header";
+import { useAuth } from "./features/auth/hooks/useAuth";
 
 // Lazy load components
-const Home = lazy(() => import('./Components/Pages/Home').then(module => ({ default: module.Home })));
-const Tutoriales = lazy(() => import('./Components/Pages/Tutoriales').then(module => ({ default: module.Tutoriales })));
-const Documentos = lazy(() => import('./Components/Pages/Documentos').then(module => ({ default: module.Documentos })));
-const Login = lazy(() => import('./Components/Auth/Login').then(module => ({ default: module.Login })));
-const Dashboard = lazy(() => import('./Components/Pages/Dashboard').then(module => ({ default: module.Dashboard })));
-const Register = lazy(() => import('./Components/Auth/Register').then(module => ({ default: module.Register })));
-const VerifyEmail = lazy(() => import('./Components/Auth/VerifyEmail').then(module => ({ default: module.VerifyEmail })));
-const ResetPassword = lazy(() => import('./Components/Auth/ResetPassword').then(module => ({ default: module.ResetPassword })));
-const ChangePassword = lazy(() => import('./Components/Auth/ChangePassword').then(module => ({ default: module.ChangePassword })));
-const CorrectEmail = lazy(() => import('./Components/Auth/CorrectEmail').then(module => ({ default: module.CorrectEmail })));
-const ActionHandler = lazy(() => import('./Components/Auth/ActionHandler').then(module => ({ default: module.ActionHandler })));
+const Home = lazy(() => import('./components/pages/Home').then(module => ({ default: module.Home })));
+const Tutoriales = lazy(() => import('./components/pages/Tutoriales').then(module => ({ default: module.Tutoriales })));
+const Documentos = lazy(() => import('./components/pages/Documentos').then(module => ({ default: module.Documentos })));
+const LoginPage = lazy(() => import('./features/auth/pages/LoginPage').then(module => ({ default: module.LoginPage })));
+const Dashboard = lazy(() => import('./components/pages/Dashboard').then(module => ({ default: module.Dashboard })));
+const RegisterPage = lazy(() => import('./features/auth/pages/RegisterPage').then(module => ({ default: module.RegisterPage })));
+const VerifyEmailPage = lazy(() => import('./features/auth/pages/VerifyEmailPage').then(module => ({ default: module.VerifyEmailPage })));
+const ResetPasswordPage = lazy(() => import('./features/auth/pages/ResetPasswordPage').then(module => ({ default: module.ResetPasswordPage })));
+const ChangePasswordPage = lazy(() => import('./features/auth/pages/ChangePasswordPage').then(module => ({ default: module.ChangePasswordPage })));
+const CorrectEmailPage = lazy(() => import('./features/auth/pages/CorrectEmailPage').then(module => ({ default: module.CorrectEmailPage })));
+const ActionHandlerPage = lazy(() => import('./features/auth/pages/ActionHandlerPage').then(module => ({ default: module.ActionHandlerPage })));
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
@@ -78,7 +78,7 @@ function App() {
     setLoading,
     setError,
     handleLogout,
-  } = UseAuth();
+  } = useAuth();
 
   return (
     <div className="text-white">
@@ -89,14 +89,14 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/tutoriales" element={<Tutoriales />} />
-              <Route path="/register" element={<Register BASE_URL={import.meta.env.VITE_BASE_URL} />} />
+              <Route path="/register" element={<RegisterPage BASE_URL={import.meta.env.VITE_BASE_URL} />} />
               <Route path="/documentos/*" element={<Documentos />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/verify-email" element={<VerifyEmail />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/action-handler" element={<ActionHandler />} />
-              <Route path="/change-password" element={<ChangePassword />} />
-              <Route path="/correct-email" element={<CorrectEmail />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/verify-email" element={<VerifyEmailPage />} />
+              <Route path="/reset-password" element={<ResetPasswordPage />} />
+              <Route path="/action-handler" element={<ActionHandlerPage />} />
+              <Route path="/change-password" element={<ChangePasswordPage />} />
+              <Route path="/correct-email" element={<CorrectEmailPage />} />
               <Route
                 path="/dashboard/*"
                 element={

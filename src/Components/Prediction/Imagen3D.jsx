@@ -3,8 +3,8 @@ import axios from "axios";
 import { Imagen3DResult } from "./Imagen3DResult";
 import { Sparkle, UploadSimple } from "@phosphor-icons/react";
 import { Button } from "flowbite-react";
-import { ErrorModal } from "../Modals/ErrorModal";
-import { LoadingModal } from "../Modals/LoadingModal";
+import { ErrorModal } from "../modals/ErrorModal";
+import { LoadingModal } from "../modals/LoadingModal";
 
 export const Imagen3D = ({
   user,

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getAuth, applyActionCode } from "firebase/auth";
 
-export const ActionHandler = () => {
+export const ActionHandlerPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const auth = getAuth();

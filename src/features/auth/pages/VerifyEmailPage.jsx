@@ -6,9 +6,9 @@ import {
   sendEmailVerification,
   onAuthStateChanged,
 } from "firebase/auth";
-import GeometricParticles from "../Ui/GeometryParticles";
+import GeometricParticles from "../../../components/ui/GeometricParticles";
 
-export const VerifyEmail = () => {
+export const VerifyEmailPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [email, setEmail] = useState("");

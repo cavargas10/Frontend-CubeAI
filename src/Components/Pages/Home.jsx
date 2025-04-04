@@ -1,12 +1,12 @@
-import { SeccionHero } from "../Secciones/SeccionHero";
-import { SeccionLogos } from "../Secciones/SeccionLogos";
-import { SeccionMetodos } from "../Secciones/SeccionMetodos";
-import { SeccionFuncionamiento } from "../Secciones/SeccionFuncionamiento";
-import { SeccionBeneficios } from "../Secciones/SeccionBeneficios";
-import { SeccionFondo } from "../Secciones/SeccionFondo";
-import { SeccionCarrusel } from "../Secciones/SeccionCarrusel";
-import { SeccionFooter } from "../Secciones/SeccionFooter";
-import { ParticleBackground }from "../Ui/ParticleBackground";
+import { SeccionHero } from "../secciones/SeccionHero";
+import { SeccionLogos } from "../secciones/SeccionLogos";
+import { SeccionMetodos } from "../secciones/SeccionMetodos";
+import { SeccionFuncionamiento } from "../secciones/SeccionFuncionamiento";
+import { SeccionBeneficios } from "../secciones/SeccionBeneficios";
+import { SeccionFondo } from "../secciones/SeccionFondo";
+import { SeccionCarrusel } from "../secciones/SeccionCarrusel";
+import { SeccionFooter } from "../secciones/SeccionFooter";
+import { ParticleBackground }from "../ui/ParticleBackground";
 
 export const Home = () => {
   return (

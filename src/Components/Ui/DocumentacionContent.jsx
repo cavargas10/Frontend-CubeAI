@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import client from "../../Config/graphqlClient";
-import { GET_HYGRAPH } from "../../Config/queries";
+import client from "../../config/client";
+import { GET_HYGRAPH } from "../../lib/hygraph/queries";
 
 const DocumentacionContent = () => {
   const [categorias, setCategorias] = useState([]);

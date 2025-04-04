@@ -1,5 +1,5 @@
-import fondo from "../../Assets/fondo.webp";
-import { Button } from "../Ui/Button";
+import fondo from "../../assets/fondo.webp";
+import { Button } from "../ui/Button";
 import { CaretRight } from "@phosphor-icons/react";
 
 export const SeccionFondo = () => {

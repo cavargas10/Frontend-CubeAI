@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Gear, SignOut, ArrowLineUpRight } from "@phosphor-icons/react";
-import logo from "../../Assets/logo.webp";
-import UserProfile from "../Auth/UserProfile";
+import logo from "../../assets/logo.webp";
+import UserProfile from "../../features/auth/components/UserProfile";
 
 export const HeaderDash = ({ userData, toggleMenu, handleLogout }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);

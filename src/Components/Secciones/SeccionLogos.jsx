@@ -1,6 +1,6 @@
-import club from "../../Assets/club.png";
-import utpl from "../../Assets/utpl.png";
-import xrlab from "../../Assets/xrlab.png";
+import club from "../../assets/club.png";
+import utpl from "../../assets/utpl.png";
+import xrlab from "../../assets/xrlab.png";
 
 export function SeccionLogos() {
   // Array de logos con sus respectivas importaciones

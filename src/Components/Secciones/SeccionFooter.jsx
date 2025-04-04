@@ -1,5 +1,5 @@
-import logo from "../../Assets/logo.webp";
-import { Button } from "../Ui/Button";
+import logo from "../../assets/logo.webp";
+import { Button } from "../ui/Button";
 import { CaretRight } from "@phosphor-icons/react";
 
 export const SeccionFooter = () => {

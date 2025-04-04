@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Importar useNavigate
-import GeometricParticles from "../Ui/GeometryParticles"; // Componente de partículas
+import GeometricParticles from "../../../components/ui/GeometricParticles"; // Componente de partículas
 import {
   Eye,
   EyeSlash,
@@ -8,13 +8,13 @@ import {
   Lock,
   GoogleChromeLogo,
 } from "@phosphor-icons/react"; // Íconos de Phosphor Icons
-import { auth, googleProvider, db } from "../../Config/firebaseConfig";
+import { auth, googleProvider, db } from "../../../config/firebase";
 import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import { getDoc, doc } from "firebase/firestore";
-import { RegistrationModal } from "../Modals/RegistrationModal";
-import { ErrorModal } from "../Modals/ErrorModal";
+import { RegistrationModal } from "../../../components/modals/RegistrationModal"; // Modal de registro
+import { ErrorModal } from "../../../components/modals/ErrorModal";
 
-export const Login = () => {
+export const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar contraseña

@@ -1,8 +1,8 @@
 import React from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-import Documentacion from "../Ui/Documentacion";
-import DocumentacionContent from "../Ui/DocumentacionContent";
-import Documento from "../Ui/Documento";
+import Documentacion from "../ui/Documentacion";
+import DocumentacionContent from "../ui/DocumentacionContent";
+import Documento from "../ui/Documento";
 
 export const Documentos = () => {
   return (
