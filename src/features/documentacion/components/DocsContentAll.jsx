@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import client from "../../config/client";
-import { GET_HYGRAPH } from "../../lib/hygraph/queries";
+import client from "../../../config/client";
+import { GET_HYGRAPH } from "../../../lib/hygraph/queries";
 
-export const DocumentacionContent = () => {
+export const DocsContentAll = () => {
   const [categorias, setCategorias] = useState([]);
 
   useEffect(() => {

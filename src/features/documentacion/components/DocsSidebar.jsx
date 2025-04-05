@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import client from "../../config/client";
-import { GET_HYGRAPH } from "../../lib/hygraph/queries";
+import client from "../../../config/client";
+import { GET_HYGRAPH } from "../../../lib/hygraph/queries";
 import { Link, useLocation } from "react-router-dom";
 import { Queue } from "@phosphor-icons/react";
 
-export const Documentacion = () => {
+export const DocsSidebar = () => {
   const [categorias, setCategorias] = useState([]);
   const location = useLocation();
 

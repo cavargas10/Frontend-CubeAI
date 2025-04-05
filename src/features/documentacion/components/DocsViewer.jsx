@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import client from "../../config/client";
-import { GET_HYGRAPH } from "../../lib/hygraph/queries";
+import client from "../../../config/client";
+import { GET_HYGRAPH } from "../../../lib/hygraph/queries";
 
-export const Documento = () => {
+export const DocsViewer = () => {
   const { slug } = useParams();
   const [documento, setDocumento] = useState(null);
 
