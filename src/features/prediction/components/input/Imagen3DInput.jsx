@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Unico3DResult } from "./Unico3DResult";
 import { Sparkle, UploadSimple } from "@phosphor-icons/react";
 import { Button } from "flowbite-react";
-import { ErrorModal } from "../modals/ErrorModal";
-import { LoadingModal } from "../modals/LoadingModal";
+import { ErrorModal } from "../../../../components/modals/ErrorModal";
+import { LoadingModal } from "../../../../components/modals/LoadingModal";
+import { Imagen3DResult } from "../results/Imagen3DResult";
 
-export const Unico3D = ({
+export const Imagen3DInput = ({
   user,
-  setPrediction_unico3d_result,
+  setPrediction_img3d_result,
   setLoading,
   loading,
   BASE_URL,
-  prediction_unico3d_result,
+  prediction_img3d_result,
   activeTab,
   isCollapsed
 }) => {
@@ -37,7 +37,7 @@ export const Unico3D = ({
     setErrorModalVisible(false);
     setErrorMessage("");
     setLoadingModalVisible(false);
-    setPrediction_unico3d_result(null);
+    setPrediction_img3d_result(null);
     setLoading(false);
   };
 
@@ -99,15 +99,15 @@ export const Unico3D = ({
       formData.append("image", imageFile);
       formData.append("generationName", generationName);
 
-      const response = await axios.post(`${BASE_URL}/unico3D`, formData, {
+      const response = await axios.post(`${BASE_URL}/imagen3D`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       });
 
-      if (typeof setPrediction_unico3d_result === "function") {
-        setPrediction_unico3d_result(response.data);
+      if (typeof setPrediction_img3d_result === "function") {
+        setPrediction_img3d_result(response.data);
       }
     } catch (error) {
       const errorMsg = error.response?.data?.error || 
@@ -134,7 +134,7 @@ export const Unico3D = ({
       }`}
     >
       <div className="pt-6 bg-principal pb-4 border-b-2 border-linea ">
-        <p className="text-center text-2xl">Unico a 3D</p>
+        <p className="text-center text-2xl">Imagen a 3D</p>
       </div>
 
       <div className="flex flex-col xl:flex-row w-full min-h-[calc(100vh-200px)] bg-fondologin">
@@ -155,7 +155,7 @@ export const Unico3D = ({
             </div>
 
             <div
-              className={`relative border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors min-h-[16rem] flex flex-col items-center justify-center
+              className={`relative border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-colors min-h-[16.5rem] flex flex-col items-center justify-center
                 ${isDragging ? 'border-azul-gradient bg-opacity-10' : 'border-linea'}
                 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:border-azul-gradient'}`}
               onDragOver={handleDragOver}
@@ -197,7 +197,7 @@ export const Unico3D = ({
             <Button
               onClick={handlePrediction}
               disabled={loading}
-              className="w-full text-lg bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient py-3 rounded-lg border-none flex items-center justify-center gap-2"
+              className="w-full text-base bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient py-2 rounded-md border-none flex items-center justify-center gap-2"
             >
               <Sparkle size={24} weight="fill" />
               Generar
@@ -207,7 +207,7 @@ export const Unico3D = ({
 
         {/* Resultado (Lado derecho) */}
         <div className="w-full xl:w-2/3">
-          <Unico3DResult prediction_unico3d_result={prediction_unico3d_result} />
+          <Imagen3DResult prediction_img3d_result={prediction_img3d_result} />
         </div>
       </div>
 
@@ -219,7 +219,6 @@ export const Unico3D = ({
 
       <LoadingModal
         showLoadingModal={loadingModalVisible}
-        message="Generando el modelo 3D..."
       />
     </div>
   );

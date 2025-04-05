@@ -7,11 +7,11 @@ import {
   TrashSimple,
 } from "@phosphor-icons/react";
 import { Button } from "flowbite-react";
-import { ErrorModal } from "../modals/ErrorModal";
-import { LoadingModal } from "../modals/LoadingModal";
-import { Boceto3DResult } from "./Boceto3DResult";
+import { ErrorModal } from "../../../../components/modals/ErrorModal";
+import { LoadingModal } from "../../../../components/modals/LoadingModal";
+import { Boceto3DResult } from "../results/Boceto3DResult";
 
-export const Boceto3D = ({
+export const Boceto3DInput = ({
   user,
   setPrediction_boceto3d_result,
   setLoading,

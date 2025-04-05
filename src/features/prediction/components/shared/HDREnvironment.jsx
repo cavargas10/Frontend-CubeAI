@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { Environment } from "@react-three/drei";
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
 import { useLoader, useThree } from "@react-three/fiber";
-import environmentHDR from '../../assets/venice_sunset_1k.hdr' 
+import environmentHDR from '../../../../assets/venice_sunset_1k.hdr' 
 
 export function HDREnvironment() {
     const { gl } = useThree();

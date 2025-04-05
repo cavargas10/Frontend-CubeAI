@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { History } from "../../../components/prediction/History";
+import { PredictionHistory } from "../../../features/prediction/components/shared/PredictionHistory";
 
 export const Visualizador = ({ BASE_URL, isCollapsed }) => {
   const [selectedTab, setSelectedTab] = useState("Texto3D");
@@ -115,7 +115,7 @@ export const Visualizador = ({ BASE_URL, isCollapsed }) => {
       </div>
 
       <div className="px-4 sm:px-0 mt-[390px] telefono:mt-[345px] sm:ml-14 md:mt-[335px] lg:mt-[310px] sm:mt-[340px] xl:mt-[280px] bg-fondologin">
-        <History selectedTab={selectedTab} BASE_URL={BASE_URL} />
+        <PredictionHistory selectedTab={selectedTab} BASE_URL={BASE_URL} />
       </div>
     </section>
   );

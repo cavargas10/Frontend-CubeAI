@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Sparkle, UploadSimple } from "@phosphor-icons/react";
 import { Button } from "flowbite-react";
-import { ErrorModal } from "../modals/ErrorModal";
-import { LoadingModal } from "../modals/LoadingModal";
-import { MultiImagen3DResult } from "./MultiImagen3DResult";
+import { ErrorModal } from "../../../../components/modals/ErrorModal";
+import { LoadingModal } from "../../../../components/modals/LoadingModal";
+import { MultiImagen3DResult } from "../results/MultiImagen3DResult";
 
-export const MultiImagen3D = ({
+export const MultiImagen3DInput = ({
   user,
   setPrediction_multiimg3d_result,
   setLoading,

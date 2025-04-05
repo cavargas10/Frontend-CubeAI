@@ -1,8 +1,8 @@
 import React, { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
-import { HDREnvironment } from "../prediction/HDREnvironment";
+import { HDREnvironment } from "./HDREnvironment";
 import { DownloadSimple, Trash } from "@phosphor-icons/react";
-import { Model } from "../prediction/Model";
+import { ModelViewer } from "./ModelViewer";
 
 const CameraSetup = ({ position }) => {
   const { camera } = useThree();
@@ -153,7 +153,7 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
           <ambientLight intensity={1} />
           <Suspense fallback={null}>
             <HDREnvironment />
-            <Model url={modelUrl} onLoad={() => setIsLoading(false)} />
+            <ModelViewer url={modelUrl} onLoad={() => setIsLoading(false)} />
           </Suspense>
         </Canvas>
       ) : (

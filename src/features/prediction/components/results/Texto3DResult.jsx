@@ -2,8 +2,8 @@ import React, { Suspense, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Grid } from "@react-three/drei";
 import { DownloadSimple, ArrowsClockwise, Aperture } from "@phosphor-icons/react";
-import { HDREnvironment } from "./HDREnvironment";
-import { Model } from "./Model";
+import { HDREnvironment } from "../shared/HDREnvironment";
+import { ModelViewer } from "../shared/ModelViewer"; 
 
 export const Texto3DResult = ({ prediction_text3d_result }) => {
   const [showWireframe, setShowWireframe] = useState(false);
@@ -71,7 +71,7 @@ export const Texto3DResult = ({ prediction_text3d_result }) => {
               fadeStrength={1}
             />
             {isResultReady && (
-              <Model
+              <ModelViewer
                 url={prediction_text3d_result.glb_model}
                 showWireframe={showWireframe}
               />

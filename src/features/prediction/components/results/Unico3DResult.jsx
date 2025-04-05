@@ -2,18 +2,18 @@ import React, { Suspense, useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Grid } from "@react-three/drei";
 import { DownloadSimple, ArrowsClockwise, Aperture, Image, X } from "@phosphor-icons/react";
-import { HDREnvironment } from "./HDREnvironment";
-import { Model } from "./Model"; 
-import { ModalBase } from "../modals/ModalBase"; 
+import { HDREnvironment } from "../shared/HDREnvironment";
+import { ModelViewer } from "../shared/ModelViewer"; 
+import { ModalBase } from "../../../../components/modals/ModalBase";
 
-export const Boceto3DResult = ({ prediction_boceto3d_result }) => {
+export const Unico3DResult = ({ prediction_unico3d_result }) => {
   const [showWireframe, setShowWireframe] = useState(false);
   const [autoRotate, setAutoRotate] = useState(true);
   const [showTexture, setShowTexture] = useState(true);
   const [texturePreview, setTexturePreview] = useState(null);
   const [isTextureZoomed, setIsTextureZoomed] = useState(false);
 
-  const isResultReady = Boolean(prediction_boceto3d_result?.glb_model_b3d);
+  const isResultReady = Boolean(prediction_unico3d_result?.obj_glb);
 
   const ControlButton = ({ onClick, title, children, active }) => (
     <button
@@ -55,10 +55,10 @@ export const Boceto3DResult = ({ prediction_boceto3d_result }) => {
               <span className="text-sm">Textura</span>
             </ControlButton>
 
-            {prediction_boceto3d_result?.glb_model_b3d && (
+            {prediction_unico3d_result?.obj_glb && (
               <div className="flex gap-2 items-center">
                 <div className="h-6 w-px bg-white/20" />
-                <a href={prediction_boceto3d_result.glb_model_b3d} download="modelo.glb" className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors flex items-center gap-2">
+                <a href={prediction_unico3d_result.obj_glb} download="modelo.glb" className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors flex items-center gap-2">
                   <DownloadSimple size={20} />
                   <span className="text-sm">GLB</span>
                 </a>
@@ -69,25 +69,25 @@ export const Boceto3DResult = ({ prediction_boceto3d_result }) => {
 
         {isResultReady && texturePreview && (
           <div className="absolute bottom-4 left-4 z-10 cursor-pointer" onClick={() => setIsTextureZoomed(true)}>
-            <div className="bg-fondologin/90 p-2 rounded-lg backdrop-blur group hover:bg-principal transition-colors">
+            <div className="bg-principal/90 p-2 rounded-lg backdrop-blur group hover:bg-principal transition-colors">
               <img src={texturePreview} alt="Vista previa de textura" className="w-16 h-16 object-cover rounded-lg group-hover:opacity-90 transition-opacity" />
               <span className="text-xs text-gray-400 mt-1 block text-center">Ver textura</span>
             </div>
           </div>
         )}
 
-        <Canvas camera={{ position: [0, 0, 1.7] }} className="h-full">
+        <Canvas camera={{ position: [0, 0, -1.5] }} className="h-full">
           <Suspense fallback={null}>
-            <Grid position={[0, -0.9, 0]} args={[15, 15]} cellSize={0.5} cellThickness={1} cellColor="#6f6f6f" sectionSize={2.5} sectionThickness={1.5} sectionColor="#9d4bff" fadeDistance={25} fadeStrength={1} />
+            <Grid position={[0, -0.9, 0]} args={[15, 15]} cellSize={0.5} cellThickness={1} cellColor="#6f6f6f" sectionSize={2.5} sectionThickness={1.5} sectionColor="#9d4bff" fadeDistance={25} fadeStrength={1} />            
             {isResultReady && (
-              <Model
-                url={prediction_boceto3d_result.glb_model_b3d}
+              <ModelViewer
+                url={prediction_unico3d_result.obj_glb}
                 showWireframe={showWireframe}
                 showTexture={showTexture}
                 onTextureLoad={setTexturePreview}
               />
             )}
-            <OrbitControls minDistance={1} maxDistance={3} autoRotate={autoRotate} autoRotateSpeed={2} enabled={isResultReady} />
+            <OrbitControls minDistance={0.2} maxDistance={0.9} autoRotate={autoRotate} autoRotateSpeed={2} enabled={isResultReady} />
             <ambientLight intensity={1} />
             <HDREnvironment />
           </Suspense>

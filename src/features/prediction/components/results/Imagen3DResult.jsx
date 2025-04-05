@@ -2,9 +2,9 @@ import React, { Suspense, useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Grid } from "@react-three/drei";
 import { DownloadSimple, ArrowsClockwise, Aperture, Image, X } from "@phosphor-icons/react";
-import { HDREnvironment } from "./HDREnvironment";
-import { Model } from "./Model";  // Ahora usamos el componente Model
-import { ModalBase } from "../modals/ModalBase";
+import { HDREnvironment } from "../shared/HDREnvironment";
+import { ModelViewer } from "../shared/ModelViewer"; 
+import { ModalBase } from "../../../../components/modals/ModalBase";
 
 export const Imagen3DResult = ({ prediction_img3d_result }) => {
   const [showWireframe, setShowWireframe] = useState(false);
@@ -81,7 +81,7 @@ export const Imagen3DResult = ({ prediction_img3d_result }) => {
           <HDREnvironment />
             <Grid position={[0, -0.5, 0]} args={[15, 15]} cellSize={0.5} cellThickness={1} cellColor="#6f6f6f" sectionSize={2.5} sectionThickness={1.5} sectionColor="#9d4bff" fadeDistance={25} fadeStrength={1} />
             {isResultReady && (
-              <Model
+              <ModelViewer
                 url={prediction_img3d_result.glb_model_i23d}
                 showWireframe={showWireframe}
                 showTexture={showTexture}

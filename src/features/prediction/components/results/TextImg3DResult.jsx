@@ -8,9 +8,9 @@ import {
   Image,
   X,
 } from "@phosphor-icons/react";
-import { HDREnvironment } from "./HDREnvironment";
-import { Model } from "./Model";
-import { ModalBase } from "../modals/ModalBase";
+import { HDREnvironment } from "../shared/HDREnvironment";
+import { ModelViewer } from "../shared/ModelViewer"; 
+import { ModalBase } from "../../../../components/modals/ModalBase";
 
 export const TextImg3DResult = ({ prediction_textimg3d_result, error }) => {
   const [isResultReady, setIsResultReady] = useState(false);
@@ -171,7 +171,7 @@ export const TextImg3DResult = ({ prediction_textimg3d_result, error }) => {
                 fadeStrength={1}
               />
               {isResultReady && (
-                <Model
+                <ModelViewer
                   url={prediction_textimg3d_result.glb_model_t23d}
                   showWireframe={showWireframe}
                   showTexture={showTexture}

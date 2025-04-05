@@ -1,6 +1,6 @@
 import React from "react";
 
-export const CardDash = ({ predictionResult }) => {
+export const PredictionCard = ({ predictionResult }) => {
   return (
     <div>
       {predictionResult && (

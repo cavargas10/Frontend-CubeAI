@@ -4,7 +4,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import * as THREE from "three";
 
-export const Model = ({ url, onLoad, showWireframe = false, showTexture = true, onTextureLoad }) => {
+export const ModelViewer = ({ url, onLoad, showWireframe = false, showTexture = true, onTextureLoad }) => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { camera } = useThree();

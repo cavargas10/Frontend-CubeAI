@@ -6,12 +6,12 @@ import { HeaderDash } from "../features/dashboard/layout/HeaderDash";
 import { Visualizador } from "../features/dashboard/components/Visualizador";
 import { TutorialDash } from "../features/dashboard/components/TutorialDash";
 import { ConfigDash } from "../features/dashboard/components/ConfigDash";
-import { Imagen3D } from "../components/prediction/Imagen3D";
-import { Texto3D } from "../components/prediction/Texto3D";
-import { TextImg3D } from "../components/prediction/TextImg3D";
-import { Unico3D } from "../components/prediction/Unico3D";
-import { MultiImagen3D } from "../components/prediction/MultiImagen3D";
-import { Boceto3D } from "../components/prediction/Boceto3D";
+import { Imagen3DInput } from "../features/prediction/components/input/Imagen3DInput";
+import { Texto3DInput } from "../features/prediction/components/input/Texto3DInput";
+import { TextImg3DInput } from "../features/prediction/components/input/TextImg3DInput";
+import { MultiImagen3DInput } from "../features/prediction/components/input/MultiImagen3DInput";
+import { Boceto3DInput } from "../features/prediction/components/input/Boceto3DInput";
+import { Unico3DInput } from "../features/prediction/components/input/Unico3DInput";
 
 export const DashboardLayout = ({
   prediction_img3d_result,
@@ -136,7 +136,7 @@ export const DashboardLayout = ({
           <Route
             path="imagen3D"
             element={
-              <Imagen3D
+              <Imagen3DInput
                 user={user}
                 setPrediction_img3d_result={setPrediction_img3d_result}
                 setLoading={setLoading}
@@ -151,7 +151,7 @@ export const DashboardLayout = ({
           <Route
             path="texto3D"
             element={
-              <Texto3D
+              <Texto3DInput
                 user={user}
                 setPrediction_text3d_result={setPrediction_text3d_result}
                 setLoading={setLoading}
@@ -165,7 +165,7 @@ export const DashboardLayout = ({
           <Route
             path="textoaimagen"
             element={
-              <TextImg3D
+              <TextImg3DInput
                 user={user}
                 setPrediction_textimg3d_result={setPrediction_textimg3d_result}
                 setLoading={setLoading}
@@ -179,7 +179,7 @@ export const DashboardLayout = ({
           <Route
             path="unico3D"
             element={
-              <Unico3D
+              <Unico3DInput
                 user={user}
                 setPrediction_unico3d_result={setPrediction_unico3d_result}
                 setLoading={setLoading}
@@ -194,7 +194,7 @@ export const DashboardLayout = ({
           <Route
             path="multiimagen3D"
             element={
-              <MultiImagen3D
+              <MultiImagen3DInput
                 user={user}
                 setPrediction_multiimg3d_result={setPrediction_multiimg3d_result}
                 setLoading={setLoading}
@@ -209,7 +209,7 @@ export const DashboardLayout = ({
           <Route
             path="boceto3D"
             element={
-              <Boceto3D
+              <Boceto3DInput
                 user={user}
                 setPrediction_boceto3d_result={setPrediction_boceto3d_result}
                 setLoading={setLoading}

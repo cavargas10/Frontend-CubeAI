@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Sparkle, DownloadSimple } from "@phosphor-icons/react";
-import { Texto3DResult } from "./Texto3DResult";
-import { ErrorModal } from "../modals/ErrorModal";
-import { LoadingModal } from "../modals/LoadingModal";
+import { Sparkle } from "@phosphor-icons/react";
 import { Button } from "flowbite-react";
+import { ErrorModal } from "../../../../components/modals/ErrorModal";
+import { LoadingModal } from "../../../../components/modals/LoadingModal";
+import { Texto3DResult } from "../results/Texto3DResult";
 
 const styles = [
   { name: "Disney", value: "disney"},
@@ -14,7 +14,7 @@ const styles = [
   { name: "Chibi", value: "chibi"},
 ];
 
-export const Texto3D = ({
+export const Texto3DInput = ({
   user,
   setPrediction_text3d_result,
   setLoading,
