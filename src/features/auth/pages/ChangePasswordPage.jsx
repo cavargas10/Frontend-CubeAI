@@ -83,7 +83,7 @@ export const ChangePasswordPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
+    <div className="flex flex-col items-center justify-center min-h-screen text-white">
       {/* Contenedor principal */}
       <div className="w-full max-w-md p-8 bg-principal rounded-lg shadow-lg border border-[#243166]">
         <h1 className="text-2xl font-medium mb-4 text-center bg-clip-text text-transparent bg-gradient-to-r from-azul-gradient to-morado-gradient">
