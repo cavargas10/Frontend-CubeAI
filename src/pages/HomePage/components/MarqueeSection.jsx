@@ -1,8 +1,8 @@
 import React from "react";
 
-import { CarruselItem } from "../ui/CarruselItem";
+import { CarruselItem } from "../../../components/ui/CarruselItem";
 
-export const SeccionCarrusel = () => {
+export const MarqueeSection = () => {
   const upperMarquee = [
     "Boceto a 3D",
     "Creatividad",

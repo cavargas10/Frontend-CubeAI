@@ -1,8 +1,8 @@
-import logo from "../../assets/logo.webp";
-import { Button } from "../ui/Button.jsx";
+import logo from "../../../assets/logo.webp";
+import { Button } from "../../../components/ui/Button";
 import { CaretRight } from "@phosphor-icons/react";
 
-export function SeccionHero() {
+export function HeroSection() {
   return (
     <section className="py-10 md:py-14">
       <div className="container px-4 md:px-6">

@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { NavDash } from "../dashboard/NavDash";
-import { HeaderDash } from "../dashboard/HeaderDash";
-import { Visualizador } from "../dashboard/Visualizador";
-import { TutorialDash } from "../dashboard/TutorialDash";
+import { NavDash } from "../components/dashboard/NavDash";
+import { HeaderDash } from "../components/dashboard/HeaderDash";
+import { Visualizador } from "../components/dashboard/Visualizador";
+import { TutorialDash } from "../components/dashboard/TutorialDash";
 import { Route, Routes } from "react-router-dom";
-import { ConfigDash } from "../dashboard/ConfigDash";
-import { Imagen3D } from "../prediction/Imagen3D";
-import { Texto3D } from "../prediction/Texto3D";
-import { TextImg3D } from "../prediction/TextImg3D";
-import { Unico3D } from "../prediction/Unico3D";
-import { MultiImagen3D } from "../prediction/MultiImagen3D";
-import { Boceto3D } from "../prediction/Boceto3D";
+import { ConfigDash } from "../components/dashboard/ConfigDash";
+import { Imagen3D } from "../components/prediction/Imagen3D";
+import { Texto3D } from "../components/prediction/Texto3D";
+import { TextImg3D } from "../components/prediction/TextImg3D";
+import { Unico3D } from "../components/prediction/Unico3D";
+import { MultiImagen3D } from "../components/prediction/MultiImagen3D";
+import { Boceto3D } from "../components/prediction/Boceto3D";
 import axios from "axios";
 
-export const Dashboard = ({
+export const DashboardLayout = ({
   prediction_img3d_result,
   prediction_text3d_result,
   prediction_textimg3d_result,
@@ -45,7 +45,7 @@ export const Dashboard = ({
         const token = await user.getIdToken();
         const response = await axios.get(`${BASE_URL}/user_data`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization:  `Bearer ${token}`,
           },
         });
         setUserData(response.data);

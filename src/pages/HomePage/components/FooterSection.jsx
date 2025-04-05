@@ -1,8 +1,8 @@
-import logo from "../../assets/logo.webp";
-import { Button } from "../ui/Button";
+import logo from "../../../assets/logo.webp";
+import { Button } from "../../../components/ui/Button";
 import { CaretRight } from "@phosphor-icons/react";
 
-export const SeccionFooter = () => {
+export const FooterSection = () => {
   return (
     <footer className="text-white py-12 px-4 sm:px-8 bg-gradient-to-b from-background via-secondary/30 to-primary/10">
       {/* Fondo con Partículas */}

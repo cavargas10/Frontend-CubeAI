@@ -1,6 +1,6 @@
 import { ArrowRight, ArrowDown } from "@phosphor-icons/react";
 
-export default function GenerationMethod({
+export function GenerationMethod({
   title,
   description,
   inputType,

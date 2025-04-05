@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import logo from "../../assets/logo.webp";
-import { Button } from "../ui/Button.jsx";
+import logo from "../assets/logo.webp";
+import { Button } from "../components/ui/Button";
 import { Link } from "react-router-dom";
 import { List, CaretRight } from "@phosphor-icons/react";
 

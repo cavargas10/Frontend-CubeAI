@@ -7,7 +7,7 @@ import {
   Image,
 } from "@phosphor-icons/react";
 
-export function SeccionBeneficios() {
+export function BenefitsSection() {
   const beneficios = [
     {
       icon: Clock,

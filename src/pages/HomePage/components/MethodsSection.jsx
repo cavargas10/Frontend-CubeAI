@@ -5,9 +5,9 @@ import {
   ImagesSquare,
   Cube,
 } from "@phosphor-icons/react";
-import GenerationMethod from "../ui/GenerationMethod"; // Importar como default
+import {GenerationMethod} from "./GenerationMethod";
 
-export function SeccionMetodos() {
+export function MethodsSection() {
   return (
     <section id="caracteristicas" className="py-20">
       <div className="container px-4 md:px-6">

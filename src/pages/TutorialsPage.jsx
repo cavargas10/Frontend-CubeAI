@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import hygraphClient from "../../config/client";
-import { GET_HYGRAPH } from "../../lib/hygraph/queries";
-import { TutorialCard } from "../ui/TutorialCard";
+import hygraphClient from "../config/client";
+import { GET_HYGRAPH } from "../lib/hygraph/queries";
+import { TutorialCard } from "../components/ui/TutorialCard";
 
-export const Tutoriales = () => {
+export const TutorialsPage = () => {
   const [tutoriales, setTutoriales] = useState([]);
 
   useEffect(() => {

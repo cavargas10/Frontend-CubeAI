@@ -1,8 +1,8 @@
-import club from "../../assets/club.png";
-import utpl from "../../assets/utpl.png";
-import xrlab from "../../assets/xrlab.png";
+import club from "../../../assets/club.png";
+import utpl from "../../../assets/utpl.png";
+import xrlab from "../../../assets/xrlab.png";
 
-export function SeccionLogos() {
+export function LogosSection() {
   // Array de logos con sus respectivas importaciones
   const logos = [
     { src: utpl, alt: "UTPL logo" },

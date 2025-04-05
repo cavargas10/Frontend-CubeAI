@@ -190,7 +190,7 @@ export const TextImg3DResult = ({ prediction_textimg3d_result, error }) => {
           </Canvas>
 
           {/* Modal para la textura */}
-          <Modal
+          <ModalBase
             isOpen={isTextureZoomed}
             onClose={() => setIsTextureZoomed(false)}
           >
@@ -207,7 +207,7 @@ export const TextImg3DResult = ({ prediction_textimg3d_result, error }) => {
                 <X size={20} />
               </button>
             </div>
-          </Modal>
+          </ModalBase>
         </div>
       </div>
     </div>

@@ -1,8 +1,8 @@
-import fondo from "../../assets/fondo.webp";
-import { Button } from "../ui/Button";
+import fondo from "../../../assets/fondo.webp";
+import { Button } from "../../../components/ui/Button";
 import { CaretRight } from "@phosphor-icons/react";
 
-export const SeccionFondo = () => {
+export const CTASection = () => {
   return (
     <div className="sm:mt-2 relative h-screen ">
       <img

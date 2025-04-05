@@ -1,6 +1,6 @@
 import { StackSimple, Lightning, Clock } from "@phosphor-icons/react";
 
-export function SeccionFuncionamiento() {
+export function HowItWorksSection() {
   return (
     <section id="como-funciona" className="py-20 bg-secondary/5">
       <div className="container px-4 md:px-6">

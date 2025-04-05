@@ -93,14 +93,14 @@ export const Unico3DResult = ({ prediction_unico3d_result }) => {
           </Suspense>
         </Canvas>
 
-        <Modal isOpen={isTextureZoomed} onClose={() => setIsTextureZoomed(false)}>
+        <ModalBase isOpen={isTextureZoomed} onClose={() => setIsTextureZoomed(false)}>
           <div className="relative">
             <img src={texturePreview} alt="Vista completa de textura" className="max-w-full max-h-[80vh] object-contain rounded-lg" />
             <button onClick={() => setIsTextureZoomed(false)} className="absolute top-2 right-2 p-2 bg-black/20 hover:bg-black/40 rounded-full transition-colors">
               <X size={20} />
             </button>
           </div>
-        </Modal>
+        </ModalBase>
       </div>
     </div>
   );

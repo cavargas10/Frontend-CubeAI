@@ -4,7 +4,6 @@ import { OrbitControls, Grid } from "@react-three/drei";
 import { DownloadSimple, ArrowsClockwise, Aperture } from "@phosphor-icons/react";
 import { HDREnvironment } from "./HDREnvironment";
 import { Model } from "./Model";
-import { ModalBase } from "../modals/ModalBase";
 
 export const Texto3DResult = ({ prediction_text3d_result }) => {
   const [showWireframe, setShowWireframe] = useState(false);
