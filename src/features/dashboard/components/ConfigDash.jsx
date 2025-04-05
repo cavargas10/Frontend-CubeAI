@@ -2,9 +2,9 @@ import React, { useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Pencil } from "@phosphor-icons/react";
-import { DeleteConfirmationModal } from "../modals/DeleteConfirmationModal";
-import { LoadingModal } from "../modals/LoadingModal";
-import { SuccessModal } from "../modals/SuccessModal";
+import { DeleteConfirmationModal } from "../../../components/modals/DeleteConfirmationModal";
+import { LoadingModal } from "../../../components/modals/LoadingModal";
+import { SuccessModal } from "../../../components/modals/SuccessModal";
 
 export const ConfigDash = ({ BASE_URL, user, userData, updateUserData, isCollapsed }) => {
   const [newName, setNewName] = useState("");

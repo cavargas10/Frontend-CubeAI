@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { NavDash } from "../components/dashboard/NavDash";
-import { HeaderDash } from "../components/dashboard/HeaderDash";
-import { Visualizador } from "../components/dashboard/Visualizador";
-import { TutorialDash } from "../components/dashboard/TutorialDash";
 import { Route, Routes } from "react-router-dom";
-import { ConfigDash } from "../components/dashboard/ConfigDash";
+import axios from "axios";
+import { NavDash } from "../features/dashboard/layout/NavDash";
+import { HeaderDash } from "../features/dashboard/layout/HeaderDash";
+import { Visualizador } from "../features/dashboard/components/Visualizador";
+import { TutorialDash } from "../features/dashboard/components/TutorialDash";
+import { ConfigDash } from "../features/dashboard/components/ConfigDash";
 import { Imagen3D } from "../components/prediction/Imagen3D";
 import { Texto3D } from "../components/prediction/Texto3D";
 import { TextImg3D } from "../components/prediction/TextImg3D";
 import { Unico3D } from "../components/prediction/Unico3D";
 import { MultiImagen3D } from "../components/prediction/MultiImagen3D";
 import { Boceto3D } from "../components/prediction/Boceto3D";
-import axios from "axios";
 
 export const DashboardLayout = ({
   prediction_img3d_result,
