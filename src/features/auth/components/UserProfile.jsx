@@ -1,7 +1,7 @@
 import React from "react";
 import { List } from "@phosphor-icons/react";
 
-const UserProfile = ({ userData, toggleMenu }) => {
+export const UserProfile = ({ userData, toggleMenu }) => {
   // Manejador para errores de imagen
   const handleImageError = (event) => {
     event.target.src = "/usuario.webp"; // Imagen por defecto
@@ -48,5 +48,3 @@ const UserProfile = ({ userData, toggleMenu }) => {
     )
   );
 };
-
-export default UserProfile;

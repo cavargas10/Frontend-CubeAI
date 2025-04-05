@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import client from "../../config/client";
 import { GET_HYGRAPH } from "../../lib/hygraph/queries";
 
-const Documento = () => {
+export const Documento = () => {
   const { slug } = useParams();
   const [documento, setDocumento] = useState(null);
 
@@ -52,5 +52,3 @@ const Documento = () => {
     </div>
   );
 };
-
-export default Documento;

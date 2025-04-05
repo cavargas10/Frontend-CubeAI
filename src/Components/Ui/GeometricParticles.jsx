@@ -366,7 +366,7 @@ function ShapeShiftingParticles({ count = 1500 }) {
 }
 
 // Componente principal que renderiza el Canvas
-export default function GeometricParticles() {
+export function GeometricParticles() {
   return (
     <div className="absolute inset-0">
       <Canvas camera={{ position: [0, 0, 7], fov: 60 }}>

@@ -17,7 +17,7 @@ import {
   GoogleChromeLogo,
 } from "@phosphor-icons/react";
 import { ErrorModal } from "../../../components/modals/ErrorModal";
-import GeometricParticles from "../../../components/ui/GeometricParticles";
+import { GeometricParticles } from "../../../components/ui/GeometricParticles";
 
 export const RegisterPage = ({ BASE_URL }) => {
   const [email, setEmail] = useState("");

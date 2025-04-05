@@ -2,7 +2,7 @@ import React, { lazy, Suspense } from "react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useAuth } from "./features/auth/hooks/useAuth";
-import PublicLayout from "./layouts/PublicLayout/PublicLayout"; // Importamos PublicLayout
+import { PublicLayout } from "./layouts/PublicLayout/PublicLayout"; // Importamos PublicLayout
 // Lazy load components
 const HomePage = lazy(() => import('./pages/HomePage').then(module => ({ default: module.HomePage })));
 const TutorialsPage = lazy(() => import('./pages/TutorialsPage').then(module => ({ default: module.TutorialsPage })));
@@ -19,7 +19,7 @@ const ActionHandlerPage = lazy(() => import('./features/auth/pages/ActionHandler
 // Loading component
 const Loading = () => <div>Loading...</div>;
 
-function App() {
+export function App() {
   const {
     user,
     userData,
@@ -103,5 +103,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

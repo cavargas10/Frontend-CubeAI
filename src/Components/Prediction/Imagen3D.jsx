@@ -223,5 +223,3 @@ export const Imagen3D = ({
     </div>
   );
 };
-
-export default Imagen3D;

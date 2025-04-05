@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Importar useNavigate
-import GeometricParticles from "../../../components/ui/GeometricParticles"; // Componente de partículas
+import { GeometricParticles } from "../../../components/ui/GeometricParticles"; // Componente de partículas
 import {
   Eye,
   EyeSlash,

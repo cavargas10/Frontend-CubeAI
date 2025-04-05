@@ -1,9 +1,8 @@
 import React from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-import Documentacion from "../components/ui/Documentacion";
-import DocumentacionContent from "../components/ui/DocumentacionContent";
-import Documento from "../components/ui/Documento";
-import { Header } from "./Header";
+import { Documentacion } from "../components/ui/Documentacion";
+import { DocumentacionContent } from "../components/ui/DocumentacionContent";
+import { Documento } from "../components/ui/Documento";
 
 export const DocsLayout = () => {
   return (

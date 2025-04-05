@@ -4,7 +4,7 @@ import { GET_HYGRAPH } from "../../lib/hygraph/queries";
 import { Link, useLocation } from "react-router-dom";
 import { Queue } from "@phosphor-icons/react";
 
-const Documentacion = () => {
+export const Documentacion = () => {
   const [categorias, setCategorias] = useState([]);
   const location = useLocation();
 
@@ -93,5 +93,3 @@ const Documentacion = () => {
     </div>
   );
 };
-
-export default Documentacion;

@@ -368,5 +368,3 @@ export const NavDash = ({ menuOpen, toggleMenu, isCollapsed, setIsCollapsed }) =
     </section>
   );
 };
-
-export default NavDash;

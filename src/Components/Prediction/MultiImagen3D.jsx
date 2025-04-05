@@ -293,5 +293,3 @@ export const MultiImagen3D = ({
     </div>
   );
 };
-
-export default MultiImagen3D;

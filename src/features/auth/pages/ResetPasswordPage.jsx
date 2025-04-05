@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Envelope, ArrowLeft } from "@phosphor-icons/react";
 import { auth } from "../../../config/firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
-import GeometricParticles from "../../../components/ui/GeometricParticles";
+import { GeometricParticles } from "../../../components/ui/GeometricParticles";
 import { ErrorModal } from "../../../components/modals/ErrorModal";
 
 export const ResetPasswordPage = () => {

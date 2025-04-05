@@ -6,7 +6,7 @@ import { DeleteConfirmationModal } from "../modals/DeleteConfirmationModal";
 import { SuccessModal } from "../modals/SuccessModal";
 import { LoadingModal } from "../modals/LoadingModal";
 
-const History = ({ selectedTab, BASE_URL }) => {
+export const History = ({ selectedTab, BASE_URL }) => {
   const [generations, setGenerations] = useState([]);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -162,5 +162,3 @@ const History = ({ selectedTab, BASE_URL }) => {
     </div>
   );
 };
-
-export default History;

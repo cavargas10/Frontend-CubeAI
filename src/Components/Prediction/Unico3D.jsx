@@ -224,5 +224,3 @@ export const Unico3D = ({
     </div>
   );
 };
-
-export default Unico3D;

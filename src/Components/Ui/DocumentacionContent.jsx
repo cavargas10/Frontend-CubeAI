@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import client from "../../config/client";
 import { GET_HYGRAPH } from "../../lib/hygraph/queries";
 
-const DocumentacionContent = () => {
+export const DocumentacionContent = () => {
   const [categorias, setCategorias] = useState([]);
 
   useEffect(() => {
@@ -35,5 +35,3 @@ const DocumentacionContent = () => {
     </div>
   );
 };
-
-export default DocumentacionContent;

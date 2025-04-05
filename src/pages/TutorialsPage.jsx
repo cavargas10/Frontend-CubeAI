@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import hygraphClient from "../config/client";
 import { GET_HYGRAPH } from "../lib/hygraph/queries";
-import TutorialCard from "../components/ui/TutorialCard";
+import { TutorialCard } from "../components/ui/TutorialCard";
 
 export const TutorialsPage = () => {
   const [tutoriales, setTutoriales] = useState([]);
@@ -11,8 +11,7 @@ export const TutorialsPage = () => {
       try {
         const data = await hygraphClient.request(GET_HYGRAPH);
         setTutoriales(data.tutoriales);
-      } catch (error) {
-      }
+      } catch (error) {}
     };
     fetchTutoriales();
   }, []);

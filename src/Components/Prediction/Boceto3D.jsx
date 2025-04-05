@@ -345,5 +345,3 @@ export const Boceto3D = ({
     </div>
   );
 };
-
-export default Boceto3D;

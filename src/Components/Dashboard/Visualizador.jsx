@@ -1,21 +1,23 @@
 import React, { useState } from "react";
-import History from "../prediction/History";
+import { History } from "../prediction/History";
 
 export const Visualizador = ({ BASE_URL, isCollapsed }) => {
   const [selectedTab, setSelectedTab] = useState("Texto3D");
   const [menuOpen, setMenuOpen] = useState(false);
-  
+
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
   };
 
   return (
-    <section className={`2xl:ml-72 sm:ml-56 w-full bg-fondologin 2xl:text-xl text-lg 
+    <section
+      className={`2xl:ml-72 sm:ml-56 w-full bg-fondologin 2xl:text-xl text-lg 
     transition-all duration-300 ease-in-out ${
       isCollapsed
-          ? "sm:ml-[80px] xl:ml-[50px] 2xl:ml-[80px]"
-          : "sm:ml-[254px] md:ml-[260px] xl:ml-[260px] 2xl:ml-[300px]"
-      }`}>
+        ? "sm:ml-[80px] xl:ml-[50px] 2xl:ml-[80px]"
+        : "sm:ml-[254px] md:ml-[260px] xl:ml-[260px] 2xl:ml-[300px]"
+    }`}
+    >
       <div className="px-4 sm:ml-10 fixed z-40 w-full bg-fondologin">
         <div className="mt-10 sm:w-3/5">
           <h1 className="text-4xl">Mis Objetos</h1>
@@ -39,25 +41,35 @@ export const Visualizador = ({ BASE_URL, isCollapsed }) => {
                   }`}
                   onClick={() => handleTabClick("Texto3D")}
                 >
-                  <a href="#" className="px-2">Texto a 3D</a>
+                  <a href="#" className="px-2">
+                    Texto a 3D
+                  </a>
                 </li>
 
                 <li
                   className={`p-3 whitespace-nowrap cursor-pointer hover:bg-bg-btn-dash rounded-lg min-w-fit ${
-                    selectedTab === "Imagen3D" ? "bg-bg-btn-dash rounded-lg" : ""
+                    selectedTab === "Imagen3D"
+                      ? "bg-bg-btn-dash rounded-lg"
+                      : ""
                   }`}
                   onClick={() => handleTabClick("Imagen3D")}
                 >
-                  <a href="#" className="px-2">Imagen a 3D</a>
+                  <a href="#" className="px-2">
+                    Imagen a 3D
+                  </a>
                 </li>
 
                 <li
                   className={`p-3 whitespace-nowrap cursor-pointer hover:bg-bg-btn-dash rounded-lg min-w-fit ${
-                    selectedTab === "TextImg3D" ? "bg-bg-btn-dash rounded-lg" : ""
+                    selectedTab === "TextImg3D"
+                      ? "bg-bg-btn-dash rounded-lg"
+                      : ""
                   }`}
                   onClick={() => handleTabClick("TextImg3D")}
                 >
-                  <a href="#" className="px-2">Texto a Imagen a 3D</a>
+                  <a href="#" className="px-2">
+                    Texto a Imagen a 3D
+                  </a>
                 </li>
 
                 <li
@@ -66,25 +78,35 @@ export const Visualizador = ({ BASE_URL, isCollapsed }) => {
                   }`}
                   onClick={() => handleTabClick("Unico3D")}
                 >
-                  <a href="#" className="px-2">Unico 3D</a>
+                  <a href="#" className="px-2">
+                    Unico 3D
+                  </a>
                 </li>
 
                 <li
                   className={`p-3 whitespace-nowrap cursor-pointer hover:bg-bg-btn-dash rounded-lg min-w-fit ${
-                    selectedTab === "MultiImagen3D" ? "bg-bg-btn-dash rounded-lg" : ""
+                    selectedTab === "MultiImagen3D"
+                      ? "bg-bg-btn-dash rounded-lg"
+                      : ""
                   }`}
                   onClick={() => handleTabClick("MultiImagen3D")}
                 >
-                  <a href="#" className="px-2">Multi Imagen a 3D</a>
+                  <a href="#" className="px-2">
+                    Multi Imagen a 3D
+                  </a>
                 </li>
 
                 <li
                   className={`p-3 whitespace-nowrap cursor-pointer hover:bg-bg-btn-dash rounded-lg min-w-fit ${
-                    selectedTab === "Boceto3D" ? "bg-bg-btn-dash rounded-lg" : ""
+                    selectedTab === "Boceto3D"
+                      ? "bg-bg-btn-dash rounded-lg"
+                      : ""
                   }`}
                   onClick={() => handleTabClick("Boceto3D")}
                 >
-                  <a href="#" className="px-2">Boceto a 3D</a>
+                  <a href="#" className="px-2">
+                    Boceto a 3D
+                  </a>
                 </li>
               </ul>
             </div>
