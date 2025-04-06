@@ -1,16 +1,23 @@
-import { useContext } from "react";
-import { Navigate } from "react-router-dom";
-import { AuthContext } from "../../Context/AuthContext";
+import React from 'react'; 
+import { Navigate, useLocation } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth"; 
+
+const Loading = () => (
+    <div className="fixed inset-0 flex justify-center items-center bg-principal z-50">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-morado-gradient"></div>
+    </div>
+);
 
 export const ProtectedRoute = ({ children }) => {
-  const { user, loading } = useContext(AuthContext);
+  const { user, loadingAuth } = useAuth();
+  const location = useLocation(); 
 
-  if (loading) {
-    return <Spinner />;
+  if (loadingAuth) {
+    return <Loading />;
   }
 
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return children;

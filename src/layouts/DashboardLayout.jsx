@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
-import axios from "axios";
+import React, { useState } from "react"; 
+import { Route, Routes, Navigate } from "react-router-dom";
+import { useAuth } from "../features/auth/hooks/useAuth"; 
+import { usePredictions } from "../features/prediction/context/PredictionContext"; 
 import { NavDash } from "../features/dashboard/layout/NavDash";
 import { HeaderDash } from "../features/dashboard/layout/HeaderDash";
 import { Visualizador } from "../features/dashboard/components/Visualizador";
@@ -9,73 +10,27 @@ import { ConfigDash } from "../features/dashboard/components/ConfigDash";
 import { Imagen3DInput } from "../features/prediction/components/input/Imagen3DInput";
 import { Texto3DInput } from "../features/prediction/components/input/Texto3DInput";
 import { TextImg3DInput } from "../features/prediction/components/input/TextImg3DInput";
+import { Unico3DInput } from "../features/prediction/components/input/Unico3DInput";
 import { MultiImagen3DInput } from "../features/prediction/components/input/MultiImagen3DInput";
 import { Boceto3DInput } from "../features/prediction/components/input/Boceto3DInput";
-import { Unico3DInput } from "../features/prediction/components/input/Unico3DInput";
 
-export const DashboardLayout = ({
-  prediction_img3d_result,
-  prediction_text3d_result,
-  prediction_textimg3d_result,
-  prediction_unico3d_result,
-  prediction_multiimg3d_result,
-  prediction_boceto3d_result,
-  setPrediction_img3d_result,
-  setPrediction_text3d_result,
-  setPrediction_textimg3d_result,
-  setPrediction_unico3d_result,
-  setPrediction_multiimg3d_result,
-  setPrediction_boceto3d_result,
-  error,
-  loading,
-  setLoading,
-  handleLogout,
-  user,
-  setError,
-  BASE_URL,
-}) => {
-  const [userData, setUserData] = useState(null);
+export const DashboardLayout = () => {
+  const { user, handleLogout, userData } = useAuth();
+  const predictions = usePredictions();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(false);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = await user.getIdToken();
-        const response = await axios.get(`${BASE_URL}/user_data`, {
-          headers: {
-            Authorization:  `Bearer ${token}`,
-          },
-        });
-        setUserData(response.data);
-      } catch (error) {
-        setError("Error al cargar los datos del usuario");
-      }
-    };
-
-    if (user) {
-      fetchUserData();
-    }
-  }, [user, BASE_URL, setError]);
-
-  const updateUserData = (newData) => {
-    setUserData((prevData) => ({ ...prevData, ...newData }));
-  };
-
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
+  const toggleMenu = () => setMenuOpen(!menuOpen);
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   return (
     <div className="text-white">
       <HeaderDash
-        userData={userData}
+        userData={userData} 
         toggleMenu={toggleMenu}
-        handleLogout={handleLogout}
+        handleLogout={handleLogout} 
       />
-
-      <main className="flex mt-16 ">
+      <main className="flex mt-14 ">
         <NavDash
           menuOpen={menuOpen}
           toggleMenu={toggleMenu}
@@ -84,36 +39,11 @@ export const DashboardLayout = ({
         />
 
         <Routes>
+          <Route path="/" element={<Navigate to="visualizador" replace />} />
           <Route
-            path="/"
+            path="visualizador"
             element={
-              <Visualizador
-                prediction_img3d_result={prediction_img3d_result}
-                prediction_text3d_result={prediction_text3d_result}
-                prediction_textimg3d_result={prediction_textimg3d_result}
-                prediction_unico3d_result={prediction_unico3d_result}
-                prediction_multiimg3d_result={prediction_multiimg3d_result}
-                prediction_boceto3d_result={prediction_boceto3d_result}
-                BASE_URL={BASE_URL}
-                error={error}
-                isCollapsed={isNavCollapsed}
-              />
-            }
-          />
-          <Route
-            path="visualizador/*"
-            element={
-              <Visualizador
-                prediction_img3d_result={prediction_img3d_result}
-                prediction_text3d_result={prediction_text3d_result}
-                prediction_textimg3d_result={prediction_textimg3d_result}
-                prediction_unico3d_result={prediction_unico3d_result}
-                prediction_multiimg3d_result={prediction_multiimg3d_result}
-                prediction_boceto3d_result={prediction_boceto3d_result}
-                BASE_URL={BASE_URL}
-                error={error}
-                isCollapsed={isNavCollapsed}
-              />
+              <Visualizador BASE_URL={BASE_URL} isCollapsed={isNavCollapsed} />
             }
           />
           <Route
@@ -127,7 +57,7 @@ export const DashboardLayout = ({
                 user={user}
                 BASE_URL={BASE_URL}
                 userData={userData}
-                updateUserData={updateUserData}
+                // updateUserData -> ConfigDash necesitará su propia lógica/servicio
                 isCollapsed={isNavCollapsed}
               />
             }
@@ -138,41 +68,42 @@ export const DashboardLayout = ({
             element={
               <Imagen3DInput
                 user={user}
-                setPrediction_img3d_result={setPrediction_img3d_result}
-                setLoading={setLoading}
-                loading={loading}
                 BASE_URL={BASE_URL}
-                prediction_img3d_result={prediction_img3d_result}
                 isCollapsed={isNavCollapsed}
+                setPrediction_img3d_result={
+                  predictions.setPrediction_img3d_result
+                }
+                prediction_img3d_result={predictions.prediction_img3d_result} 
               />
             }
           />
-
           <Route
             path="texto3D"
             element={
               <Texto3DInput
                 user={user}
-                setPrediction_text3d_result={setPrediction_text3d_result}
-                setLoading={setLoading}
-                loading={loading}
                 BASE_URL={BASE_URL}
-                prediction_text3d_result={prediction_text3d_result}
                 isCollapsed={isNavCollapsed}
+                setPrediction_text3d_result={
+                  predictions.setPrediction_text3d_result
+                } 
+                prediction_text3d_result={predictions.prediction_text3d_result} 
               />
             }
           />
           <Route
-            path="textoaimagen"
+            path="textoaimagen" 
             element={
               <TextImg3DInput
                 user={user}
-                setPrediction_textimg3d_result={setPrediction_textimg3d_result}
-                setLoading={setLoading}
-                loading={loading}
                 BASE_URL={BASE_URL}
-                prediction_textimg3d_result={prediction_textimg3d_result}
                 isCollapsed={isNavCollapsed}
+                setPrediction_textimg3d_result={
+                  predictions.setPrediction_textimg3d_result
+                } 
+                prediction_textimg3d_result={
+                  predictions.prediction_textimg3d_result
+                } 
               />
             }
           />
@@ -181,45 +112,51 @@ export const DashboardLayout = ({
             element={
               <Unico3DInput
                 user={user}
-                setPrediction_unico3d_result={setPrediction_unico3d_result}
-                setLoading={setLoading}
-                loading={loading}
                 BASE_URL={BASE_URL}
-                prediction_unico3d_result={prediction_unico3d_result}
                 isCollapsed={isNavCollapsed}
+                setPrediction_unico3d_result={
+                  predictions.setPrediction_unico3d_result
+                } 
+                prediction_unico3d_result={
+                  predictions.prediction_unico3d_result
+                } 
               />
             }
           />
-
           <Route
             path="multiimagen3D"
             element={
               <MultiImagen3DInput
                 user={user}
-                setPrediction_multiimg3d_result={setPrediction_multiimg3d_result}
-                setLoading={setLoading}
-                loading={loading}
                 BASE_URL={BASE_URL}
-                prediction_multiimg3d_result={prediction_multiimg3d_result}
                 isCollapsed={isNavCollapsed}
+                setPrediction_multiimg3d_result={
+                  predictions.setPrediction_multiimg3d_result
+                } 
+                prediction_multiimg3d_result={
+                  predictions.prediction_multiimg3d_result
+                } 
               />
             }
           />
-
           <Route
             path="boceto3D"
             element={
               <Boceto3DInput
                 user={user}
-                setPrediction_boceto3d_result={setPrediction_boceto3d_result}
-                setLoading={setLoading}
-                loading={loading}
                 BASE_URL={BASE_URL}
-                prediction_boceto3d_result={prediction_boceto3d_result}
                 isCollapsed={isNavCollapsed}
+                setPrediction_boceto3d_result={
+                  predictions.setPrediction_boceto3d_result
+                }
+                prediction_boceto3d_result={
+                  predictions.prediction_boceto3d_result
+                }
               />
             }
           />
+
+          <Route path="*" element={<Navigate to="visualizador" replace />} />
         </Routes>
       </main>
     </div>

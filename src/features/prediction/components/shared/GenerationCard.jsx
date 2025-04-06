@@ -18,7 +18,7 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const getCameraPosition = () => {
-    if (generation.glb_model_i23d) return [0, 0.15, -0.9];
+    if (generation.glb_model_i23d) return [0, 0, -0.9];
     if (generation.glb_model_t23d) return [0, 0, -0.9];
     if (generation.glb_model_multi3d) return [0, 0, -0.8];
     if (generation.glb_model_b3d) return [0, 0, -0.9];
@@ -56,9 +56,9 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
     const link = document.createElement("a");
     link.href = url;
     link.download = filename || "archivo";
-    document.body.appendChild(link); // Necesario para algunos navegadores
+    document.body.appendChild(link); 
     link.click();
-    document.body.removeChild(link); // Limpiar después de usar
+    document.body.removeChild(link); 
   };
 
   const renderDownloadButtons = () => {
@@ -143,7 +143,6 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
 
   return (
     <div className="relative w-full mt-1 h-[200px] sm:w-[220px] sm:h-[220px] rounded-2xl overflow-hidden shadow-lg bg-principal group cursor-pointer">
-      {/* Neon Border Effect */}
       <div className="absolute inset-0 border-2 border-transparent group-hover:border-purple-600 rounded-2xl animate-pulse transition-all duration-500 z-10 pointer-events-none"></div>
 
       {/* Canvas or Fallback */}
@@ -162,22 +161,18 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
         </div>
       )}
 
-      {/* Loading Overlay */}
       {isLoading && (
         <div className="absolute inset-0 bg-black bg-opacity-90 flex items-center justify-center text-white text-sm font-semibold z-20">
           <div className="animate-pulse">Cargando...</div>
         </div>
       )}
 
-      {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20"></div>
 
-      {/* Card Content */}
       <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-b from-black/80 via-black/60 to-transparent backdrop-blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-30">
         <h3 className="text-white text-base font-bold mb-1">{generation.generation_name}</h3>
         <p className="text-gray-300 text-xs">Generado el: {formatDate(generation.timestamp)}</p>
 
-        {/* Actions */}
         <div className="mt-3 flex justify-between items-center">
           <div className="flex gap-2">
             {renderDownloadButtons()}
@@ -185,7 +180,7 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
           <button
             className="p-2 bg-red-600 rounded-full hover:bg-red-700 transition-colors shadow-lg hover:shadow-xl"
             onClick={() => {
-              console.log("Eliminar generación:", generation); // Depuración
+              console.log("Eliminar generación:", generation); 
               openModal(generation);
             }}
             aria-label="Eliminar generación"
