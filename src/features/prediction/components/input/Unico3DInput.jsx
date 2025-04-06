@@ -1,144 +1,94 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+// src/features/prediction/components/input/Unico3DInput.jsx
+import React, { useState, useEffect, useCallback } from "react";
 import { Sparkle, UploadSimple } from "@phosphor-icons/react";
 import { Button } from "flowbite-react";
 import { ErrorModal } from "../../../../components/modals/ErrorModal";
 import { LoadingModal } from "../../../../components/modals/LoadingModal";
-import { Unico3DResult } from "../results/Unico3DResult";
+import { Unico3DResult } from "../results/Unico3DResult"; 
+import { usePredictionHandler } from "../../hooks/usePredictionHandler";
+import { useImageUpload } from "../../hooks/useImageUpload";
 
 export const Unico3DInput = ({
   user,
   setPrediction_unico3d_result,
-  setLoading,
-  loading,
   BASE_URL,
-  prediction_unico3d_result,
+  prediction_unico3d_result, 
   activeTab,
-  isCollapsed
+  isCollapsed,
 }) => {
-  const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
   const [generationName, setGenerationName] = useState("");
-  const [errorModalVisible, setErrorModalVisible] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [loadingModalVisible, setLoadingModalVisible] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
+
+  const {
+    imageFile,
+    imagePreview,
+    isDragging,
+    handleFileChange,
+    handleDragOver,
+    handleDragLeave,
+    handleDrop,
+    resetImageState,
+  } = useImageUpload();
+
+  const {
+    isLoading: predictionLoading,
+    error: predictionError,
+    submitPrediction,
+    clearError: clearPredictionError,
+    clearResult: clearPredictionResult,
+    setError: setPredictionError,
+    setIsLoading: setPredictionLoading,
+  } = usePredictionHandler(user, BASE_URL);
+
+  const resetComponentState = useCallback(() => {
+    setGenerationName("");
+    resetImageState();
+    clearPredictionError();
+    clearPredictionResult();
+    setPrediction_unico3d_result(null); 
+    setPredictionLoading(false);
+  }, [resetImageState, clearPredictionError, clearPredictionResult, setPrediction_unico3d_result, setPredictionLoading]);
 
   useEffect(() => {
     return () => {
-      resetState();
+      resetComponentState();
     };
-  }, [activeTab]);
+  }, [activeTab, resetComponentState]);
 
-  const resetState = () => {
-    setImageFile(null);
-    setImagePreview(null);
-    setGenerationName("");
-    setErrorModalVisible(false);
-    setErrorMessage("");
-    setLoadingModalVisible(false);
-    setPrediction_unico3d_result(null);
-    setLoading(false);
-  };
-
-  const handleFileChange = (event) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const file = e.dataTransfer.files?.[0];
-    if (file && file.type.startsWith('image/')) {
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handlePrediction = async () => {
+  const handleLocalPrediction = async () => {
     if (!imageFile) {
-      setErrorMessage("No se ha seleccionado ninguna imagen");
-      setErrorModalVisible(true);
+      setPredictionError("No se ha seleccionado ninguna imagen");
       return;
     }
-
     if (!generationName) {
-      setErrorMessage("Por favor, ingrese un nombre para la generación");
-      setErrorModalVisible(true);
+      setPredictionError("Por favor, ingrese un nombre para la generación");
       return;
     }
 
-    setLoadingModalVisible(true);
-    setLoading(true);
+    const formData = new FormData();
+    formData.append("image", imageFile);
+    formData.append("generationName", generationName);
 
-    try {
-      const token = await user.getIdToken();
-      const formData = new FormData();
-      formData.append("image", imageFile);
-      formData.append("generationName", generationName);
+    // Llama al hook con el endpoint correcto
+    const result = await submitPrediction("unico3D", formData, { 
+      headers: { "Content-Type": "multipart/form-data" }
+    });
 
-      const response = await axios.post(`${BASE_URL}/unico3D`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (typeof setPrediction_unico3d_result === "function") {
-        setPrediction_unico3d_result(response.data);
-      }
-    } catch (error) {
-      const errorMsg = error.response?.data?.error || 
-                      "Error al realizar la predicción. Por favor, intente nuevamente.";
-      setErrorMessage(errorMsg);
-      setErrorModalVisible(true);
-    } finally {
-      setLoading(false);
-      setLoadingModalVisible(false);
+     if (result && typeof setPrediction_unico3d_result === "function") {
+        setPrediction_unico3d_result(result); 
     }
-  };
-
-  const closeErrorModal = () => {
-    setErrorModalVisible(false);
-    setErrorMessage("");
   };
 
   return (
-    <div className={`w-full sm:ml-[264px] xl:ml-[265px] 2xl:ml-[300px] bg-fondologin
-      transition-all duration-300 ease-in-out${
-      isCollapsed
-        ? "sm:ml-[80px] xl:ml-[80px] 2xl:ml-[80px]"
-        : "sm:ml-[264px] md:ml-[267px] xl:ml-[250px] 2xl:ml-[300px]"
-      }`}
-    >
-      <div className="pt-6 bg-principal pb-4 border-b-2 border-linea ">
+    <div className={`w-full bg-fondologin transition-all duration-300 ease-in-out ${
+        isCollapsed
+          ? "sm:ml-[80px] xl:ml-[80px] 2xl:ml-[80px]"
+          : "sm:ml-[264px] xl:ml-[265px] 2xl:ml-[300px]" 
+      }`}>
+       <div className="pt-6 bg-principal pb-4 border-b-2 border-linea ">
         <p className="text-center text-2xl">Unico a 3D</p>
       </div>
-
       <div className="flex flex-col xl:flex-row w-full min-h-[calc(100vh-200px)] bg-fondologin">
-        {/* Formulario (Lado izquierdo) */}
+         {/* Formulario (Lado izquierdo) - Idéntico a Imagen3DInput */}
         <div className="w-full xl:w-1/3 p-6 border-r border-linea">
           <div className="flex flex-col gap-6">
             {/* Campo de nombre */}
@@ -149,54 +99,54 @@ export const Unico3DInput = ({
                 placeholder="Ingrese un nombre"
                 value={generationName}
                 onChange={(e) => setGenerationName(e.target.value)}
-                disabled={loading}
+                disabled={predictionLoading}
                 className="bg-transparent border p-3 rounded-lg w-full"
               />
             </div>
 
+             {/* Área de subida - Idéntica */}
             <div
-              className={`relative border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors min-h-[16rem] flex flex-col items-center justify-center
-                ${isDragging ? 'border-azul-gradient bg-opacity-10' : 'border-linea'}
-                ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:border-azul-gradient'}`}
+              className={`relative border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors min-h-[16rem] flex flex-col items-center justify-center ${
+                isDragging ? 'border-azul-gradient bg-opacity-10' : 'border-linea'
+              } ${predictionLoading ? 'opacity-50 cursor-not-allowed' : 'hover:border-azul-gradient'}`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
-              onClick={() => !loading && document.getElementById('fileInput').click()}
+              onClick={() => !predictionLoading && document.getElementById('fileInput-unico3d').click()} // ID único
             >
               <input
-                id="fileInput"
+                id="fileInput-unico3d" 
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
-                disabled={loading}
+                disabled={predictionLoading}
                 className="hidden"
               />
-              
               {imagePreview ? (
-                <div className="w-full h-full flex flex-col items-center gap-4">
-                  <img 
-                    src={imagePreview} 
-                    alt="Vista previa" 
-                    className="max-w-full max-h-48 object-contain rounded-lg"
-                  />
-                </div>
+                 <div className="w-full h-full flex flex-col items-center gap-4">
+                   <img
+                     src={imagePreview}
+                     alt="Vista previa"
+                     className="max-w-full max-h-48 object-contain rounded-lg"
+                   />
+                 </div>
               ) : (
-                <>
-                  <UploadSimple className="w-12 h-12 text-gray-400" weight="thin" />
-                  <p className="mt-4 text-sm">
-                    Arrastra una imagen o haz clic para seleccionar
-                  </p>
-                  <p className="mt-2 text-xs text-gray-400">
-                    PNG, JPG, JPEG (MAX. 10MB)
-                  </p>
-                </>
-              )}
+                 <>
+                   <UploadSimple className="w-12 h-12 text-gray-400" weight="thin" />
+                   <p className="mt-4 text-sm">
+                     Arrastra una imagen o haz clic para seleccionar
+                   </p>
+                   <p className="mt-2 text-xs text-gray-400">
+                     PNG, JPG, JPEG (MAX. 10MB)
+                   </p>
+                 </>
+               )}
             </div>
 
-            {/* Botón de generar */}
+             {/* Botón de generar - Idéntico */}
             <Button
-              onClick={handlePrediction}
-              disabled={loading}
+              onClick={handleLocalPrediction}
+              disabled={predictionLoading}
               className="w-full text-lg bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient py-3 rounded-lg border-none flex items-center justify-center gap-2"
             >
               <Sparkle size={24} weight="fill" />
@@ -205,20 +155,20 @@ export const Unico3DInput = ({
           </div>
         </div>
 
-        {/* Resultado (Lado derecho) */}
+         {/* Resultado (Lado derecho) - Usa el componente Result específico */}
         <div className="w-full xl:w-2/3">
           <Unico3DResult prediction_unico3d_result={prediction_unico3d_result} />
         </div>
       </div>
 
+       {/* Modales - Idénticos */}
       <ErrorModal
-        showModal={errorModalVisible}
-        closeModal={closeErrorModal}
-        errorMessage={errorMessage}
+        showModal={!!predictionError}
+        closeModal={clearPredictionError}
+        errorMessage={predictionError || ""}
       />
-
       <LoadingModal
-        showLoadingModal={loadingModalVisible}
+        showLoadingModal={predictionLoading}
         message="Generando el modelo 3D..."
       />
     </div>
