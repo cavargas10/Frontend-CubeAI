@@ -1,10 +1,9 @@
-// src/features/prediction/components/input/Unico3DInput.jsx
 import React, { useState, useEffect, useCallback } from "react";
 import { Sparkle, UploadSimple } from "@phosphor-icons/react";
 import { Button } from "flowbite-react";
 import { ErrorModal } from "../../../../components/modals/ErrorModal";
 import { LoadingModal } from "../../../../components/modals/LoadingModal";
-import { Unico3DResult } from "../results/Unico3DResult"; 
+import { Unico3DResult } from "../results/Unico3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useImageUpload } from "../../hooks/useImageUpload";
 
@@ -12,12 +11,10 @@ export const Unico3DInput = ({
   user,
   setPrediction_unico3d_result,
   BASE_URL,
-  prediction_unico3d_result, 
-  activeTab,
+  prediction_unico3d_result,
   isCollapsed,
 }) => {
   const [generationName, setGenerationName] = useState("");
-
   const {
     imageFile,
     imagePreview,
@@ -34,32 +31,30 @@ export const Unico3DInput = ({
     error: predictionError,
     submitPrediction,
     clearError: clearPredictionError,
-    clearResult: clearPredictionResult,
     setError: setPredictionError,
-    setIsLoading: setPredictionLoading,
   } = usePredictionHandler(user, BASE_URL);
 
   const resetComponentState = useCallback(() => {
     setGenerationName("");
     resetImageState();
     clearPredictionError();
-    clearPredictionResult();
-    setPrediction_unico3d_result(null); 
-    setPredictionLoading(false);
-  }, [resetImageState, clearPredictionError, clearPredictionResult, setPrediction_unico3d_result, setPredictionLoading]);
+    if (typeof setPrediction_unico3d_result === "function") {
+      setPrediction_unico3d_result(null);
+    }
+  }, [resetImageState, clearPredictionError, setPrediction_unico3d_result]);
 
   useEffect(() => {
     return () => {
       resetComponentState();
     };
-  }, [activeTab, resetComponentState]);
+  }, [resetComponentState]);
 
   const handleLocalPrediction = async () => {
     if (!imageFile) {
       setPredictionError("No se ha seleccionado ninguna imagen");
       return;
     }
-    if (!generationName) {
+    if (!generationName.trim()) {
       setPredictionError("Por favor, ingrese un nombre para la generación");
       return;
     }
@@ -68,30 +63,29 @@ export const Unico3DInput = ({
     formData.append("image", imageFile);
     formData.append("generationName", generationName);
 
-    // Llama al hook con el endpoint correcto
-    const result = await submitPrediction("unico3D", formData, { 
-      headers: { "Content-Type": "multipart/form-data" }
+    const result = await submitPrediction("unico3D", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
     });
 
-     if (result && typeof setPrediction_unico3d_result === "function") {
-        setPrediction_unico3d_result(result); 
+    if (result && typeof setPrediction_unico3d_result === "function") {
+      setPrediction_unico3d_result(result);
     }
   };
 
   return (
-    <div className={`w-full bg-fondologin transition-all duration-300 ease-in-out ${
+    <div
+      className={`w-full bg-fondologin transition-all duration-300 ease-in-out ${
         isCollapsed
           ? "sm:ml-[80px] xl:ml-[80px] 2xl:ml-[80px]"
-          : "sm:ml-[264px] xl:ml-[265px] 2xl:ml-[300px]" 
-      }`}>
-       <div className="pt-6 bg-principal pb-4 border-b-2 border-linea ">
+          : "sm:ml-[264px] xl:ml-[265px] 2xl:ml-[300px]"
+      }`}
+    >
+      <div className="pt-6 bg-principal pb-4 border-b-2 border-linea ">
         <p className="text-center text-2xl">Unico a 3D</p>
       </div>
       <div className="flex flex-col xl:flex-row w-full min-h-[calc(100vh-200px)] bg-fondologin">
-         {/* Formulario (Lado izquierdo) - Idéntico a Imagen3DInput */}
         <div className="w-full xl:w-1/3 p-6 border-r border-linea">
           <div className="flex flex-col gap-6">
-            {/* Campo de nombre */}
             <div className="flex flex-col gap-2">
               <label className="text-lg">Nombre de la generación</label>
               <input
@@ -103,19 +97,22 @@ export const Unico3DInput = ({
                 className="bg-transparent border p-3 rounded-lg w-full"
               />
             </div>
-
-             {/* Área de subida - Idéntica */}
             <div
               className={`relative border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors min-h-[16rem] flex flex-col items-center justify-center ${
-                isDragging ? 'border-azul-gradient bg-opacity-10' : 'border-linea'
-              } ${predictionLoading ? 'opacity-50 cursor-not-allowed' : 'hover:border-azul-gradient'}`}
+                isDragging
+                  ? "border-azul-gradient bg-opacity-10"
+                  : "border-linea"
+              } ${predictionLoading ? "opacity-50 cursor-not-allowed" : "hover:border-azul-gradient"}`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
-              onClick={() => !predictionLoading && document.getElementById('fileInput-unico3d').click()} // ID único
+              onClick={() =>
+                !predictionLoading &&
+                document.getElementById("fileInput-unico3d").click()
+              }
             >
               <input
-                id="fileInput-unico3d" 
+                id="fileInput-unico3d"
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
@@ -123,27 +120,28 @@ export const Unico3DInput = ({
                 className="hidden"
               />
               {imagePreview ? (
-                 <div className="w-full h-full flex flex-col items-center gap-4">
-                   <img
-                     src={imagePreview}
-                     alt="Vista previa"
-                     className="max-w-full max-h-48 object-contain rounded-lg"
-                   />
-                 </div>
+                <div className="w-full h-full flex flex-col items-center gap-4">
+                  <img
+                    src={imagePreview}
+                    alt="Vista previa"
+                    className="max-w-full max-h-48 object-contain rounded-lg"
+                  />
+                </div>
               ) : (
-                 <>
-                   <UploadSimple className="w-12 h-12 text-gray-400" weight="thin" />
-                   <p className="mt-4 text-sm">
-                     Arrastra una imagen o haz clic para seleccionar
-                   </p>
-                   <p className="mt-2 text-xs text-gray-400">
-                     PNG, JPG, JPEG (MAX. 10MB)
-                   </p>
-                 </>
-               )}
+                <>
+                  <UploadSimple
+                    className="w-12 h-12 text-gray-400"
+                    weight="thin"
+                  />
+                  <p className="mt-4 text-sm">
+                    Arrastra una imagen o haz clic para seleccionar
+                  </p>
+                  <p className="mt-2 text-xs text-gray-400">
+                    PNG, JPG, JPEG (MAX. 10MB)
+                  </p>
+                </>
+              )}
             </div>
-
-             {/* Botón de generar - Idéntico */}
             <Button
               onClick={handleLocalPrediction}
               disabled={predictionLoading}
@@ -154,14 +152,12 @@ export const Unico3DInput = ({
             </Button>
           </div>
         </div>
-
-         {/* Resultado (Lado derecho) - Usa el componente Result específico */}
         <div className="w-full xl:w-2/3">
-          <Unico3DResult prediction_unico3d_result={prediction_unico3d_result} />
+          <Unico3DResult
+            prediction_unico3d_result={prediction_unico3d_result}
+          />
         </div>
       </div>
-
-       {/* Modales - Idénticos */}
       <ErrorModal
         showModal={!!predictionError}
         closeModal={clearPredictionError}
