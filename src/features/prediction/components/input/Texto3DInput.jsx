@@ -1,4 +1,3 @@
-// src/features/prediction/components/input/Texto3DInput.jsx
 import React, { useState, useEffect, useCallback } from "react";
 import { Sparkle } from "@phosphor-icons/react";
 import { Button } from "flowbite-react";

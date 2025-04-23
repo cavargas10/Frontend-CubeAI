@@ -4,7 +4,7 @@ import { usePredictions } from '../../context/PredictionContext';
 
 export const Texto3DResult = () => {
   const { prediction_text3d_result } = usePredictions();
-  const modelUrl = prediction_text3d_result?.glb_model; 
+  const modelUrl = prediction_text3d_result?.glb_model_t3d; 
 
   const controls = {
     wireframe: true, 
