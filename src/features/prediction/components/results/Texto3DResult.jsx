@@ -9,7 +9,7 @@ export const Texto3DResult = () => {
   const controls = {
     wireframe: true, 
     rotate: true,    
-    texture: false,  
+    texture: true,  
     download: true, 
   };
   const cameraPosition = [0, 0, 1.7]; 

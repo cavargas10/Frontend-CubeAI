@@ -22,7 +22,7 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
     if (generation.glb_model_t23d) return [0, 0, -0.9];
     if (generation.glb_model_multi3d) return [0, 0, -0.8];
     if (generation.glb_model_b3d) return [0, 0, -0.9];
-    if (generation.glb_model) return [0, 0, -2];
+    if (generation.glb_model_t3d) return [0, 0, -0.9];
     if (generation.obj_glb) return [0, 0.15, -1.2];
     return [0, 0, 5];
   };
@@ -32,7 +32,7 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
     if (generation.glb_model_t23d) return generation.glb_model_t23d;
     if (generation.glb_model_multi3d) return generation.glb_model_multi3d;
     if (generation.glb_model_b3d) return generation.glb_model_b3d;
-    if (generation.glb_model) return generation.glb_model;
+    if (generation.glb_model_t3d) return generation.glb_model_t3d;
     if (generation.obj_glb) return generation.obj_glb;
     return null;
   };
@@ -80,7 +80,7 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
       buttons.push(
         <button
           key="obj"
-          onClick={() => handleDownload(generation.glb_model_t23d, "glb_model.obj")}
+          onClick={() => handleDownload(generation.glb_model_t23d, "glb_model_t23d.glb")}
           className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-full shadow-lg hover:shadow-xl transition-all text-xs"
           aria-label="Descargar modelo GLB"
         >
@@ -104,7 +104,7 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
       buttons.push(
         <button
           key="obj"
-          onClick={() => handleDownload(generation.glb_model_b3d, "glb_model.obj")}
+          onClick={() => handleDownload(generation.glb_model_b3d, "glb_model_b3d.glb")}
           className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-full shadow-lg hover:shadow-xl transition-all text-xs"
           aria-label="Descargar modelo GLB"
         >
@@ -112,11 +112,11 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
           GLB
         </button>
       );
-    } else if (generation.glb_model) {
+    } else if (generation.glb_model_t3d) {
       buttons.push(
         <button
           key="obj"
-          onClick={() => handleDownload(generation.glb_model, "glb_model.obj")}
+          onClick={() => handleDownload(generation.glb_model_t3d, "glb_model_t3d.glb")}
           className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-full shadow-lg hover:shadow-xl transition-all text-xs"
           aria-label="Descargar modelo GLB"
         >

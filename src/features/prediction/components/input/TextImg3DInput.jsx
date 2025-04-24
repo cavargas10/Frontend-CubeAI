@@ -89,7 +89,7 @@ export const TextImg3DInput = ({
       </div>
 
       <div className="flex flex-col xl:flex-row w-full min-h-[calc(100vh-200px)] bg-fondologin">
-        <div className="w-full xl:w-1/3 p-6 border-r border-linea">
+        <div className="w-full xl:w-1/3 p-6 border-r-2 border-linea">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-3">
               <label className="text-base">Nombre de la generación</label>

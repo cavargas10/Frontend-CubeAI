@@ -151,7 +151,7 @@ export const Boceto3DInput = ({
         <p className="text-center text-2xl">Boceto 3D</p>
       </div>
       <div className="flex flex-col xl:flex-row w-full min-h-[calc(100vh-200px)] bg-fondologin">
-        <div className="w-full xl:w-1/2 p-6 border-r border-linea">
+        <div className="w-full xl:w-1/2 p-6 border-r-2 border-linea">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
               <label className="text-base font-medium">

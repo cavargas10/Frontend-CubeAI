@@ -84,7 +84,7 @@ export const MultiImagen3DInput = ({
         <p className="text-center text-2xl">Imagen a 3D (Múltiples vistas)</p>
       </div>
       <div className="flex flex-col xl:flex-row w-full min-h-[calc(100vh-200px)] bg-fondologin">
-        <div className="w-full xl:w-1/3 p-6 border-r border-linea">
+        <div className="w-full xl:w-1/3 p-6 border-r-2 border-linea">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               <label className="text-base font-medium">Nombre de la generación</label>
