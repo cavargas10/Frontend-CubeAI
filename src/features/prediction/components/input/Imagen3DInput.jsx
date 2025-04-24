@@ -1,4 +1,3 @@
-// src/features/prediction/components/input/Imagen3DInput.jsx
 import React, { useState, useEffect, useCallback } from "react";
 import { Sparkle, UploadSimple } from "@phosphor-icons/react";
 import { Button } from "flowbite-react";
@@ -11,11 +10,10 @@ import { useImageUpload } from "../../hooks/useImageUpload";
 export const Imagen3DInput = ({
   user,
   setPrediction_img3d_result,
-  BASE_URL,
-  prediction_img3d_result,
   isCollapsed,
 }) => {
   const [generationName, setGenerationName] = useState("");
+
   const {
     imageFile,
     imagePreview,
@@ -33,7 +31,7 @@ export const Imagen3DInput = ({
     submitPrediction,
     clearError: clearPredictionError,
     setError: setPredictionError,
-  } = usePredictionHandler(user, BASE_URL);
+  } = usePredictionHandler(user);
 
   const resetComponentState = useCallback(() => {
     setGenerationName("");
@@ -64,9 +62,7 @@ export const Imagen3DInput = ({
     formData.append("image", imageFile);
     formData.append("generationName", generationName);
 
-    const result = await submitPrediction("imagen3D", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    const result = await submitPrediction("imagen3D", formData);
 
     if (result && typeof setPrediction_img3d_result === "function") {
       setPrediction_img3d_result(result);
@@ -84,37 +80,28 @@ export const Imagen3DInput = ({
       <div className="pt-6 bg-principal pb-4 border-b-2 border-linea ">
         <p className="text-center text-2xl">Imagen a 3D</p>
       </div>
-
       <div className="flex flex-col xl:flex-row w-full min-h-[calc(100vh-200px)] bg-fondologin">
-        {/* Formulario (Lado izquierdo) */}
         <div className="w-full xl:w-1/3 p-6 border-r-2 border-linea ">
           <div className="flex flex-col gap-6">
-            {/* Campo de nombre */}
             <div className="flex flex-col gap-2">
-              <label className="text-lg">Nombre de la generación</label>
+              <label className="text-lg text-gray-300">Nombre de la generación</label>
               <input
                 type="text"
-                placeholder="Ingrese un nombre"
+                placeholder="Ej: Robot explorador"
                 value={generationName}
                 onChange={(e) => setGenerationName(e.target.value)}
                 disabled={predictionLoading}
-                className="bg-transparent border p-3 rounded-lg w-full"
+                className="bg-transparent border border-linea p-3 rounded-lg w-full text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
-
             <div
               className={`relative border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-colors min-h-[16.5rem] flex flex-col items-center justify-center ${
-                isDragging
-                  ? "border-azul-gradient bg-opacity-10"
-                  : "border-linea" // Usa tu color 'linea'
-              } ${predictionLoading ? "opacity-50 cursor-not-allowed" : "hover:border-azul-gradient"}`}
+                isDragging ? "border-blue-500 bg-blue-900/20" : "border-linea"
+              } ${predictionLoading ? "opacity-50 cursor-not-allowed" : "hover:border-blue-500"}`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
-              onClick={() =>
-                !predictionLoading &&
-                document.getElementById("fileInput-imagen3d").click()
-              }
+              onClick={() => !predictionLoading && document.getElementById("fileInput-imagen3d").click()}
             >
               <input
                 id="fileInput-imagen3d"
@@ -125,45 +112,36 @@ export const Imagen3DInput = ({
                 className="hidden"
               />
               {imagePreview ? (
-                <div className="w-full h-full flex flex-col items-center gap-4">
+                <div className="w-full h-full flex flex-col items-center justify-center gap-2">
                   <img
                     src={imagePreview}
                     alt="Vista previa"
-                    className="max-w-full max-h-48 object-contain rounded-lg"
+                    className="max-w-[80%] max-h-[80%] object-contain rounded-lg"
                   />
                 </div>
               ) : (
                 <>
-                  <UploadSimple
-                    className="w-12 h-12 text-gray-400"
-                    weight="thin"
-                  />
-                  <p className="mt-4 text-sm">
-                    Arrastra una imagen o haz clic para seleccionar
-                  </p>
-                  <p className="mt-2 text-xs text-gray-400">
-                    PNG, JPG, JPEG (MAX. 10MB)
-                  </p>
+                  <UploadSimple className="w-12 h-12 text-gray-400 mb-3" weight="light" />
+                  <p className="text-sm text-gray-300">Arrastra una imagen o haz clic</p>
+                  <p className="mt-1 text-xs text-gray-500">PNG, JPG, JPEG (MAX. 10MB)</p>
                 </>
               )}
             </div>
-
             <Button
               onClick={handleLocalPrediction}
               disabled={predictionLoading}
-              className="w-full text-base bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient py-2 rounded-md border-none flex items-center justify-center gap-2"
+              className="w-full text-base bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient py-2.5 rounded-md border-none flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              style={{transition: 'opacity 0.3s ease'}}
             >
-              <Sparkle size={24} weight="fill" />
+              <Sparkle size={20} weight="fill" />
               Generar
             </Button>
           </div>
         </div>
-
         <div className="w-full xl:w-2/3">
-          <Imagen3DResult prediction_img3d_result={prediction_img3d_result} />
+          <Imagen3DResult />
         </div>
       </div>
-
       <ErrorModal
         showModal={!!predictionError}
         closeModal={clearPredictionError}

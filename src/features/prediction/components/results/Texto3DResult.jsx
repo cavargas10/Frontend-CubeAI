@@ -13,8 +13,8 @@ export const Texto3DResult = () => {
     download: true, 
   };
   const cameraPosition = [0, 0, 1.7]; 
-  const orbitConfig = { minDistance: 1, maxDistance: 3, autoRotateSpeed: 2 };
-  const gridPosition = [0, -0.9, 0]; 
+  const orbitConfig = { minDistance: 0.5, maxDistance: 2, autoRotateSpeed: 2 };
+  const gridPosition = [0, -0.5, 0]; 
 
   return (
     <ModelResultViewer

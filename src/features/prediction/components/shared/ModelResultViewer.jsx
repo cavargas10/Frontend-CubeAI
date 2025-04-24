@@ -64,7 +64,7 @@ export const ModelResultViewer = ({
   return (
     <div
       className="w-full h-full bg-principal rounded-r-lg relative"
-      style={{ minHeight: "500px" }}
+      style={{ minHeight: "510px" }}
     >
       {!isResultReady && (
         <div className="absolute inset-0 bg-black/30 backdrop-blur-sm z-20 flex items-center justify-center">

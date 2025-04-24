@@ -17,8 +17,6 @@ const styles = [
 export const TextImg3DInput = ({
   user,
   setPrediction_textimg3d_result,
-  BASE_URL,
-  prediction_textimg3d_result,
   isCollapsed,
 }) => {
   const [generationName, setGenerationName] = useState("");
@@ -32,7 +30,7 @@ export const TextImg3DInput = ({
     submitPrediction,
     clearError: clearPredictionError,
     setError: setPredictionError,
-  } = usePredictionHandler(user, BASE_URL);
+  } = usePredictionHandler(user);
 
   const resetComponentState = useCallback(() => {
     setGenerationName("");
@@ -81,87 +79,81 @@ export const TextImg3DInput = ({
       className={`w-full bg-fondologin transition-all duration-300 ease-in-out ${
         isCollapsed
           ? "sm:ml-[80px] xl:ml-[80px] 2xl:ml-[80px]"
-          : "sm:ml-[264px] xl:ml-[265px] 2xl:ml-[300px]" // Ajusta clases
+          : "sm:ml-[264px] xl:ml-[265px] 2xl:ml-[300px]"
       }`}
     >
       <div className="bg-principal pt-6 pb-4 border-b-2 border-linea">
         <p className="text-center text-2xl">Texto e Imagen a 3D</p>
       </div>
-
       <div className="flex flex-col xl:flex-row w-full min-h-[calc(100vh-200px)] bg-fondologin">
         <div className="w-full xl:w-1/3 p-6 border-r-2 border-linea">
           <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-3">
-              <label className="text-base">Nombre de la generación</label>
+            <div className="flex flex-col gap-2">
+              <label className="text-base text-gray-300">Nombre de la generación</label>
               <input
                 type="text"
-                placeholder="Ingrese un nombre"
+                placeholder="Ej: Dragón en montaña"
                 value={generationName}
                 onChange={(e) => setGenerationName(e.target.value)}
                 disabled={predictionLoading}
-                className="bg-transparent border p-2 rounded-md w-full text-sm"
-              />
-            </div>
-            <div className="flex flex-col gap-3">
-              <label className="text-base">Prompt</label>
-              <input
-                type="text"
-                placeholder="Ingrese descripción"
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-                disabled={predictionLoading}
-                className="bg-transparent border p-2 rounded-md w-full text-sm"
-              />
-            </div>
-            <div className="flex flex-col gap-3">
-              <label className="text-base">Detalles adicionales</label>
-              <input
-                type="text"
-                placeholder="Ingrese detalles adicionales"
-                value={additionalDetails}
-                onChange={(e) => setAdditionalDetails(e.target.value)}
-                disabled={predictionLoading}
-                className="bg-transparent border p-2 rounded-md w-full text-sm"
+                className="bg-transparent border border-linea p-2 rounded-md w-full text-sm text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
             <div className="flex flex-col gap-2">
-              <label className="text-base">Estilo</label>
+              <label className="text-base text-gray-300">Prompt</label>
+              <input
+                type="text"
+                placeholder="Ej: Un dragón rojo majestuoso..."
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                disabled={predictionLoading}
+                className="bg-transparent border border-linea p-2 rounded-md w-full text-sm text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-base text-gray-300">Detalles adicionales</label>
+              <input
+                type="text"
+                placeholder="Ej: volando sobre pico nevado, atardecer"
+                value={additionalDetails}
+                onChange={(e) => setAdditionalDetails(e.target.value)}
+                disabled={predictionLoading}
+                className="bg-transparent border border-linea p-2 rounded-md w-full text-sm text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-base text-gray-300">Estilo Visual</label>
               <div className="grid grid-cols-3 gap-2">
                 {styles.map((s) => (
                   <button
                     key={s.value}
                     onClick={() => setSelectedStyle(s.value)}
                     disabled={predictionLoading}
-                    className={`relative border rounded-md p-2 flex flex-col items-center justify-center transition-all text-sm ${
+                    className={`relative border rounded-md p-2.5 flex items-center justify-center transition-all text-sm h-11 ${
                       selectedStyle === s.value
-                        ? "border-azul-gradient shadow-md scale-105"
-                        : "border-linea hover:border-azul-gradient"
+                        ? "border-blue-500 bg-blue-900/30 shadow-md scale-105 font-semibold"
+                        : "border-linea hover:border-blue-400 bg-principal/50"
                     }`}
                   >
-                    <span className="">{s.name}</span>
+                    <span>{s.name}</span>
                   </button>
                 ))}
               </div>
             </div>
-
             <Button
               onClick={handleLocalPrediction}
               disabled={predictionLoading}
-              className="w-full text-base bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient py-2 rounded-lg border-none flex items-center justify-center gap-1"
+              className="w-full text-base bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient py-2 rounded-lg border-none flex items-center justify-center gap-1.5 disabled:opacity-60"
             >
-              <Sparkle size={20} weight="fill" />
+              <Sparkle size={18} weight="fill" />
               Generar
             </Button>
           </div>
         </div>
-
         <div className="w-full xl:w-2/3">
-          <TextImg3DResult
-            prediction_textimg3d_result={prediction_textimg3d_result}
-          />
+          <TextImg3DResult />
         </div>
       </div>
-
       <ErrorModal
         showModal={!!predictionError}
         closeModal={clearPredictionError}
