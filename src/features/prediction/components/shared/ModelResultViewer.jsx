@@ -1,6 +1,6 @@
 import React, { Suspense, useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Grid } from "@react-three/drei";
+import { OrbitControls, Grid, Html } from "@react-three/drei";
 import {
   DownloadSimple,
   ArrowsClockwise,
@@ -24,6 +24,21 @@ const ControlButton = ({ onClick, title, children, active }) => (
   </button>
 );
 
+const ModelLoadingFallback = () => {
+  return (
+    <Html center zIndexRange={[100, 0]}>
+      <div className="text-center p-4 bg-principal/90 rounded-lg backdrop-blur-sm shadow-xl">
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-morado-gradient mx-auto mb-3"></div>
+        <p className="text-sm text-white font-medium">Cargando modelo 3D...</p>
+      </div>
+    </Html>
+  );
+};
+
+const CanvasInitializingFallback = () => {
+  return <Html center></Html>;
+};
+
 export const ModelResultViewer = ({
   modelUrl,
   textureUrl,
@@ -46,25 +61,20 @@ export const ModelResultViewer = ({
   const [showWireframe, setShowWireframe] = useState(false);
   const [autoRotate, setAutoRotate] = useState(true);
   const [showTexture, setShowTexture] = useState(true);
-  const [internalTexturePreview, setInternalTexturePreview] = useState(null); // Textura extraída por ModelViewer
+  const [internalTexturePreview, setInternalTexturePreview] = useState(null);
   const [isTextureZoomed, setIsTextureZoomed] = useState(false);
-
   const isResultReady = Boolean(modelUrl);
   const textureToPreview = textureUrl || internalTexturePreview;
 
   useEffect(() => {
     setInternalTexturePreview(null);
-    if (!controls.texture) {
-      setShowTexture(false);
-    } else {
-      setShowTexture(true);
-    }
+    setShowTexture(controls.texture);
   }, [modelUrl, controls.texture]);
 
   return (
     <div
       className="w-full h-full bg-principal rounded-r-lg relative"
-      style={{ minHeight: "510px" }}
+      style={{ minHeight: "500px" }}
     >
       {!isResultReady && (
         <div className="absolute inset-0 bg-black/30 backdrop-blur-sm z-20 flex items-center justify-center">
@@ -80,7 +90,7 @@ export const ModelResultViewer = ({
       )}
 
       <div
-        className={`relative h-full ${children ? "grid xl:grid-cols-6" : ""}`}
+        className={`relative h-full ${children && isResultReady ? "grid xl:grid-cols-6" : ""}`}
       >
         {isResultReady && children && (
           <div className="xl:col-span-2 border-r border-linea flex flex-col items-center p-4">
@@ -89,14 +99,16 @@ export const ModelResultViewer = ({
         )}
 
         <div
-          className={`${isResultReady && children ? "xl:col-span-4" : "col-span-full"} h-full relative`}
+          className={`${children && isResultReady ? "xl:col-span-4" : "col-span-full"} h-full relative`}
         >
           {isResultReady && (
             <div className="absolute top-4 left-4 z-10 flex flex-wrap gap-2 bg-principal/90 p-2 rounded-lg backdrop-blur">
+              {" "}
+              {/* Tu estilo */}
               {controls.wireframe && (
                 <ControlButton
                   onClick={() => setShowWireframe(!showWireframe)}
-                  title="Mostrar/Ocultar Malla"
+                  title="Malla"
                   active={showWireframe}
                 >
                   <Aperture size={20} />
@@ -106,7 +118,7 @@ export const ModelResultViewer = ({
               {controls.rotate && (
                 <ControlButton
                   onClick={() => setAutoRotate(!autoRotate)}
-                  title="Activar/Desactivar Rotación"
+                  title="Rotación"
                   active={autoRotate}
                 >
                   <ArrowsClockwise size={20} />
@@ -116,7 +128,7 @@ export const ModelResultViewer = ({
               {controls.texture && (
                 <ControlButton
                   onClick={() => setShowTexture(!showTexture)}
-                  title="Activar/Desactivar Textura"
+                  title="Textura"
                   active={showTexture}
                 >
                   <ImageIcon size={20} />
@@ -158,10 +170,10 @@ export const ModelResultViewer = ({
           )}
 
           <Canvas
-            camera={{ position: initialCameraPosition }}
-            className="h-full"
+            camera={{ position: initialCameraPosition, fov: 50 }}
+            className={`h-full rounded-b-lg xl:rounded-r-lg xl:rounded-bl-none ${!isResultReady ? "opacity-40" : "opacity-100 transition-opacity duration-300"}`}
           >
-            <Suspense fallback={null}>
+            <Suspense fallback={<CanvasInitializingFallback />}>
               <Grid
                 position={gridPosition}
                 args={[15, 15]}
@@ -174,37 +186,43 @@ export const ModelResultViewer = ({
                 fadeDistance={25}
                 fadeStrength={1}
               />
-              {isResultReady && (
-                <ModelViewer
-                  url={modelUrl}
-                  showWireframe={showWireframe}
-                  showTexture={showTexture && controls.texture}
-                  onTextureLoad={setInternalTexturePreview}
-                />
-              )}
+              <HDREnvironment />
               <OrbitControls
                 minDistance={orbitControlsConfig.minDistance}
                 maxDistance={orbitControlsConfig.maxDistance}
-                autoRotate={autoRotate && controls.rotate}
+                autoRotate={isResultReady && autoRotate && controls.rotate}
                 autoRotateSpeed={orbitControlsConfig.autoRotateSpeed}
+                enablePan={true}
                 enabled={isResultReady}
               />
-              <HDREnvironment />
+              {isResultReady && (
+                <Suspense fallback={<ModelLoadingFallback />}>
+                  <ModelViewer
+                    key={modelUrl}
+                    url={modelUrl}
+                    showWireframe={showWireframe}
+                    showTexture={showTexture && controls.texture}
+                    onTextureLoad={setInternalTexturePreview}
+                  />
+                </Suspense>
+              )}
             </Suspense>
           </Canvas>
+
           <ModalBase
             isOpen={isTextureZoomed}
             onClose={() => setIsTextureZoomed(false)}
           >
-            <div className="relative">
+            <div className="relative p-4">
               <img
                 src={textureToPreview}
                 alt="Vista completa de textura"
-                className="max-w-full max-h-[80vh] object-contain rounded-lg"
+                className="max-w-[80vw] max-h-[80vh] object-contain rounded-lg"
               />
               <button
                 onClick={() => setIsTextureZoomed(false)}
-                className="absolute top-2 right-2 p-2 bg-black/20 hover:bg-black/40 rounded-full transition-colors"
+                className="absolute top-2 right-2 p-2 bg-black/20 hover:bg-black/40 rounded-full transition-colors text-white"
+                aria-label="Cerrar vista de textura"
               >
                 <X size={20} />
               </button>
