@@ -15,7 +15,7 @@ import { MultiImagen3DInput } from "../features/prediction/components/input/Mult
 import { Boceto3DInput } from "../features/prediction/components/input/Boceto3DInput";
 
 export const DashboardLayout = () => {
-  const { user, handleLogout, userData } = useAuth();
+  const { user, handleLogout, userData, updateUserData } = useAuth();
   const predictions = usePredictions();
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -60,6 +60,7 @@ export const DashboardLayout = () => {
                 user={user}
                 BASE_URL={BASE_URL}
                 userData={userData}
+                updateUserData={updateUserData}
                 isCollapsed={isNavCollapsed}
               />
             }

@@ -6,7 +6,13 @@ import { DeleteConfirmationModal } from "../../../components/modals/DeleteConfir
 import { LoadingModal } from "../../../components/modals/LoadingModal";
 import { SuccessModal } from "../../../components/modals/SuccessModal";
 
-export const ConfigDash = ({ BASE_URL, user, userData, updateUserData, isCollapsed }) => {
+export const ConfigDash = ({
+  BASE_URL,
+  user,
+  userData,
+  updateUserData,
+  isCollapsed,
+}) => {
   const [newName, setNewName] = useState("");
   const [isNameChanged, setIsNameChanged] = useState(false);
   const [nameError, setNameError] = useState("");
@@ -42,13 +48,19 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData, isCollaps
           },
         }
       );
-      updateUserData({ name: response.data.name });
+
+      // Usar la función updateUserData para actualizar los datos en el contexto
+      if (updateUserData && typeof updateUserData === "function") {
+        updateUserData({ name: response.data.name });
+      }
+
       setNewName("");
       setIsNameChanged(false);
       setShowLoadingModal(false);
       setSuccessMessage("Su usuario se ha actualizado");
       setShowSuccessModal(true);
     } catch (error) {
+      console.error("Error actualizando el nombre:", error);
       setShowLoadingModal(false);
     }
   };
@@ -83,11 +95,17 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData, isCollaps
           },
         }
       );
-      updateUserData({ profile_picture: response.data.profile_picture });
+
+      // Usar la función updateUserData para actualizar los datos en el contexto
+      if (updateUserData && typeof updateUserData === "function") {
+        updateUserData({ profile_picture: response.data.profile_picture });
+      }
+
       setShowLoadingModal(false);
       setSuccessMessage("Su imagen se ha actualizado");
       setShowSuccessModal(true);
     } catch (error) {
+      console.error("Error actualizando la imagen de perfil:", error);
       setShowLoadingModal(false);
     }
   };
@@ -102,6 +120,7 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData, isCollaps
       });
       navigate("/");
     } catch (error) {
+      console.error("Error eliminando la cuenta:", error);
     }
   };
 
@@ -123,11 +142,13 @@ export const ConfigDash = ({ BASE_URL, user, userData, updateUserData, isCollaps
   }
 
   return (
-    <section className={`sm:ml-64 pb-8 pr-5 w-full bg-fondologin transition-all duration-300 ease-in-out ${
+    <section
+      className={`sm:ml-64 pb-8 pr-5 w-full bg-fondologin transition-all duration-300 ease-in-out ${
         isCollapsed
           ? "sm:ml-[80px] xl:ml-[80px] 2xl:ml-[80px]"
           : "sm:ml-[264px] md:ml-[267px] xl:ml-[267px] 2xl:ml-[300px]"
-      }`}>
+      }`}
+    >
       <div className="ml-8 mt-8">
         <div>
           <h1 className="text-4xl">Perfil</h1>

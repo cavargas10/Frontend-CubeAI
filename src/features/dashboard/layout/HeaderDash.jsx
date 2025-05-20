@@ -12,7 +12,6 @@ export const HeaderDash = ({ userData, toggleMenu, handleLogout }) => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -40,7 +39,6 @@ export const HeaderDash = ({ userData, toggleMenu, handleLogout }) => {
               <UserProfile userData={userData} toggleMenu={toggleMenu} />
             </div>
 
-            {/* Dropdown Menu */}
             <div
               className={`
                 mr-6 absolute right-0 mt-2 w-56 rounded-xl bg-principal border-2 border-linea shadow-lg
@@ -62,7 +60,6 @@ export const HeaderDash = ({ userData, toggleMenu, handleLogout }) => {
                 </p>
               </div>
 
-              {/* Dropdown Items */}
               <div className="py-1">
                 <Link
                   to="configdash"
