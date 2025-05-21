@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useAuth } from "../features/auth/hooks/useAuth";
 import { usePredictions } from "../features/prediction/context/PredictionContext";
@@ -15,14 +15,11 @@ import { MultiImagen3DInput } from "../features/prediction/components/input/Mult
 import { Boceto3DInput } from "../features/prediction/components/input/Boceto3DInput";
 
 export const DashboardLayout = () => {
-  const { user, handleLogout, userData, updateUserData } = useAuth();
+  const { user, handleLogout, userData, refetchUserData } = useAuth();
   const predictions = usePredictions();
-
   const [menuOpen, setMenuOpen] = useState(false);
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
-
   const toggleMenu = () => setMenuOpen(!menuOpen);
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   return (
     <div className="text-white">
@@ -31,22 +28,19 @@ export const DashboardLayout = () => {
         toggleMenu={toggleMenu}
         handleLogout={handleLogout}
       />
-
-      <main className="flex mt-16 ">
+      <main className="flex mt-16">
         <NavDash
           menuOpen={menuOpen}
           toggleMenu={toggleMenu}
           isCollapsed={isNavCollapsed}
           setIsCollapsed={setIsNavCollapsed}
         />
-
         <Routes>
           <Route path="/" element={<Navigate to="visualizador" replace />} />
-
           <Route
             path="visualizador"
             element={
-              <Visualizador BASE_URL={BASE_URL} isCollapsed={isNavCollapsed} />
+              <Visualizador isCollapsed={isNavCollapsed} />
             }
           />
           <Route
@@ -58,14 +52,12 @@ export const DashboardLayout = () => {
             element={
               <ConfigDash
                 user={user}
-                BASE_URL={BASE_URL}
                 userData={userData}
-                updateUserData={updateUserData}
+                refetchUserData={refetchUserData}
                 isCollapsed={isNavCollapsed}
               />
             }
           />
-
           <Route
             path="imagen3D"
             element={
@@ -152,7 +144,6 @@ export const DashboardLayout = () => {
               />
             }
           />
-
           <Route path="*" element={<Navigate to="visualizador" replace />} />
         </Routes>
       </main>

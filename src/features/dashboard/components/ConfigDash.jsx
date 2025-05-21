@@ -1,18 +1,16 @@
-import React, { useState, useRef } from "react";
-import axios from "axios";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Pencil } from "@phosphor-icons/react";
+import {
+  updateUserName,
+  updateUserProfilePicture,
+  deleteUserAccount,
+} from "../../auth/services/userApi";
 import { DeleteConfirmationModal } from "../../../components/modals/DeleteConfirmationModal";
 import { LoadingModal } from "../../../components/modals/LoadingModal";
 import { SuccessModal } from "../../../components/modals/SuccessModal";
 
-export const ConfigDash = ({
-  BASE_URL,
-  user,
-  userData,
-  updateUserData,
-  isCollapsed,
-}) => {
+export const ConfigDash = ({ user, userData, refetchUserData, isCollapsed }) => {
   const [newName, setNewName] = useState("");
   const [isNameChanged, setIsNameChanged] = useState(false);
   const [nameError, setNameError] = useState("");
@@ -33,27 +31,12 @@ export const ConfigDash = ({
 
   const handleNameSubmit = async () => {
     if (!isNameChanged || newName.trim() === "") return;
-
     setLoadingMessage("Actualizando su usuario");
     setShowLoadingModal(true);
-
     try {
       const token = await user.getIdToken();
-      const response = await axios.post(
-        `${BASE_URL}/update_name`,
-        { name: newName },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      // Usar la función updateUserData para actualizar los datos en el contexto
-      if (updateUserData && typeof updateUserData === "function") {
-        updateUserData({ name: response.data.name });
-      }
-
+      await updateUserName(token, newName.trim());
+      await refetchUserData();
       setNewName("");
       setIsNameChanged(false);
       setShowLoadingModal(false);
@@ -79,28 +62,12 @@ export const ConfigDash = ({
   const handleProfilePictureSubmit = async (file) => {
     setLoadingMessage("Actualizando su imagen de perfil");
     setShowLoadingModal(true);
-
     const formData = new FormData();
     formData.append("profile_picture", file);
-
     try {
       const token = await user.getIdToken();
-      const response = await axios.post(
-        `${BASE_URL}/update_profile_picture`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      // Usar la función updateUserData para actualizar los datos en el contexto
-      if (updateUserData && typeof updateUserData === "function") {
-        updateUserData({ profile_picture: response.data.profile_picture });
-      }
-
+      await updateUserProfilePicture(token, formData);
+      await refetchUserData();
       setShowLoadingModal(false);
       setSuccessMessage("Su imagen se ha actualizado");
       setShowSuccessModal(true);
@@ -113,11 +80,7 @@ export const ConfigDash = ({
   const handleDeleteAccount = async () => {
     try {
       const token = await user.getIdToken();
-      await axios.delete(`${BASE_URL}/delete_user`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await deleteUserAccount(token);
       navigate("/");
     } catch (error) {
       console.error("Error eliminando la cuenta:", error);
@@ -128,7 +91,6 @@ export const ConfigDash = ({
   const closeDeleteModal = () => setShowDeleteModal(false);
   const confirmDelete = () => {
     handleDeleteAccount();
-    navigate("http://localhost:5173/");
   };
 
   const closeSuccessModal = () => setShowSuccessModal(false);
@@ -149,13 +111,12 @@ export const ConfigDash = ({
           : "sm:ml-[264px] md:ml-[267px] xl:ml-[267px] 2xl:ml-[300px]"
       }`}
     >
-      <div className="ml-8 mt-8">
+      <div className="ml-8 mt-7">
         <div>
           <h1 className="text-4xl">Perfil</h1>
           <p className="mt-3">Gestiona tu perfil personal en CV3D.AI</p>
           <hr className="mt-4" />
         </div>
-
         <form className="mt-3 sm:mt-8">
           <div className="flex flex-col lg:flex-row">
             <div className="lg:w-1/2 pr-4">
@@ -189,7 +150,6 @@ export const ConfigDash = ({
                 </div>
                 {nameError && <p className="text-red-500 mt-2">{nameError}</p>}
               </div>
-
               <div className="mb-3 sm:mb-5">
                 <h2 className="text-2xl">Correo electrónico</h2>
                 <p className="mt-1">
@@ -205,7 +165,6 @@ export const ConfigDash = ({
                   />
                 </div>
               </div>
-
               <div>
                 <h2 className="text-2xl">Borrar cuenta</h2>
                 <p className="mt-1">
@@ -222,13 +181,12 @@ export const ConfigDash = ({
                 </div>
               </div>
             </div>
-
             <div className="mt-3 sm:w-1/2 xl:pl-4 sm:mt-5 xl:mt-0">
               <div className="mb-6">
                 <h2 className="text-2xl">Imagen de perfil</h2>
                 <p className="mt-1">Actualiza tu imagen de perfil</p>
                 <div className="mt-3 flex items-center">
-                  <div className="relative  mx-auto sm:mx-0">
+                  <div className="relative mx-auto sm:mx-0">
                     {userData.profile_picture && (
                       <img
                         src={userData.profile_picture}

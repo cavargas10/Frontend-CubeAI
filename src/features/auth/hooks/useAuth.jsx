@@ -1,77 +1,72 @@
-import { useState, useEffect, useCallback } from "react"; 
+import { useState, useEffect, useCallback } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import axios from "axios";
-import { auth } from "../../../config/firebase"; 
+import { auth } from "../../../config/firebase";
+import { getUserData } from "../services/userApi";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL; 
 export const useAuth = () => {
-  const [user, setUser] = useState(null); 
-  const [userData, setUserData] = useState(null); 
-  const [loadingAuth, setLoadingAuth] = useState(true); 
-  const [authError, setAuthError] = useState(null); 
-  
-  useEffect(() => {
-    setLoadingAuth(true); 
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      setUser(firebaseUser); 
+  const [user, setUser] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [loadingAuth, setLoadingAuth] = useState(true);
+  const [authError, setAuthError] = useState(null);
 
+  const fetchCurrentUserData = useCallback(async (firebaseUser) => {
+    if (!firebaseUser) return;
+    try {
+      const token = await firebaseUser.getIdToken(true);
+      const backendUserData = await getUserData(token);
+      setUserData(backendUserData);
+      setAuthError(null);
+    } catch (err) {
+      console.error("Error fetching user data from backend:", err);
+      setAuthError("No se pudieron cargar los datos completos del usuario.");
+      setUserData(null);
+    }
+  }, []);
+
+  useEffect(() => {
+    setLoadingAuth(true);
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      setUser(firebaseUser);
       if (firebaseUser) {
         if (firebaseUser.emailVerified) {
-          try {
-            const token = await firebaseUser.getIdToken(true); 
-            const response = await axios.get(`${BASE_URL}/user_data`, {
-              headers: { Authorization: `Bearer ${token}` },
-            });
-            setUserData(response.data); 
-            setAuthError(null); 
-          } catch (err) {
-            console.error("Error fetching user data from backend:", err);
-            
-            setAuthError("No se pudieron cargar los datos completos del usuario.");
-            setUserData(null); 
-          }
+          await fetchCurrentUserData(firebaseUser);
         } else {
-          
-          setUserData(null); 
-          setAuthError(null); 
+          setUserData(null);
+          setAuthError(null);
           console.log("Usuario no verificado.");
         }
       } else {
-        
-        setUserData(null); 
-        setAuthError(null); 
+        setUserData(null);
+        setAuthError(null);
       }
-      setLoadingAuth(false); 
+      setLoadingAuth(false);
     });
-
     return () => unsubscribe();
-  }, []); 
+  }, [fetchCurrentUserData]);
 
   const handleLogout = useCallback(async () => {
-    setAuthError(null); 
+    setAuthError(null);
     try {
       await signOut(auth);
-      
       console.log("Logout exitoso");
     } catch (error) {
       console.error("Error during logout:", error);
       setAuthError("Error al cerrar la sesión. Intente nuevamente.");
     }
-  }, []); 
-
-  const updateUserData = useCallback((newData) => {
-    setUserData(prevData => {
-      if (!prevData) return newData;
-      return { ...prevData, ...newData };
-    });
   }, []);
 
+  const refetchUserData = useCallback(async () => {
+    if (user) {
+      await fetchCurrentUserData(user);
+    }
+  }, [user, fetchCurrentUserData]);
+
   return {
-    user,         
-    userData,     
-    loadingAuth,  
-    authError,    
+    user,
+    userData,
+    loadingAuth,
+    authError,
     handleLogout,
-    updateUserData 
+    refetchUserData,
   };
 };

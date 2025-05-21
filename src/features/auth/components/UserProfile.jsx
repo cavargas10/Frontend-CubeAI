@@ -1,4 +1,3 @@
-import React from "react";
 import { List } from "@phosphor-icons/react";
 
 export const UserProfile = ({ userData, toggleMenu }) => {
