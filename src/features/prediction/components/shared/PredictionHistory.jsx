@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { auth } from "../../../../config/firebase";
 import { GenerationCard } from "./GenerationCard";
 import { DeleteConfirmationModal } from "../../../../components/modals/DeleteConfirmationModal";
@@ -13,6 +13,7 @@ export const PredictionHistory = ({ selectedTab }) => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showLoadingModal, setShowLoadingModal] = useState(false);
   const [generationToDelete, setGenerationToDelete] = useState(null);
+
   const fetchGenerations = useCallback(async () => {
     setApiError(null);
     try {
@@ -57,7 +58,6 @@ export const PredictionHistory = ({ selectedTab }) => {
       console.error("Error fetching generations:", error);
       setApiError(error.message || "Error al obtener el historial.");
       setGenerations([]);
-    } finally {
     }
   }, []);
 
@@ -69,7 +69,6 @@ export const PredictionHistory = ({ selectedTab }) => {
     if (!timestamp) return "Fecha desconocida";
     try {
       const date = new Date(timestamp);
-
       return isNaN(date.getTime())
         ? "Fecha inválida"
         : date.toLocaleDateString();
@@ -97,11 +96,9 @@ export const PredictionHistory = ({ selectedTab }) => {
       setShowDeleteModal(false);
       return;
     }
-
     setShowDeleteModal(false);
     setShowLoadingModal(true);
     setApiError(null);
-
     try {
       const user = auth.currentUser;
       const token = await user.getIdToken();
@@ -114,7 +111,6 @@ export const PredictionHistory = ({ selectedTab }) => {
     } catch (error) {
       console.error("Error deleting generation:", error);
       setShowLoadingModal(false);
-
       setApiError(error.message || "Error al eliminar la generación.");
     } finally {
       setGenerationToDelete(null);
@@ -124,9 +120,11 @@ export const PredictionHistory = ({ selectedTab }) => {
   const closeSuccessModal = () => {
     setShowSuccessModal(false);
   };
+
   const filteredGenerations = generations.filter(
     (generation) => generation.generation_type === selectedTab
   );
+
   return (
     <div className="w-full px-4 sm:px-0">
       {apiError && (
@@ -134,7 +132,6 @@ export const PredictionHistory = ({ selectedTab }) => {
           {apiError}
         </div>
       )}
-
       {filteredGenerations.length === 0 && !apiError && (
         <div className="flex justify-center items-center h-64">
           <p className="text-xl text-gray-500 text-center px-4">
@@ -142,7 +139,6 @@ export const PredictionHistory = ({ selectedTab }) => {
           </p>
         </div>
       )}
-
       {filteredGenerations.length > 0 && (
         <div className="sm:flex sm:gap-8 gap-4 w-full sm:flex-wrap justify-center sm:justify-start">
           {filteredGenerations.map((generation, index) => (
@@ -158,7 +154,6 @@ export const PredictionHistory = ({ selectedTab }) => {
           ))}
         </div>
       )}
-
       <DeleteConfirmationModal
         showModal={showDeleteModal}
         closeModal={closeModal}
@@ -169,12 +164,10 @@ export const PredictionHistory = ({ selectedTab }) => {
             : "¿Estás seguro de eliminar esta generación?"
         }
       />
-
       <LoadingModal
         showLoadingModal={showLoadingModal}
         message="Eliminando objeto..."
       />
-
       <SuccessModal
         showSuccessModal={showSuccessModal}
         closeSuccessModal={closeSuccessModal}

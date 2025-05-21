@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { PredictionHistory } from "../../../features/prediction/components/shared/PredictionHistory";
 
-export const Visualizador = ({ BASE_URL, isCollapsed }) => {
+export const Visualizador = ({ isCollapsed }) => {
   const [selectedTab, setSelectedTab] = useState("Texto3D");
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -26,12 +26,9 @@ export const Visualizador = ({ BASE_URL, isCollapsed }) => {
             generadas por IA.
           </p>
         </div>
-
         <hr className="mt-4" />
-
         <div className="mt-6 mb-3">
           <h2 className="text-2xl">Modelo 3D Creados</h2>
-
           <div className="w-full mt-4 overflow-x-auto">
             <div className="min-w-max pb-2">
               <ul className="flex space-x-4">
@@ -45,7 +42,6 @@ export const Visualizador = ({ BASE_URL, isCollapsed }) => {
                     Texto a 3D
                   </a>
                 </li>
-
                 <li
                   className={`p-3 whitespace-nowrap cursor-pointer hover:bg-bg-btn-dash rounded-lg min-w-fit ${
                     selectedTab === "Imagen3D"
@@ -58,7 +54,6 @@ export const Visualizador = ({ BASE_URL, isCollapsed }) => {
                     Imagen a 3D
                   </a>
                 </li>
-
                 <li
                   className={`p-3 whitespace-nowrap cursor-pointer hover:bg-bg-btn-dash rounded-lg min-w-fit ${
                     selectedTab === "TextImg3D"
@@ -71,7 +66,6 @@ export const Visualizador = ({ BASE_URL, isCollapsed }) => {
                     Texto a Imagen a 3D
                   </a>
                 </li>
-
                 <li
                   className={`p-3 whitespace-nowrap cursor-pointer hover:bg-bg-btn-dash rounded-lg min-w-fit ${
                     selectedTab === "Unico3D" ? "bg-bg-btn-dash rounded-lg" : ""
@@ -82,7 +76,6 @@ export const Visualizador = ({ BASE_URL, isCollapsed }) => {
                     Unico 3D
                   </a>
                 </li>
-
                 <li
                   className={`p-3 whitespace-nowrap cursor-pointer hover:bg-bg-btn-dash rounded-lg min-w-fit ${
                     selectedTab === "MultiImagen3D"
@@ -95,7 +88,6 @@ export const Visualizador = ({ BASE_URL, isCollapsed }) => {
                     Multi Imagen a 3D
                   </a>
                 </li>
-
                 <li
                   className={`p-3 whitespace-nowrap cursor-pointer hover:bg-bg-btn-dash rounded-lg min-w-fit ${
                     selectedTab === "Boceto3D"
@@ -113,9 +105,8 @@ export const Visualizador = ({ BASE_URL, isCollapsed }) => {
           </div>
         </div>
       </div>
-
       <div className="px-4 sm:px-0 mt-[390px] telefono:mt-[345px] sm:ml-14 md:mt-[335px] lg:mt-[310px] sm:mt-[340px] xl:mt-[280px] bg-fondologin">
-        <PredictionHistory selectedTab={selectedTab} BASE_URL={BASE_URL} />
+        <PredictionHistory selectedTab={selectedTab} />
       </div>
     </section>
   );
