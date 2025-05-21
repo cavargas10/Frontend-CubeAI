@@ -2,9 +2,14 @@ import { List } from "@phosphor-icons/react";
 
 export const UserProfile = ({ userData, toggleMenu }) => {
   const handleImageError = (event) => {
-    event.target.src = "/usuario.webp"; 
+    event.target.src = "/usuario.webp";
     event.target.alt = "Imagen no disponible";
-    event.target.onerror = null; 
+    event.target.onerror = null;
+  };
+
+  const handleHamburgerClick = (event) => {
+    event.stopPropagation(); 
+    toggleMenu(); 
   };
 
   return (
@@ -20,11 +25,10 @@ export const UserProfile = ({ userData, toggleMenu }) => {
               src={userData.profile_picture}
               alt={`Foto de perfil de ${userData.name}`}
               className="w-[36px] h-[36px] rounded-full object-cover ml-2 mt-4"
-              onError={handleImageError} 
+              onError={handleImageError}
             />
           ) : (
-            
-            <div className="w-[36px] h-[36px] rounded-full bg-gray-300 flex items-center justify-center text-gray-500 font-bold">
+            <div className="w-[36px] h-[36px] rounded-full bg-gray-300 flex items-center justify-center text-gray-500 font-bold mt-4">
               {userData.name?.charAt(0).toUpperCase()}
             </div>
           )}
@@ -32,8 +36,8 @@ export const UserProfile = ({ userData, toggleMenu }) => {
           <button
             name="menu dashboard"
             aria-label="Open menu dashboard"
-            onClick={toggleMenu}
-            className="block md:hidden focus:outline-none"
+            onClick={handleHamburgerClick} 
+            className="block md:hidden focus:outline-none mt-4" 
           >
             <List size={32} color="#ffffff" />
           </button>

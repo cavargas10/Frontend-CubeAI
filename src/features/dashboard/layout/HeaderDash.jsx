@@ -34,7 +34,7 @@ export const HeaderDash = ({ userData, toggleMenu, handleLogout }) => {
         </div>
 
         {userData && (
-          <div className="relative" ref={dropdownRef}>
+          <div className="relative" ref={dropdownRef}> 
             <div onClick={toggleDropdown} className="cursor-pointer">
               <UserProfile userData={userData} toggleMenu={toggleMenu} />
             </div>
@@ -45,12 +45,11 @@ export const HeaderDash = ({ userData, toggleMenu, handleLogout }) => {
                 transform transition-all duration-200 origin-top
                 ${
                   isDropdownOpen
-                    ? "opacity-100 scale-100 translate-y-0"
+                    ? "opacity-100 scale-100 translate-y-0 z-50" 
                     : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
                 }
               `}
             >
-              {/* Dropdown Header */}
               <div className="px-4 py-3 border-b border-linea">
                 <p className="text-sm font-medium text-gray-400">
                   Conectado como

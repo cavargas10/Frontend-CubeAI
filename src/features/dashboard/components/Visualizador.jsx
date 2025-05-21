@@ -18,7 +18,7 @@ export const Visualizador = ({ isCollapsed }) => {
         : "sm:ml-[254px] md:ml-[260px] xl:ml-[260px] 2xl:ml-[300px]"
     }`}
     >
-      <div className="px-4 sm:ml-10 fixed z-40 w-full bg-fondologin">
+      <div className="px-4 sm:ml-10 fixed z-30 w-full bg-fondologin">
         <div className="mt-10 sm:w-3/5">
           <h1 className="text-4xl">Mis Objetos</h1>
           <p className="mt-4 text-lg">
@@ -27,7 +27,7 @@ export const Visualizador = ({ isCollapsed }) => {
           </p>
         </div>
         <hr className="mt-4" />
-        <div className="mt-6 mb-3">
+        <div className="mt-5 mb-3">
           <h2 className="text-2xl">Modelo 3D Creados</h2>
           <div className="w-full mt-4 overflow-x-auto">
             <div className="min-w-max pb-2">
