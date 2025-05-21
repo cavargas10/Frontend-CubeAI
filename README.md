@@ -1,7 +1,3 @@
-¡Entendido! Que sea un proyecto de tesis de la UTPL y que ya esté desplegado en Vercel cambia un poco el enfoque del README. Lo haremos más descriptivo del proyecto en sí y de su propósito académico.
-
-Aquí tienes una versión ajustada, enfocada en ser un README para un proyecto de tesis:
-
 # Instant3D - Plataforma Web para Generación de Modelos 3D con IA (Proyecto de Tesis UTPL) 🚀
 
 **Instant3D** es un proyecto de tesis desarrollado para la Universidad Técnica Particular de Loja (UTPL). Consiste en una plataforma web que permite a los usuarios transformar diversas entradas (texto, imágenes, bocetos) en modelos 3D mediante el uso de Inteligencia Artificial. El frontend de la aplicación está construido con React, Vite y Tailwind CSS.
