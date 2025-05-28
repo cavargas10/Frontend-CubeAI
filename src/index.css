@@ -8,52 +8,180 @@
 }
 
 body {
-  background-color: #0F102F;
+  background-color: #0f102f;
 }
 body::-webkit-scrollbar {
-  width: 8px; /* Ancho de la barra de desplazamiento */
+  width: 8px; 
 }
 
 body::-webkit-scrollbar-thumb {
-  background-color: #4a5568; /* Color del pulgar de la barra de desplazamiento */
-  border-radius: 19px; /* Radio del pulgar de la barra de desplazamiento */
+  background: linear-gradient(to bottom, theme('colors.azul-gradient'), theme('colors.morado-gradient'));
+  border-radius: 19px;
 }
 
 body::-webkit-scrollbar-track {
-  background-color: #cbd5e0; /* Color de fondo de la barra de desplazamiento */
+  background-color: #0f102f;
 }
 
-.prose h2 {
-  font-weight: bold;
-  font-size: 20px;
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.prose img {
-  margin-top: 30px;
-  width: 700px;
-  display: block;
-  margin: 0 auto;
-  margin-top: 20px;
-  border: 3px solid #ffffff; 
-}
 .prose {
-  text-align: justify;
+  @apply text-gray-300 leading-relaxed max-w-none; 
+  font-family: theme("fontFamily.sans");
+}
+
+/* --- Encabezados --- */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  @apply font-bold tracking-tight text-gray-100; 
+  letter-spacing: -0.025em; 
+}
+
+.prose h1 {
+  @apply text-3xl sm:text-4xl lg:text-5xl mt-6 mb-10 font-extrabold text-gray-100;
+  @apply relative pb-6;
+  &::after {
+    content: "";
+    @apply absolute bottom-0 left-0 h-[3px] w-1/3 bg-gradient-to-r from-azul-gradient to-morado-gradient rounded-full;
+  }
+}
+.prose h2 {
+  @apply text-3xl sm:text-4xl mt-16 mb-8 font-bold text-white;
+  @apply relative pl-4;
+  &::before {
+    content: "";
+    @apply absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-azul-gradient to-morado-gradient rounded-full;
+  }
+}
+
+.prose h3 {
+  @apply text-2xl sm:text-3xl mt-12 mb-6 font-bold text-gray-200;
+}
+
+.prose h4 {
+  @apply text-xl sm:text-2xl mt-10 mb-5 font-semibold text-gray-300;
+}
+
+/* --- Párrafos y Texto --- */
+.prose p {
+  @apply my-6 text-base sm:text-lg text-gray-300;
+}
+
+.prose a {
+  @apply text-morado-gradient font-medium no-underline transition-all duration-200 ease-out;
+  @apply relative hover:text-azul-gradient;
+  &::after {
+    content: "";
+    @apply absolute left-0 -bottom-0.5 h-[2px] w-0 bg-azul-gradient transition-all duration-300;
+  }
+  &:hover::after {
+    @apply w-full;
+  }
+}
+
+.prose strong {
+  @apply text-gray-200 font-semibold;
+}
+
+.prose em {
+  @apply text-gray-400 italic;
+}
+
+/* --- Listas --- */
+.prose ul,
+.prose ol {
+  @apply my-6 pl-5 space-y-3;
+}
+
+.prose ul li::marker {
+  @apply text-azul-gradient;
+}
+.prose ol li::marker {
+  @apply text-morado-gradient font-semibold;
+}
+
+.prose li {
+  @apply pl-3;
+}
+
+.prose ul > li > strong:first-child {
+  @apply block mb-1 text-morado-gradient font-semibold; 
+}
+
+.prose ul > li > strong:first-child + * {
+  @apply text-gray-300; 
 }
 
 .prose ul {
-  list-style-type: disc;
-  padding-left: 20px; 
+  @apply list-none pl-0; 
 }
 
-.prose ul li {
-  margin-top: 1rem;
-  margin-bottom: 1rem; 
+.prose ul > li {
+  @apply pl-8 mb-6 pt-4 border-t border-linea/20 relative; 
 }
 
-.prose p{
-  margin-top: 1rem;
+.prose ul > li::before {
+  content: "●";
+  @apply absolute left-2 top-4 text-azul-gradient text-xl font-bold;
+}
+
+.prose ul > li:first-child {
+  @apply border-t-0 pt-0; 
+}
+
+.prose ul > li:first-child::before {
+  @apply top-0; 
+}
+.prose ol > li {
+  @apply pl-8 mb-6 pt-4 border-t border-linea/20 relative; 
+}
+
+/* --- Bloques de Código --- */
+.prose pre {
+  @apply bg-[#060718] p-5 rounded-xl overflow-x-auto my-8 shadow-2xl border border-linea/20; /* Fondo aún más oscuro, casi negro azulado */
+  @apply relative;
+  box-shadow:
+    0 0 15px theme("colors.azul-gradient / 20%"),
+    0 0 30px theme("colors.morado-gradient / 10%");
+}
+
+.prose pre code {
+  @apply bg-transparent p-0 rounded-none text-gray-300 font-mono text-sm leading-relaxed;
+}
+
+/* --- Código en Línea --- */
+.prose code:not(pre > code) {
+  @apply bg-principal text-sm text-morado-gradient px-2 py-1 rounded-md font-mono border border-linea/40;
+  box-shadow: 0 0 5px theme("colors.morado-gradient / 20%"); /* Pequeño glow */
+}
+
+/* --- Imágenes --- */
+.prose figure {
+  @apply my-10 p-1 rounded-lg bg-gradient-to-br from-azul-gradient/20 via-principal/0 to-morado-gradient/20 transition-all duration-300 hover:shadow-[0_0_30px_theme('colors.morado-gradient'/40%)];
+}
+.prose figure img {
+  @apply block max-w-full h-auto rounded-md shadow-xl border-0; 
+  margin: 0 !important; 
+}
+
+.prose img:not(figure > img) {
+  @apply max-w-full h-auto my-10 rounded-lg shadow-xl border-2 border-linea/20 hover:border-morado-gradient transition-all duration-300;
+}
+
+/* --- Citas --- */
+.prose blockquote {
+  @apply my-8 px-6 py-4 border-0 bg-principal rounded-lg shadow-lg;
+  @apply relative border-l-4 border-azul-gradient; 
+  p {
+    @apply text-gray-300 italic text-lg; 
+  }
+}
+
+/* --- Líneas Horizontales --- */
+.prose hr {
+  @apply my-12 border-0 h-[2px] bg-gradient-to-r from-transparent via-linea/50 to-transparent;
 }
 
 .MyGradient {
@@ -67,6 +195,16 @@ body::-webkit-scrollbar-track {
 }
 
 .custom-select option {
-  background-color: #0A0B20; 
-  color: white; 
+  background-color: #0a0b20;
+  color: white;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-linea/50 rounded-full hover:bg-linea/80;
 }

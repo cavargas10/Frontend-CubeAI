@@ -1,21 +1,17 @@
-// src/App.jsx
 import React, { lazy, Suspense } from "react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom"; // Importa Navigate
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useAuth } from "./features/auth/hooks/useAuth";
 import { PredictionProvider } from "./features/prediction/context/PredictionContext";
 import { ProtectedRoute } from "./features/auth/components/ProtectedRoute";
-import { ErrorBoundaryFallbackUI } from "./components/ui/ErrorBoundaryFallbackUI"; // Asegúrate de que este componente exista
-
-// --- Lazy Loading ---
-// Layouts
+import { ErrorBoundaryFallbackUI } from "./components/ui/ErrorBoundaryFallbackUI";
 
 const PublicLayout = lazy(() =>
   import("./layouts/PublicLayout/PublicLayout").then((module) => ({
     default: module.PublicLayout,
   }))
 );
-const DocsLayout = lazy(() =>
+const DocsLayout = lazy(() => 
   import("./layouts/DocsLayout").then((module) => ({
     default: module.DocsLayout,
   }))
@@ -26,7 +22,6 @@ const DashboardLayout = lazy(() =>
   }))
 );
 
-// Pages Públicas
 const HomePage = lazy(() =>
   import("./pages/HomePage").then((module) => ({ default: module.HomePage }))
 );
@@ -35,8 +30,6 @@ const TutorialsPage = lazy(() =>
     default: module.TutorialsPage,
   }))
 );
-
-// Pages de Autenticación
 const LoginPage = lazy(() =>
   import("./features/auth/pages/LoginPage").then((module) => ({
     default: module.LoginPage,
@@ -72,9 +65,12 @@ const ActionHandlerPage = lazy(() =>
     default: module.ActionHandlerPage,
   }))
 );
-// --- Fin Lazy Loading ---
 
-// --- Error Boundary (sin cambios) ---
+const DocsViewer = lazy(() =>
+  import("./features/documentacion/components/DocsViewer").then((module) => ({
+    default: module.DocsViewer,
+  }))
+);
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -89,7 +85,6 @@ class ErrorBoundary extends React.Component {
   }
   render() {
     if (this.state.hasError) {
-      // Renderiza el componente de fallback pasándole el error y errorInfo
       return (
         <ErrorBoundaryFallbackUI
           error={this.state.error}
@@ -100,91 +95,65 @@ class ErrorBoundary extends React.Component {
     return this.props.children;
   }
 }
-// --- Fin Error Boundary ---
 
-// --- Loading Component ---
 export const Loading = () => (
-  <div className="fixed inset-0 z-[100] flex justify-center items-center bg-principal/80 backdrop-blur-sm">
-    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-morado-gradient"></div>
+  <div className="fixed inset-0 z-[200] flex justify-center items-center bg-principal/90 backdrop-blur-md">
+    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-morado-gradient"></div>
   </div>
 );
-// --- Fin Loading Component ---
 
 export function App() {
-  // Solo obtiene el estado de carga inicial de la autenticación desde useAuth
   const { loadingAuth } = useAuth();
 
-  // Muestra un loading global solo durante la verificación inicial de auth
   if (loadingAuth) {
     return <Loading />;
   }
 
-  // Una vez verificado el estado de auth (cargado), renderiza las rutas
   return (
-    <div className="text-white">
-      {" "}
-      {/* Contenedor principal */}
+    <div className="text-white ">
       <ErrorBoundary>
         <BrowserRouter>
           <Suspense fallback={<Loading />}>
-            {" "}
-            {/* Fallback para Carga Diferida */}
             <Routes>
-              {/* --- Rutas Públicas --- */}
-              <Route element={<PublicLayout />}>
-                {" "}
-                {/* Header público se renderiza aquí */}
-                <Route path="/" element={<HomePage />} />
-                <Route path="/tutoriales" element={<TutorialsPage />} />
-                <Route path="documentos/*" element={<DocsLayout />} />
-                {/* Rutas de Autenticación también usan el Layout Público */}
-                <Route path="/login" element={<LoginPage />} />
+              <Route path="/" element={<PublicLayout />}> 
+                <Route index element={<HomePage />} /> 
+                <Route path="tutoriales" element={<TutorialsPage />} />
+                <Route path="login" element={<LoginPage />} />
                 <Route
-                  path="/register"
+                  path="register"
                   element={
                     <RegisterPage BASE_URL={import.meta.env.VITE_BASE_URL} />
                   }
                 />
-                <Route path="/verify-email" element={<VerifyEmailPage />} />
-                <Route path="/reset-password" element={<ResetPasswordPage />} />
-                <Route path="/action-handler" element={<ActionHandlerPage />} />
-                <Route
-                  path="/change-password"
-                  element={<ChangePasswordPage />}
-                />
-                <Route path="/correct-email" element={<CorrectEmailPage />} />
-                {/* Si alguna página de Auth NO debe tener el Header Público, sácala de este Route padre */}
+                <Route path="verify-email" element={<VerifyEmailPage />} />
+                <Route path="reset-password" element={<ResetPasswordPage />} />
+                <Route path="action-handler" element={<ActionHandlerPage />} />
+                <Route path="change-password" element={<ChangePasswordPage />} />
+                <Route path="correct-email" element={<CorrectEmailPage />} />
+                <Route path="documentos" element={<DocsLayout />}> 
+                  <Route index element={<Navigate to="documento/empezar" replace />} />
+                  <Route path="documento/:slug" element={<DocsViewer />} />
+                  <Route path="*" element={<Navigate to="documento/empezar" replace />} />
+                </Route>
+                 <Route path="*" element={<Navigate to="/" replace />} /> 
               </Route>
 
-              {/* --- Ruta de Documentación --- */}
-              {/* Rutas anidadas para documentos */}
-              <Route path="documentos/*" element={<DocsLayout />} />
-
-              {/* --- Ruta del Dashboard (Protegida) --- */}
               <Route
-                path="/dashboard/*" // Captura todas las sub-rutas del dashboard
+                path="/dashboard/*"
                 element={
                   <ProtectedRoute>
-                    {" "}
-                    {/* 1. Protege la ruta */}
                     <PredictionProvider>
-                      {" "}
-                      {/* 2. Provee el contexto de predicción */}
-                      <DashboardLayout />{" "}
-                      {/* 3. Renderiza el layout del dashboard (SIN PROPS de predicción) */}
+                      <DashboardLayout />
                     </PredictionProvider>
                   </ProtectedRoute>
                 }
               />
-
-              {/* --- Redirección si no coincide ninguna ruta (Opcional 404) --- */}
-              {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
-              {/* O <Route path="*" element={<NotFoundPage />} /> */}
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>
         </BrowserRouter>
       </ErrorBoundary>
-      <SpeedInsights /> {/* Analíticas Vercel */}
+      <SpeedInsights />
     </div>
   );
 }

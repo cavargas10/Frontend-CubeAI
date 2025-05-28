@@ -1,16 +1,13 @@
-¡Entendido! Que sea un proyecto de tesis de la UTPL y que ya esté desplegado en Vercel cambia un poco el enfoque del README. Lo haremos más descriptivo del proyecto en sí y de su propósito académico.
+# Instant3D - Plataforma Web para Generación de Modelos 3D con IA
+## Proyecto de Tesis: "Objetos tridimensionales creados por IA: Innovación en entornos virtuales"
 
-Aquí tienes una versión ajustada, enfocada en ser un README para un proyecto de tesis:
-
-# Instant3D - Plataforma Web para Generación de Modelos 3D con IA (Proyecto de Tesis UTPL) 🚀
-
-**Instant3D** es un proyecto de tesis desarrollado para la Universidad Técnica Particular de Loja (UTPL). Consiste en una plataforma web que permite a los usuarios transformar diversas entradas (texto, imágenes, bocetos) en modelos 3D mediante el uso de Inteligencia Artificial. El frontend de la aplicación está construido con React, Vite y Tailwind CSS.
+**Instant3D** es un proyecto de tesis desarrollado para la Universidad Técnica Particular de Loja (UTPL), enmarcado bajo el título: **"Objetos tridimensionales creados por IA: Innovación en entornos virtuales"**. Consiste en una plataforma web que permite a los usuarios transformar diversas entradas (texto, imágenes, bocetos) en modelos 3D mediante el uso de Inteligencia Artificial. El frontend de la aplicación está construido con React, Vite y Tailwind CSS.
 
 **Proyecto desplegado en:** [https://instant3d.vercel.app/](https://instant3d.vercel.app/)
 
 ## 🎓 Propósito del Proyecto
 
-Este proyecto tiene como objetivo principal investigar y desarrollar una solución accesible para la creación de contenido 3D, democratizando el acceso a herramientas de modelado mediante la aplicación de técnicas de Inteligencia Artificial. Busca facilitar a usuarios, tanto técnicos como no técnicos, la generación de activos 3D a partir de conceptos simples.
+Este proyecto tiene como objetivo principal investigar y desarrollar una solución accesible para la creación de contenido 3D, demostrando la innovación que la Inteligencia Artificial puede aportar a los entornos virtuales. Busca facilitar a usuarios, tanto técnicos como no técnicos, la generación de activos 3D a partir de conceptos simples, contribuyendo así al avance y aplicación de la IA en el modelado tridimensional.
 
 ## ✨ Funcionalidades Principales
 
@@ -62,6 +59,7 @@ Este proyecto tiene como objetivo principal investigar y desarrollar una soluci�
 
 La estructura del proyecto está organizada para facilitar la modularidad y escalabilidad:
 
+```
 Frontend-CubeAI/
 ├── public/ # Archivos estáticos
 ├── src/
@@ -79,48 +77,13 @@ Frontend-CubeAI/
 │ ├── App.jsx # Componente raíz y enrutador principal
 │ ├── main.jsx # Punto de entrada de React
 │ └── index.css # Estilos globales
-├── .env.example # Ejemplo de archivo de variables de entorno
+├── .env.example # Ejemplo de archivo de variables de entorno (local)
 ├── vite.config.js # Configuración de Vite
 ├── tailwind.config.js # Configuración de Tailwind CSS
 └── README.md # Este archivo
+```
 
-## ⚙️ Configuración del Entorno de Desarrollo
-
-Para ejecutar este proyecto localmente, sigue estos pasos:
-
-1.  **Clona el repositorio:**
-    ```bash
-    git clone https://[URL_DE_TU_REPOSITORIO_GIT_SI_APLICA] Frontend-CubeAI
-    cd Frontend-CubeAI
-    ```
-
-2.  **Crea un archivo `.env`** en la raíz del proyecto a partir del `.env.example` (si lo tienes) o directamente con las siguientes variables:
-    ```env
-    # URL de tu instancia de Hygraph
-    VITE_HYGRAPH_URL=TU_HYGRAPH_ENDPOINT
-    VITE_HYGRAPH_PERMANENTAUTH_TOKEN=TU_HYGRAPH_TOKEN
-
-    # Configuración de Firebase
-    VITE_FIREBASE_API_KEY=TU_FIREBASE_API_KEY
-    VITE_FIREBASE_AUTH_DOMAIN=TU_FIREBASE_AUTH_DOMAIN
-    # ... (resto de variables de Firebase)
-    VITE_FIREBASE_APP_ID=TU_FIREBASE_APP_ID
-
-    # URL base de tu API Backend (donde se procesan las predicciones)
-    VITE_BASE_URL=URL_DE_TU_BACKEND
-    ```
-    **Nota:** Estas claves son sensibles y necesarias para la conexión con los servicios externos.
-
-3.  **Instala las dependencias:**
-    ```bash
-    npm install
-    ```
-
-4.  **Ejecuta el servidor de desarrollo:**
-    ```bash
-    npm run dev
-    ```
-    La aplicación estará disponible en [http://localhost:5173](http://localhost:5173) (o el puerto que indique Vite).
+*(Las variables de entorno sensibles como las claves de API de Firebase, Hygraph y la URL del backend son necesarias para la funcionalidad completa y se gestionan de forma segura en el entorno de despliegue).*
 
 ## 🚀 Despliegue
 
@@ -131,9 +94,9 @@ La configuración de Vercel (`vercel.json`) maneja las reescrituras necesarias p
 
 ## 👨‍💻 Autor
 
-*   **Carlos Andrés Vargas Ramírez**
+**Carlos Andrés Vargas Ramírez**
 *   Estudiante de Ingenieria en Sistemas Informáticos y Computación - Universidad Técnica Particular de Loja (UTPL)
 
 ## 📄 Licencia
 
-Este proyecto se presenta como parte de un trabajo de tesis y no está destinado a la distribución o uso comercial sin autorización explícita.
+Este proyecto se presenta como parte del trabajo de tesis **"Objetos tridimensionales creados por IA: Innovación en entornos virtuales"** y su uso está principalmente destinado a fines académicos y de demostración en dicho contexto.

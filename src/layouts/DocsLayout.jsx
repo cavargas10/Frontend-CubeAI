@@ -1,21 +1,32 @@
-import React from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { DocsSidebar } from "../features/documentacion/components/DocsSidebar";
-import { DocsContentAll } from "../features/documentacion/components/DocsContentAll";
-import { DocsViewer } from "../features/documentacion/components/DocsViewer";
 
 export const DocsLayout = () => {
   return (
-    <div className="z-auto sm:grid sm:grid-cols-[320px_1fr] h-screen">
-      <nav className="sm:border-r-2 border-linea overflow-y-auto pt-14 ml-4 sm:ml-10">
+    <div className="flex flex-1 min-h-0">
+      <nav
+        className="
+        sm:w-64 md:w-72 lg:w-80 
+        flex-shrink-0
+        sm:h-[calc(100vh-4rem)] 
+        sm:sticky sm:top-16    
+        border-r-0 sm:border-r-2 border-linea/50
+        z-10
+        bg-fondologin
+        overflow-y-auto custom-scrollbar
+      "
+      >
         <DocsSidebar />
       </nav>
-      <main className="overflow-y-auto sm:pt-24 px-10 bg-fondologin">
-        <Routes>
-          <Route path="/" element={<Navigate to="/documentos/documento/empezar" />} />
-          <Route path="documentos" element={<DocsContentAll />} />
-          <Route path="documento/:slug" element={<DocsViewer />} />
-        </Routes>
+
+      <main
+        className="
+        flex-grow
+        overflow-y-auto
+        px-6 md:px-8 lg:px-12 py-8 md:py-10 
+      "
+      >
+        <Outlet />
       </main>
     </div>
   );
