@@ -208,3 +208,9 @@ body::-webkit-scrollbar-track {
 .custom-scrollbar::-webkit-scrollbar-thumb {
   @apply bg-linea/50 rounded-full hover:bg-linea/80;
 }
+/* Estilos para el botón de play de LiteYouTubeEmbed */
+.lty-playbtn {
+  background-image: linear-gradient(to right, theme('colors.azul-gradient'), theme('colors.morado-gradient')) !important;
+  background-color: transparent !important;
+}
+
