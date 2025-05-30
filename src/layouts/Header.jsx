@@ -112,23 +112,44 @@ export const Header = ({ user }) => {
           <button
             name="menu"
             aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-header-menu"
             className={`
               block md:hidden
               w-11 h-11 rounded-lg shadow-lg
-              bg-gradient-to-r from-[#3333EA] to-[#A975FF]
+              bg-gradient-to-br from-azul-gradient to-morado-gradient
               text-white transition-all duration-300 ease-in-out
-              hover:scale-105 hover:shadow-xl
-              focus:outline-none focus:ring-3 focus:ring-[#A975FF]/30
-              flex items-center justify-center
-              ${isMenuOpen ? "rotate-90 shadow-2xl" : "rotate-0"}
+              hover:scale-105 hover:from-morado-gradient hover:to-azul-gradient
+              focus:outline-none focus:ring-3 focus:ring-morado-gradient/40
+              flex items-center justify-center relative overflow-hidden
             `}
             onClick={toggleMenu}
           >
-            {isMenuOpen ? (
-              <X size={22} weight="bold" />
-            ) : (
-              <List size={22} weight="bold" />
-            )}
+            <List
+              size={24}
+              weight="bold"
+              className={`
+                transition-all duration-300 ease-in-out
+                ${
+                  isMenuOpen
+                    ? "opacity-0 transform rotate-45 scale-75"
+                    : "opacity-100 transform rotate-0 scale-100"
+                }
+              `}
+            />
+
+            <X
+              size={24}
+              weight="bold"
+              className={`
+                absolute transition-all duration-300 ease-in-out
+                ${
+                  isMenuOpen
+                    ? "opacity-100 transform rotate-0 scale-100"
+                    : "opacity-0 transform -rotate-45 scale-75"
+                }
+              `}
+            />
           </button>
         </div>
       </header>
@@ -148,7 +169,6 @@ export const Header = ({ user }) => {
             }}
           />
 
-          {/* Panel deslizable - CORREGIDO z-index y posición */}
           <div
             className={`
             md:hidden fixed left-0 right-0 z-40
@@ -163,16 +183,12 @@ export const Header = ({ user }) => {
               overflowY: "auto",
             }}
           >
-            {/* Header del drawer */}
             <div className="flex items-center justify-between p-4 border-b border-gray-700/30 bg-fondologin/80">
               <h2 className="text-lg font-bold text-white">Menú</h2>
               <div className="w-8 h-1 bg-gradient-to-r from-[#3333EA] to-[#A975FF] rounded-full"></div>
             </div>
-
-            {/* Contenido */}
             <div className="px-4 py-4">
               <div className="flex flex-col gap-2">
-                {/* Enlaces principales */}
                 <Link
                   to="/"
                   className={`
@@ -266,9 +282,7 @@ export const Header = ({ user }) => {
                   />
                 </Link>
               </div>
-
               <div className="mx-0 my-4 h-[1px] bg-gradient-to-r from-transparent via-gray-700 to-transparent"></div>
-
               <div className="flex flex-col gap-3">
                 <Link
                   to="/login"
