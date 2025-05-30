@@ -214,3 +214,18 @@ body::-webkit-scrollbar-track {
   background-color: transparent !important;
 }
 
+.custom-scrollbar::-webkit-scrollbar {
+  @apply w-[6px]; /* Ancho del scrollbar */
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-transparent; /* Fondo de la pista transparente */
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  /* Usando tus colores de gradiente para el thumb */
+  background-image: linear-gradient(to bottom, theme('colors.azul-gradient'), theme('colors.morado-gradient'));
+  @apply rounded-full;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  /* Puedes hacer que el gradiente sea más brillante en hover si quieres, o mantenerlo igual */
+  filter: brightness(1.2);
+}
