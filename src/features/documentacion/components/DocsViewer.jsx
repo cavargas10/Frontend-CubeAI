@@ -62,7 +62,7 @@ export const DocsViewer = () => {
     return (
       <div className="flex flex-col justify-center items-center min-h-[calc(100vh-10rem)] text-center p-4"> 
         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-morado-gradient mb-4"></div>
-        <p className="text-lg text-gray-400">Cargando documento...</p>
+        <p className="text-lg text-white">Cargando documento...</p>
       </div>
     );
   }
@@ -74,7 +74,7 @@ export const DocsViewer = () => {
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <h2 className="text-2xl font-semibold text-red-400 mb-3">Error al Cargar</h2>
-        <p className="text-gray-400 max-w-md">{error}</p>
+        <p className="text-white max-w-md">{error}</p>
         <Link
           to="/documentos/documento/empezar" 
           className="mt-8 inline-block px-6 py-2.5 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-lg hover:opacity-90 transition-opacity shadow-md"
@@ -88,7 +88,7 @@ export const DocsViewer = () => {
   if (!documento) {
     return (
       <div className="flex flex-col justify-center items-center min-h-[calc(100vh-10rem)] text-center p-4">
-        <p className="text-xl text-gray-500">Documento no disponible.</p>
+        <p className="text-xl text-white">Documento no disponible.</p>
         <Link
           to="/documentos/documento/empezar"
           className="mt-8 inline-block px-6 py-2.5 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-lg hover:opacity-90 transition-opacity shadow-md"
@@ -100,9 +100,9 @@ export const DocsViewer = () => {
   }
 
   return (
-    <article ref={contentRef} className="prose prose-invert w-full max-w-none">
+    <article ref={contentRef} className="prose prose-invert w-full max-w-none mt-4">
       
-      <h1 className="text-4xl sm:text-5xl lg:text-6xl mt-0 font-extrabold bg-gradient-to-r from-azul-gradient to-morado-gradient text-transparent bg-clip-text "
+      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold bg-gradient-to-r from-azul-gradient to-morado-gradient text-transparent bg-clip-text "
           style={{textShadow: "0 0 15px theme('colors.morado-gradient / 30%'), 0 0 5px theme('colors.azul-gradient / 20%')"}}
       >
           {documento.titulo}

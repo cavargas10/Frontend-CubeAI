@@ -35,12 +35,12 @@ body::-webkit-scrollbar-track {
 .prose h4,
 .prose h5,
 .prose h6 {
-  @apply font-bold tracking-tight text-gray-100; 
+  @apply font-bold tracking-tight text-white; 
   letter-spacing: -0.025em; 
 }
 
 .prose h1 {
-  @apply text-3xl sm:text-4xl lg:text-5xl mt-6 mb-10 font-extrabold text-gray-100;
+  @apply text-3xl sm:text-4xl lg:text-5xl mt-8 mb-10 font-extrabold text-white;
   @apply relative pb-6;
   &::after {
     content: "";
@@ -57,16 +57,16 @@ body::-webkit-scrollbar-track {
 }
 
 .prose h3 {
-  @apply text-2xl sm:text-3xl mt-12 mb-6 font-bold text-gray-200;
+  @apply text-2xl sm:text-3xl mt-12 mb-6 font-bold text-white;
 }
 
 .prose h4 {
-  @apply text-xl sm:text-2xl mt-10 mb-5 font-semibold text-gray-300;
+  @apply text-xl sm:text-2xl mt-10 mb-5 font-semibold text-white;
 }
 
 /* --- Párrafos y Texto --- */
 .prose p {
-  @apply my-6 text-base sm:text-lg text-gray-300;
+  @apply my-6 text-base sm:text-lg text-white;
 }
 
 .prose a {
@@ -159,15 +159,25 @@ body::-webkit-scrollbar-track {
 
 /* --- Imágenes --- */
 .prose figure {
-  @apply my-10 p-1 rounded-lg bg-gradient-to-br from-azul-gradient/20 via-principal/0 to-morado-gradient/20 transition-all duration-300 hover:shadow-[0_0_30px_theme('colors.morado-gradient'/40%)];
+  @apply my-10 p-1 rounded-lg 
+         bg-gradient-to-br from-azul-gradient/20 via-principal/0 to-morado-gradient/20 
+         border border-transparent
+         transition-all duration-300 
+         hover:border-azul-gradient
+         hover:shadow-[0_10px_30px_rgba(51,51,234,0.2),0_0_15px_rgba(51,51,234,0.8),0_0_30px_theme('colors.morado-gradient'/40%)];
 }
+
 .prose figure img {
   @apply block max-w-full h-auto rounded-md shadow-xl border-0; 
   margin: 0 !important; 
 }
 
 .prose img:not(figure > img) {
-  @apply max-w-full h-auto my-10 rounded-lg shadow-xl border-2 border-linea/20 hover:border-morado-gradient transition-all duration-300;
+  @apply my-10 rounded-lg shadow-xl 
+         border-2 border-linea/20 
+         transition-all duration-300 
+         hover:border-azul-gradient 
+         hover:shadow-[0_10px_30px_rgba(51,51,234,0.2),0_0_15px_rgba(51,51,234,0.8)]; 
 }
 
 /* --- Citas --- */
@@ -208,25 +218,23 @@ body::-webkit-scrollbar-track {
 .custom-scrollbar::-webkit-scrollbar-thumb {
   @apply bg-linea/50 rounded-full hover:bg-linea/80;
 }
-/* Estilos para el botón de play de LiteYouTubeEmbed */
+
 .lty-playbtn {
   background-image: linear-gradient(to right, theme('colors.azul-gradient'), theme('colors.morado-gradient')) !important;
   background-color: transparent !important;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  @apply w-[6px]; /* Ancho del scrollbar */
+  @apply w-[6px];
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  @apply bg-transparent; /* Fondo de la pista transparente */
+  @apply bg-transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  /* Usando tus colores de gradiente para el thumb */
   background-image: linear-gradient(to bottom, theme('colors.azul-gradient'), theme('colors.morado-gradient'));
   @apply rounded-full;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  /* Puedes hacer que el gradiente sea más brillante en hover si quieres, o mantenerlo igual */
   filter: brightness(1.2);
 }
 

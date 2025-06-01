@@ -64,15 +64,14 @@ export const DocsSidebar = () => {
                 <li key={documento.slug}>
                   <Link
                     className={`
-                      flex items-center transition-all duration-200 ease-in-out
-                      group relative block rounded-md
+                      flex items-center transition-all duration-200 ease-in-out group relative rounded-md
                       ${isMobile 
                         ? 'py-2.5 px-2 text-base' 
                         : 'py-2 px-3 text-sm'
                       }
                       ${isActive
                         ? "bg-gradient-to-r from-azul-gradient/25 to-morado-gradient/25 text-white font-semibold"
-                        : "text-gray-300 hover:text-white hover:bg-linea/15 hover:translate-x-0.5"
+                        : "text-white hover:bg-linea/15 hover:translate-x-0.5"
                       }
                     `}
                     to={`/documentos/documento/${documento.slug}`}
@@ -172,7 +171,7 @@ export const DocsSidebar = () => {
       >
         <div className="flex items-center justify-between p-4 border-b border-linea/20 sticky top-0 z-10">
           <h2 className="text-lg font-bold text-white">Documentación</h2>
-          <button onClick={toggleMenu} className="p-1 text-gray-400 hover:text-white rounded-md hover:bg-linea/20">
+          <button onClick={toggleMenu} className="p-1 text-white rounded-md hover:bg-linea/20">
           </button>
         </div>
         
