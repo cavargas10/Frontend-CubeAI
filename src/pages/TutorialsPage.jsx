@@ -50,11 +50,11 @@ export const TutorialsPage = () => {
     <div className="min-h-screen pt-16 sm:pt-24 pb-16 bg-fondologin">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-12 md:mb-16 text-center">
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-100 mb-3">
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-3">
             Tutoriales
           </h1>
           <div className="mt-3 w-32 md:w-40 h-1 bg-gradient-to-r from-azul-gradient to-morado-gradient rounded-full mx-auto shadow-md shadow-morado-gradient/30" />
-          <p className="text-lg text-gray-400 max-w-2xl mx-auto mt-6">
+          <p className="text-lg text-white max-w-2xl mx-auto mt-6">
             Descubre nuestra colección de tutoriales diseñados para ayudarte a
             dominar Instant3D.
           </p>
@@ -76,7 +76,7 @@ export const TutorialsPage = () => {
             <div className="text-center py-16">
               <div className="max-w-md mx-auto">
                 <svg
-                  className="mx-auto h-16 w-16 text-gray-500 mb-4"
+                  className="mx-auto h-16 w-16 text-white mb-4"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -89,7 +89,7 @@ export const TutorialsPage = () => {
                     d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9A2.25 2.25 0 0013.5 5.25h-9A2.25 2.25 0 002.25 7.5v9A2.25 2.25 0 004.5 18.75z"
                   />
                 </svg>
-                <h3 className="mt-2 text-xl font-semibold text-gray-200">
+                <h3 className="mt-2 text-xl font-semibold text-white">
                   Aún no hay tutoriales disponibles
                 </h3>
                 <p className="mt-1 text-sm text-gray-400">
