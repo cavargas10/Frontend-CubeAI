@@ -13,7 +13,7 @@ export const FooterSection = () => {
       {/* Contenedor Principal */}
       <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 relative z-10">
         {/* Logo Section */}
-        <div className="sm:col-span-1 flex flex-col items-center justify-center sm:border-r-2 border-opacity-20 border-gray-300">
+        <div className="sm:col-span-1 flex flex-col items-center justify-center sm:border-r-4  border-white">
           <img
             src={logo}
             alt="Logo"
@@ -21,21 +21,18 @@ export const FooterSection = () => {
           />
         </div>
 
-        {/* Content Section */}
         <div className="sm:col-span-2 flex flex-col justify-center">
           <div className="flex flex-col sm:flex-row items-center justify-between space-y-6 sm:space-y-0 sm:space-x-12">
-            {/* Texto Descriptivo */}
             <div className="text-center sm:text-left max-w-md">
               <h2 className="text-3xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-azul-gradient via-primary to-morado-gradient animate-text-glow">
                 COMIENZA TU AVENTURA
               </h2>
-              <p className="text-gray-300 leading-relaxed">
+              <p className="text-white leading-relaxed">
                 Empieza a generar objetos 3D únicos gracias al texto o imagen
                 que proporciones como entrada.
               </p>
             </div>
 
-            {/* Botón */}
             <div className="flex items-center justify-center">
               <Button
                 to="/login"
@@ -49,8 +46,7 @@ export const FooterSection = () => {
         </div>
       </div>
 
-      {/* Copyright Section */}
-      <div className="text-center text-gray-400 mt-12 pt-6 border-t border-opacity-10 border-gray-300">
+      <div className="text-center text-white mt-12 pt-6">
         <p className="text-sm">
           Copyright © Instant3D 2024. Todos los derechos reservados.
         </p>

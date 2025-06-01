@@ -229,3 +229,25 @@ body::-webkit-scrollbar-track {
   /* Puedes hacer que el gradiente sea más brillante en hover si quieres, o mantenerlo igual */
   filter: brightness(1.2);
 }
+
+/*Animaciones y estilos para Metodos de Generacion*/
+  @keyframes fadeDown {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
+    100% { transform: translateY(0); }
+  }
+  @keyframes fadeRight {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(5px); }
+    100% { transform: translateX(0); }
+  }
+  .animate-fade-down {
+    animation: fadeDown 1.5s infinite ease-in-out;
+  }
+  .animate-fade-right {
+    animation: fadeRight 1.5s infinite ease-in-out;
+  }
+  .group:hover .input-output-image {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+  }

@@ -7,7 +7,6 @@ export function HeroSection() {
     <section className="py-10 md:py-14">
       <div className="container px-4 md:px-6">
         <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
-          {/* Texto principal */}
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-gradient-to-r from-azul-gradient via-primary to-morado-gradient bg-clip-text text-transparent text-glow">
@@ -18,7 +17,6 @@ export function HeroSection() {
                 impresionantes modelos 3D en segundos.
               </p>
             </div>
-            {/* Botón "Pruébalo Gratis" */}
             <div className="flex flex-col gap-2 min-[400px]:flex-row">
               <Button
                 to="/login"
@@ -29,11 +27,9 @@ export function HeroSection() {
               </Button>
             </div>
           </div>
-
-          {/* Imagen destacada */}
           <div className="relative mx-auto aspect-square w-full max-w-[500px] overflow-hidden rounded-xl bg-secondary/30 lg:order-last">
             <img
-              src={logo} // Ruta de tu imagen local
+              src={logo} 
               alt="Muestra de modelo 3D"
               className="w-full h-full object-cover"
             />

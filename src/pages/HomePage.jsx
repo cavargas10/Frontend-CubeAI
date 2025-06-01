@@ -11,10 +11,7 @@ import { ParticleBackground }from "../components/ui/ParticleBackground";
 export const HomePage = () => {
   return (
     <main className="pt-24 relative">
-      {/* Agrega el fondo de partículas */}
       <ParticleBackground />
-
-      {/* Contenido principal */}
       <div className="w-full px-10 2xl:px-44 relative z-10">
         <HeroSection />
         <LogosSection />

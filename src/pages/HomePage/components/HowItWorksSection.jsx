@@ -4,7 +4,6 @@ export function HowItWorksSection() {
   return (
     <section id="como-funciona" className="py-20 bg-secondary/5">
       <div className="container px-4 md:px-6">
-        {/* Encabezado */}
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
             <div className="inline-block rounded-lg bg-primary/10 border border-primary/20 px-3 py-1 text-sm font-bold text-primary mb-2 bg-azul-gradient">
@@ -20,16 +19,14 @@ export function HowItWorksSection() {
           </div>
         </div>
 
-        {/* Tarjetas de Pasos */}
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {/* Paso 1 */}
-          <div className="relative flex flex-col items-center space-y-4 rounded-2xl border border-gray-700 backdrop-blur-xl p-6 shadow-lg">
+          <div className="group relative flex flex-col items-center space-y-4 rounded-2xl border border-border/40 bg-transparent backdrop-blur-xl p-6 shadow-lg transition-all duration-300 hover:border-azul-gradient hover:shadow-[0_10px_30px_rgba(51,51,234,0.2),0_0_15px_rgba(51,51,234,0.8)]">
             <div className="absolute top-[-1rem] left-1/2 transform -translate-x-1/2 rounded-full bg-azul-gradient px-3 py-1 text-base font-bold text-white font-heading">
               Paso 1
             </div>
             <div className="rounded-full bg-gradient-to-r from-azul-gradient to-morado-gradient p-6">
               <StackSimple
-                className="h-8 w-8 text-white transition-transform duration-300 hover:scale-125"
+                className="h-8 w-8 text-white transition-transform duration-300 group-hover:scale-125"
                 weight="bold"
               />
             </div>
@@ -42,14 +39,13 @@ export function HowItWorksSection() {
             </p>
           </div>
 
-          {/* Paso 2 */}
-          <div className="relative flex flex-col items-center space-y-4 rounded-2xl border border-gray-700 backdrop-blur-xl p-6 shadow-lg">
+          <div className="group relative flex flex-col items-center space-y-4 rounded-2xl border border-border/40 bg-transparent backdrop-blur-xl p-6 shadow-lg transition-all duration-300 hover:border-azul-gradient hover:shadow-[0_10px_30px_rgba(51,51,234,0.2),0_0_15px_rgba(51,51,234,0.8)]">
             <div className="absolute top-[-1rem] left-1/2 transform -translate-x-1/2 rounded-full bg-azul-gradient px-3 py-1 text-base font-bold text-white font-heading">
               Paso 2
             </div>
             <div className="rounded-full bg-gradient-to-r from-azul-gradient to-morado-gradient p-6">
               <Lightning
-                className="h-8 w-8 text-white transition-transform duration-300 hover:scale-125"
+                className="h-8 w-8 text-white transition-transform duration-300 group-hover:scale-125"
                 weight="bold"
               />
             </div>
@@ -62,14 +58,13 @@ export function HowItWorksSection() {
             </p>
           </div>
 
-          {/* Paso 3 */}
-          <div className="relative flex flex-col items-center space-y-4 rounded-2xl border border-gray-700 backdrop-blur-xl p-6 shadow-lg">
+          <div className="group relative flex flex-col items-center space-y-4 rounded-2xl border border-border/40 bg-transparent backdrop-blur-xl p-6 shadow-lg transition-all duration-300 hover:border-azul-gradient hover:shadow-[0_10px_30px_rgba(51,51,234,0.2),0_0_15px_rgba(51,51,234,0.8)]">
             <div className="absolute top-[-1rem] left-1/2 transform -translate-x-1/2 rounded-full bg-azul-gradient px-3 py-1 text-base font-bold text-white font-heading">
               Paso 3
             </div>
             <div className="rounded-full bg-gradient-to-r from-azul-gradient to-morado-gradient p-6">
               <Clock
-                className="h-8 w-8 text-white transition-transform duration-300 hover:scale-125"
+                className="h-8 w-8 text-white transition-transform duration-300 group-hover:scale-125"
                 weight="bold"
               />
             </div>

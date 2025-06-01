@@ -1,5 +1,3 @@
-import React from "react";
-
 import { CarruselItem } from "../../../components/ui/CarruselItem";
 
 export const MarqueeSection = () => {
