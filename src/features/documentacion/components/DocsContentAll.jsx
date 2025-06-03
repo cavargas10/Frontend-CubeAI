@@ -1,34 +1,32 @@
-import React, { useEffect, useState } from "react";
-import client from "../../../config/client";
-import { GET_HYGRAPH } from "../../../lib/hygraph/queries";
+import { useDocumentation } from "../context/DocumentationContext"; 
 
 export const DocsContentAll = () => {
-  const [categorias, setCategorias] = useState([]);
+  const { categorias, loading, error } = useDocumentation();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await client.request(GET_HYGRAPH);
-        setCategorias(data.categorias);
-      } catch (error) {
-      }
-    };
+  if (loading) {
+    return <div className="p-4 text-white animate-pulse">Cargando todos los documentos...</div>;
+  }
 
-    fetchData();
-  }, []);
+  if (error) {
+    return <div className="p-4 text-red-400">Error al cargar documentos: {error}</div>;
+  }
+
+  if (!categorias || categorias.length === 0) {
+    return <div className="p-4 text-gray-400">No hay documentos para mostrar.</div>;
+  }
 
   return (
-    <div className="">
+    <div className="prose prose-invert max-w-none p-4"> 
       {categorias.map((categoria) => (
-        <div key={categoria.slug}>
-          <h2>{categoria.titulo}</h2>
+        <div key={categoria.slug} className="mb-8">
+          <h2 className="text-3xl font-bold border-b border-linea/30 pb-2 mb-4">{categoria.titulo}</h2>
           {categoria.documentos.map((documento) => (
-            <div key={documento.slug} id={documento.slug}>
-              <h3>{documento.titulo}</h3>
+            <section key={documento.slug} id={documento.slug} className="mb-6">
+              <h3 className="text-2xl font-semibold mb-2">{documento.titulo}</h3>
               <div
                 dangerouslySetInnerHTML={{ __html: documento.contenido.html }}
               />
-            </div>
+            </section>
           ))}
         </div>
       ))}

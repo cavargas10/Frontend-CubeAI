@@ -5,6 +5,7 @@ import { useAuth } from "./features/auth/hooks/useAuth";
 import { PredictionProvider } from "./features/prediction/context/PredictionContext";
 import { ProtectedRoute } from "./features/auth/components/ProtectedRoute";
 import { ErrorBoundaryFallbackUI } from "./components/ui/ErrorBoundaryFallbackUI";
+import { DocumentationProvider } from "./features/documentacion/context/DocumentationContext"; 
 
 const PublicLayout = lazy(() =>
   import("./layouts/PublicLayout/PublicLayout").then((module) => ({
@@ -67,7 +68,7 @@ const ActionHandlerPage = lazy(() =>
 );
 
 const DocsViewer = lazy(() =>
-  import("./features/documentacion/components/DocsViewer").then((module) => ({
+  import("./features/documentacion/components/DocsViewer").then((module) => ({ 
     default: module.DocsViewer,
   }))
 );
@@ -130,7 +131,15 @@ export function App() {
                 <Route path="action-handler" element={<ActionHandlerPage />} />
                 <Route path="change-password" element={<ChangePasswordPage />} />
                 <Route path="correct-email" element={<CorrectEmailPage />} />
-                <Route path="documentos" element={<DocsLayout />}> 
+                
+                <Route 
+                  path="documentos" 
+                  element={
+                    <DocumentationProvider>
+                      <DocsLayout />
+                    </DocumentationProvider>
+                  }
+                > 
                   <Route index element={<Navigate to="documento/empezar" replace />} />
                   <Route path="documento/:slug" element={<DocsViewer />} />
                   <Route path="*" element={<Navigate to="documento/empezar" replace />} />
@@ -148,7 +157,7 @@ export function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<Navigate to="/" replace />} />  
             </Routes>
           </Suspense>
         </BrowserRouter>

@@ -81,6 +81,14 @@ body::-webkit-scrollbar-track {
   }
 }
 
+.prose a.nav-button::after {
+  display: none !important;
+}
+
+.prose a.nav-button:hover::after {
+  display: none !important;
+}
+
 .prose strong {
   @apply text-gray-200 font-semibold;
 }

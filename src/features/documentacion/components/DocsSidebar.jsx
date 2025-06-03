@@ -1,26 +1,12 @@
 import { useEffect, useState } from "react";
-import client from "../../../config/client";
-import { GET_HYGRAPH } from "../../../lib/hygraph/queries";
 import { Link, useLocation } from "react-router-dom";
 import { CaretLineRight, CaretLineLeft } from "@phosphor-icons/react"; 
+import { useDocumentation } from "../context/DocumentationContext"; 
 
 export const DocsSidebar = () => {
-  const [categorias, setCategorias] = useState([]);
+  const { categorias, loading: contextLoading, error: contextError } = useDocumentation();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await client.request(GET_HYGRAPH);
-        setCategorias(data.categorias || []);
-      } catch (error) {
-        console.error("Error fetching sidebar data:", error);
-        setCategorias([]);
-      }
-    };
-    fetchData();
-  }, []);
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -43,8 +29,19 @@ export const DocsSidebar = () => {
     }
   };
 
+  if (contextLoading) {
+    return <div className="p-4 text-white animate-pulse">Cargando menú...</div>;
+  }
+
+  if (contextError) {
+    return <div className="p-4 text-red-400">Error al cargar el menú.</div>;
+  }
+
   const renderLinks = (isMobile = false) => (
     <div className={`${isMobile ? 'space-y-3 p-4' : 'space-y-3'}`}>
+      {(!categorias || categorias.length === 0) && !contextLoading && (
+        <p className="text-gray-400 px-3 py-2">No hay categorías disponibles.</p>
+      )}
       {categorias.map((categoria) => (
         <div key={categoria.slug}>
           <h3
@@ -66,27 +63,23 @@ export const DocsSidebar = () => {
                     className={`
                       flex items-center transition-all duration-200 ease-in-out group relative rounded-md
                       ${isMobile 
-                        ? 'py-2.5 px-2 text-base' 
+                        ? 'py-2.5 px-3 text-base' 
                         : 'py-2 px-3 text-sm'
                       }
                       ${isActive
-                        ? "bg-gradient-to-r from-azul-gradient/25 to-morado-gradient/25 text-white font-semibold"
+                        ? "bg-gradient-to-r from-[#3333EA]/30 to-[#A975FF]/30 text-white font-semibold shadow-sm border-l-4 border-[#A975FF]"
                         : "text-white hover:bg-linea/15 hover:translate-x-0.5"
                       }
                     `}
                     to={`/documentos/documento/${documento.slug}`}
                     onClick={isMobile ? handleLinkClickMobile : undefined}
                   >
-                    {isActive && !isMobile && (
-                      <span className="absolute left-0 top-1/2 -translate-y-1/2 h-3/5 w-[3px] bg-morado-gradient rounded-r-full"></span>
-                    )}
-                    {isActive && isMobile && (
-                      <span className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-[3px] bg-morado-gradient "></span>
+                    {isActive && (
+                      <span className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#3333EA] to-[#A975FF] rounded-r-sm"></span>
                     )}
                     <span className={`
                       transition-all duration-200
-                      ${isActive && !isMobile ? 'ml-2' : 'ml-0'}
-                      ${isActive && isMobile ? 'ml-2' : 'ml-0'} 
+                      ${isActive ? 'ml-2' : 'ml-0'}
                     `}>
                       {documento.titulo}
                     </span>
@@ -164,15 +157,14 @@ export const DocsSidebar = () => {
           shadow-2xl border-r border-linea/20
           transform transition-transform duration-300 ease-in-out
           flex flex-col
-          ${headerHeightClass} /* Aplicamos la clase para el top */
+          ${headerHeightClass} 
           ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
+        style={{ height: `calc(100vh - 4rem)` }} 
         aria-hidden={!isMenuOpen}
       >
-        <div className="flex items-center justify-between p-4 border-b border-linea/20 sticky top-0 z-10">
+        <div className="flex items-center justify-between p-4 border-b border-linea/20 sticky top-0 z-10 bg-fondologin">
           <h2 className="text-lg font-bold text-white">Documentación</h2>
-          <button onClick={toggleMenu} className="p-1 text-white rounded-md hover:bg-linea/20">
-          </button>
         </div>
         
         <nav className="flex-grow overflow-y-auto custom-scrollbar">
