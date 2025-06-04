@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { getAuth, applyActionCode } from "firebase/auth";
+import { getAuth, applyActionCode, checkActionCode } from "firebase/auth";
+import { CheckCircle, XCircle } from "@phosphor-icons/react";
 
 export const ActionHandlerPage = () => {
   const navigate = useNavigate();
@@ -16,89 +17,129 @@ export const ActionHandlerPage = () => {
 
       if (!oobCode) {
         setError("No se encontró un código de acción válido en la URL.");
+        setProcessing(false);
         setTimeout(() => navigate("/login"), 3000);
         return;
       }
 
       try {
         if (mode === "resetPassword") {
-          // Para reseteo de contraseña, sí hacemos redirección
           navigate(`/change-password?oobCode=${oobCode}`);
         } else if (mode === "verifyEmail") {
-          // Verifica que sea el usuario actual
-          if (!auth.currentUser) {
-            await new Promise((resolve) => {
-              const unsubscribe = auth.onAuthStateChanged((user) => {
-                if (user) {
-                  unsubscribe();
-                  resolve();
-                }
-              });
-              // Timeout para evitar espera infinita
-              setTimeout(() => {
-                unsubscribe();
-                resolve();
-              }, 5000);
-            });
+          try {
+            await checkActionCode(auth, oobCode);
+          } catch (codeError) {
+            console.error("Error al validar el código de acción:", codeError);
+            if (codeError.code === "auth/invalid-action-code") {
+              setError("El código de acción no es válido o ha expirado.");
+            } else {
+              setError("Hubo un problema al validar el código de acción.");
+            }
+            setProcessing(false);
+            setTimeout(() => navigate("/login"), 3000);
+            return;
           }
-
-          // Para verificación de correo, aplicamos el código directamente aquí
           await applyActionCode(auth, oobCode);
-
-          // Esperar un momento antes de redirigir
           setTimeout(() => {
             setProcessing(false);
-            // Redirigir al dashboard o a una página de éxito después de un tiempo
             setTimeout(() => navigate("/dashboard?verified=true"), 2000);
           }, 1000);
         } else {
           setError("Acción no reconocida.");
+          setProcessing(false);
           setTimeout(() => navigate("/login"), 3000);
         }
-      } finally {
+      } catch (err) {
+        console.error("Error al procesar la solicitud:", err);
+        if (err.code === "auth/invalid-action-code") {
+          setError("El código de acción no es válido o ha expirado.");
+        } else {
+          setError("Error al procesar la solicitud. Inténtalo de nuevo.");
+        }
         setProcessing(false);
+        setTimeout(() => navigate("/login"), 3000);
       }
     };
 
     handleAction();
   }, [searchParams, navigate, auth]);
 
-  // Renderizar UI según el estado
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-principal text-white p-4">
-      {processing && (
-        <>
-          <h2 className="text-xl mb-4">Procesando tu solicitud...</h2>
-          <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-        </>
-      )}
-
-      {!processing && !error && (
-        <>
-          <div className="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center mb-4">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-8 w-8 text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
+    <div className="h-screen pt-16 bg-fondologin text-gray-100 flex items-center justify-center overflow-hidden">
+      <div className="w-full max-w-md space-y-8 p-6 sm:p-12">
+        {processing && (
+          <div className="text-center">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-azul-gradient to-morado-gradient p-0.5">
+              <div className="w-full h-full rounded-full bg-fondologin flex items-center justify-center">
+                <svg
+                  className="animate-spin h-10 w-10 text-azul-gradient"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+            <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-azul-gradient to-morado-gradient mb-2">
+              Procesando tu solicitud
+            </h1>
+            <p className="text-base">Por favor espera un momento...</p>
           </div>
-          <h1 className="text-2xl font-medium mb-4 text-center bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-green-700">
-            ¡Correo verificado con éxito!
-          </h1>
-          <p className="text-gray-400 text-sm text-center">
-            Redirigiendo al dashboard...
-          </p>
-        </>
-      )}
+        )}
+
+        {!processing && !error && (
+          <div className="text-center">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-green-500 to-green-600 p-0.5">
+              <div className="w-full h-full rounded-full bg-fondologin flex items-center justify-center">
+                <CheckCircle
+                  className="h-10 w-10 text-green-500"
+                  weight="fill"
+                />
+              </div>
+            </div>
+            <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-green-600 mb-2">
+              ¡Correo verificado con éxito!
+            </h1>
+            <p className="text-base mb-4">
+              Tu cuenta ha sido verificada correctamente.
+            </p>
+            <p className="text-sm text-gray-400">
+              Redirigiendo al dashboard...
+            </p>
+          </div>
+        )}
+
+        {!processing && error && (
+          <div className="text-center space-y-6">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-red-500 to-red-600 p-0.5">
+              <div className="w-full h-full rounded-full bg-fondologin flex items-center justify-center">
+                <XCircle className="h-10 w-10 text-red-500" weight="fill" />
+              </div>
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-red-600 mb-2">
+                Error
+              </h1>
+              <p className="text-base mb-4">{error}</p>
+              <p className="text-sm text-gray-400">
+                Redirigiendo al login...
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

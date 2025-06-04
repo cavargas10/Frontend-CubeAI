@@ -154,7 +154,7 @@ export const Header = ({ user }) => {
         </div>
       </header>
 
-      <div className="fixed top-16 left-0 w-full h-[1px] bg-gray-700 z-50"></div>
+      <div className="fixed top-16 left-0 w-full h-[1px] bg-gray-700 z-auto"></div>
 
       {isMenuOpen && (
         <>

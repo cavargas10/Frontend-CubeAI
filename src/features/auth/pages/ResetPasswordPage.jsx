@@ -1,40 +1,34 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Envelope, ArrowLeft } from "@phosphor-icons/react";
+import { Envelope, ArrowLeft, CheckCircle, XCircle } from "@phosphor-icons/react";
 import { auth } from "../../../config/firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { GeometricParticles } from "../../../components/ui/GeometricParticles";
-import { ErrorModal } from "../../../components/modals/ErrorModal";
 
 export const ResetPasswordPage = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [error, setError] = useState(null);
-  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [canResend, setCanResend] = useState(true);
-  const [timer, setTimer] = useState(60);
+  const [countdown, setCountdown] = useState(0);
   const navigate = useNavigate();
 
   const handleGoToLogin = () => {
     navigate("/login");
   };
 
-  // Validación del correo electrónico
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   useEffect(() => {
-    if (!canResend && timer > 0) {
-      const interval = setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-      return () => clearInterval(interval);
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
     }
-    if (timer === 0) {
+    if (countdown === 0 && !canResend) {
       setCanResend(true);
-      setTimer(60);
     }
-  }, [timer, canResend]);
+  }, [countdown, canResend]);
 
   useEffect(() => {
     if (message) {
@@ -47,168 +41,123 @@ export const ResetPasswordPage = () => {
 
   const handleResetPassword = async () => {
     if (!isValidEmail) {
-      setError("Por favor, ingresa un correo electrónico válido.");
-      setShowErrorModal(true);
+      setErrorMessage("Por favor, ingresa un correo electrónico válido.");
       return;
     }
 
     setIsLoading(true);
     setCanResend(false);
+    setErrorMessage("");
 
     try {
       await sendPasswordResetEmail(auth, email);
-      setMessage(
-        "Se ha enviado un enlace para restablecer la contraseña a tu correo electrónico."
-      );
+      setMessage("Se ha enviado un enlace para restablecer la contraseña.");
+      setCountdown(60);
     } catch (error) {
-      setError(
+      setErrorMessage(
         error.message ||
           "Hubo un error al enviar el correo. Por favor, inténtalo de nuevo."
       );
-      setShowErrorModal(true);
+      setCanResend(true);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const closeErrorModal = () => {
-    setShowErrorModal(false);
-    setError(null);
-  };
-
   return (
-    <div className="flex flex-col lg:flex-row h-screen justify-center gap-8 items-center px-4 pt-16">
-      {/* Contenedor principal */}
-      <div className="w-full lg:w-2/5 rounded-lg border border-[#243166] bg-principal p-4 lg:px-8 lg:py-6">
-        <div className="text-center">
-          {/* Título con gradientes */}
-          <h1
-            className="text-xl lg:text-3xl font-medium mb-4 bg-clip-text text-transparent bg-gradient-to-r from-azul-gradient to-morado-gradient py-2"
-            style={{ lineHeight: "1.2" }}
-          >
-            Restablecer contraseña
-          </h1>
-
-          <p className="text-gray-400 text-sm lg:text-base mb-5">
-            Ingresa tu correo electrónico para recibir un enlace de
-            restablecimiento.
-          </p>
-
-          {/* Bloque de información de correo electrónico */}
-          <div className="py-4 px-3 border border-[#243166] rounded-lg mb-5 bg-fondologin">
-            {/* Campo de correo electrónico */}
-            <div className="relative my-2">
+    <div className="h-screen pt-16 bg-fondologin text-gray-100 flex overflow-hidden">
+      <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-6 sm:p-12 h-full">
+        <div className="w-full max-w-md space-y-8">
+          <div className="text-center">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-azul-gradient to-morado-gradient p-0.5">
+              <div className="w-full h-full rounded-full bg-fondologin flex items-center justify-center">
+                <Envelope className="h-10 w-10 text-azul-gradient" weight="bold" />
+              </div>
+            </div>
+            <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-azul-gradient to-morado-gradient mb-2">
+              Restablecer contraseña
+            </h1>
+            <p className="text-base">
+              Ingresa tu correo electrónico para recibir un enlace de restablecimiento
+            </p>
+          </div>
+          <div className="space-y-3">
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
+                <Envelope className="h-5 w-5 text-gray-400" aria-hidden="true" />
+              </div>
               <input
-                className={`shadow appearance-none border rounded w-full py-2 px-3 pl-10 text-white bg-principal leading-tight focus:outline-none ${
+                className={`appearance-none rounded-md block w-full px-3 py-3 pl-10 border bg-principal placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient sm:text-sm transition-colors ${
                   email && !isValidEmail
-                    ? "border-red-500"
-                    : "focus:border-[#4a7dfc]"
+                    ? "border-red-500 focus:border-red-500"
+                    : "border-linea focus:border-morado-gradient"
                 }`}
                 type="email"
                 placeholder="Correo electrónico"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <Envelope className="h-5 w-5 text-[#4a7dfc]" weight="bold" />
-              </div>
             </div>
-            {/* Mensaje de error para el correo electrónico */}
             {email && !isValidEmail && (
-              <p className="text-red-500 text-xs mt-1">
+              <p className="text-red-400 text-sm mt-1">
                 Ingresa un correo electrónico válido.
               </p>
             )}
           </div>
-
-          {/* Mensaje de éxito con tonos verdes */}
-          {message && (
-            <div className="p-3 mb-5 rounded-lg bg-green-900 border border-green-800 text-green-400 text-xs lg:text-sm flex items-center space-x-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-              <span>{message}</span>
+          {errorMessage && (
+            <div className="flex items-start space-x-3 p-4 rounded-lg bg-red-500/10 border border-red-500/20">
+              <XCircle className="h-5 w-5 text-red-400 mt-0.5 flex-shrink-0" weight="fill" />
+              <p className="text-red-200 text-sm">{errorMessage}</p>
             </div>
           )}
 
-          {/* Botón de envío */}
-          <button
-            className={`${
-              isValidEmail
-                ? "bg-[#18204a] border-transparent text-white"
-                : "bg-transparent border border-[#243166] text-[#4a7dfc]"
-            } w-full py-2 rounded-lg transition-colors mb-3 text-sm lg:text-base disabled:opacity-50 disabled:cursor-not-allowed`}
-            onClick={handleResetPassword}
-            disabled={isLoading || !canResend || !isValidEmail}
-          >
-            {isLoading ? (
-              <span className="flex items-center justify-center">
-                <svg
-                  className="animate-spin mr-1 h-3 w-3 lg:h-4 lg:w-4 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-                Enviando...
-              </span>
-            ) : !canResend ? (
-              `Reenviar enlace (${timer}s)`
-            ) : (
-              "Enviar enlace de recuperación"
-            )}
-          </button>
-
-          {/* Botón para volver al inicio de sesión */}
-          <button
-            className="text-[#4a7dfc] hover:text-[#6a95ff] transition-colors flex items-center justify-center mx-auto text-sm lg:text-base"
-            onClick={handleGoToLogin}
-          >
-            <ArrowLeft className="mr-1 h-3 w-3 lg:h-4 lg:w-4" weight="bold" />
-            Volver a inicio de sesión
-          </button>
+          {message && (
+            <div className="flex items-center space-x-3 p-2 rounded-lg bg-green-500/10 border border-green-500/20">
+              <CheckCircle className="h-5 w-5 text-green-400 flex-shrink-0" weight="fill" />
+              <p className="text-green-200 text-sm">{message}</p>
+            </div>
+          )}
+          <div className="space-y-3">
+            <button
+              onClick={handleResetPassword}
+              disabled={isLoading || !canResend || !isValidEmail}
+              className="w-full py-3 px-4 rounded-lg bg-gradient-to-r from-azul-gradient to-morado-gradient hover:from-azul-gradient/90 hover:to-morado-gradient/90 text-white font-medium text-sm transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            >
+              {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <svg className="animate-spin -ml-1 mr-3 h-4 w-4" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Enviando...
+                </div>
+              ) : countdown > 0 ? (
+                `Reenviar en ${countdown}s`
+              ) : (
+                "Enviar enlace de recuperación"
+              )}
+            </button>
+            <button
+              onClick={handleGoToLogin}
+              className="w-full py-3 px-4 rounded-lg border border-linea/50 bg-transparent hover:bg-secondary/10 text-gray-300 hover:text-white font-medium text-sm transition-all flex items-center justify-center space-x-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span>Volver a inicio de sesión</span>
+            </button>
+          </div>
+          <div className="text-center">
+            <p className="text-xs">
+              ¿No encuentras el correo? Revisa tu carpeta de spam
+            </p>
+          </div>
         </div>
       </div>
-
-      {/* Componente GeometricParticles */}
-      <div className="hidden lg:block lg:w-2/5 lg:h-[400px] relative">
+      <div className="hidden lg:block lg:w-1/2 relative overflow-hidden h-full">
         <div className="absolute inset-0">
           <GeometricParticles />
         </div>
+        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-azul-gradient/5 via-transparent to-morado-gradient/5 pointer-events-none"></div>
       </div>
-
-      {/* Modal de error */}
-      <ErrorModal
-        showModal={showErrorModal}
-        closeModal={closeErrorModal}
-        errorMessage={
-          error || "Error desconocido. Por favor, inténtalo de nuevo."
-        }
-      />
     </div>
   );
 };

@@ -34,6 +34,7 @@ export const useAuth = () => {
           setUserData(null);
           setAuthError(null);
           console.log("Usuario no verificado.");
+          window.location.href = "/verify-email";
         }
       } else {
         setUserData(null);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { auth, googleProvider } from "../../../config/firebase";
 import {
   createUserWithEmailAndPassword,
@@ -15,7 +15,6 @@ import {
   Lock,
   Eye,
   EyeSlash,
-  GoogleChromeLogo,
 } from "@phosphor-icons/react";
 import { ErrorModal } from "../../../components/modals/ErrorModal";
 import { GeometricParticles } from "../../../components/ui/GeometricParticles";
@@ -25,9 +24,9 @@ export const RegisterPage = ({ BASE_URL }) => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [errorMessages, setErrorMessages] = useState([]); // Estado para errores (array)
+  const [errorMessages, setErrorMessages] = useState([]); 
   const [showErrorModal, setShowErrorModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Para indicar carga en botones/form
+  const [isLoading, setIsLoading] = useState(false); 
   const navigate = useNavigate();
 
   const validations = {
@@ -41,6 +40,7 @@ export const RegisterPage = ({ BASE_URL }) => {
       special: /[^A-Za-z0-9]/.test(password),
     },
   };
+
   const allPasswordRequirementsMet = Object.values(validations.password).every(
     Boolean
   );
@@ -94,7 +94,6 @@ export const RegisterPage = ({ BASE_URL }) => {
 
   const handleRegister = async () => {
     clearError();
-
     const currentErrors = [];
     if (!validations.name) currentErrors.push("El nombre es obligatorio.");
     if (!validations.email)
@@ -103,15 +102,12 @@ export const RegisterPage = ({ BASE_URL }) => {
       currentErrors.push(
         "La contraseña debe cumplir con todos los requisitos mínimos."
       );
-
     if (currentErrors.length > 0) {
       setErrorMessages(currentErrors);
       setShowErrorModal(true);
       return;
     }
-
     setIsLoading(true);
-
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -120,16 +116,12 @@ export const RegisterPage = ({ BASE_URL }) => {
       );
       const user = userCredential.user;
       console.log("Usuario creado en Firebase Auth:", user.uid);
-
       await updateProfile(user, { displayName: name });
       console.log("Perfil de Firebase Auth actualizado con nombre.");
-
-      await sendUserDataToBackend(user, name); // Pasa el nombre del input
+      await sendUserDataToBackend(user, name); 
       console.log("Datos enviados al backend para usuario de email.");
-
       await sendEmailVerification(user);
       console.log("Correo de verificación enviado.");
-
       navigate("/verify-email");
     } catch (error) {
       console.error("Error durante el registro con email:", error);
@@ -151,17 +143,13 @@ export const RegisterPage = ({ BASE_URL }) => {
   const handleGoogleSignUp = async () => {
     clearError();
     setIsLoading(true);
-
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       const additionalInfo = getAdditionalUserInfo(result);
-
       console.log("Firebase Google Auth Success. User UID:", user.uid);
       console.log("Es nuevo usuario?:", additionalInfo.isNewUser);
-
       await sendUserDataToBackend(user);
-
       console.log("Navegando al dashboard...");
       navigate("/dashboard");
     } catch (error) {
@@ -185,66 +173,90 @@ export const RegisterPage = ({ BASE_URL }) => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen justify-center gap-8 items-center px-4 pt-16">
-      <div className="w-full lg:w-2/5 rounded-lg border border-[#243166] bg-principal p-4 lg:px-8 lg:py-6">
-        <div className="text-center">
-          <h1
-            className="text-xl lg:text-3xl font-medium mb-4 bg-clip-text text-transparent bg-gradient-to-r from-azul-gradient to-morado-gradient py-2"
-            style={{ lineHeight: "1.2" }}
-          >
-            Registro
-          </h1>
-          <p className="text-gray-400 text-sm lg:text-base mb-5">
-            Introduce tus datos para crear tu cuenta aquí
-          </p>
+    <div className="h-screen pt-16 bg-fondologin text-gray-100 flex selection:bg-morado-gradient selection:text-white overflow-hidden">
+      <div className="hidden lg:block lg:w-1/2 relative overflow-hidden h-full">
+        <div className="absolute inset-0">
+          <GeometricParticles />
+        </div>
+        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-azul-gradient/5 via-transparent to-morado-gradient/5 pointer-events-none"></div>
+      </div>
 
+      <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-6 sm:p-12 h-full">
+        <div className="w-full max-w-md space-y-6">
+          <div>
+            <h2 className="text-center text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-azul-gradient to-morado-gradient py-1">
+              Registro
+            </h2>
+            <p className="mt-2 text-center text-sm">
+              Introduce tus datos para crear tu cuenta aquí
+            </p>
+          </div>
           <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
             <div className="relative">
-              <UserCircle className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
+                <UserCircle
+                  className="h-5 w-5 text-gray-400"
+                  aria-hidden="true"
+                />
+              </div>
               <input
-                className={`shadow appearance-none border rounded w-full py-2 pl-10 pr-3 text-white bg-fondologin leading-tight focus:outline-none focus:border-[#4a7dfc] ${!validations.name && name ? "border-red-500" : "border-linea"}`}
+                id="name"
+                name="name"
                 type="text"
+                autoComplete="name"
+                required
+                className="appearance-none rounded-md block w-full px-3 py-3 pl-10 border border-linea bg-principal placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors"
                 placeholder="Nombre completo"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                disabled={isLoading}
               />
             </div>
-
             <div className="relative">
-              <Envelope className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
+                <Envelope
+                  className="h-5 w-5 text-gray-400"
+                  aria-hidden="true"
+                />
+              </div>
               <input
-                className={`shadow appearance-none border rounded w-full py-2 pl-10 pr-3 text-white bg-fondologin leading-tight focus:outline-none focus:border-[#4a7dfc] ${!validations.email && email ? "border-red-500" : "border-linea"}`}
+                id="email-address"
+                name="email"
                 type="email"
+                autoComplete="email"
+                required
+                className="appearance-none rounded-md block w-full px-3 py-3 pl-10 border border-linea bg-principal placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors"
                 placeholder="Correo electrónico"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                disabled={isLoading}
               />
             </div>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
+                <Lock
+                  className="h-5 w-5 text-gray-400"
+                  aria-hidden="true"
+                />
+              </div>
               <input
-                className={`shadow appearance-none border rounded w-full py-2 pl-10 pr-10 text-white bg-fondologin leading-tight focus:outline-none focus:border-[#4a7dfc] ${!allPasswordRequirementsMet && password ? "border-red-500" : "border-linea"}`}
+                id="password"
+                name="password"
                 type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
+                required
+                className="appearance-none rounded-md block w-full px-3 py-3 pl-10 pr-10 border border-linea bg-principal placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors"
                 placeholder="Contraseña"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                disabled={isLoading}
               />
               <button
                 type="button"
-                className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-300 focus:outline-none z-20"
                 onClick={() => setShowPassword(!showPassword)}
-                aria-label={
-                  showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
-                }
-                disabled={isLoading}
               >
                 {showPassword ? (
-                  <EyeSlash className="h-5 w-5" />
+                  <EyeSlash className="h-5 w-5" aria-hidden="true" />
                 ) : (
-                  <Eye className="h-5 w-5" />
+                  <Eye className="h-5 w-5" aria-hidden="true" />
                 )}
               </button>
             </div>
@@ -293,76 +305,103 @@ export const RegisterPage = ({ BASE_URL }) => {
                 </div>
               </div>
             )}
-
-            <button
-              type="button"
-              onClick={handleRegister}
-              className="bg-[#243166] hover:bg-[#1e2a5f] text-white w-full py-2 rounded-lg transition-colors mb-3 text-sm lg:text-base disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <span className="flex items-center justify-center">
-                  <svg
-                    className="animate-spin mr-1 h-4 w-4 text-white" /* ... svg spinner ... */
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  Registrando...
-                </span>
-              ) : (
-                "Registrarse"
-              )}
-            </button>
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={handleRegister}
+                disabled={isLoading}
+                className="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-md text-white bg-gradient-to-r from-azul-gradient to-morado-gradient hover:from-azul-gradient/90 hover:to-morado-gradient/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-fondologin focus:ring-morado-gradient disabled:opacity-60 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+              >
+                {isLoading ? (
+                  <span className="flex items-center">
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Registrando...
+                  </span>
+                ) : (
+                  "Registrarse"
+                )}
+              </button>
+            </div>
           </form>
 
-          <div className="relative my-4">
-            <div className="absolute inset-0 flex items-center">
-              <hr className="w-full border-t border-[#243166]" />
+          <div className="relative py-2">
+            <div
+              className="absolute inset-0 flex items-center"
+              aria-hidden="true"
+            >
+              <div className="w-full border-t border-linea/70" />
             </div>
-            <div className="relative flex justify-center text-xs text-gray-400">
-              <span className="bg-principal px-2">O CONTINÚA CON</span>
+            <div className="relative flex justify-center text-xs">
+              <span className="px-2 bg-fondologin text-gray-500 uppercase">
+                O
+              </span>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4">
+          <div>
             <button
+              type="button"
               onClick={handleGoogleSignUp}
-              className="flex items-center justify-center bg-white border border-gray-300 text-gray-700 font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isLoading}
+              className="w-full group relative overflow-hidden inline-flex items-center justify-center py-3 px-4 rounded-xl shadow-lg bg-white/5 backdrop-blur-sm border border-white/10 text-white font-medium hover:bg-white/10 hover:border-white/20 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-fondologin focus:ring-white/20 disabled:opacity-60 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98]"
             >
-              <GoogleChromeLogo className="h-6 w-6 mr-2 text-[#4285F4]" />
-              Regístrate con Google
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
+              <div className="relative z-10 flex items-center">
+                <div className="w-5 h-5 mr-2 flex items-center justify-center">
+                  <svg viewBox="0 0 24 24" className="w-5 h-5">
+                    <path
+                      fill="#4285F4"
+                      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                    />
+                    <path
+                      fill="#EA4335"
+                      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                    />
+                  </svg>
+                </div>
+                <span className="text-white/90 group-hover:text-white transition-colors duration-200">
+                  Continuar con Google
+                </span>
+              </div>
             </button>
           </div>
-
-          <div className="text-center text-sm text-gray-400 mt-4">
+          <p className="text-center text-sm">
             ¿Ya tienes una cuenta?{" "}
             <button
-              className="text-[#4a7dfc] hover:text-[#6a95ff] focus:outline-none"
+              type="button"
               onClick={handleGoToLogin}
-              disabled={isLoading}
+              className="font-bold text-azul-gradient hover:text-morado-gradient transition-colors"
             >
               Inicia sesión aquí
             </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="hidden lg:block lg:w-2/5 lg:h-[400px] relative">
-        <div className="absolute inset-0">
-          <GeometricParticles />
+          </p>
         </div>
       </div>
 
