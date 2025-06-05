@@ -26,14 +26,16 @@ export const DashboardLayout = () => {
       <HeaderDash
         userData={userData}
         toggleMenu={toggleMenu}
+        menuOpen={menuOpen}
         handleLogout={handleLogout}
       />
-      <main className="flex mt-16">
+      <main className="flex pt-16">
         <NavDash
           menuOpen={menuOpen}
           toggleMenu={toggleMenu}
           isCollapsed={isNavCollapsed}
           setIsCollapsed={setIsNavCollapsed}
+          handleLogout={handleLogout}
         />
         <Routes>
           <Route path="/" element={<Navigate to="visualizador" replace />} />

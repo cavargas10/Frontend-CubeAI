@@ -1,48 +1,34 @@
-import { List } from "@phosphor-icons/react";
-
-export const UserProfile = ({ userData, toggleMenu }) => {
+export const UserProfile = ({ userData }) => {
   const handleImageError = (event) => {
     event.target.src = "/usuario.webp";
-    event.target.alt = "Imagen no disponible";
     event.target.onerror = null;
   };
 
-  const handleHamburgerClick = (event) => {
-    event.stopPropagation(); 
-    toggleMenu(); 
-  };
+  const profileImageSize = "w-9 h-9";
+  const gradientBorderSize = "p-0.5";
+
+  if (!userData) return null;
 
   return (
-    userData && (
-      <div className="flex items-center justify-center gap-2 sm:mr-0 px-6">
-        <div className="flex items-center gap-2">
-          <p className="sm:block hidden text-white mt-5 z-50">
-            Bienvenido, {userData.name}
-          </p>
+    <div className="flex items-center justify-end gap-3 cursor-pointer">
+      <p className="hidden sm:block text-sm text-white font-medium transition-colors duration-300 hover:text-[#A975FF] whitespace-nowrap">
+        Bienvenido, {userData.name}
+      </p>
 
-          {userData.profile_picture ? (
-            <img
-              src={userData.profile_picture}
-              alt={`Foto de perfil de ${userData.name}`}
-              className="w-[36px] h-[36px] rounded-full object-cover ml-2 mt-4"
-              onError={handleImageError}
-            />
-          ) : (
-            <div className="w-[36px] h-[36px] rounded-full bg-gray-300 flex items-center justify-center text-gray-500 font-bold mt-4">
-              {userData.name?.charAt(0).toUpperCase()}
-            </div>
-          )}
-
-          <button
-            name="menu dashboard"
-            aria-label="Open menu dashboard"
-            onClick={handleHamburgerClick} 
-            className="block md:hidden focus:outline-none mt-4" 
-          >
-            <List size={32} color="#ffffff" />
-          </button>
-        </div>
+      <div className={`relative rounded-full ${gradientBorderSize} bg-gradient-to-br from-azul-gradient to-morado-gradient shadow-md transition-transform duration-300 group-hover:scale-110`}>
+        {userData.profile_picture ? (
+          <img
+            src={userData.profile_picture}
+            alt={`Foto de perfil de ${userData.name}`}
+            className={`${profileImageSize} rounded-full object-cover border-2 border-principal`}
+            onError={handleImageError}
+          />
+        ) : (
+          <div className={`${profileImageSize} rounded-full flex items-center justify-center bg-principal`}>
+            <span className="text-white text-base font-semibold">{userData.name?.charAt(0).toUpperCase()}</span>
+          </div>
+        )}
       </div>
-    )
+    </div>
   );
 };

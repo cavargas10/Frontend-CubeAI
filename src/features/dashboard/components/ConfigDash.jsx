@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Pencil } from "@phosphor-icons/react";
+import { Pencil, User, Envelope, Trash, Image, Shield } from "@phosphor-icons/react";
 import {
   updateUserName,
   updateUserProfilePicture,
@@ -97,111 +97,96 @@ export const ConfigDash = ({ user, userData, refetchUserData, isCollapsed }) => 
 
   if (!userData) {
     return (
-      <div className="w-full sm:ml-64 pl-2 pr-8 mt-2 border-l-2 border-linea bg-fondologin">
-        Cargando datos del usuario...
-      </div>
+      <section
+        className={`min-h-screen bg-fondologin text-white transition-all duration-300 ease-in-out relative w-full ${
+          isCollapsed
+            ? "sm:pl-[80px]"
+            : "md:pl-[267px] 2xl:pl-[300px]"
+        }`}
+      >
+        <div className="relative z-10 px-4 sm:px-6 md:px-8 pt-6 pb-8">
+          <div className="flex items-center justify-center h-64">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-azul-gradient"></div>
+          </div>
+        </div>
+      </section>
     );
   }
 
   return (
     <section
-      className={`sm:ml-64 pb-8 pr-5 w-full bg-fondologin transition-all duration-300 ease-in-out ${
+      className={`min-h-screen bg-fondologin text-white transition-all duration-300 ease-in-out relative w-full ${
         isCollapsed
-          ? "sm:ml-[80px] xl:ml-[80px] 2xl:ml-[80px]"
-          : "sm:ml-[264px] md:ml-[267px] xl:ml-[267px] 2xl:ml-[300px]"
+          ? "sm:pl-[80px]"
+          : "md:pl-[267px] 2xl:pl-[300px]"
       }`}
     >
-      <div className="ml-8 mt-7">
-        <div>
-          <h1 className="text-4xl">Perfil</h1>
-          <p className="mt-3">Gestiona tu perfil personal en CV3D.AI</p>
-          <hr className="mt-4" />
-        </div>
-        <form className="mt-3 sm:mt-8">
-          <div className="flex flex-col lg:flex-row">
-            <div className="lg:w-1/2 pr-4">
-              <div className="mb-3 sm:mb-5">
-                <h2 className="text-2xl">Nombre</h2>
-                <p className="mt-1">
-                  Nombre de usuario con el que usted se registró.
-                </p>
-                <div className="flex mt-3">
-                  <input
-                    type="text"
-                    placeholder={userData.name || "Cargando..."}
-                    value={newName}
-                    onChange={handleNameChange}
-                    className={`p-2 rounded-lg w-80 bg-principal border-2 ${
-                      nameError ? "border-red-500" : "border-linea"
-                    }`}
-                  />
-                  <button
-                    type="button"
-                    onClick={handleNameSubmit}
-                    disabled={!isNameChanged || !!nameError}
-                    className={`ml-5 p-2 text-center rounded-lg ${
-                      isNameChanged && !nameError
-                        ? "bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient"
-                        : "bg-gray-400 cursor-not-allowed"
-                    }`}
-                  >
-                    Guardar
-                  </button>
-                </div>
-                {nameError && <p className="text-red-500 mt-2">{nameError}</p>}
-              </div>
-              <div className="mb-3 sm:mb-5">
-                <h2 className="text-2xl">Correo electrónico</h2>
-                <p className="mt-1">
-                  La dirección de correo electrónico utilizada para registrarse
-                  enCV3D.AI
-                </p>
-                <div className="mt-3">
-                  <input
-                    type="email"
-                    value={userData.email || ""}
-                    readOnly
-                    className="p-2 rounded-lg w-80 bg-principal border-2 border-linea"
-                  />
-                </div>
-              </div>
-              <div>
-                <h2 className="text-2xl">Borrar cuenta</h2>
-                <p className="mt-1">
-                  Eliminar su cuenta. Esta acción es irreversible.
-                </p>
-                <div className="mt-3">
-                  <button
-                    type="button"
-                    onClick={openDeleteModal}
-                    className="px-4 py-3 rounded-lg bg-red-500 hover:bg-red-600 text-white"
-                  >
-                    Borrar mi cuenta
-                  </button>
-                </div>
-              </div>
+      <div className="relative z-10 px-4 sm:px-6 md:px-8 pt-6 pb-8">
+        <div className="mb-8">
+          <div className="flex items-center gap-4 mb-3">
+            <div>
+              <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-azul-gradient to-morado-gradient pb-2">
+                Configuración
+              </h1>
+              <div className="h-1 w-32 bg-gradient-to-r from-azul-gradient to-morado-gradient rounded-full mt-2"></div>
             </div>
-            <div className="mt-3 sm:w-1/2 xl:pl-4 sm:mt-5 xl:mt-0">
-              <div className="mb-6">
-                <h2 className="text-2xl">Imagen de perfil</h2>
-                <p className="mt-1">Actualiza tu imagen de perfil</p>
-                <div className="mt-3 flex items-center">
-                  <div className="relative mx-auto sm:mx-0">
-                    {userData.profile_picture && (
-                      <img
-                        src={userData.profile_picture}
-                        alt="Profile"
-                        className="w-28 h-28 rounded-full object-cover"
-                      />
-                    )}
-                    <button
-                      type="button"
-                      onClick={handleProfilePictureClick}
-                      className="absolute bottom-0 right-0 p-1 bg-gradient-to-r from-azul-gradient to-morado-gradient rounded-full hover:bg-gradient-to-tr shadow-lg"
-                    >
-                      <Pencil size={24} />
-                    </button>
+          </div>        
+          <p className="text-lg leading-relaxed text-justify">
+            Gestiona tu perfil personal y configuraciones de cuenta. Aquí puedes actualizar 
+            tu información, cambiar tu imagen de perfil y administrar tu cuenta de Instant3D.
+          </p>
+        </div>
+        <hr className="border-t-2 border-linea/20 my-5" />
+        <div className="mb-6">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-1 h-8 bg-gradient-to-b from-azul-gradient to-morado-gradient rounded-full"></div>
+            <h2 className="text-2xl font-bold text-white">Información del Perfil</h2>
+          </div>
+          <div className="relative bg-principal/30 backdrop-blur-sm border border-linea/20 rounded-2xl p-6">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+              <div className="xl:col-span-1">
+                <div className="bg-principal/20 backdrop-blur-sm border border-linea/20 rounded-xl p-6 h-full flex flex-col">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Image size={20} className="text-azul-gradient" />
+                    <h3 className="text-lg font-semibold text-white">Imagen de Perfil</h3>
                   </div>
+                  <p className="text-gray-400 text-sm mb-6">
+                    Actualiza tu imagen de perfil para personalizar tu cuenta
+                  </p>
+                  <div className="flex-1 flex flex-col items-center justify-center space-y-6">
+                    <div className="relative group">
+                      <div className="relative w-40 h-40 rounded-full bg-gradient-to-br from-azul-gradient to-morado-gradient shadow-md p-1">
+                        <div className="w-full h-full rounded-full overflow-hidden bg-principal">
+                          {userData.profile_picture ? (
+                            <img
+                              src={userData.profile_picture}
+                              alt="Profile"
+                              className="w-full h-full rounded-full object-cover border-4 border-principal"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-gradient-to-br from-azul-gradient/20 to-morado-gradient/20 flex items-center justify-center rounded-full">
+                              <User size={64} className="text-gray-400" />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleProfilePictureClick}
+                        className="absolute -bottom-3 -right-3 p-4 bg-gradient-to-r from-azul-gradient to-morado-gradient rounded-full hover:shadow-lg transition-all duration-300 hover:scale-125 border-4 border-principal"
+                      >
+                        <Pencil size={18} className="text-white" />
+                      </button>
+                    </div>                    
+                    <div className="text-center space-y-2">
+                      <p className="text-sm text-gray-300 font-medium">
+                        {userData.name || "Usuario"}
+                      </p>
+                      <p className="text-xs text-gray-400">
+                        Haz clic para cambiar tu imagen
+                      </p>
+                    </div>
+                  </div>                 
                   <input
                     type="file"
                     ref={fileInputRef}
@@ -211,10 +196,91 @@ export const ConfigDash = ({ user, userData, refetchUserData, isCollapsed }) => 
                   />
                 </div>
               </div>
+              <div className="xl:col-span-2 space-y-6">
+                <div className="bg-principal/20 backdrop-blur-sm border border-linea/20 rounded-xl p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <User size={20} className="text-azul-gradient" />
+                    <h3 className="text-lg font-semibold text-white">Nombre de Usuario</h3>
+                  </div>
+                  <p className="text-gray-400 text-sm mb-4">
+                    Nombre de usuario con el que te registraste en la plataforma
+                  </p>                  
+                  <div className="space-y-3">
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <input
+                        type="text"
+                        placeholder={userData.name || "Cargando..."}
+                        value={newName}
+                        onChange={handleNameChange}
+                        className={`flex-1 p-3 rounded-lg bg-principal/50 border-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300 ${
+                          nameError ? "border-red-500" : "border-linea/30"
+                        }`}
+                      />
+                      <button
+                        type="button"
+                        onClick={handleNameSubmit}
+                        disabled={!isNameChanged || !!nameError}
+                        className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                          isNameChanged && !nameError
+                            ? "bg-gradient-to-r from-azul-gradient to-morado-gradient hover:shadow-lg hover:scale-105 text-white"
+                            : "bg-gray-600 cursor-not-allowed text-gray-400"
+                        }`}
+                      >
+                        Guardar
+                      </button>
+                    </div>
+                    {nameError && (
+                      <p className="text-red-400 text-sm flex items-center gap-2">
+                        <span className="w-1 h-1 bg-red-400 rounded-full"></span>
+                        {nameError}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className="bg-principal/20 backdrop-blur-sm border border-linea/20 rounded-xl p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Envelope size={20} className="text-morado-gradient" />
+                    <h3 className="text-lg font-semibold text-white">Correo Electrónico</h3>
+                  </div>
+                  <p className="text-gray-400 text-sm mb-4">
+                    La dirección de correo electrónico utilizada para registrarte en Instant3D
+                  </p>                 
+                  <input
+                    type="email"
+                    value={userData.email || ""}
+                    readOnly
+                    className="w-full p-3 rounded-lg bg-principal/30 border-2 border-linea/20 text-gray-300 cursor-not-allowed"
+                  />
+                  <p className="text-xs text-gray-500 mt-2">
+                    El correo electrónico no puede ser modificado
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="mt-8 pt-6 border-t border-linea/20">
+              <div className="bg-red-500/10 backdrop-blur-sm border border-red-500/20 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <Shield size={20} className="text-red-400" />
+                  <h3 className="text-lg font-semibold text-red-400">Zona de Peligro</h3>
+                </div>
+                <p className="text-gray-400 text-sm mb-4">
+                  Eliminar tu cuenta de forma permanente. Esta acción es irreversible y 
+                  eliminará todos tus datos, modelos y configuraciones.
+                </p>
+                <button
+                  type="button"
+                  onClick={openDeleteModal}
+                  className="flex items-center gap-2 px-4 py-3 rounded-lg bg-red-500/20 hover:bg-red-500 text-red-400 hover:text-white border border-red-500/30 hover:border-red-500 transition-all duration-300 hover:scale-105"
+                >
+                  <Trash size={18} />
+                  Eliminar mi cuenta
+                </button>
+              </div>
             </div>
           </div>
-        </form>
+        </div>
       </div>
+
       <DeleteConfirmationModal
         showModal={showDeleteModal}
         closeModal={closeDeleteModal}

@@ -133,14 +133,14 @@ export const PredictionHistory = ({ selectedTab }) => {
         </div>
       )}
       {filteredGenerations.length === 0 && !apiError && (
-        <div className="flex justify-center items-center h-64">
+        <div className="flex justify-center items-center h-60">
           <p className="text-xl text-gray-500 text-center px-4">
             Aún no has generado ningún objeto en la categoría "{selectedTab}".
           </p>
         </div>
       )}
       {filteredGenerations.length > 0 && (
-        <div className="sm:flex sm:gap-8 gap-4 w-full sm:flex-wrap justify-center sm:justify-start">
+        <div className="flex flex-col gap-6 sm:flex-row sm:gap-8 sm:flex-wrap w-full justify-center sm:justify-start">
           {filteredGenerations.map((generation, index) => (
             <GenerationCard
               key={

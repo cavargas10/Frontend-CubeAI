@@ -46,7 +46,7 @@ export const Header = ({ user }) => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 w-full z-50 bg-transparent font-inter font-bold transition-all duration-300 ${
+        className={`fixed top-0 left-0 w-full z-50 bg-transparent font-inter font-bold transition-all border-b-2 border-linea duration-300 ${
           isScrolled
             ? "backdrop-blur-lg bg-opacity-80"
             : "backdrop-blur-sm bg-opacity-50"
@@ -153,8 +153,6 @@ export const Header = ({ user }) => {
           </button>
         </div>
       </header>
-
-      <div className="fixed top-16 left-0 w-full h-[1px] bg-gray-700 z-auto"></div>
 
       {isMenuOpen && (
         <>

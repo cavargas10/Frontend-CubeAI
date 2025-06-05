@@ -1,112 +1,141 @@
 import { useState } from "react";
+import {
+  Textbox,
+  Image,
+  FileImage,
+  Cube,
+  Images,
+  Scribble,
+  Compass
+} from "@phosphor-icons/react";
 import { PredictionHistory } from "../../../features/prediction/components/shared/PredictionHistory";
 
 export const Visualizador = ({ isCollapsed }) => {
   const [selectedTab, setSelectedTab] = useState("Texto3D");
-  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
   };
 
+  const tabsConfig = [
+    { 
+      id: "Texto3D", 
+      label: "Texto a 3D",
+      shortLabel: "Texto 3D",
+      icon: Textbox
+    },
+    { 
+      id: "Imagen3D", 
+      label: "Imagen a 3D",
+      shortLabel: "Imagen 3D", 
+      icon: Image
+    },
+    { 
+      id: "TextImg3D", 
+      label: "Texto a Imagen a 3D",
+      shortLabel: "Texto→Img 3D",
+      icon: FileImage
+    },
+    { 
+      id: "Unico3D", 
+      label: "Único 3D",
+      shortLabel: "Único 3D",
+      icon: Cube
+    },
+    { 
+      id: "MultiImagen3D", 
+      label: "Multi Imagen a 3D",
+      shortLabel: "Multi 3D",
+      icon: Images
+    },
+    { 
+      id: "Boceto3D", 
+      label: "Boceto a 3D",
+      shortLabel: "Boceto 3D",
+      icon: Scribble
+    },
+  ];
+
   return (
     <section
-      className={`2xl:ml-72 sm:ml-56 w-full bg-fondologin 2xl:text-xl text-lg 
-    transition-all duration-300 ease-in-out ${
-      isCollapsed
-        ? "sm:ml-[80px] xl:ml-[50px] 2xl:ml-[80px]"
-        : "sm:ml-[254px] md:ml-[260px] xl:ml-[260px] 2xl:ml-[300px]"
-    }`}
+      className={`min-h-screen bg-fondologin text-white transition-all duration-300 ease-in-out relative w-full ${
+        isCollapsed
+          ? "sm:pl-[80px]"
+          : "md:pl-[267px] 2xl:pl-[300px]"
+      }`}
     >
-      <div className="px-4 sm:ml-10 fixed z-30 w-full bg-fondologin">
-        <div className="mt-10 sm:w-3/5">
-          <h1 className="text-4xl">Mis Objetos</h1>
-          <p className="mt-4 text-lg">
-            Explore su repositorio de recursos de aprendizaje y obras de arte 3D
-            generadas por IA.
+      <div className="relative z-10 px-4 sm:px-6 md:px-8 pt-6 pb-8">
+        <div className="mb-8">
+          <div className="flex items-center gap-4 mb-3">
+            <div>
+              <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-azul-gradient to-morado-gradient pb-2">
+                Mis Objetos
+              </h1>
+              <div className="h-1 w-32 bg-gradient-to-r from-azul-gradient to-morado-gradient rounded-full mt-2"></div>
+            </div>
+          </div>         
+          <p className="text-lg leading-relaxed text-justify">
+            Bienvenido a tu espacio de creación 3D. Aquí puedes gestionar y visualizar tus modelos 3D generados por IA.
+            Explora las diferentes categorías y accede a tus objetos de manera rápida y sencilla. 
           </p>
         </div>
-        <hr className="mt-4" />
-        <div className="mt-5 mb-3">
-          <h2 className="text-2xl">Modelo 3D Creados</h2>
-          <div className="w-full mt-4 overflow-x-auto">
-            <div className="min-w-max pb-2">
-              <ul className="flex space-x-4">
-                <li
-                  className={`p-3 whitespace-nowrap cursor-pointer hover:bg-bg-btn-dash rounded-lg min-w-fit ${
-                    selectedTab === "Texto3D" ? "bg-bg-btn-dash rounded-lg" : ""
-                  }`}
-                  onClick={() => handleTabClick("Texto3D")}
-                >
-                  <a href="#" className="px-2">
-                    Texto a 3D
-                  </a>
-                </li>
-                <li
-                  className={`p-3 whitespace-nowrap cursor-pointer hover:bg-bg-btn-dash rounded-lg min-w-fit ${
-                    selectedTab === "Imagen3D"
-                      ? "bg-bg-btn-dash rounded-lg"
-                      : ""
-                  }`}
-                  onClick={() => handleTabClick("Imagen3D")}
-                >
-                  <a href="#" className="px-2">
-                    Imagen a 3D
-                  </a>
-                </li>
-                <li
-                  className={`p-3 whitespace-nowrap cursor-pointer hover:bg-bg-btn-dash rounded-lg min-w-fit ${
-                    selectedTab === "TextImg3D"
-                      ? "bg-bg-btn-dash rounded-lg"
-                      : ""
-                  }`}
-                  onClick={() => handleTabClick("TextImg3D")}
-                >
-                  <a href="#" className="px-2">
-                    Texto a Imagen a 3D
-                  </a>
-                </li>
-                <li
-                  className={`p-3 whitespace-nowrap cursor-pointer hover:bg-bg-btn-dash rounded-lg min-w-fit ${
-                    selectedTab === "Unico3D" ? "bg-bg-btn-dash rounded-lg" : ""
-                  }`}
-                  onClick={() => handleTabClick("Unico3D")}
-                >
-                  <a href="#" className="px-2">
-                    Unico 3D
-                  </a>
-                </li>
-                <li
-                  className={`p-3 whitespace-nowrap cursor-pointer hover:bg-bg-btn-dash rounded-lg min-w-fit ${
-                    selectedTab === "MultiImagen3D"
-                      ? "bg-bg-btn-dash rounded-lg"
-                      : ""
-                  }`}
-                  onClick={() => handleTabClick("MultiImagen3D")}
-                >
-                  <a href="#" className="px-2">
-                    Multi Imagen a 3D
-                  </a>
-                </li>
-                <li
-                  className={`p-3 whitespace-nowrap cursor-pointer hover:bg-bg-btn-dash rounded-lg min-w-fit ${
-                    selectedTab === "Boceto3D"
-                      ? "bg-bg-btn-dash rounded-lg"
-                      : ""
-                  }`}
-                  onClick={() => handleTabClick("Boceto3D")}
-                >
-                  <a href="#" className="px-2">
-                    Boceto a 3D
-                  </a>
-                </li>
-              </ul>
+        <hr className="border-t-2 border-linea/20 my-5" />
+        <div className="mb-6">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-1 h-8 bg-gradient-to-b from-azul-gradient to-morado-gradient rounded-full"></div>
+            <h2 className="text-2xl font-bold text-white">Modelos 3D Creados</h2>
+          </div>
+          <div className="w-full">
+            <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-azul-gradient/20 scrollbar-track-transparent">
+              <div className="flex gap-2 p-2 bg-principal/50 rounded-2xl border border-linea/20 backdrop-blur-sm w-full">
+                {tabsConfig.map((tab) => {
+                  const IconComponent = tab.icon;
+                  const isActive = selectedTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      className={`
+                        relative flex items-center gap-1.5 px-2 lg:px-3 py-3 rounded-xl font-medium text-xs lg:text-sm
+                        transition-all duration-300 ease-in-out transform
+                        ${isActive 
+                          ? "bg-gradient-to-r from-azul-gradient to-morado-gradient text-white shadow-xl border border-white/20"
+                          : "bg-bg-btn-dash/30 text-gray-300 hover:bg-bg-btn-dash hover:text-white hover:scale-105 hover:shadow-lg border border-transparent hover:border-linea/30"
+                        }
+                        group whitespace-nowrap flex-1 min-w-0 justify-center
+                      `}
+                      onClick={() => handleTabClick(tab.id)}
+                    >
+                      <IconComponent 
+                        size={16} 
+                        className={`
+                          transition-all duration-300 flex-shrink-0
+                          ${isActive ? "text-white drop-shadow-sm" : "text-azul-gradient group-hover:text-white"}
+                        `}
+                      />
+                      <span className={`
+                        font-semibold tracking-wide truncate text-center
+                        ${isCollapsed 
+                          ? 'hidden sm:inline' 
+                          : 'hidden lg:inline'
+                        }
+                      `}>
+                        {isCollapsed ? tab.label : tab.shortLabel}
+                      </span>
+                      {!isActive && (
+                        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-azul-gradient/0 via-azul-gradient/5 to-morado-gradient/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="px-4 sm:px-0 mt-[390px] telefono:mt-[345px] sm:ml-14 md:mt-[335px] lg:mt-[310px] sm:mt-[340px] xl:mt-[280px] bg-fondologin">
-        <PredictionHistory selectedTab={selectedTab} />
+        <div className="relative">
+          <div className="relative bg-principal/30 backdrop-blur-sm border border-linea/20 rounded-2xl p-6">
+            <PredictionHistory selectedTab={selectedTab} />
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -47,7 +47,6 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
   }, []);
 
   const handleDownload = (url, filename) => {
-    console.log("Intentando descargar:", url, "como", filename); // Depuración
     if (!url) {
       console.error("URL no válida para descargar.");
       return;
@@ -144,8 +143,6 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
   return (
     <div className="relative w-full mt-1 h-[200px] sm:w-[220px] sm:h-[220px] rounded-2xl overflow-hidden shadow-lg bg-principal group cursor-pointer">
       <div className="absolute inset-0 border-2 border-transparent group-hover:border-purple-600 rounded-2xl animate-pulse transition-all duration-500 z-10 pointer-events-none"></div>
-
-      {/* Canvas or Fallback */}
       {modelUrl ? (
         <Canvas ref={canvasRef}>
           <CameraSetup position={getCameraPosition()} />
@@ -162,8 +159,9 @@ export const GenerationCard = ({ generation, formatDate, openModal }) => {
       )}
 
       {isLoading && (
-        <div className="absolute inset-0 bg-black bg-opacity-90 flex items-center justify-center text-white text-sm font-semibold z-20">
-          <div className="animate-pulse">Cargando...</div>
+        <div className="absolute inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center text-white text-sm font-semibold z-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-morado-gradient mb-4"></div>
+          <div className="text-center">Cargando...</div>
         </div>
       )}
 
