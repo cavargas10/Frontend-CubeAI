@@ -1,4 +1,3 @@
-import React from "react";
 import { ModelResultViewer } from "../shared/ModelResultViewer"; 
 import { usePredictions } from '../../context/PredictionContext'; 
 import { DownloadSimple } from "@phosphor-icons/react"; 

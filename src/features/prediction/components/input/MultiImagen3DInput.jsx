@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Sparkle, UploadSimple } from "@phosphor-icons/react";
-import { Button } from "flowbite-react";
+import { useState, useEffect, useCallback } from "react";
+import { Sparkle, UploadSimple, TextAa, CheckCircle } from "@phosphor-icons/react";
 import { ErrorModal } from "../../../../components/modals/ErrorModal";
 import { LoadingModal } from "../../../../components/modals/LoadingModal";
 import { MultiImagen3DResult } from "../results/MultiImagen3DResult";
@@ -10,6 +9,7 @@ import { useMultiImageUpload } from "../../hooks/useMultiImageUpload";
 export const MultiImagen3DInput = ({
   user,
   setPrediction_multiimg3d_result,
+  prediction_multiimg3d_result, 
   isCollapsed,
 }) => {
   const [generationName, setGenerationName] = useState("");
@@ -73,97 +73,141 @@ export const MultiImagen3DInput = ({
     }
   };
 
+  // Condición para deshabilitar el botón
+  const isButtonDisabled =
+    predictionLoading ||
+    !generationName.trim() ||
+    !imageFiles.frontal ||
+    !imageFiles.lateral ||
+    !imageFiles.trasera;
+
   return (
-    <div className={`w-full bg-fondologin transition-all duration-300 ease-in-out ${
-        isCollapsed
-          ? "sm:ml-[80px] xl:ml-[80px] 2xl:ml-[80px]"
-          : "sm:ml-[264px] xl:ml-[265px] 2xl:ml-[300px]"
-      }`}>
-      <div className="bg-principal pt-6 pb-4 border-b-2 border-linea">
-        <p className="text-center text-2xl">Imagen a 3D (Múltiples vistas)</p>
-      </div>
-      <div className="flex flex-col xl:flex-row w-full min-h-[calc(100vh-200px)] bg-fondologin">
-        <div className="w-full xl:w-1/3 p-6 border-r-2 border-linea">
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <label className="text-base font-medium text-gray-300">Nombre de la generación</label>
-              <input
-                type="text"
-                placeholder="Ej: Mi personaje completo"
-                value={generationName}
-                onChange={(e) => setGenerationName(e.target.value)}
-                disabled={predictionLoading}
-                className="bg-transparent border border-linea p-2 rounded-md w-full text-base text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              />
+    <section
+      className={`w-full bg-fondologin text-white transition-all duration-300 ease-in-out relative flex flex-col h-[calc(100vh-4rem)] ${
+        isCollapsed ? "sm:pl-[80px]" : "md:pl-[267px] 2xl:pl-[300px]"
+      }`}
+    >
+      <div className="relative z-10 px-4 sm:px-6 md:px-8 pt-6 pb-8 flex flex-col flex-grow">
+        
+        <div className="mb-6 flex-shrink-0">
+          <div className="flex items-center gap-4">
+            <div>
+              <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-azul-gradient to-morado-gradient">
+                Multi Imagen a 3D
+              </h1>
+              <div className="h-1 w-24 bg-gradient-to-r from-azul-gradient to-morado-gradient rounded-full mt-1.5"></div>
             </div>
-            <div className="flex justify-between text-base text-gray-400 px-1">
-              {["frontal", "lateral", "trasera"].map(type => (
-                <span
-                  key={type}
-                  className={`cursor-pointer capitalize p-1 rounded ${
-                    currentImageType === type ? "text-blue-400 font-semibold bg-blue-900/30" : "hover:text-blue-300"
-                  } ${imageFiles[type] ? 'text-green-400' : ''}`}
-                  onClick={() => !predictionLoading && selectImageType(type)}
-                  title={imageFiles[type] ? `Imagen ${type} cargada` : `Cargar imagen ${type}`}
-                >
-                  {type} {imageFiles[type] ? '✓' : ''}
-                </span>
-              ))}
-            </div>
-            <div
-              className={`relative border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-colors min-h-[16rem] flex flex-col items-center justify-center ${
-                isDragging ? "border-blue-500 bg-blue-900/10" : "border-linea"
-              } ${predictionLoading ? "opacity-50 cursor-not-allowed" : "hover:border-blue-500"}`}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-              onClick={() => !predictionLoading && document.getElementById('fileInput-multi').click()}
-            >
-              <input
-                id="fileInput-multi"
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                disabled={predictionLoading}
-                className="hidden"
-              />
-              {imagePreviews[currentImageType] ? (
-                <div className="w-full h-full flex flex-col items-center justify-center gap-1">
-                  <img
-                    src={imagePreviews[currentImageType]}
-                    alt={`Vista previa (${currentImageType})`}
-                    className="max-w-[75%] max-h-[75%] object-contain rounded-md mb-1"
-                  />
-                   <span className="text-xs text-gray-400">Mostrando: {currentImageType}</span>
-                   <span className="text-xs text-gray-500 text-center leading-tight">
-                     (Clic en Frontal/Lateral/Trasera para cambiar o reemplazar)
-                   </span>
-                </div>
-              ) : (
-                <>
-                  <UploadSimple className="w-8 h-8 text-gray-400 mb-2" weight="light" />
-                  <p className="text-sm text-gray-300 capitalize">
-                    Arrastra o haz clic para cargar <strong>{currentImageType}</strong>
-                  </p>
-                  <p className="mt-1 text-xs text-gray-500">PNG, JPG, JPEG (MAX. 10MB)</p>
-                </>
-              )}
-            </div>
-            <Button
-              onClick={handleLocalPrediction}
-              disabled={predictionLoading || !imageFiles.frontal || !imageFiles.lateral || !imageFiles.trasera}
-              className={`w-full text-base bg-gradient-to-r hover:bg-gradient-to-tr from-azul-gradient to-morado-gradient py-2 rounded-md border-none flex items-center justify-center gap-2 ${(!imageFiles.frontal || !imageFiles.lateral || !imageFiles.trasera) && !predictionLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-              style={{transition: 'opacity 0.3s ease'}}
-            >
-              <Sparkle size={18} weight="fill" />
-              Generar
-            </Button>
           </div>
         </div>
-        <div className="w-full xl:w-2/3">
-          <MultiImagen3DResult />
+        
+        <hr className="border-t-2 border-linea/20 mb-6 flex-shrink-0" />
+
+        <div className="flex-grow grid grid-cols-1 xl:grid-cols-5 gap-4">
+          
+          <div className="xl:col-span-2">
+            <div className="bg-principal/30 backdrop-blur-sm border border-linea/20 rounded-2xl p-4 h-full flex flex-col space-y-4">
+              
+              <div>
+                <div className="flex items-center gap-3 mb-2">
+                  <TextAa size={18} className="text-azul-gradient" />
+                  <h3 className="text-sm font-semibold text-white">Nombre de la Generación</h3>
+                </div>
+                <input
+                  type="text"
+                  placeholder="Ej: Mi personaje completo"
+                  value={generationName}
+                  onChange={(e) => setGenerationName(e.target.value)}
+                  disabled={predictionLoading}
+                  className={`w-full p-2.5 rounded-lg bg-principal/50 border-2 ${
+                    generationName.trim() ? "border-azul-gradient" : "border-linea/30"
+                  } text-white placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300`}
+                />
+              </div>
+
+              <div className="flex-grow flex flex-col min-h-0">
+                <div className="flex items-center gap-3 mb-2">
+                  <UploadSimple size={18} className="text-azul-gradient" />
+                  <h3 className="text-sm font-semibold text-white">Sube tus Vistas</h3>
+                </div>
+                
+                <div className="flex gap-2 mb-2">
+                  {["frontal", "lateral", "trasera"].map(type => (
+                    <button
+                      key={type}
+                      onClick={() => !predictionLoading && selectImageType(type)}
+                      disabled={predictionLoading}
+                      className={`flex-1 border-2 rounded-lg py-1.5 px-2 flex items-center justify-center transition-all text-xs h-10 gap-1.5 ${
+                        currentImageType === type
+                          ? "border-azul-gradient bg-azul-gradient/20 shadow-md font-semibold"
+                          : "border-linea/30 hover:border-azul-gradient/50 bg-principal/50 text-gray-300 hover:text-white"
+                      }`}
+                    >
+                      <span className="capitalize">{type}</span>
+                      {imageFiles[type] && <CheckCircle size={14} weight="fill" className="text-green-400" />}
+                    </button>
+                  ))}
+                </div>
+
+                <div
+                  className={`relative border-2 border-dashed rounded-lg p-2 text-center cursor-pointer transition-colors flex flex-col items-center justify-center flex-grow ${
+                    isDragging
+                      ? "border-azul-gradient bg-azul-gradient/10"
+                      : imagePreviews[currentImageType]
+                      ? "border-azul-gradient bg-azul-gradient/10"
+                      : "border-linea/30"
+                  } ${predictionLoading ? "opacity-50 cursor-not-allowed" : "hover:border-azul-gradient/50"}`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  onClick={() => !predictionLoading && document.getElementById('fileInput-multiimagen3d').click()}
+                >
+                  <input
+                    id="fileInput-multiimagen3d"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    disabled={predictionLoading}
+                    className="hidden"
+                  />
+                  {imagePreviews[currentImageType] ? (
+                    <div className="w-full h-full relative p-1">
+                      <img
+                        src={imagePreviews[currentImageType]}
+                        alt={`Vista previa (${currentImageType})`}
+                        className="absolute inset-0 w-full h-full object-contain"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center p-4">
+                      <UploadSimple className="w-10 h-10 text-gray-400 mb-3" weight="light" />
+                      <p className="text-sm text-gray-300 capitalize">
+                        Arrastra o haz clic para subir la vista <strong>{currentImageType}</strong>
+                      </p>
+                      <p className="mt-1 text-xs text-gray-500">PNG, JPG, JPEG (MAX. 10MB)</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+              
+              <div className="mt-auto flex-shrink-0">
+                <button
+                  onClick={handleLocalPrediction}
+                  disabled={isButtonDisabled} // Deshabilitar el botón según la condición
+                  className="w-full text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-3 rounded-lg border-none flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-lg hover:shadow-morado-gradient/20 hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 disabled:cursor-not-allowed"
+                >
+                  <Sparkle size={22} weight="fill" />
+                  Generar Modelo 3D
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="xl:col-span-3">
+            <MultiImagen3DResult predictionResult={prediction_multiimg3d_result} />
+          </div>
         </div>
       </div>
+
       <ErrorModal
         showModal={!!predictionError}
         closeModal={clearPredictionError}
@@ -173,6 +217,6 @@ export const MultiImagen3DInput = ({
         showLoadingModal={predictionLoading}
         message="Generando el modelo 3D..."
       />
-    </div>
+    </section>
   );
 };

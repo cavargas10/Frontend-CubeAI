@@ -1,4 +1,3 @@
-import React from "react"; 
 import { ModelResultViewer } from "../shared/ModelResultViewer"; 
 import { usePredictions } from '../../context/PredictionContext'; 
 
@@ -12,9 +11,9 @@ export const Texto3DResult = () => {
     texture: true,  
     download: true, 
   };
-  const cameraPosition = [0, 0, 1.7]; 
+  const cameraPosition = [0, 0, 1.5]; 
   const orbitConfig = { minDistance: 0.5, maxDistance: 2, autoRotateSpeed: 2 };
-  const gridPosition = [0, -0.2, 0]; 
+  const gridPosition = [0, -0.5, 0]; 
 
   return (
     <ModelResultViewer

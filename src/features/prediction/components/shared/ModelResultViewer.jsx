@@ -1,4 +1,4 @@
-import React, { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Grid, Html } from "@react-three/drei";
 import {
@@ -15,8 +15,10 @@ import { ModalBase } from "../../../../components/modals/ModalBase";
 const ControlButton = ({ onClick, title, children, active }) => (
   <button
     onClick={onClick}
-    className={`p-2 rounded-lg transition-colors flex items-center gap-2 ${
-      active ? "bg-morado-gradient text-white" : "bg-white/5 hover:bg-white/10"
+    className={`p-2 rounded-xl transition-all flex items-center gap-2 ${
+      active
+        ? "bg-gradient-to-r from-azul-gradient to-morado-gradient text-white shadow-md"
+        : "bg-white/5 hover:bg-gradient-to-r hover:from-azul-gradient/50 hover:to-morado-gradient/50 text-gray-300"
     }`}
     title={title}
   >
@@ -27,7 +29,7 @@ const ControlButton = ({ onClick, title, children, active }) => (
 const ModelLoadingFallback = () => {
   return (
     <Html center zIndexRange={[100, 0]}>
-      <div className="text-center p-4 bg-principal/90 rounded-lg backdrop-blur-sm shadow-xl">
+      <div className="text-center p-4 bg-principal/90 rounded-2xl backdrop-blur-sm shadow-xl">
         <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-morado-gradient mx-auto mb-3"></div>
         <p className="text-sm text-white font-medium">Cargando modelo 3D...</p>
       </div>
@@ -57,6 +59,7 @@ export const ModelResultViewer = ({
   },
   gridPosition = [0, -0.5, 0],
   children,
+  isCollapsed = false, 
 }) => {
   const [showWireframe, setShowWireframe] = useState(false);
   const [autoRotate, setAutoRotate] = useState(true);
@@ -73,12 +76,11 @@ export const ModelResultViewer = ({
 
   return (
     <div
-      className="w-full h-full bg-principal rounded-r-lg relative"
-      style={{ minHeight: "500px" }}
+      className="w-full h-full bg-principal rounded-3xl relative overflow-hidden"
     >
       {!isResultReady && (
-        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm z-20 flex items-center justify-center">
-          <div className="text-center p-6 rounded-lg bg-principal/80">
+        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm z-20 flex items-center justify-center rounded-3xl">
+          <div className="text-center p-6 rounded-2xl bg-principal/80">
             <h3 className="text-2xl font-semibold mb-2">
               Esperando generación...
             </h3>
@@ -102,9 +104,7 @@ export const ModelResultViewer = ({
           className={`${children && isResultReady ? "xl:col-span-4" : "col-span-full"} h-full relative`}
         >
           {isResultReady && (
-            <div className="absolute top-4 left-4 z-10 flex flex-wrap gap-2 bg-principal/90 p-2 rounded-lg backdrop-blur">
-              {" "}
-              {/* Tu estilo */}
+            <div className="absolute top-4 left-4 z-10 flex flex-wrap gap-2 bg-principal/90 p-3 rounded-2xl backdrop-blur">
               {controls.wireframe && (
                 <ControlButton
                   onClick={() => setShowWireframe(!showWireframe)}
@@ -137,11 +137,11 @@ export const ModelResultViewer = ({
               )}
               {controls.download && modelUrl && (
                 <div className="flex gap-2 items-center">
-                  <div className="h-6 w-px bg-white/20" />
+                  <div className="h-6 w-px bg-white/20 rounded-full" />
                   <a
                     href={modelUrl}
                     download={downloadFilename}
-                    className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors flex items-center gap-2"
+                    className="p-2 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-xl flex items-center gap-2 transition-all hover:shadow-lg hover:scale-105"
                   >
                     <DownloadSimple size={20} />
                     <span className="text-sm">GLB</span>
@@ -156,11 +156,11 @@ export const ModelResultViewer = ({
               className="absolute bottom-4 left-4 z-10 cursor-pointer"
               onClick={() => setIsTextureZoomed(true)}
             >
-              <div className="bg-fondologin/90 p-2 rounded-lg backdrop-blur group hover:bg-principal transition-colors">
+              <div className="bg-fondologin/90 p-3 rounded-2xl group hover:bg-principal transition-colors">
                 <img
                   src={textureToPreview}
                   alt="Vista previa de textura"
-                  className="w-16 h-16 object-cover rounded-lg group-hover:opacity-90 transition-opacity"
+                  className="w-16 h-16 object-cover rounded-xl group-hover:opacity-90 transition-opacity"
                 />
                 <span className="text-xs text-gray-400 mt-1 block text-center">
                   Ver textura
@@ -171,7 +171,7 @@ export const ModelResultViewer = ({
 
           <Canvas
             camera={{ position: initialCameraPosition, fov: 50 }}
-            className={`h-full rounded-b-lg xl:rounded-r-lg xl:rounded-bl-none ${!isResultReady ? "opacity-40" : "opacity-100 transition-opacity duration-300"}`}
+            className={`h-full rounded-3xl ${!isResultReady ? "opacity-40" : "opacity-100 transition-opacity duration-300"}`}
           >
             <Suspense fallback={<CanvasInitializingFallback />}>
               <Grid
@@ -212,20 +212,49 @@ export const ModelResultViewer = ({
           <ModalBase
             isOpen={isTextureZoomed}
             onClose={() => setIsTextureZoomed(false)}
+            className="z-[9999]"
           >
-            <div className="relative p-4">
-              <img
-                src={textureToPreview}
-                alt="Vista completa de textura"
-                className="max-w-[80vw] max-h-[80vh] object-contain rounded-lg"
-              />
-              <button
+            <div 
+              className={`fixed inset-0 z-[9999] flex items-center justify-center transition-all duration-300 ease-in-out ${
+                isCollapsed
+                  ? "sm:pl-[80px]"
+                  : "md:pl-[267px] 2xl:pl-[300px]"
+              }`}
+              style={{ paddingTop: '80px', paddingBottom: '20px' }} 
+            >
+              <div 
+                className="absolute inset-0 bg-black/80 backdrop-blur-sm"
                 onClick={() => setIsTextureZoomed(false)}
-                className="absolute top-2 right-2 p-2 bg-black/20 hover:bg-black/40 rounded-full transition-colors text-white"
-                aria-label="Cerrar vista de textura"
-              >
-                <X size={20} />
-              </button>
+              />
+
+              <div className="relative bg-principal rounded-2xl p-4 shadow-2xl">
+                <div className="w-[500px] h-[500px] flex items-center justify-center relative">
+                  <img
+                    src={textureToPreview}
+                    alt="Vista completa de textura"
+                    className="max-w-full max-h-full object-contain rounded-xl"
+                  />
+
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+                    <a
+                      href={textureToPreview}
+                      download="textura.png"
+                      className="px-4 py-2 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-full flex items-center gap-2 transition-all hover:shadow-lg hover:scale-105 shadow-xl backdrop-blur-sm"
+                    >
+                      <DownloadSimple size={18} />
+                      <span className="text-sm font-medium">Descargar</span>
+                    </a>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setIsTextureZoomed(false)}
+                  className="absolute -top-3 -right-3 p-2 bg-red-500 hover:bg-red-600 rounded-full transition-colors text-white shadow-lg z-10"
+                  aria-label="Cerrar vista de textura"
+                >
+                  <X size={20} />
+                </button>
+              </div>
             </div>
           </ModalBase>
         </div>
