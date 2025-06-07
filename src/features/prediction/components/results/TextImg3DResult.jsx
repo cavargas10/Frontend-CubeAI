@@ -14,6 +14,7 @@ export const TextImg3DResult = () => {
     texture: true,
     download: false, 
   };
+
   const cameraPosition = [0, 0, 1.5];
   const orbitConfig = { minDistance: 0.5, maxDistance: 1.5, autoRotateSpeed: 2 };
   const gridPosition = [0, -0.35, 0];
@@ -29,7 +30,7 @@ export const TextImg3DResult = () => {
     >
       <>
         {predictionError && <p className="text-red-500 mb-4">{predictionError}</p>}
-        <h3 className="text-xl border-b border-linea pb-3 text-center w-full mb-4">
+        <h3 className="text-xl border-b border-linea pb-3 xl:border-b xl:border-linea xl:pb-3 text-center w-full mb-4 md:border-b-0 md:pb-0">
           Resultado de la Generación
         </h3>
         {imageUrl && (
@@ -43,7 +44,6 @@ export const TextImg3DResult = () => {
         )}
         {modelUrl && (
           <div className="mt-auto w-full flex flex-col items-center gap-3 pt-4">
-            <p className="text-sm text-gray-300">Descargar modelo 3D</p>
             <div className="flex gap-3">
               <a
                 href={modelUrl}

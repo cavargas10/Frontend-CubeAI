@@ -74,7 +74,7 @@ export const Unico3DInput = ({
 
   return (
     <section
-      className={`w-full bg-fondologin text-white transition-all duration-300 ease-in-out relative flex flex-col h-[calc(100vh-4rem)] ${
+      className={`w-full bg-fondologin text-white transition-all duration-300 ease-in-out relative flex flex-col min-h-[calc(100vh-4rem)] ${
         isCollapsed ? "sm:pl-[80px]" : "md:pl-[267px] 2xl:pl-[300px]"
       }`}
     >
@@ -93,9 +93,11 @@ export const Unico3DInput = ({
         
         <hr className="border-t-2 border-linea/20 mb-6 flex-shrink-0" />
 
-        <div className="flex-grow grid grid-cols-1 xl:grid-cols-5 gap-4">
+        {/* Layout responsive: columna única en móvil, dos columnas en desktop */}
+        <div className="flex-grow flex flex-col xl:grid xl:grid-cols-5 xl:gap-4">
           
-          <div className="xl:col-span-2">
+          {/* Formulario de entrada */}
+          <div className="xl:col-span-2 mb-6 xl:mb-0">
             <div className="bg-principal/30 backdrop-blur-sm border border-linea/20 rounded-2xl p-4 h-full flex flex-col space-y-4">
               
               <div>
@@ -142,15 +144,15 @@ export const Unico3DInput = ({
                     className="hidden"
                   />
                   {imagePreview ? (
-                    <div className="w-full h-full relative">
+                    <div className="w-full h-full relative min-h-[200px] sm:min-h-[220px] xl:min-h-0">
                       <img
                         src={imagePreview}
                         alt="Vista previa"
-                        className="absolute inset-0 w-full h-full object-contain"
+                        className="absolute inset-0 w-full h-full object-contain rounded-lg"
                       />
                     </div>
                   ) : (
-                    <div className="flex flex-col items-center justify-center p-4">
+                    <div className="flex flex-col items-center justify-center p-4 min-h-[200px] sm:min-h-[220px] xl:min-h-0">
                       <UploadSimple className="w-10 h-10 text-gray-400 mb-3" weight="light" />
                       <p className="text-sm text-gray-300">Arrastra una imagen o haz clic</p>
                       <p className="mt-1 text-xs text-gray-500">PNG, JPG, JPEG (MAX. 10MB)</p>
@@ -162,7 +164,7 @@ export const Unico3DInput = ({
               <div className="mt-auto flex-shrink-0">
                 <button
                   onClick={handleLocalPrediction}
-                  disabled={isButtonDisabled} // Deshabilitar el botón según la condición
+                  disabled={isButtonDisabled}
                   className="w-full text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-3 rounded-lg border-none flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-lg hover:shadow-morado-gradient/20 hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 disabled:cursor-not-allowed"
                 >
                   <Sparkle size={22} weight="fill" />
@@ -172,8 +174,11 @@ export const Unico3DInput = ({
             </div>
           </div>
 
-          <div className="xl:col-span-3">
-            <Unico3DResult predictionResult={prediction_unico3d_result} />
+          {/* Resultado del modelo 3D - Más grande en móvil */}
+          <div className="xl:col-span-3 flex-grow">
+            <div className="h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0">
+              <Unico3DResult predictionResult={prediction_unico3d_result} />
+            </div>
           </div>
         </div>
       </div>

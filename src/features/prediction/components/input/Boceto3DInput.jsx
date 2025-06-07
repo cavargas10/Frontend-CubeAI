@@ -176,10 +176,13 @@ export const Boceto3DInput = ({
           </div>
         </div>
         <hr className="border-t-2 border-linea/20 mb-6 flex-shrink-0" />
-        <div className="flex-grow grid grid-cols-1 xl:grid-cols-5 gap-4">
+        
+        {/* Layout responsivo: columna en móvil, grid en xl */}
+        <div className="flex-grow flex flex-col xl:grid xl:grid-cols-5 gap-4">
+          {/* Sección del canvas */}
           <div className="xl:col-span-2">
             <div className="bg-principal/30 backdrop-blur-sm border border-linea/20 rounded-2xl p-4 h-full flex flex-col space-y-4">
-              <div>
+              <div className="flex-shrink-0">
                 <div className="flex items-center gap-3 mb-2">
                   <TextAa size={18} className="text-azul-gradient" />
                   <h3 className="text-sm font-semibold text-white">Nombre de la Generación</h3>
@@ -197,7 +200,7 @@ export const Boceto3DInput = ({
               </div>
               <div className="flex-grow flex flex-col min-h-0">
                 <div
-                  className={`w-full h-full rounded-lg overflow-hidden relative ${
+                  className={`w-full min-h-[400px] xl:min-h-0 xl:flex-grow rounded-lg overflow-hidden relative ${
                     predictionLoading ? "opacity-60 pointer-events-none" : ""
                   }`}
                   style={{ touchAction: "none" }}
@@ -246,19 +249,19 @@ export const Boceto3DInput = ({
                     </button>
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 p-2">
-                    <div className="bg-principal/80 backdrop-blur-sm border border-linea/20 rounded-lg p-2 flex items-center gap-2">
+                    <div className="bg-principal/80 backdrop-blur-sm border border-linea/20 rounded-lg p-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                       <input
                         type="text"
                         placeholder="Describe tu boceto (opcional)..."
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         disabled={predictionLoading}
-                        className="flex-1 text-sm bg-transparent text-white border-none focus:ring-0"
+                        className="flex-1 text-sm bg-transparent text-white border-none focus:ring-0 placeholder-gray-400 px-1 py-1"
                       />
                       <button
                         onClick={handleLocalPrediction}
-                        disabled={isButtonDisabled} // Deshabilitar el botón según la condición
-                        className="text-sm font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2 px-4 rounded-md border-none flex items-center justify-center gap-2 transition-all hover:scale-105 disabled:opacity-60 disabled:hover:scale-100"
+                        disabled={isButtonDisabled}
+                        className="text-sm font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2 px-4 rounded-md border-none flex items-center justify-center gap-2 transition-all hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 whitespace-nowrap"
                       >
                         <Sparkle size={16} weight="fill" />
                         Generar
@@ -269,7 +272,9 @@ export const Boceto3DInput = ({
               </div>
             </div>
           </div>
-          <div className="xl:col-span-3">
+          
+          {/* Sección del resultado - Más grande en móvil */}
+          <div className="xl:col-span-3 flex-grow min-h-[500px] md:min-h-[600px] xl:min-h-0">
             <Boceto3DResult predictionResult={prediction_boceto3d_result} />
           </div>
         </div>

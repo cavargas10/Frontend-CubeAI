@@ -103,9 +103,11 @@ export const TextImg3DInput = ({
         
         <hr className="border-t-2 border-linea/20 mb-6 flex-shrink-0" />
 
-        <div className="flex-grow grid grid-cols-1 xl:grid-cols-5 gap-4">
+        {/* Layout mejorado para móvil */}
+        <div className="flex-grow flex flex-col xl:grid xl:grid-cols-5 gap-4">
           
-          <div className="xl:col-span-2">
+          {/* Panel de inputs - más compacto en móvil */}
+          <div className="xl:col-span-2 flex-shrink-0">
             <div className="bg-principal/30 backdrop-blur-sm border border-linea/20 rounded-2xl p-3 h-full flex flex-col space-y-2">
               
               <div>
@@ -201,7 +203,7 @@ export const TextImg3DInput = ({
               <div className="mt-auto flex-shrink-0">
                 <button
                   onClick={handleLocalPrediction}
-                  disabled={isButtonDisabled} // Deshabilitar el botón según la condición
+                  disabled={isButtonDisabled}
                   className="w-full text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2.5 rounded-lg border-none flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-lg hover:shadow-morado-gradient/20 hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 disabled:cursor-not-allowed"
                 >
                   <Sparkle size={22} weight="fill" />
@@ -211,8 +213,11 @@ export const TextImg3DInput = ({
             </div>
           </div>
 
-          <div className="xl:col-span-3">
-            <TextImg3DResult predictionResult={prediction_textimg3d_result} />
+          {/* Viewer más grande en móvil */}
+          <div className="xl:col-span-3 flex-grow min-h-0">
+            <div className="h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0">
+              <TextImg3DResult predictionResult={prediction_textimg3d_result} />
+            </div>
           </div>
         </div>
       </div>

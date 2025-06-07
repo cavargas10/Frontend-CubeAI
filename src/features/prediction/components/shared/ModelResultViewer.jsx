@@ -95,13 +95,13 @@ export const ModelResultViewer = ({
         className={`relative h-full ${children && isResultReady ? "grid xl:grid-cols-6" : ""}`}
       >
         {isResultReady && children && (
-          <div className="xl:col-span-2 border-r border-linea flex flex-col items-center p-4">
+          <div className="xl:col-span-2 xl:border-r xl:border-linea flex flex-col items-center p-4">
             {children}
           </div>
         )}
 
         <div
-          className={`${children && isResultReady ? "xl:col-span-4" : "col-span-full"} h-full relative`}
+          className={`${children && isResultReady ? "xl:col-span-4" : "col-span-full"} h-full relative ${children && isResultReady ? "border-t xl:border-t-0 xl:border-linea" : ""}`}
         >
           {isResultReady && (
             <div className="absolute top-4 left-4 z-10 flex flex-wrap gap-2 bg-principal/90 p-3 rounded-2xl backdrop-blur">
