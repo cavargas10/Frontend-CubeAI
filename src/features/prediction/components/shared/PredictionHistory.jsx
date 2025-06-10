@@ -157,7 +157,7 @@ export const PredictionHistory = ({ selectedTab }) => {
       <DeleteConfirmationModal
         showModal={showDeleteModal}
         closeModal={closeModal}
-        confirmDelete={handleDeleteGeneration}
+        onConfirm={handleDeleteGeneration} 
         message={
           generationToDelete
             ? `¿Seguro que deseas eliminar "${generationToDelete.generation_name}"?`

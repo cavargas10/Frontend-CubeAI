@@ -1,12 +1,10 @@
-import React from "react";
 import { XCircle } from "@phosphor-icons/react";
 import { Modal, Button } from "flowbite-react";
 
 export const DeleteConfirmationModal = ({
   showModal,
   closeModal,
-  handleDeleteGeneration,
-  confirmDelete,
+  onConfirm, 
   message
 }) => {
   return (
@@ -35,7 +33,7 @@ export const DeleteConfirmationModal = ({
           <div className="flex justify-center gap-4">
             <Button
               className="bg-red-600 text-white hover:bg-red-700 rounded-xl"
-              onClick={handleDeleteGeneration || confirmDelete}
+              onClick={onConfirm} 
             >
               Sí, claro
             </Button>

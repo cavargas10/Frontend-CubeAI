@@ -284,7 +284,7 @@ export const ConfigDash = ({ user, userData, refetchUserData, isCollapsed }) => 
       <DeleteConfirmationModal
         showModal={showDeleteModal}
         closeModal={closeDeleteModal}
-        confirmDelete={confirmDelete}
+        onConfirm={confirmDelete} 
         message="¿Estás seguro de que deseas eliminar tu cuenta?"
       />
       <LoadingModal
