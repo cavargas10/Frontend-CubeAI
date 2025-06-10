@@ -9,7 +9,6 @@ import { useMultiImageUpload } from "../../hooks/useMultiImageUpload";
 export const MultiImagen3DInput = ({
   user,
   setPrediction_multiimg3d_result,
-  prediction_multiimg3d_result, 
   isCollapsed,
 }) => {
   const [generationName, setGenerationName] = useState("");
@@ -61,6 +60,10 @@ export const MultiImagen3DInput = ({
       return;
     }
 
+    if (typeof setPrediction_multiimg3d_result === "function") {
+        setPrediction_multiimg3d_result(null);
+    }
+
     const formData = new FormData();
     formData.append("frontal", imageFiles.frontal);
     formData.append("lateral", imageFiles.lateral);
@@ -68,9 +71,10 @@ export const MultiImagen3DInput = ({
     formData.append("generationName", generationName);
 
     const result = await submitPrediction("multiimagen3D", formData);
-
-    if (result && typeof setPrediction_multiimg3d_result === "function") {
-      setPrediction_multiimg3d_result(result);
+    if (result) {
+      if (typeof setPrediction_multiimg3d_result === "function") {
+        setPrediction_multiimg3d_result(result);
+      }
     }
   };
 
@@ -103,6 +107,7 @@ export const MultiImagen3DInput = ({
         <hr className="border-t-2 border-linea/20 mb-6 flex-shrink-0" />
 
         <div className="flex-grow flex flex-col xl:grid xl:grid-cols-5 xl:gap-4">
+          
           <div className="xl:col-span-2 mb-6 xl:mb-0">
             <div className="bg-principal/30 backdrop-blur-sm border border-linea/20 rounded-2xl p-4 h-full flex flex-col space-y-4">
               
@@ -187,6 +192,7 @@ export const MultiImagen3DInput = ({
                   )}
                 </div>
               </div>
+              
               <div className="mt-auto flex-shrink-0">
                 <button
                   onClick={handleLocalPrediction}
@@ -199,9 +205,10 @@ export const MultiImagen3DInput = ({
               </div>
             </div>
           </div>
+
           <div className="xl:col-span-3 flex-grow">
             <div className="h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0">
-              <MultiImagen3DResult predictionResult={prediction_multiimg3d_result} />
+              <MultiImagen3DResult />
             </div>
           </div>
         </div>
@@ -214,7 +221,7 @@ export const MultiImagen3DInput = ({
       />
       <LoadingModal
         showLoadingModal={predictionLoading}
-        steps={loadingSteps} 
+        steps={loadingSteps}
       />
     </section>
   );

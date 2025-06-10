@@ -3,7 +3,7 @@ import { usePredictions } from '../../context/PredictionContext';
 
 export const Imagen3DResult = () => {
   const { prediction_img3d_result } = usePredictions();
-  const modelUrl = prediction_img3d_result?.glb_model_i23d; 
+  const modelUrl = prediction_img3d_result?.modelUrl; 
 
   const controls = {
     wireframe: true,

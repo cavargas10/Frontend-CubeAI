@@ -16,7 +16,6 @@ const styles = [
 export const TextImg3DInput = ({
   user,
   setPrediction_textimg3d_result,
-  prediction_textimg3d_result,
   isCollapsed,
 }) => {
   const [generationName, setGenerationName] = useState("");
@@ -63,6 +62,10 @@ export const TextImg3DInput = ({
       return;
     }
 
+    if (typeof setPrediction_textimg3d_result === 'function') {
+        setPrediction_textimg3d_result(null);
+    }
+
     const result = await submitPrediction("textimg3D", {
       generationName,
       subject,
@@ -70,8 +73,10 @@ export const TextImg3DInput = ({
       additionalDetails,
     });
 
-    if (result && typeof setPrediction_textimg3d_result === "function") {
-      setPrediction_textimg3d_result(result);
+    if (result) {
+      if (typeof setPrediction_textimg3d_result === "function") {
+        setPrediction_textimg3d_result(result);
+      }
     }
   };
 
@@ -104,9 +109,10 @@ export const TextImg3DInput = ({
         <hr className="border-t-2 border-linea/20 mb-6 flex-shrink-0" />
 
         <div className="flex-grow flex flex-col xl:grid xl:grid-cols-5 gap-4">
+          
           <div className="xl:col-span-2 flex-shrink-0">
             <div className="bg-principal/30 backdrop-blur-sm border border-linea/20 rounded-2xl p-3 h-full flex flex-col space-y-2">
-              
+
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   <TextAa size={18} className="text-azul-gradient" />
@@ -135,7 +141,7 @@ export const TextImg3DInput = ({
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
                   disabled={predictionLoading}
-                  className={`w-full p-2 rounded-lg bg-principal/50 border-2 ${
+className={`w-full p-2 rounded-lg bg-principal/50 border-2 ${
                     subject.trim() ? "border-azul-gradient" : "border-linea/30"
                   } text-white text-sm placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300`}
                 />
@@ -212,7 +218,7 @@ export const TextImg3DInput = ({
 
           <div className="xl:col-span-3 flex-grow min-h-0">
             <div className="h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0">
-              <TextImg3DResult predictionResult={prediction_textimg3d_result} />
+              <TextImg3DResult />
             </div>
           </div>
         </div>
@@ -225,7 +231,7 @@ export const TextImg3DInput = ({
       />
       <LoadingModal
         showLoadingModal={predictionLoading}
-        steps={loadingSteps} 
+        steps={loadingSteps}
       />
     </section>
   );

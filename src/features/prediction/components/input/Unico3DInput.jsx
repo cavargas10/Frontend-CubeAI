@@ -9,7 +9,6 @@ import { useImageUpload } from "../../hooks/useImageUpload";
 export const Unico3DInput = ({
   user,
   setPrediction_unico3d_result,
-  prediction_unico3d_result,
   isCollapsed,
 }) => {
   const [generationName, setGenerationName] = useState("");
@@ -58,6 +57,9 @@ export const Unico3DInput = ({
       setPredictionError("No se ha seleccionado ninguna imagen");
       return;
     }
+    if (typeof setPrediction_unico3d_result === "function") {
+        setPrediction_unico3d_result(null);
+    }
 
     const formData = new FormData();
     formData.append("image", imageFile);
@@ -65,8 +67,10 @@ export const Unico3DInput = ({
 
     const result = await submitPrediction("unico3D", formData);
 
-    if (result && typeof setPrediction_unico3d_result === "function") {
-      setPrediction_unico3d_result(result);
+    if (result) {
+      if (typeof setPrediction_unico3d_result === "function") {
+        setPrediction_unico3d_result(result);
+      }
     }
   };
 
@@ -173,7 +177,7 @@ export const Unico3DInput = ({
 
           <div className="xl:col-span-3 flex-grow">
             <div className="h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0">
-              <Unico3DResult predictionResult={prediction_unico3d_result} />
+              <Unico3DResult />
             </div>
           </div>
         </div>
@@ -186,7 +190,7 @@ export const Unico3DInput = ({
       />
       <LoadingModal
         showLoadingModal={predictionLoading}
-        steps={loadingSteps} 
+        steps={loadingSteps}
       />
     </section>
   );

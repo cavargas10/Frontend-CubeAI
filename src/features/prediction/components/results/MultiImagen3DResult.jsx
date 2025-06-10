@@ -3,7 +3,7 @@ import { usePredictions } from '../../context/PredictionContext';
 
 export const MultiImagen3DResult = () => {
   const { prediction_multiimg3d_result } = usePredictions();
-  const modelUrl = prediction_multiimg3d_result?.glb_model_multi3d; 
+  const modelUrl = prediction_multiimg3d_result?.modelUrl;
 
   const controls = {
     wireframe: true,

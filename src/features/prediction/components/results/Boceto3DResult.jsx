@@ -3,7 +3,8 @@ import { usePredictions } from "../../context/PredictionContext";
 
 export const Boceto3DResult = () => {
   const { prediction_boceto3d_result } = usePredictions();
-  const modelUrl = prediction_boceto3d_result?.glb_model_b3d;
+  const modelUrl = prediction_boceto3d_result?.modelUrl;
+
   const controls = {
     wireframe: true,
     rotate: true,

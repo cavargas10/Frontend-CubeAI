@@ -3,7 +3,7 @@ import { usePredictions } from '../../context/PredictionContext';
 
 export const Unico3DResult = () => {
   const { prediction_unico3d_result } = usePredictions();
-  const modelUrl = prediction_unico3d_result?.obj_glb; 
+  const modelUrl = prediction_unico3d_result?.modelUrl;
 
   const controls = {
     wireframe: true,
