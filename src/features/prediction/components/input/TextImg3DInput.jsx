@@ -6,6 +6,18 @@ import { TextImg3DResult } from "../results/TextImg3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
+import { uploadPredictionPreview } from "../../services/predictionApi"; 
+
+function dataURLtoBlob(dataurl) {
+    const arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], {type:mime});
+}
 
 const styles = [
   { name: "Disney", value: "disney" },
@@ -17,7 +29,7 @@ const styles = [
 
 export const TextImg3DInput = ({ isCollapsed }) => {
   const { user } = useAuth();
-  const { dispatch, clearResult } = usePredictions();
+  const { dispatch, clearResult, prediction_textimg3d_result } = usePredictions();
   const [generationName, setGenerationName] = useState("");
   const [subject, setSubject] = useState("");
   const [selectedStyle, setSelectedStyle] = useState(null);
@@ -54,9 +66,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
       !selectedStyle ||
       !additionalDetails.trim()
     ) {
-      setPredictionError(
-        "Todos los campos (Nombre, Prompt, Estilo, Detalles) son obligatorios"
-      );
+      setPredictionError("Todos los campos (Nombre, Prompt, Estilo, Detalles) son obligatorios");
       return;
     }
 
@@ -73,6 +83,27 @@ export const TextImg3DInput = ({ isCollapsed }) => {
       dispatch({ type: 'SET_PREDICTION', payload: { type: 'textimg3d', result } });
     }
   };
+  
+  const handlePreviewUpload = useCallback(async (dataURL) => {
+    if (!user || !prediction_textimg3d_result || !prediction_textimg3d_result.generation_name) return;
+    if (prediction_textimg3d_result.previewImageUrl) return;
+
+    try {
+        const token = await user.getIdToken();
+        const previewBlob = dataURLtoBlob(dataURL);
+      
+        const formData = new FormData();
+        formData.append('preview', previewBlob, 'preview.png');
+        formData.append('generation_name', prediction_textimg3d_result.generation_name);
+        formData.append('prediction_type_api', 'TextImg3D'); // <-- TIPO CORRECTO
+
+        await uploadPredictionPreview(token, formData);
+        console.log("Previsualización subida con éxito para 'Texto a Imagen a 3D'.");
+        
+    } catch (error) {
+        console.error("Error al subir la previsualización:", error);
+    }
+  }, [user, prediction_textimg3d_result]);
 
   const isButtonDisabled =
     predictionLoading ||
@@ -221,7 +252,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
 
           <div className="xl:col-span-3 flex-grow min-h-0">
             <div className="h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0">
-              <TextImg3DResult />
+              <TextImg3DResult onFirstLoad={handlePreviewUpload} />
             </div>
           </div>
         </div>

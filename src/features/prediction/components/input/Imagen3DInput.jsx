@@ -7,10 +7,22 @@ import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
+import { uploadPredictionPreview } from "../../services/predictionApi"; 
+
+function dataURLtoBlob(dataurl) {
+    const arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], {type:mime});
+}
 
 export const Imagen3DInput = ({ isCollapsed }) => {
   const { user } = useAuth();
-  const { dispatch, clearResult } = usePredictions();
+  const { dispatch, clearResult, prediction_img3d_result } = usePredictions();
   const [generationName, setGenerationName] = useState("");
 
   const {
@@ -67,6 +79,28 @@ export const Imagen3DInput = ({ isCollapsed }) => {
       dispatch({ type: 'SET_PREDICTION', payload: { type: 'img3d', result } });
     }
   };
+
+  const handlePreviewUpload = useCallback(async (dataURL) => {
+    if (!user || !prediction_img3d_result || !prediction_img3d_result.generation_name) return;
+    if (prediction_img3d_result.previewImageUrl) return;
+
+    try {
+        const token = await user.getIdToken();
+        const previewBlob = dataURLtoBlob(dataURL);
+        
+        const formData = new FormData();
+        formData.append('preview', previewBlob, 'preview.png');
+        formData.append('generation_name', prediction_img3d_result.generation_name);
+        formData.append('prediction_type_api', 'Imagen3D');
+
+        await uploadPredictionPreview(token, formData);
+        console.log("Previsualización subida con éxito para 'Imagen a 3D'.");
+        
+    } catch (error) {
+        console.error("Error al subir la previsualización:", error);
+    }
+  }, [user, prediction_img3d_result]);
+
 
   const isButtonDisabled =
     predictionLoading || !generationName.trim() || !imageFile;
@@ -190,7 +224,8 @@ export const Imagen3DInput = ({ isCollapsed }) => {
 
           <div className="xl:col-span-3 flex-grow">
             <div className="h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0">
-              <Imagen3DResult />
+              {/* Le pasamos la nueva función a Imagen3DResult */}
+              <Imagen3DResult onFirstLoad={handlePreviewUpload} />
             </div>
           </div>
         </div>

@@ -122,3 +122,17 @@ export const deleteGeneration = async (token, generation) => {
     handleApiError(error, "Error al eliminar la generación");
   }
 };
+
+export const uploadPredictionPreview = async (token, formData) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/generation/preview`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleApiError(error, "Error al subir la previsualización de la generación");
+  }
+};

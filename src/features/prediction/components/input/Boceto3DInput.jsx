@@ -7,10 +7,22 @@ import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useCanvasDrawing } from "../../hooks/useCanvasDrawing";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
+import { uploadPredictionPreview } from "../../services/predictionApi";
+
+function dataURLtoBlob(dataurl) {
+    const arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], {type:mime});
+}
 
 export const Boceto3DInput = ({ isCollapsed }) => {
   const { user } = useAuth();
-  const { dispatch, clearResult } = usePredictions();
+  const { dispatch, clearResult, prediction_boceto3d_result } = usePredictions();
   const [generationName, setGenerationName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -128,7 +140,7 @@ export const Boceto3DInput = ({ isCollapsed }) => {
       );
       return;
     }
-
+    
     dispatch({ type: 'SET_PREDICTION', payload: { type: 'boceto3d', result: null } });
 
     const image = getCanvasDataURL("image/png");
@@ -158,6 +170,27 @@ export const Boceto3DInput = ({ isCollapsed }) => {
     setPredictionError,
     dispatch,
   ]);
+
+  const handlePreviewUpload = useCallback(async (dataURL) => {
+    if (!user || !prediction_boceto3d_result || !prediction_boceto3d_result.generation_name) return;
+    if (prediction_boceto3d_result.previewImageUrl) return;
+
+    try {
+        const token = await user.getIdToken();
+        const previewBlob = dataURLtoBlob(dataURL);
+        
+        const formData = new FormData();
+        formData.append('preview', previewBlob, 'preview.png');
+        formData.append('generation_name', prediction_boceto3d_result.generation_name);
+        formData.append('prediction_type_api', 'Boceto3D');
+
+        await uploadPredictionPreview(token, formData);
+        console.log("Previsualización subida con éxito para 'Boceto a 3D'.");
+        
+    } catch (error) {
+        console.error("Error al subir la previsualización:", error);
+    }
+  }, [user, prediction_boceto3d_result]);
 
   const isButtonDisabled =
     predictionLoading || !generationName.trim() || isCanvasEmpty();
@@ -284,7 +317,7 @@ export const Boceto3DInput = ({ isCollapsed }) => {
           </div>
 
           <div className="xl:col-span-3 flex-grow min-h-[500px] md:min-h-[600px] xl:min-h-0">
-            <Boceto3DResult />
+            <Boceto3DResult onFirstLoad={handlePreviewUpload} />
           </div>
         </div>
       </div>

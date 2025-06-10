@@ -1,5 +1,5 @@
-import { Suspense, useState, useEffect } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Suspense, useState, useEffect, useRef } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls, Grid, Html } from "@react-three/drei";
 import {
   DownloadSimple,
@@ -11,6 +11,7 @@ import {
 import { HDREnvironment } from "./HDREnvironment";
 import { ModelViewer } from "./ModelViewer";
 import { ModalBase } from "../../../../components/modals/ModalBase";
+import { viewerConfig } from "../../config/viewer.config"; 
 
 const ControlButton = ({ onClick, title, children, active }) => (
   <button
@@ -26,40 +27,54 @@ const ControlButton = ({ onClick, title, children, active }) => (
   </button>
 );
 
-const ModelLoadingFallback = () => {
-  return (
+const ModelLoadingFallback = () => (
     <Html center zIndexRange={[100, 0]}>
       <div className="text-center p-4 bg-principal/90 rounded-2xl backdrop-blur-sm shadow-xl">
         <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-morado-gradient mx-auto mb-3"></div>
         <p className="text-sm text-white font-medium">Cargando modelo 3D...</p>
       </div>
     </Html>
-  );
-};
+);
 
-const CanvasInitializingFallback = () => {
-  return <Html center></Html>;
+const CanvasInitializingFallback = () => <Html center></Html>;
+
+const CanvasCaptureHandler = ({ onCaptureReady }) => {
+  const { gl, scene, camera } = useThree();
+  const captured = useRef(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (gl.domElement && !captured.current) {
+        gl.render(scene, camera);
+        try {
+          const dataURL = gl.domElement.toDataURL("image/png");
+          if (dataURL.length > 100) { 
+            onCaptureReady(dataURL);
+            captured.current = true;
+          }
+        } catch (e) {
+            console.error("Error capturing canvas:", e);
+        }
+      }
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [gl, onCaptureReady, scene, camera]);
+
+  return null;
 };
 
 export const ModelResultViewer = ({
   modelUrl,
   textureUrl,
-  downloadFilename = "modelo.glb",
-  controls = {
-    wireframe: true,
-    rotate: true,
-    texture: true,
-    download: true,
-  },
-  initialCameraPosition = [0, 0, 1.7],
-  orbitControlsConfig = {
-    minDistance: 0.5,
-    maxDistance: 2,
-    autoRotateSpeed: 2,
-  },
-  gridPosition = [0, -0.5, 0],
+  onFirstLoad,
   children,
-  isCollapsed = false, 
+  isCollapsed,
+  downloadFilename = viewerConfig.default.downloadFilename,
+  controls = viewerConfig.default.controls,
+  initialCameraPosition = viewerConfig.default.initialCameraPosition,
+  orbitControlsConfig = viewerConfig.default.orbitControlsConfig,
+  gridPosition = viewerConfig.default.gridPosition,
 }) => {
   const [showWireframe, setShowWireframe] = useState(false);
   const [autoRotate, setAutoRotate] = useState(true);
@@ -72,6 +87,8 @@ export const ModelResultViewer = ({
   useEffect(() => {
     setInternalTexturePreview(null);
     setShowTexture(controls.texture);
+    setShowWireframe(false); 
+    setAutoRotate(true); 
   }, [modelUrl, controls.texture]);
 
   return (
@@ -168,8 +185,9 @@ export const ModelResultViewer = ({
               </div>
             </div>
           )}
-
+          
           <Canvas
+            gl={{ preserveDrawingBuffer: true }}
             camera={{ position: initialCameraPosition, fov: 50 }}
             className={`h-full rounded-3xl ${!isResultReady ? "opacity-40" : "opacity-100 transition-opacity duration-300"}`}
           >
@@ -185,6 +203,7 @@ export const ModelResultViewer = ({
                 sectionColor="#9d4bff"
                 fadeDistance={25}
                 fadeStrength={1}
+                infiniteGrid
               />
               <HDREnvironment />
               <OrbitControls
@@ -198,12 +217,13 @@ export const ModelResultViewer = ({
               {isResultReady && (
                 <Suspense fallback={<ModelLoadingFallback />}>
                   <ModelViewer
-                    key={modelUrl}
+                    key={modelUrl} 
                     url={modelUrl}
                     showWireframe={showWireframe}
                     showTexture={showTexture && controls.texture}
                     onTextureLoad={setInternalTexturePreview}
                   />
+                  {onFirstLoad && <CanvasCaptureHandler onCaptureReady={onFirstLoad} />}
                 </Suspense>
               )}
             </Suspense>
@@ -212,21 +232,19 @@ export const ModelResultViewer = ({
           <ModalBase
             isOpen={isTextureZoomed}
             onClose={() => setIsTextureZoomed(false)}
-            className="z-[9999]"
           >
-            <div 
+            <div
               className={`fixed inset-0 z-[9999] flex items-center justify-center transition-all duration-300 ease-in-out ${
                 isCollapsed
                   ? "sm:pl-[80px]"
                   : "md:pl-[267px] 2xl:pl-[300px]"
               }`}
-              style={{ paddingTop: '80px', paddingBottom: '20px' }} 
+              style={{ paddingTop: '80px', paddingBottom: '20px' }}
             >
-              <div 
+              <div
                 className="absolute inset-0 bg-black/80 backdrop-blur-sm"
                 onClick={() => setIsTextureZoomed(false)}
               />
-
               <div className="relative bg-principal rounded-2xl p-4 shadow-2xl">
                 <div className="w-[500px] h-[500px] flex items-center justify-center relative">
                   <img
@@ -234,7 +252,6 @@ export const ModelResultViewer = ({
                     alt="Vista completa de textura"
                     className="max-w-full max-h-full object-contain rounded-xl"
                   />
-
                   <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
                     <a
                       href={textureToPreview}
@@ -246,7 +263,6 @@ export const ModelResultViewer = ({
                     </a>
                   </div>
                 </div>
-
                 <button
                   onClick={() => setIsTextureZoomed(false)}
                   className="absolute -top-3 -right-3 p-2 bg-red-500 hover:bg-red-600 rounded-full transition-colors text-white shadow-lg z-10"
