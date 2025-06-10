@@ -15,35 +15,31 @@ import {
   Lock,
   Eye,
   EyeSlash,
+  Question,
 } from "@phosphor-icons/react";
 import { ErrorModal } from "../../../components/modals/ErrorModal";
+import { RequirementsModal } from "../../../components/modals/RequirementsModal";
 import { GeometricParticles } from "../../../components/ui/GeometricParticles";
+import { usePasswordValidation } from "../hooks/usePasswordValidation";
 
 export const RegisterPage = ({ BASE_URL }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [errorMessages, setErrorMessages] = useState([]); 
+  const [showRequirementsModal, setShowRequirementsModal] = useState(false);
+  const [errorMessages, setErrorMessages] = useState([]);
   const [showErrorModal, setShowErrorModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const validations = {
-    name: name.trim().length > 0,
-    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
-    password: {
-      length: password.length >= 6,
-      uppercase: /[A-Z]/.test(password),
-      lowercase: /[a-z]/.test(password),
-      number: /[0-9]/.test(password),
-      special: /[^A-Za-z0-9]/.test(password),
-    },
-  };
-
-  const allPasswordRequirementsMet = Object.values(validations.password).every(
-    Boolean
-  );
+  const {
+    allRequirementsMet: allPasswordRequirementsMet,
+    strengthScore,
+    strengthLabel,
+  } = usePasswordValidation(password);
+  const isNameValid = name.trim().length > 0;
+  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleGoToLogin = () => {
     navigate("/login");
@@ -95,8 +91,8 @@ export const RegisterPage = ({ BASE_URL }) => {
   const handleRegister = async () => {
     clearError();
     const currentErrors = [];
-    if (!validations.name) currentErrors.push("El nombre es obligatorio.");
-    if (!validations.email)
+    if (!isNameValid) currentErrors.push("El nombre es obligatorio.");
+    if (!isEmailValid)
       currentErrors.push("Ingresa un correo electrónico válido.");
     if (!allPasswordRequirementsMet)
       currentErrors.push(
@@ -118,7 +114,7 @@ export const RegisterPage = ({ BASE_URL }) => {
       console.log("Usuario creado en Firebase Auth:", user.uid);
       await updateProfile(user, { displayName: name });
       console.log("Perfil de Firebase Auth actualizado con nombre.");
-      await sendUserDataToBackend(user, name); 
+      await sendUserDataToBackend(user, name);
       console.log("Datos enviados al backend para usuario de email.");
       await sendEmailVerification(user);
       console.log("Correo de verificación enviado.");
@@ -232,10 +228,7 @@ export const RegisterPage = ({ BASE_URL }) => {
             </div>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                <Lock
-                  className="h-5 w-5 text-gray-400"
-                  aria-hidden="true"
-                />
+                <Lock className="h-5 w-5 text-gray-400" aria-hidden="true" />
               </div>
               <input
                 id="password"
@@ -243,63 +236,54 @@ export const RegisterPage = ({ BASE_URL }) => {
                 type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
                 required
-                className="appearance-none rounded-md block w-full px-3 py-3 pl-10 pr-10 border border-linea bg-principal placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors"
+                className="appearance-none rounded-md block w-full px-3 py-3 pl-10 pr-20 border border-linea bg-principal placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors"
                 placeholder="Contraseña"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <button
-                type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-300 focus:outline-none z-20"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? (
-                  <EyeSlash className="h-5 w-5" aria-hidden="true" />
-                ) : (
-                  <Eye className="h-5 w-5" aria-hidden="true" />
-                )}
-              </button>
+              <div className="absolute inset-y-0 right-0 pr-3 flex items-center space-x-2 z-20">
+                <button
+                  type="button"
+                  className="text-gray-400 hover:text-gray-300 focus:outline-none"
+                  onClick={() => setShowRequirementsModal(true)}
+                  aria-label="Mostrar requisitos de contraseña"
+                >
+                  <Question className="h-5 w-5" aria-hidden="true" />
+                </button>
+                <button
+                  type="button"
+                  className="text-gray-400 hover:text-gray-300 focus:outline-none"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={
+                    showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                  }
+                >
+                  {showPassword ? (
+                    <EyeSlash className="h-5 w-5" aria-hidden="true" />
+                  ) : (
+                    <Eye className="h-5 w-5" aria-hidden="true" />
+                  )}
+                </button>
+              </div>
             </div>
             {password.length > 0 && (
               <div className="mt-2">
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-xs text-gray-400">Fortaleza:</span>
-                  <span className="text-xs font-medium">
-                    {Object.values(validations.password).filter(Boolean)
-                      .length === 0 && "Muy débil"}
-                    {Object.values(validations.password).filter(Boolean)
-                      .length === 1 && "Débil"}
-                    {Object.values(validations.password).filter(Boolean)
-                      .length === 2 && "Regular"}
-                    {Object.values(validations.password).filter(Boolean)
-                      .length === 3 && "Buena"}
-                    {Object.values(validations.password).filter(Boolean)
-                      .length === 4 && "Fuerte"}
-                    {Object.values(validations.password).filter(Boolean)
-                      .length === 5 && "Excelente"}
-                  </span>
+                  <span className="text-xs font-medium">{strengthLabel}</span>
                 </div>
                 <div className="h-1.5 w-full bg-secondary/30 rounded-full overflow-hidden">
                   <div
                     className={`h-full transition-all duration-300 ${
-                      Object.values(validations.password).filter(Boolean)
-                        .length === 0
-                        ? "w-0 bg-red-500"
-                        : Object.values(validations.password).filter(Boolean)
-                              .length === 1
-                          ? "w-1/5 bg-red-500"
-                          : Object.values(validations.password).filter(Boolean)
-                                .length === 2
-                            ? "w-2/5 bg-amber-500"
-                            : Object.values(validations.password).filter(
-                                  Boolean
-                                ).length === 3
-                              ? "w-3/5 bg-amber-500"
-                              : Object.values(validations.password).filter(
-                                    Boolean
-                                  ).length === 4
-                                ? "w-4/5 bg-green-500"
-                                : "w-full bg-green-500"
+                      strengthScore <= 1
+                        ? "w-1/5 bg-red-500"
+                        : strengthScore === 2
+                          ? "w-2/5 bg-amber-500"
+                          : strengthScore === 3
+                            ? "w-3/5 bg-amber-500"
+                            : strengthScore === 4
+                              ? "w-4/5 bg-green-500"
+                              : "w-full bg-green-500"
                     }`}
                   ></div>
                 </div>
@@ -405,6 +389,11 @@ export const RegisterPage = ({ BASE_URL }) => {
         </div>
       </div>
 
+      <RequirementsModal
+        showModal={showRequirementsModal}
+        closeModal={() => setShowRequirementsModal(false)}
+        password={password}
+      />
       <ErrorModal
         showModal={showErrorModal}
         closeModal={clearError}
