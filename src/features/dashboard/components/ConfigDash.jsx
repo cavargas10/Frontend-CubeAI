@@ -16,13 +16,10 @@ import {
 import { DeleteConfirmationModal } from "../../../components/modals/DeleteConfirmationModal";
 import { LoadingModal } from "../../../components/modals/LoadingModal";
 import { SuccessModal } from "../../../components/modals/SuccessModal";
+import { useAuth } from "../../auth/hooks/useAuth"; 
 
-export const ConfigDash = ({
-  user,
-  userData,
-  refetchUserData,
-  isCollapsed,
-}) => {
+export const ConfigDash = ({ isCollapsed }) => {
+  const { user, userData, refetchUserData } = useAuth();
   const [newName, setNewName] = useState("");
   const [isNameChanged, setIsNameChanged] = useState(false);
   const [nameError, setNameError] = useState("");
@@ -35,14 +32,14 @@ export const ConfigDash = ({
   const navigate = useNavigate();
 
   const handleNameChange = (event) => {
-    const value = event.target.value.trim();
+    const value = event.target.value; // No usamos trim aquí para permitir espacios intermedios
     setNewName(value);
-    setIsNameChanged(userData && value !== userData.name);
-    setNameError(value === "" ? "El nombre no puede estar vacío" : "");
+    setIsNameChanged(userData && value.trim() !== userData.name);
+    setNameError(value.trim() === "" ? "El nombre no puede estar vacío" : "");
   };
 
   const handleNameSubmit = async () => {
-    if (!isNameChanged || newName.trim() === "") return;
+    if (!isNameChanged || newName.trim() === "" || !user) return;
     setLoadingMessage("Actualizando su usuario");
     setShowLoadingModal(true);
     try {
@@ -72,6 +69,7 @@ export const ConfigDash = ({
   };
 
   const handleProfilePictureSubmit = async (file) => {
+    if (!user) return;
     setLoadingMessage("Actualizando su imagen de perfil");
     setShowLoadingModal(true);
     const formData = new FormData();
@@ -90,6 +88,7 @@ export const ConfigDash = ({
   };
 
   const handleDeleteAccount = async () => {
+    if (!user) return;
     try {
       const token = await user.getIdToken();
       await deleteUserAccount(token);
@@ -102,6 +101,7 @@ export const ConfigDash = ({
   const openDeleteModal = () => setShowDeleteModal(true);
   const closeDeleteModal = () => setShowDeleteModal(false);
   const confirmDelete = () => {
+    closeDeleteModal(); // Cerramos el modal antes de la acción
     handleDeleteAccount();
   };
 
@@ -310,7 +310,7 @@ export const ConfigDash = ({
       />
       <LoadingModal
         showLoadingModal={showLoadingModal}
-        message={loadingMessage}
+        steps={["Eliminando tu cuenta...", "Esto puede tardar un momento."]}
       />
       <SuccessModal
         showSuccessModal={showSuccessModal}

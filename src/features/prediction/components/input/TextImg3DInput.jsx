@@ -4,6 +4,8 @@ import { ErrorModal } from "../../../../components/modals/ErrorModal";
 import { LoadingModal } from "../../../../components/modals/LoadingModal";
 import { TextImg3DResult } from "../results/TextImg3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
+import { useAuth } from "../../../auth/hooks/useAuth";
+import { usePredictions } from "../../context/PredictionContext";
 
 const styles = [
   { name: "Disney", value: "disney" },
@@ -13,11 +15,9 @@ const styles = [
   { name: "Chibi", value: "chibi" },
 ];
 
-export const TextImg3DInput = ({
-  user,
-  setPrediction_textimg3d_result,
-  isCollapsed,
-}) => {
+export const TextImg3DInput = ({ isCollapsed }) => {
+  const { user } = useAuth();
+  const { dispatch, clearResult } = usePredictions();
   const [generationName, setGenerationName] = useState("");
   const [subject, setSubject] = useState("");
   const [selectedStyle, setSelectedStyle] = useState(null);
@@ -38,10 +38,8 @@ export const TextImg3DInput = ({
     setSelectedStyle(null);
     setAdditionalDetails("");
     clearPredictionError();
-    if (typeof setPrediction_textimg3d_result === "function") {
-      setPrediction_textimg3d_result(null);
-    }
-  }, [clearPredictionError, setPrediction_textimg3d_result]);
+    clearResult('textimg3d');
+  }, [clearPredictionError, clearResult]);
 
   useEffect(() => {
     return () => {
@@ -62,9 +60,7 @@ export const TextImg3DInput = ({
       return;
     }
 
-    if (typeof setPrediction_textimg3d_result === 'function') {
-        setPrediction_textimg3d_result(null);
-    }
+    dispatch({ type: 'SET_PREDICTION', payload: { type: 'textimg3d', result: null } });
 
     const result = await submitPrediction("textimg3D", {
       generationName,
@@ -74,9 +70,7 @@ export const TextImg3DInput = ({
     });
 
     if (result) {
-      if (typeof setPrediction_textimg3d_result === "function") {
-        setPrediction_textimg3d_result(result);
-      }
+      dispatch({ type: 'SET_PREDICTION', payload: { type: 'textimg3d', result } });
     }
   };
 
@@ -94,7 +88,6 @@ export const TextImg3DInput = ({
       }`}
     >
       <div className="relative z-10 px-4 sm:px-6 md:px-8 pt-6 pb-8 flex flex-col flex-grow">
-        
         <div className="mb-6 flex-shrink-0">
           <div className="flex items-center gap-4">
             <div>
@@ -105,18 +98,18 @@ export const TextImg3DInput = ({
             </div>
           </div>
         </div>
-        
+
         <hr className="border-t-2 border-linea/20 mb-6 flex-shrink-0" />
 
         <div className="flex-grow flex flex-col xl:grid xl:grid-cols-5 gap-4">
-          
           <div className="xl:col-span-2 flex-shrink-0">
             <div className="bg-principal/30 backdrop-blur-sm border border-linea/20 rounded-2xl p-3 h-full flex flex-col space-y-2">
-
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   <TextAa size={18} className="text-azul-gradient" />
-                  <h3 className="text-sm font-semibold text-white">Nombre de la Generación</h3>
+                  <h3 className="text-sm font-semibold text-white">
+                    Nombre de la Generación
+                  </h3>
                 </div>
                 <input
                   type="text"
@@ -125,7 +118,9 @@ export const TextImg3DInput = ({
                   onChange={(e) => setGenerationName(e.target.value)}
                   disabled={predictionLoading}
                   className={`w-full p-2 rounded-lg bg-principal/50 border-2 ${
-                    generationName.trim() ? "border-azul-gradient" : "border-linea/30"
+                    generationName.trim()
+                      ? "border-azul-gradient"
+                      : "border-linea/30"
                   } text-white text-sm placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300`}
                 />
               </div>
@@ -141,8 +136,10 @@ export const TextImg3DInput = ({
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
                   disabled={predictionLoading}
-className={`w-full p-2 rounded-lg bg-principal/50 border-2 ${
-                    subject.trim() ? "border-azul-gradient" : "border-linea/30"
+                  className={`w-full p-2 rounded-lg bg-principal/50 border-2 ${
+                    subject.trim()
+                      ? "border-azul-gradient"
+                      : "border-linea/30"
                   } text-white text-sm placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300`}
                 />
               </div>
@@ -150,7 +147,9 @@ className={`w-full p-2 rounded-lg bg-principal/50 border-2 ${
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   <ChatText size={18} className="text-azul-gradient" />
-                  <h3 className="text-sm font-semibold text-white">Detalles Adicionales</h3>
+                  <h3 className="text-sm font-semibold text-white">
+                    Detalles Adicionales
+                  </h3>
                 </div>
                 <input
                   type="text"
@@ -159,15 +158,19 @@ className={`w-full p-2 rounded-lg bg-principal/50 border-2 ${
                   onChange={(e) => setAdditionalDetails(e.target.value)}
                   disabled={predictionLoading}
                   className={`w-full p-2 rounded-lg bg-principal/50 border-2 ${
-                    additionalDetails.trim() ? "border-azul-gradient" : "border-linea/30"
+                    additionalDetails.trim()
+                      ? "border-azul-gradient"
+                      : "border-linea/30"
                   } text-white text-sm placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300`}
                 />
               </div>
-              
+
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   <PaintBrush size={18} className="text-azul-gradient" />
-                  <h3 className="text-sm font-semibold text-white">Estilo Visual</h3>
+                  <h3 className="text-sm font-semibold text-white">
+                    Estilo Visual
+                  </h3>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
                   {styles.slice(0, 3).map((style) => (

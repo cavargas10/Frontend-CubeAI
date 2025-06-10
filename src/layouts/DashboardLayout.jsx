@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useAuth } from "../features/auth/hooks/useAuth";
-import { usePredictions } from "../features/prediction/context/PredictionContext";
 import { NavDash } from "../features/dashboard/layout/NavDash";
 import { HeaderDash } from "../features/dashboard/layout/HeaderDash";
 import { Visualizador } from "../features/dashboard/components/Visualizador";
@@ -15,8 +14,7 @@ import { MultiImagen3DInput } from "../features/prediction/components/input/Mult
 import { Boceto3DInput } from "../features/prediction/components/input/Boceto3DInput";
 
 export const DashboardLayout = () => {
-  const { user, handleLogout, userData, refetchUserData } = useAuth();
-  const predictions = usePredictions();
+  const { handleLogout, userData } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
   const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -41,9 +39,7 @@ export const DashboardLayout = () => {
           <Route path="/" element={<Navigate to="visualizador" replace />} />
           <Route
             path="visualizador"
-            element={
-              <Visualizador isCollapsed={isNavCollapsed} />
-            }
+            element={<Visualizador isCollapsed={isNavCollapsed} />}
           />
           <Route
             path="tutorialdash"
@@ -51,100 +47,31 @@ export const DashboardLayout = () => {
           />
           <Route
             path="configdash"
-            element={
-              <ConfigDash
-                user={user}
-                userData={userData}
-                refetchUserData={refetchUserData}
-                isCollapsed={isNavCollapsed}
-              />
-            }
+            element={<ConfigDash isCollapsed={isNavCollapsed} />}
           />
           <Route
             path="imagen3D"
-            element={
-              <Imagen3DInput
-                user={user}
-                isCollapsed={isNavCollapsed}
-                setPrediction_img3d_result={
-                  predictions.setPrediction_img3d_result
-                }
-                prediction_img3d_result={predictions.prediction_img3d_result}
-              />
-            }
+            element={<Imagen3DInput isCollapsed={isNavCollapsed} />}
           />
           <Route
             path="texto3D"
-            element={
-              <Texto3DInput
-                user={user}
-                isCollapsed={isNavCollapsed}
-                setPrediction_text3d_result={
-                  predictions.setPrediction_text3d_result
-                }
-                prediction_text3d_result={predictions.prediction_text3d_result}
-              />
-            }
+            element={<Texto3DInput isCollapsed={isNavCollapsed} />}
           />
           <Route
             path="textoaimagen"
-            element={
-              <TextImg3DInput
-                user={user}
-                isCollapsed={isNavCollapsed}
-                setPrediction_textimg3d_result={
-                  predictions.setPrediction_textimg3d_result
-                }
-                prediction_textimg3d_result={
-                  predictions.prediction_textimg3d_result
-                }
-              />
-            }
+            element={<TextImg3DInput isCollapsed={isNavCollapsed} />}
           />
           <Route
             path="unico3D"
-            element={
-              <Unico3DInput
-                user={user}
-                isCollapsed={isNavCollapsed}
-                setPrediction_unico3d_result={
-                  predictions.setPrediction_unico3d_result
-                }
-                prediction_unico3d_result={
-                  predictions.prediction_unico3d_result
-                }
-              />
-            }
+            element={<Unico3DInput isCollapsed={isNavCollapsed} />}
           />
           <Route
             path="multiimagen3D"
-            element={
-              <MultiImagen3DInput
-                user={user}
-                isCollapsed={isNavCollapsed}
-                setPrediction_multiimg3d_result={
-                  predictions.setPrediction_multiimg3d_result
-                }
-                prediction_multiimg3d_result={
-                  predictions.prediction_multiimg3d_result
-                }
-              />
-            }
+            element={<MultiImagen3DInput isCollapsed={isNavCollapsed} />}
           />
           <Route
             path="boceto3D"
-            element={
-              <Boceto3DInput
-                user={user}
-                isCollapsed={isNavCollapsed}
-                setPrediction_boceto3d_result={
-                  predictions.setPrediction_boceto3d_result
-                }
-                prediction_boceto3d_result={
-                  predictions.prediction_boceto3d_result
-                }
-              />
-            }
+            element={<Boceto3DInput isCollapsed={isNavCollapsed} />}
           />
           <Route path="*" element={<Navigate to="visualizador" replace />} />
         </Routes>

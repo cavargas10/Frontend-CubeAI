@@ -1,61 +1,54 @@
-import { createContext, useState, useContext, useMemo, useCallback } from 'react';
+// src/features/prediction/context/PredictionContext.jsx
+
+import { createContext, useContext, useReducer, useMemo, useCallback } from 'react';
+
+// 1. Define el estado inicial
+const initialState = {
+  img3d: null,
+  text3d: null,
+  textimg3d: null,
+  unico3d: null,
+  multiimg3d: null,
+  boceto3d: null,
+};
+
+// 2. Crea el reducer
+function predictionReducer(state, action) {
+  switch (action.type) {
+    case 'SET_PREDICTION':
+      // action.payload será { type: 'img3d', result: {...} }
+      return { ...state, [action.payload.type]: action.payload.result };
+    case 'CLEAR_PREDICTION':
+      // action.payload será { type: 'img3d' }
+      return { ...state, [action.payload.type]: null };
+    case 'CLEAR_ALL':
+      return initialState;
+    default:
+      throw new Error(`Unhandled action type: ${action.type}`);
+  }
+}
 
 const PredictionContext = createContext(undefined);
 
 export const PredictionProvider = ({ children }) => {
-  const [prediction_img3d_result, setPrediction_img3d_result_state] = useState(null);
-  const [prediction_text3d_result, setPrediction_text3d_result_state] = useState(null);
-  const [prediction_textimg3d_result, setPrediction_textimg3d_result_state] = useState(null);
-  const [prediction_unico3d_result, setPrediction_unico3d_result_state] = useState(null);
-  const [prediction_multiimg3d_result, setPrediction_multiimg3d_result_state] = useState(null);
-  const [prediction_boceto3d_result, setPrediction_boceto3d_result_state] = useState(null);
-  const setPrediction_img3d_result = useCallback((result) => setPrediction_img3d_result_state(result), []);
-  const setPrediction_text3d_result = useCallback((result) => setPrediction_text3d_result_state(result), []);
-  const setPrediction_textimg3d_result = useCallback((result) => setPrediction_textimg3d_result_state(result), []);
-  const setPrediction_unico3d_result = useCallback((result) => setPrediction_unico3d_result_state(result), []);
-  const setPrediction_multiimg3d_result = useCallback((result) => setPrediction_multiimg3d_result_state(result), []);
-  const setPrediction_boceto3d_result = useCallback((result) => setPrediction_boceto3d_result_state(result), []);
+  // 3. Usa useReducer en lugar de múltiples useState
+  const [state, dispatch] = useReducer(predictionReducer, initialState);
 
+  // 4. Crea una función para limpiar un tipo específico de resultado
   const clearResult = useCallback((type) => {
-    switch (type) {
-      case 'img3d': setPrediction_img3d_result_state(null); break;
-      case 'text3d': setPrediction_text3d_result_state(null); break;
-      case 'textimg3d': setPrediction_textimg3d_result_state(null); break;
-      case 'unico3d': setPrediction_unico3d_result_state(null); break;
-      case 'multiimg3d': setPrediction_multiimg3d_result_state(null); break;
-      case 'boceto3d': setPrediction_boceto3d_result_state(null); break;
-      default:
-        setPrediction_img3d_result_state(null);
-        setPrediction_text3d_result_state(null);
-        setPrediction_textimg3d_result_state(null);
-        setPrediction_unico3d_result_state(null);
-        setPrediction_multiimg3d_result_state(null);
-        setPrediction_boceto3d_result_state(null);
-        break;
+    if (type) {
+        dispatch({ type: 'CLEAR_PREDICTION', payload: { type } });
+    } else {
+        dispatch({ type: 'CLEAR_ALL' });
     }
   }, []);
 
+  // 5. Construye el valor del contexto con el estado y el dispatch
   const value = useMemo(() => ({
-    prediction_img3d_result,
-    prediction_text3d_result,
-    prediction_textimg3d_result,
-    prediction_unico3d_result,
-    prediction_multiimg3d_result,
-    prediction_boceto3d_result,
-    setPrediction_img3d_result,
-    setPrediction_text3d_result,
-    setPrediction_textimg3d_result,
-    setPrediction_unico3d_result,
-    setPrediction_multiimg3d_result,
-    setPrediction_boceto3d_result,
+    ...state, // Expone cada estado individualmente: prediction_img3d, etc.
+    dispatch,
     clearResult,
-  }), [
-    prediction_img3d_result, prediction_text3d_result, prediction_textimg3d_result,
-    prediction_unico3d_result, prediction_multiimg3d_result, prediction_boceto3d_result,
-    setPrediction_img3d_result, setPrediction_text3d_result, setPrediction_textimg3d_result,
-    setPrediction_unico3d_result, setPrediction_multiimg3d_result, setPrediction_boceto3d_result,
-    clearResult,
-  ]);
+  }), [state, clearResult]);
 
   return (
     <PredictionContext.Provider value={value}>
@@ -69,5 +62,16 @@ export const usePredictions = () => {
   if (context === undefined) {
     throw new Error('usePredictions must be used within a PredictionProvider');
   }
-  return context;
+  
+  // 6. Renombramos para mantener la consistencia con tu código anterior
+  return {
+    prediction_img3d_result: context.img3d,
+    prediction_text3d_result: context.text3d,
+    prediction_textimg3d_result: context.textimg3d,
+    prediction_unico3d_result: context.unico3d,
+    prediction_multiimg3d_result: context.multiimg3d,
+    prediction_boceto3d_result: context.boceto3d,
+    dispatch: context.dispatch,
+    clearResult: context.clearResult,
+  };
 };

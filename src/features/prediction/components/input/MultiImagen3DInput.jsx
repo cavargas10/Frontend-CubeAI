@@ -5,12 +5,12 @@ import { LoadingModal } from "../../../../components/modals/LoadingModal";
 import { MultiImagen3DResult } from "../results/MultiImagen3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useMultiImageUpload } from "../../hooks/useMultiImageUpload";
+import { useAuth } from "../../../auth/hooks/useAuth";
+import { usePredictions } from "../../context/PredictionContext";
 
-export const MultiImagen3DInput = ({
-  user,
-  setPrediction_multiimg3d_result,
-  isCollapsed,
-}) => {
+export const MultiImagen3DInput = ({ isCollapsed }) => {
+  const { user } = useAuth();
+  const { dispatch, clearResult } = usePredictions();
   const [generationName, setGenerationName] = useState("");
 
   const {
@@ -39,10 +39,12 @@ export const MultiImagen3DInput = ({
     setGenerationName("");
     resetMultiImageState();
     clearPredictionError();
-    if (typeof setPrediction_multiimg3d_result === "function") {
-      setPrediction_multiimg3d_result(null);
-    }
-  }, [resetMultiImageState, clearPredictionError, setPrediction_multiimg3d_result]);
+    clearResult('multiimg3d');
+  }, [
+    resetMultiImageState,
+    clearPredictionError,
+    clearResult,
+  ]);
 
   useEffect(() => {
     return () => {
@@ -52,17 +54,16 @@ export const MultiImagen3DInput = ({
 
   const handleLocalPrediction = async () => {
     if (!imageFiles.frontal || !imageFiles.lateral || !imageFiles.trasera) {
-      setPredictionError("Por favor, cargue las tres imágenes (frontal, lateral y trasera).");
+      setPredictionError(
+        "Por favor, cargue las tres imágenes (frontal, lateral y trasera)."
+      );
       return;
     }
     if (!generationName.trim()) {
       setPredictionError("Por favor, ingrese un nombre para la generación.");
       return;
     }
-
-    if (typeof setPrediction_multiimg3d_result === "function") {
-        setPrediction_multiimg3d_result(null);
-    }
+    dispatch({ type: 'SET_PREDICTION', payload: { type: 'multiimg3d', result: null } });
 
     const formData = new FormData();
     formData.append("frontal", imageFiles.frontal);
@@ -72,9 +73,7 @@ export const MultiImagen3DInput = ({
 
     const result = await submitPrediction("multiimagen3D", formData);
     if (result) {
-      if (typeof setPrediction_multiimg3d_result === "function") {
-        setPrediction_multiimg3d_result(result);
-      }
+      dispatch({ type: 'SET_PREDICTION', payload: { type: 'multiimg3d', result } });
     }
   };
 
@@ -92,7 +91,6 @@ export const MultiImagen3DInput = ({
       }`}
     >
       <div className="relative z-10 px-4 sm:px-6 md:px-8 pt-6 pb-8 flex flex-col flex-grow">
-        
         <div className="mb-6 flex-shrink-0">
           <div className="flex items-center gap-4">
             <div>
@@ -103,18 +101,18 @@ export const MultiImagen3DInput = ({
             </div>
           </div>
         </div>
-        
+
         <hr className="border-t-2 border-linea/20 mb-6 flex-shrink-0" />
 
         <div className="flex-grow flex flex-col xl:grid xl:grid-cols-5 xl:gap-4">
-          
           <div className="xl:col-span-2 mb-6 xl:mb-0">
             <div className="bg-principal/30 backdrop-blur-sm border border-linea/20 rounded-2xl p-4 h-full flex flex-col space-y-4">
-              
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   <TextAa size={18} className="text-azul-gradient" />
-                  <h3 className="text-sm font-semibold text-white">Nombre de la Generación</h3>
+                  <h3 className="text-sm font-semibold text-white">
+                    Nombre de la Generación
+                  </h3>
                 </div>
                 <input
                   type="text"
@@ -123,7 +121,9 @@ export const MultiImagen3DInput = ({
                   onChange={(e) => setGenerationName(e.target.value)}
                   disabled={predictionLoading}
                   className={`w-full p-2.5 rounded-lg bg-principal/50 border-2 ${
-                    generationName.trim() ? "border-azul-gradient" : "border-linea/30"
+                    generationName.trim()
+                      ? "border-azul-gradient"
+                      : "border-linea/30"
                   } text-white placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300`}
                 />
               </div>
@@ -131,11 +131,13 @@ export const MultiImagen3DInput = ({
               <div className="flex-grow flex flex-col min-h-0">
                 <div className="flex items-center gap-3 mb-2">
                   <UploadSimple size={18} className="text-azul-gradient" />
-                  <h3 className="text-sm font-semibold text-white">Sube tus Vistas</h3>
+                  <h3 className="text-sm font-semibold text-white">
+                    Sube tus Vistas
+                  </h3>
                 </div>
-                
+
                 <div className="flex gap-2 mb-2">
-                  {["frontal", "lateral", "trasera"].map(type => (
+                  {["frontal", "lateral", "trasera"].map((type) => (
                     <button
                       key={type}
                       onClick={() => !predictionLoading && selectImageType(type)}
@@ -147,7 +149,13 @@ export const MultiImagen3DInput = ({
                       }`}
                     >
                       <span className="capitalize">{type}</span>
-                      {imageFiles[type] && <CheckCircle size={14} weight="fill" className="text-green-400" />}
+                      {imageFiles[type] && (
+                        <CheckCircle
+                          size={14}
+                          weight="fill"
+                          className="text-green-400"
+                        />
+                      )}
                     </button>
                   ))}
                 </div>
@@ -159,11 +167,18 @@ export const MultiImagen3DInput = ({
                       : imagePreviews[currentImageType]
                       ? "border-azul-gradient bg-azul-gradient/10"
                       : "border-linea/30"
-                  } ${predictionLoading ? "opacity-50 cursor-not-allowed" : "hover:border-azul-gradient/50"}`}
+                  } ${
+                    predictionLoading
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:border-azul-gradient/50"
+                  }`}
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
-                  onClick={() => !predictionLoading && document.getElementById('fileInput-multiimagen3d').click()}
+                  onClick={() =>
+                    !predictionLoading &&
+                    document.getElementById("fileInput-multiimagen3d").click()
+                  }
                 >
                   <input
                     id="fileInput-multiimagen3d"
@@ -183,16 +198,22 @@ export const MultiImagen3DInput = ({
                     </div>
                   ) : (
                     <div className="flex flex-col items-center justify-center p-4 min-h-[200px] sm:min-h-[220px] xl:min-h-0">
-                      <UploadSimple className="w-10 h-10 text-gray-400 mb-3" weight="light" />
+                      <UploadSimple
+                        className="w-10 h-10 text-gray-400 mb-3"
+                        weight="light"
+                      />
                       <p className="text-sm text-gray-300 capitalize">
-                        Arrastra o haz clic para subir la vista <strong>{currentImageType}</strong>
+                        Arrastra o haz clic para subir la vista{" "}
+                        <strong>{currentImageType}</strong>
                       </p>
-                      <p className="mt-1 text-xs text-gray-500">PNG, JPG, JPEG (MAX. 10MB)</p>
+                      <p className="mt-1 text-xs text-gray-500">
+                        PNG, JPG, JPEG (MAX. 10MB)
+                      </p>
                     </div>
                   )}
                 </div>
               </div>
-              
+
               <div className="mt-auto flex-shrink-0">
                 <button
                   onClick={handleLocalPrediction}
