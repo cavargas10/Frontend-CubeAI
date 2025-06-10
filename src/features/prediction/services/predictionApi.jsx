@@ -3,7 +3,7 @@ import axios from 'axios';
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const handleApiError = (error, defaultMessage = "Error en la solicitud de predicción") => {
-  console.error("Prediction API Error:", error);
+  console.error("Prediction API Error:", error.response || error);
   const message = error.response?.data?.error || error.message || defaultMessage;
   throw new Error(message);
 };
@@ -39,9 +39,7 @@ export const generateImagen3D = async (token, formData) => {
 export const generateTexto3D = async (token, data) => {
   try {
     const response = await axios.post(`${BASE_URL}/texto3D`, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
   } catch (error) {
@@ -88,36 +86,35 @@ export const generateMultiImagen3D = async (token, formData) => {
     }
 };
 
-export const getGenerations = async (token) => {
+export const getGenerations = async (token, generationType) => {
   try {
-    const response = await axios.get(`${BASE_URL}/generations`, {
+    const response = await axios.get(`${BASE_URL}/generations?type=${generationType}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    if (!response.data || typeof response.data !== 'object') {
-        throw new Error("Respuesta inesperada al obtener generaciones.");
-    }
-
-    const expectedKeys = ['imagen3D', 'texto3D', 'textimg3D', 'unico3D', 'multiimg3D', 'boceto3D'];
-    for (const key of expectedKeys) {
-        if (!Array.isArray(response.data[key])) {
-             console.warn(`Falta o no es un array la clave '${key}' en la respuesta de generaciones.`);
-             response.data[key] = []; 
-        }
+    if (!Array.isArray(response.data)) {
+        throw new Error("La respuesta de la API no es un array válido.");
     }
     return response.data;
   } catch (error) {
-    handleApiError(error, "Error al obtener el historial de generaciones");
+    handleApiError(error, `Error al obtener el historial para ${generationType}`);
   }
 };
 
-export const deleteGeneration = async (token, generationType, generationName) => {
+export const deleteGeneration = async (token, generation) => {
   try {
-    const encodedName = encodeURIComponent(generationName);
+    if (!generation || !generation.prediction_type || !generation.generation_name) {
+      throw new Error("Datos de generación inválidos para la eliminación.");
+    }
+
     const response = await axios.delete(
-      `${BASE_URL}/generation/${generationType}/${encodedName}`,
+      `${BASE_URL}/generation`,
       {
         headers: { Authorization: `Bearer ${token}` },
+        data: {
+          prediction_type: generation.prediction_type, 
+          generation_name: generation.generation_name,
+        },
       }
     );
     return { success: true, data: response.data };
