@@ -1,6 +1,13 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Pencil, User, Envelope, Trash, Image, Shield } from "@phosphor-icons/react";
+import {
+  Pencil,
+  User,
+  Envelope,
+  Trash,
+  Image,
+  Shield,
+} from "@phosphor-icons/react";
 import {
   updateUserName,
   updateUserProfilePicture,
@@ -10,7 +17,12 @@ import { DeleteConfirmationModal } from "../../../components/modals/DeleteConfir
 import { LoadingModal } from "../../../components/modals/LoadingModal";
 import { SuccessModal } from "../../../components/modals/SuccessModal";
 
-export const ConfigDash = ({ user, userData, refetchUserData, isCollapsed }) => {
+export const ConfigDash = ({
+  user,
+  userData,
+  refetchUserData,
+  isCollapsed,
+}) => {
   const [newName, setNewName] = useState("");
   const [isNameChanged, setIsNameChanged] = useState(false);
   const [nameError, setNameError] = useState("");
@@ -99,9 +111,7 @@ export const ConfigDash = ({ user, userData, refetchUserData, isCollapsed }) => 
     return (
       <section
         className={`min-h-screen bg-fondologin text-white transition-all duration-300 ease-in-out relative w-full ${
-          isCollapsed
-            ? "sm:pl-[80px]"
-            : "md:pl-[267px] 2xl:pl-[300px]"
+          isCollapsed ? "sm:pl-[80px]" : "md:pl-[267px] 2xl:pl-[300px]"
         }`}
       >
         <div className="relative z-10 px-4 sm:px-6 md:px-8 pt-6 pb-8">
@@ -116,9 +126,7 @@ export const ConfigDash = ({ user, userData, refetchUserData, isCollapsed }) => 
   return (
     <section
       className={`min-h-screen bg-fondologin text-white transition-all duration-300 ease-in-out relative w-full ${
-        isCollapsed
-          ? "sm:pl-[80px]"
-          : "md:pl-[267px] 2xl:pl-[300px]"
+        isCollapsed ? "sm:pl-[80px]" : "md:pl-[267px] 2xl:pl-[300px]"
       }`}
     >
       <div className="relative z-10 px-4 sm:px-6 md:px-8 pt-6 pb-8">
@@ -130,17 +138,20 @@ export const ConfigDash = ({ user, userData, refetchUserData, isCollapsed }) => 
               </h1>
               <div className="h-1 w-32 bg-gradient-to-r from-azul-gradient to-morado-gradient rounded-full mt-2"></div>
             </div>
-          </div>        
+          </div>
           <p className="text-lg leading-relaxed text-justify">
-            Gestiona tu perfil personal y configuraciones de cuenta. Aquí puedes actualizar 
-            tu información, cambiar tu imagen de perfil y administrar tu cuenta de Instant3D.
+            Gestiona tu perfil personal y configuraciones de cuenta. Aquí puedes
+            actualizar tu información, cambiar tu imagen de perfil y administrar
+            tu cuenta de Instant3D.
           </p>
         </div>
         <hr className="border-t-2 border-linea/20 my-5" />
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-1 h-8 bg-gradient-to-b from-azul-gradient to-morado-gradient rounded-full"></div>
-            <h2 className="text-2xl font-bold text-white">Información del Perfil</h2>
+            <h2 className="text-2xl font-bold text-white">
+              Información del Perfil
+            </h2>
           </div>
           <div className="relative bg-principal/30 backdrop-blur-sm border border-linea/20 rounded-2xl p-6">
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
@@ -148,7 +159,9 @@ export const ConfigDash = ({ user, userData, refetchUserData, isCollapsed }) => 
                 <div className="bg-principal/20 backdrop-blur-sm border border-linea/20 rounded-xl p-6 h-full flex flex-col">
                   <div className="flex items-center gap-3 mb-4">
                     <Image size={20} className="text-azul-gradient" />
-                    <h3 className="text-lg font-semibold text-white">Imagen de Perfil</h3>
+                    <h3 className="text-lg font-semibold text-white">
+                      Imagen de Perfil
+                    </h3>
                   </div>
                   <p className="text-gray-400 text-sm mb-6">
                     Actualiza tu imagen de perfil para personalizar tu cuenta
@@ -177,7 +190,7 @@ export const ConfigDash = ({ user, userData, refetchUserData, isCollapsed }) => 
                       >
                         <Pencil size={18} className="text-white" />
                       </button>
-                    </div>                    
+                    </div>
                     <div className="text-center space-y-2">
                       <p className="text-sm text-gray-300 font-medium">
                         {userData.name || "Usuario"}
@@ -186,7 +199,7 @@ export const ConfigDash = ({ user, userData, refetchUserData, isCollapsed }) => 
                         Haz clic para cambiar tu imagen
                       </p>
                     </div>
-                  </div>                 
+                  </div>
                   <input
                     type="file"
                     ref={fileInputRef}
@@ -200,11 +213,13 @@ export const ConfigDash = ({ user, userData, refetchUserData, isCollapsed }) => 
                 <div className="bg-principal/20 backdrop-blur-sm border border-linea/20 rounded-xl p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <User size={20} className="text-azul-gradient" />
-                    <h3 className="text-lg font-semibold text-white">Nombre de Usuario</h3>
+                    <h3 className="text-lg font-semibold text-white">
+                      Nombre de Usuario
+                    </h3>
                   </div>
                   <p className="text-gray-400 text-sm mb-4">
                     Nombre de usuario con el que te registraste en la plataforma
-                  </p>                  
+                  </p>
                   <div className="space-y-3">
                     <div className="flex flex-col sm:flex-row gap-3">
                       <input
@@ -240,11 +255,14 @@ export const ConfigDash = ({ user, userData, refetchUserData, isCollapsed }) => 
                 <div className="bg-principal/20 backdrop-blur-sm border border-linea/20 rounded-xl p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <Envelope size={20} className="text-morado-gradient" />
-                    <h3 className="text-lg font-semibold text-white">Correo Electrónico</h3>
+                    <h3 className="text-lg font-semibold text-white">
+                      Correo Electrónico
+                    </h3>
                   </div>
                   <p className="text-gray-400 text-sm mb-4">
-                    La dirección de correo electrónico utilizada para registrarte en Instant3D
-                  </p>                 
+                    La dirección de correo electrónico utilizada para
+                    registrarte en Instant3D
+                  </p>
                   <input
                     type="email"
                     value={userData.email || ""}
@@ -261,11 +279,14 @@ export const ConfigDash = ({ user, userData, refetchUserData, isCollapsed }) => 
               <div className="bg-red-500/10 backdrop-blur-sm border border-red-500/20 rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <Shield size={20} className="text-red-400" />
-                  <h3 className="text-lg font-semibold text-red-400">Zona de Peligro</h3>
+                  <h3 className="text-lg font-semibold text-red-400">
+                    Zona de Peligro
+                  </h3>
                 </div>
                 <p className="text-gray-400 text-sm mb-4">
-                  Eliminar tu cuenta de forma permanente. Esta acción es irreversible y 
-                  eliminará todos tus datos, modelos y configuraciones.
+                  Eliminar tu cuenta de forma permanente. Esta acción es
+                  irreversible y eliminará todos tus datos, modelos y
+                  configuraciones.
                 </p>
                 <button
                   type="button"
@@ -284,7 +305,7 @@ export const ConfigDash = ({ user, userData, refetchUserData, isCollapsed }) => 
       <DeleteConfirmationModal
         showModal={showDeleteModal}
         closeModal={closeDeleteModal}
-        onConfirm={confirmDelete} 
+        onConfirm={confirmDelete}
         message="¿Estás seguro de que deseas eliminar tu cuenta?"
       />
       <LoadingModal

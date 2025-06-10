@@ -1,11 +1,11 @@
-import { XCircle } from "@phosphor-icons/react";
 import { Modal, Button } from "flowbite-react";
+import { WarningCircle } from "@phosphor-icons/react";
 
 export const DeleteConfirmationModal = ({
   showModal,
   closeModal,
-  onConfirm, 
-  message
+  onConfirm,
+  message,
 }) => {
   return (
     <Modal
@@ -16,29 +16,41 @@ export const DeleteConfirmationModal = ({
       theme={{
         root: {
           base: "fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm",
-          backdrop: "fixed inset-0 z-40 bg-black bg-opacity-50"
         },
         content: {
-          base: "relative w-full max-w-md m-auto",
-          inner: "relative rounded-none bg-transparent"
-        }
+          base: "relative w-full max-w-sm m-auto",
+          inner: "relative rounded-none bg-transparent",
+        },
       }}
     >
-      <Modal.Body className="flex items-center justify-center p-0 bg-transparent">
-        <div className="text-center bg-[#171735] rounded-xl py-8 px-6 w-96 relative z-50">
-          <XCircle size={40} color="#ff0000" className="mx-auto mb-4" />
-          <h3 className="mb-5 text-lg font-normal text-gray-50 dark:text-gray-400">
+      <Modal.Body className="p-0 bg-transparent">
+        <div className="text-center bg-principal rounded-2xl py-6 px-6 border-2 border-red-500/30 shadow-2xl shadow-red-500/10">
+          <div className="flex flex-col items-center mb-5">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center mb-3 shadow-lg">
+              <WarningCircle size={32} color="#fff" weight="bold" />
+            </div>
+            <h3 className="text-xl font-bold text-white">
+              Confirmación Requerida
+            </h3>
+          </div>
+
+          <p className="mb-6 text-sm text-gray-300">
             {message}
-          </h3>
+            <br />
+            <span className="font-semibold text-red-400 mt-2 block">
+              Esta acción no se puede deshacer.
+            </span>
+          </p>
+
           <div className="flex justify-center gap-4">
             <Button
-              className="bg-red-600 text-white hover:bg-red-700 rounded-xl"
-              onClick={onConfirm} 
+              className="flex-1 bg-red-600 text-white font-semibold hover:bg-red-700 rounded-xl transition-all"
+              onClick={onConfirm}
             >
-              Sí, claro
+              Sí, continuar
             </Button>
             <Button
-              className="bg-[#111127] text-white hover:bg-[#171735] rounded-xl"
+              className="flex-1 bg-linea/50 text-white hover:bg-linea/80 font-semibold rounded-xl transition-all"
               onClick={closeModal}
             >
               Cancelar

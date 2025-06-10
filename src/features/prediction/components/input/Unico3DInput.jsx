@@ -28,6 +28,7 @@ export const Unico3DInput = ({
   const {
     isLoading: predictionLoading,
     error: predictionError,
+    loadingSteps,
     submitPrediction,
     clearError: clearPredictionError,
     setError: setPredictionError,
@@ -69,7 +70,6 @@ export const Unico3DInput = ({
     }
   };
 
-  // Condición para deshabilitar el botón
   const isButtonDisabled = predictionLoading || !generationName.trim() || !imageFile;
 
   return (
@@ -93,10 +93,7 @@ export const Unico3DInput = ({
         
         <hr className="border-t-2 border-linea/20 mb-6 flex-shrink-0" />
 
-        {/* Layout responsive: columna única en móvil, dos columnas en desktop */}
         <div className="flex-grow flex flex-col xl:grid xl:grid-cols-5 xl:gap-4">
-          
-          {/* Formulario de entrada */}
           <div className="xl:col-span-2 mb-6 xl:mb-0">
             <div className="bg-principal/30 backdrop-blur-sm border border-linea/20 rounded-2xl p-4 h-full flex flex-col space-y-4">
               
@@ -174,7 +171,6 @@ export const Unico3DInput = ({
             </div>
           </div>
 
-          {/* Resultado del modelo 3D - Más grande en móvil */}
           <div className="xl:col-span-3 flex-grow">
             <div className="h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0">
               <Unico3DResult predictionResult={prediction_unico3d_result} />
@@ -190,7 +186,7 @@ export const Unico3DInput = ({
       />
       <LoadingModal
         showLoadingModal={predictionLoading}
-        message="Generando el modelo 3D..."
+        steps={loadingSteps} 
       />
     </section>
   );

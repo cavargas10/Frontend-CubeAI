@@ -27,6 +27,7 @@ export const TextImg3DInput = ({
   const {
     isLoading: predictionLoading,
     error: predictionError,
+    loadingSteps,
     submitPrediction,
     clearError: clearPredictionError,
     setError: setPredictionError,
@@ -74,7 +75,6 @@ export const TextImg3DInput = ({
     }
   };
 
-  // Condición para deshabilitar el botón
   const isButtonDisabled =
     predictionLoading ||
     !generationName.trim() ||
@@ -103,10 +103,7 @@ export const TextImg3DInput = ({
         
         <hr className="border-t-2 border-linea/20 mb-6 flex-shrink-0" />
 
-        {/* Layout mejorado para móvil */}
         <div className="flex-grow flex flex-col xl:grid xl:grid-cols-5 gap-4">
-          
-          {/* Panel de inputs - más compacto en móvil */}
           <div className="xl:col-span-2 flex-shrink-0">
             <div className="bg-principal/30 backdrop-blur-sm border border-linea/20 rounded-2xl p-3 h-full flex flex-col space-y-2">
               
@@ -213,7 +210,6 @@ export const TextImg3DInput = ({
             </div>
           </div>
 
-          {/* Viewer más grande en móvil */}
           <div className="xl:col-span-3 flex-grow min-h-0">
             <div className="h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0">
               <TextImg3DResult predictionResult={prediction_textimg3d_result} />
@@ -229,7 +225,7 @@ export const TextImg3DInput = ({
       />
       <LoadingModal
         showLoadingModal={predictionLoading}
-        message="Generando el modelo 3D..."
+        steps={loadingSteps} 
       />
     </section>
   );

@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useMemo, useEffect, useRef } from "react";
+import {
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+  useRef,
+} from "react";
 import { Sparkle, PencilSimple, Eraser, Trash } from "@phosphor-icons/react";
 import { ErrorModal } from "../../../../components/modals/ErrorModal";
 import { LoadingModal } from "../../../../components/modals/LoadingModal";
@@ -19,6 +25,7 @@ export const Boceto3DInput = ({
   const {
     isLoading: predictionLoading,
     error: predictionError,
+    loadingSteps,
     submitPrediction,
     clearError: clearPredictionError,
     setError: setPredictionError,
@@ -126,7 +133,9 @@ export const Boceto3DInput = ({
       return;
     }
     if (isCanvasEmpty()) {
-      setPredictionError("Por favor, dibuje algo en el lienzo antes de generar.");
+      setPredictionError(
+        "Por favor, dibuje algo en el lienzo antes de generar."
+      );
       return;
     }
     const image = getCanvasDataURL("image/png");
@@ -147,6 +156,8 @@ export const Boceto3DInput = ({
   }, [
     generationName,
     description,
+    loadingMessage, 
+    submitPrediction,
     submitPrediction,
     getCanvasDataURL,
     isCanvasEmpty,
@@ -155,8 +166,8 @@ export const Boceto3DInput = ({
     setPrediction_boceto3d_result,
   ]);
 
-  // Condición para deshabilitar el botón
-  const isButtonDisabled = predictionLoading || !generationName.trim() || isCanvasEmpty();
+  const isButtonDisabled =
+    predictionLoading || !generationName.trim() || isCanvasEmpty();
 
   return (
     <section
@@ -176,16 +187,15 @@ export const Boceto3DInput = ({
           </div>
         </div>
         <hr className="border-t-2 border-linea/20 mb-6 flex-shrink-0" />
-        
-        {/* Layout responsivo: columna en móvil, grid en xl */}
         <div className="flex-grow flex flex-col xl:grid xl:grid-cols-5 gap-4">
-          {/* Sección del canvas */}
           <div className="xl:col-span-2">
             <div className="bg-principal/30 backdrop-blur-sm border border-linea/20 rounded-2xl p-4 h-full flex flex-col space-y-4">
               <div className="flex-shrink-0">
                 <div className="flex items-center gap-3 mb-2">
                   <TextAa size={18} className="text-azul-gradient" />
-                  <h3 className="text-sm font-semibold text-white">Nombre de la Generación</h3>
+                  <h3 className="text-sm font-semibold text-white">
+                    Nombre de la Generación
+                  </h3>
                 </div>
                 <input
                   type="text"
@@ -194,7 +204,9 @@ export const Boceto3DInput = ({
                   onChange={(e) => setGenerationName(e.target.value)}
                   disabled={predictionLoading}
                   className={`w-full p-2.5 rounded-lg bg-principal/50 border-2 ${
-                    generationName.trim() ? "border-azul-gradient" : "border-linea/30"
+                    generationName.trim()
+                      ? "border-azul-gradient"
+                      : "border-linea/30"
                   } text-white placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300`}
                 />
               </div>
@@ -205,7 +217,11 @@ export const Boceto3DInput = ({
                   }`}
                   style={{ touchAction: "none" }}
                 >
-                  <div className="w-full h-full bg-white" style={{ cursor: "crosshair" }} {...drawingHandlers}>
+                  <div
+                    className="w-full h-full bg-white"
+                    style={{ cursor: "crosshair" }}
+                    {...drawingHandlers}
+                  >
                     <canvas
                       ref={initializeLocalCanvas}
                       width={canvasConfig.width}
@@ -272,8 +288,7 @@ export const Boceto3DInput = ({
               </div>
             </div>
           </div>
-          
-          {/* Sección del resultado - Más grande en móvil */}
+
           <div className="xl:col-span-3 flex-grow min-h-[500px] md:min-h-[600px] xl:min-h-0">
             <Boceto3DResult predictionResult={prediction_boceto3d_result} />
           </div>
@@ -286,7 +301,7 @@ export const Boceto3DInput = ({
       />
       <LoadingModal
         showLoadingModal={predictionLoading}
-        message="Generando el modelo 3D..."
+        steps={loadingSteps}
       />
     </section>
   );

@@ -26,6 +26,7 @@ export const Texto3DInput = ({
   const {
     isLoading: predictionLoading,
     error: predictionError,
+    loadingSteps,
     submitPrediction,
     clearError: clearPredictionError,
     setError: setPredictionError,
@@ -64,7 +65,6 @@ export const Texto3DInput = ({
     }
   };
 
-  // Condición para deshabilitar el botón
   const isButtonDisabled = predictionLoading || !generationName.trim() || !userPrompt.trim() || !selectedStyle;
 
   return (
@@ -89,7 +89,6 @@ export const Texto3DInput = ({
         <hr className="border-t-2 border-linea/20 mb-6 flex-shrink-0" />
 
         <div className="flex-grow grid grid-cols-1 xl:grid-cols-5 gap-4">
-          
           <div className="xl:col-span-2 h-fit">
             <div className="bg-principal/30 backdrop-blur-sm border border-linea/20 rounded-2xl p-4 flex flex-col space-y-4">
               
@@ -191,7 +190,7 @@ export const Texto3DInput = ({
       />
       <LoadingModal
         showLoadingModal={predictionLoading}
-        message="Generando el modelo 3D..."
+        steps={loadingSteps} 
       />
     </section>
   );
