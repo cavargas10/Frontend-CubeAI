@@ -6,7 +6,8 @@ import { Texto3DResult } from "../results/Texto3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
-import { uploadPredictionPreview } from "../../services/predictionApi"; 
+import { uploadPredictionPreview } from "../../services/predictionApi";
+import { useTranslation } from "react-i18next";
 
 function dataURLtoBlob(dataurl) {
     const arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1];
@@ -19,20 +20,21 @@ function dataURLtoBlob(dataurl) {
     return new Blob([u8arr], {type:mime});
 }
 
-const styles = [
-  { name: "Disney", value: "disney" },
-  { name: "Pixar", value: "pixar" },
-  { name: "Realista", value: "realista" },
-  { name: "Anime", value: "anime" },
-  { name: "Chibi", value: "chibi" },
-];
-
 export const Texto3DInput = ({ isCollapsed }) => {
+  const { t } = useTranslation();
+
   const { user } = useAuth();
   const { dispatch, clearResult, prediction_text3d_result } = usePredictions();
   const [generationName, setGenerationName] = useState("");
   const [userPrompt, setUserPrompt] = useState("");
   const [selectedStyle, setSelectedStyle] = useState(null);
+  const styles = [
+    { name: t("generation_pages.styles.disney"), value: "disney" },
+    { name: t("generation_pages.styles.pixar"), value: "pixar" },
+    { name: t("generation_pages.styles.realistic"), value: "realistic" },
+    { name: t("generation_pages.styles.anime"), value: "anime" },
+    { name: t("generation_pages.styles.chibi"), value: "chibi" },
+  ];
 
   const {
     isLoading: predictionLoading,
@@ -86,7 +88,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
         const formData = new FormData();
         formData.append('preview', previewBlob, 'preview.png');
         formData.append('generation_name', prediction_text3d_result.generation_name);
-        formData.append('prediction_type_api', 'Texto3D'); // <-- TIPO CORRECTO
+        formData.append('prediction_type_api', 'Texto3D');
 
         await uploadPredictionPreview(token, formData);
         console.log("Previsualización subida con éxito para 'Texto a 3D'.");
@@ -113,7 +115,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
           <div className="flex items-center gap-4">
             <div>
               <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-azul-gradient to-morado-gradient">
-                Texto a 3D
+                {t("generation_pages.text_to_3d.title")}
               </h1>
               <div className="h-1 w-24 bg-gradient-to-r from-azul-gradient to-morado-gradient rounded-full mt-1.5"></div>
             </div>
@@ -129,12 +131,12 @@ export const Texto3DInput = ({ isCollapsed }) => {
                 <div className="flex items-center gap-3 mb-2">
                   <TextAa size={18} className="text-azul-gradient" />
                   <h3 className="text-sm font-semibold text-white">
-                    Nombre de la Generación
+                    {t("generation_pages.common.generation_name_label")}
                   </h3>
                 </div>
                 <input
                   type="text"
-                  placeholder="Ej: Espada mágica brillante"
+                  placeholder={t("generation_pages.common.name_placeholder_generic")}
                   value={generationName}
                   onChange={(e) => setGenerationName(e.target.value)}
                   disabled={predictionLoading}
@@ -149,10 +151,12 @@ export const Texto3DInput = ({ isCollapsed }) => {
               <div className="flex-grow flex flex-col">
                 <div className="flex items-center gap-3 mb-2">
                   <TextT size={18} className="text-azul-gradient" />
-                  <h3 className="text-sm font-semibold text-white">Prompt</h3>
+                  <h3 className="text-sm font-semibold text-white">
+                    {t("generation_pages.common.prompt_label")}
+                  </h3>
                 </div>
                 <textarea
-                  placeholder="Describe detalladamente el modelo 3D..."
+                  placeholder={t("generation_pages.common.prompt_placeholder_generic")}
                   value={userPrompt}
                   onChange={(e) => setUserPrompt(e.target.value)}
                   disabled={predictionLoading}
@@ -168,7 +172,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
                 <div className="flex items-center gap-3 mb-2">
                   <PaintBrush size={18} className="text-azul-gradient" />
                   <h3 className="text-sm font-semibold text-white">
-                    Estilo Visual
+                    {t("generation_pages.common.style_label")}
                   </h3>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
@@ -212,7 +216,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
                   className="w-full text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2.5 rounded-lg border-none flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-lg hover:shadow-morado-gradient/20 hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 disabled:cursor-not-allowed"
                 >
                   <Sparkle size={22} weight="fill" />
-                  Generar Modelo 3D
+                  {t("generation_pages.common.generate_button")}
                 </button>
               </div>
             </div>

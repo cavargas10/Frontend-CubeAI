@@ -1,4 +1,3 @@
-// src/features/prediction/hooks/useMultiImageUpload.js
 import { useState, useCallback } from "react";
 
 const IMAGE_TYPES = ["frontal", "lateral", "trasera"];

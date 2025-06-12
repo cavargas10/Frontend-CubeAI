@@ -1,8 +1,11 @@
 import club from "../../../assets/club.png";
 import utpl from "../../../assets/utpl.png";
 import xrlab from "../../../assets/xrlab.png";
+import { useTranslation } from "react-i18next";
 
 export function LogosSection() {
+  const { t } = useTranslation();
+
   const logos = [
     { src: utpl, alt: "UTPL logo" },
     { src: club, alt: "Club logo" },
@@ -14,10 +17,10 @@ export function LogosSection() {
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center mb-10">
           <div className="inline-block rounded-lg bg-primary/10 border border-primary/20 px-3 py-1 text-sm text-primary mb-2 bg-azul-gradient">
-            Colaboraciones
+            {t("logos.badge")}
           </div>
           <h2 className="text-3xl md:text-5xl font-bold tracking-tighter bg-gradient-to-r from-azul-gradient to-morado-gradient bg-clip-text text-transparent">
-            Empresas que confían en nosotros
+            {t("logos.title")}
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">

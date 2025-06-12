@@ -1,29 +1,11 @@
 import { CarruselItem } from "../../../components/ui/CarruselItem";
+import { useTranslation } from "react-i18next";
 
 export const MarqueeSection = () => {
-  const upperMarquee = [
-    "Boceto a 3D",
-    "Creatividad",
-    "Imagen a 3D",
-    "Modelos 3D",
-    "Texto a 3D",
-    "Generación 3D",
-    "Texto a Imagen a 3D",
-    "Múltiples imágenes a 3D",
-    "Único a 3D",
-  ];
-
-  const lowerMarquee = [
-    "Boceto a 3D",
-    "Creatividad",
-    "Imagen a 3D",
-    "Modelos 3D",
-    "Texto a 3D",
-    "Generación 3D",
-    "Texto a Imagen a 3D",
-    "Múltiples imágenes a 3D",
-    "Único a 3D",
-  ];
+  const { t } = useTranslation();
+  const marqueeItems = t("marquee.items", { returnObjects: true });
+  const upperMarquee = marqueeItems;
+  const lowerMarquee = marqueeItems;
 
   return (
     <div className=" overflow-hidden font-inter font-bold my-12 ">

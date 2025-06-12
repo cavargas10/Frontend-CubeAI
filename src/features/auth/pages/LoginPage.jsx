@@ -12,8 +12,10 @@ import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import { getDoc, doc } from "firebase/firestore";
 import { RegistrationModal } from "../../../components/modals/RegistrationModal";
 import { ErrorModal } from "../../../components/modals/ErrorModal";
+import { useTranslation } from "react-i18next";
 
 export const LoginPage = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -136,10 +138,10 @@ export const LoginPage = () => {
         <div className="w-full max-w-md space-y-8">
           <div>
             <h2 className="text-center text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-azul-gradient to-morado-gradient py-1">
-              Bienvenido de Nuevo
+              {t("auth.login.title")}
             </h2>
             <p className="mt-2 text-center text-sm">
-              Inicia sesión para acceder a tu plataforma.
+              {t("auth.login.subtitle")}
             </p>
           </div>
 
@@ -158,7 +160,7 @@ export const LoginPage = () => {
                 autoComplete="email"
                 required
                 className="appearance-none rounded-md block w-full px-3 py-3 pl-10 border border-linea bg-principal placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors"
-                placeholder="Correo electrónico"
+                placeholder={t("auth.login.email_placeholder")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -178,7 +180,7 @@ export const LoginPage = () => {
                 autoComplete="current-password"
                 required
                 className="appearance-none rounded-md block w-full px-3 py-3 pl-10 pr-10 border border-linea bg-principal placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors"
-                placeholder="Contraseña"
+                placeholder={t("auth.login.password_placeholder")}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -209,7 +211,7 @@ export const LoginPage = () => {
                   htmlFor="remember-me"
                   className="ml-2 block text-gray-300"
                 >
-                  Recordarme
+                  {t("auth.login.remember_me")}
                 </label>
               </div>
 
@@ -219,7 +221,7 @@ export const LoginPage = () => {
                   onClick={handleResetPasswordClick}
                   className="text-azul-gradient hover:text-morado-gradient transition-colors"
                 >
-                  ¿Olvidaste tu contraseña?
+                  {t("auth.login.forgot_password")}
                 </button>
               </div>
             </div>
@@ -252,10 +254,10 @@ export const LoginPage = () => {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       ></path>
                     </svg>
-                    Ingresando...
+                    {t("auth.login.login_loading_button")}
                   </span>
                 ) : (
-                  "Iniciar Sesión"
+                  t("auth.login.login_button")
                 )}
               </button>
             </div>
@@ -270,7 +272,7 @@ export const LoginPage = () => {
             </div>
             <div className="relative flex justify-center text-xs">
               <span className="px-2 bg-fondologin text-gray-500 uppercase">
-                O
+                {t("auth.login.or_separator")}
               </span>
             </div>
           </div>
@@ -305,20 +307,20 @@ export const LoginPage = () => {
                   </svg>
                 </div>
                 <span className="text-white/90 group-hover:text-white transition-colors duration-200">
-                  Continuar con Google
+                  {t("auth.login.google_button")}
                 </span>
               </div>
             </button>
           </div>
 
           <p className="mt-8 text-center text-sm">
-            ¿No tienes una cuenta?{" "}
+            {t("auth.login.no_account")}{" "}
             <button
               type="button"
               onClick={handleRegisterClick}
               className="font-bold text-azul-gradient hover:text-morado-gradient transition-colors"
             >
-              Regístrate aquí
+              {t("auth.login.register_link")}
             </button>
           </p>
         </div>

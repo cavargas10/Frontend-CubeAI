@@ -1,7 +1,10 @@
 import { Modal, Button } from "flowbite-react";
 import { XCircle } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 
 export const ErrorModal = ({ showModal, closeModal, errorMessage }) => {
+  const { t } = useTranslation();
+
   return (
     <Modal
       show={showModal}
@@ -9,13 +12,8 @@ export const ErrorModal = ({ showModal, closeModal, errorMessage }) => {
       popup={true}
       onClose={closeModal}
       theme={{
-        root: {
-          base: "fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm",
-        },
-        content: {
-          base: "relative w-full max-w-sm m-auto",
-          inner: "relative rounded-none bg-transparent",
-        },
+        root: { base: "fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm" },
+        content: { base: "relative w-full max-w-sm m-auto", inner: "relative rounded-none bg-transparent" },
       }}
     >
       <Modal.Body className="p-0 bg-transparent">
@@ -25,20 +23,18 @@ export const ErrorModal = ({ showModal, closeModal, errorMessage }) => {
               <XCircle size={32} color="#fff" weight="bold" />
             </div>
             <h3 className="text-xl font-bold text-red-400">
-              Ocurrió un Error
+              {t('auth.modals.error_title')}
             </h3>
           </div>
-
           <div className="mb-6 text-sm text-gray-300">
             {errorMessage}
           </div>
-
           <div className="flex justify-center">
             <Button
               className="bg-red-600 text-white font-semibold hover:bg-red-700 rounded-xl w-full py-1.5 transition-all"
               onClick={closeModal}
             >
-              Cerrar
+              {t('auth.modals.close_button')}
             </Button>
           </div>
         </div>

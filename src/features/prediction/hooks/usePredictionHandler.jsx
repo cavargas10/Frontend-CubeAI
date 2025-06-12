@@ -7,74 +7,20 @@ import {
   generateUnico3D,
   generateMultiImagen3D,
 } from "../services/predictionApi";
-
-const predictionSteps = {
-  boceto3D: [
-    "Analizando tu boceto...",
-    "Interpretando las formas principales...",
-    "Generando la malla 3D base...",
-    "Extrapolando volumen y profundidad...",
-    "Refinando la geometría del modelo...",
-    "Casi listo, finalizando el modelo...",
-  ],
-  imagen3D: [
-    "Procesando la imagen de entrada...",
-    "Identificando contornos y profundidad...",
-    "Creando un mapa de normales...",
-    "Construyendo el modelo 3D inicial...",
-    "Proyectando texturas sobre la malla...",
-    "Optimizando el resultado final...",
-  ],
-  texto3D: [
-    "Interpretando tu descripción...",
-    "Generando conceptos visuales...",
-    "Creando una forma 3D a partir del texto...",
-    "Aplicando un estilo base...",
-    "Añadiendo detalles y texturas...",
-    "El modelo 3D está casi listo...",
-  ],
-  textimg3D: [
-    "Interpretando tu descripción...",
-    "Generando una imagen 2D base...",
-    "Analizando la imagen generada...",
-    "Extruyendo la imagen a 3D...",
-    "Refinando la forma y las texturas...",
-    "Tu creación 3D está por terminar...",
-  ],
-  multiimagen3D: [
-    "Analizando las vistas (frontal, lateral, trasera)...",
-    "Alineando las imágenes en el espacio 3D...",
-    "Fusionando las perspectivas...",
-    "Reconstruyendo la geometría completa...",
-    "Generando una textura unificada...",
-    "Compilando el modelo 3D final...",
-  ],
-  unico3D: [
-    "Iniciando escaneo fotogramétrico...",
-    "Calculando puntos de interés...",
-    "Reconstruyendo la nube de puntos...",
-    "Creando la malla 3D...",
-    "Generando la textura a partir de la imagen...",
-    "Finalizando el modelo 3D de alta fidelidad...",
-  ],
-  default: [
-    "Iniciando proceso...",
-    "Contactando con los servidores de IA...",
-    "La solicitud está en cola...",
-    "Procesando datos...",
-    "Generando resultado...",
-    "Casi hemos terminado...",
-  ],
-};
+import { useTranslation } from "react-i18next";
 
 export const usePredictionHandler = (user) => {
+  const { t } = useTranslation();
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [loadingSteps, setLoadingSteps] = useState(predictionSteps.default);
+  const [loadingSteps, setLoadingSteps] = useState([]);
 
   const submitPrediction = useCallback(
     async (endpoint, payload) => {
-      setLoadingSteps(predictionSteps[endpoint] || predictionSteps.default);
+      const translatedSteps = t(`loading_steps.${endpoint}`, { returnObjects: true }) || t('loading_steps.default', { returnObjects: true });
+      setLoadingSteps(translatedSteps);
+
       setIsLoading(true);
       setError(null);
 
@@ -111,7 +57,7 @@ export const usePredictionHandler = (user) => {
         setIsLoading(false);
       }
     },
-    [user]
+    [user, t] 
   );
 
   const clearError = useCallback(() => setError(null), []);

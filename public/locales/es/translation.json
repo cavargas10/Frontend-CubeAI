@@ -1,0 +1,507 @@
+{
+  "header": {
+    "home": "Inicio",
+    "docs": "Documentación",
+    "tutorials": "Tutoriales",
+    "login": "Iniciar sesión",
+    "register": "Registrarse"
+  },
+  "hero": {
+    "title": "Transforma Cualquier Entrada en Objetos 3D Asombrosos",
+    "subtitle": "Nuestra plataforma impulsada por IA convierte tus imágenes, descripciones de texto o bocetos en impresionantes modelos 3D en segundos.",
+    "cta_button": "Pruébalo Gratis"
+  },
+  "logos": {
+    "title": "Empresas que confían en nosotros",
+    "badge": "Colaboraciones"
+  },
+  "methods": {
+    "title": "Métodos de Generación",
+    "subtitle": "Nuestra IA puede generar objetos 3D a partir de prácticamente cualquier tipo de entrada que proporciones.",
+    "badge": "Características",
+    "image_to_3d": {
+      "title": "Imagen a 3D",
+      "description": "Sube una imagen y nuestra IA generará un modelo 3D detallado basado en ella.",
+      "input_type": "Imagen"
+    },
+    "text_to_3d": {
+      "title": "Texto a 3D",
+      "description": "Describe lo que quieres en lenguaje natural y observa cómo nuestra IA da vida a tus ideas.",
+      "input_type": "Texto",
+      "input_text": "Un robot futurista con detalles cibernéticos"
+    },
+    "unique_to_3d": {
+      "title": "Único a 3D",
+      "description": "Método especializado para objetos únicos o complejos que requieren un enfoque personalizado.",
+      "input_type": "Entrada personalizada"
+    },
+    "text_to_image_to_3d": {
+      "title": "Texto a Imagen a 3D",
+      "description": "Describe tu idea en texto, conviértela en una imagen y luego genera un modelo 3D.",
+      "input_type": "Texto",
+      "input_text": "Un dragón volando sobre una montaña",
+      "intermediate_label": "Imagen Intermedia"
+    },
+    "multi_image_to_3d": {
+      "title": "Múltiples imágenes a 3D",
+      "description": "Proporciona varias imágenes desde diferentes ángulos para crear un modelo 3D más preciso y detallado.",
+      "input_type": "Múltiples imágenes",
+      "views": ["Frontal", "Lateral", "Trasera"]
+    },
+    "sketch_to_3d": {
+      "title": "Boceto a 3D",
+      "description": "Dibuja un simple boceto y nuestra IA lo transformará en un objeto 3D completamente realizado.",
+      "input_type": "Boceto"
+    },
+    "output_label": "Modelo 3D"
+  },
+  "marquee": {
+    "items": [
+      "Boceto a 3D",
+      "Creatividad",
+      "Imagen a 3D",
+      "Modelos 3D",
+      "Texto a 3D",
+      "Generación 3D",
+      "Texto a Imagen a 3D",
+      "Múltiples imágenes a 3D",
+      "Único a 3D"
+    ]
+  },
+  "how_it_works": {
+    "title": "Cómo Funciona",
+    "subtitle": "Nuestra avanzada IA hace que crear objetos 3D sea simple e intuitivo.",
+    "badge": "Proceso",
+    "step1": {
+      "title": "Sube o Crea",
+      "description": "Sube una imagen, escribe una descripción o dibuja un boceto de lo que quieres crear."
+    },
+    "step2": {
+      "title": "Procesamiento IA",
+      "description": "Nuestra avanzada IA analiza tu entrada y genera un modelo 3D detallado en tiempo real."
+    },
+    "step3": {
+      "title": "Descarga y Usa",
+      "description": "Descarga tu modelo 3D en varios formatos para usar en juegos, AR/VR, impresión y más."
+    }
+  },
+  "benefits": {
+    "title": "Beneficios de Nuestra Plataforma",
+    "subtitle": "Descubre por qué los profesionales y entusiastas eligen nuestra tecnología para sus necesidades de creación 3D.",
+    "badge": "Ventajas",
+    "item1": {
+      "title": "Ahorra Tiempo",
+      "description": "Deja de perder días modelando. El 3D se puede hacer en sólo unos minutos utilizando nuestra IA."
+    },
+    "item2": {
+      "title": "Interfaz Intuitiva",
+      "description": "Interfaz sencilla e intuitiva. No es necesario convertirse en un experto en modelaje o en avisos."
+    },
+    "item3": {
+      "title": "Exportación Flexible",
+      "description": "Exporte su modelo 3D como un archivo OBJ o GLB para usarlo sin problemas donde quiera."
+    },
+    "item4": {
+      "title": "Almacenamiento",
+      "description": "Genera el objeto 3D que necesites y guárdalo en nuestra base de datos, para que lo puedas utilizar en un futuro."
+    },
+    "item5": {
+      "title": "Múltiples Estilos",
+      "description": "Elige entre varios estilos como: Anime, Pixar, Disney, Realista, Chibi para personalizar tus creaciones 3D."
+    },
+    "item6": {
+      "title": "Extracción de Texturas",
+      "description": "Descarga y utiliza las texturas generadas por la IA para tus proyectos. Ideal para desarrolladores de juegos y diseñadores 3D."
+    }
+  },
+  "cta": {
+    "title": "¿Preparado para que tu socio de IA genere objetos 3D únicos?",
+    "button": "Pruébalo Gratis"
+  },
+  "footer": {
+    "title": "COMIENZA TU AVENTURA",
+    "subtitle": "Empieza a generar objetos 3D únicos gracias al texto o imagen que proporciones como entrada.",
+    "button": "Comenzar",
+    "copyright": "Copyright © Instant3D 2024. Todos los derechos reservados."
+  },
+  "docs": {
+    "viewer": {
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "no_previous": "Sin documento anterior",
+      "no_next": "Sin documento siguiente"
+    },
+    "sidebar": {
+      "title": "Documentación",
+      "loading": "Cargando menú...",
+      "error": "Error al cargar el menú.",
+      "no_categories": "No hay categorías disponibles."
+    },
+    "mobile_menu": {
+      "title": "Documentación",
+      "close_menu": "Cerrar menú",
+      "open_menu": "Abrir menú"
+    },
+    "error_view": {
+      "title": "Error al Cargar",
+      "button_text": "Volver a la Documentación",
+      "not_found_title": "Documento no disponible o no encontrado.",
+      "button_not_found": "Ir a la Documentación"
+    },
+    "loading_view": {
+      "title": "Cargando documento..."
+    },
+    "content_all": {
+      "loading": "Cargando todos los documentos...",
+      "error_prefix": "Error al cargar documentos: ",
+      "no_docs": "No hay documentos para mostrar."
+    }
+  },
+  "tutorials_page": {
+    "title": "Tutoriales",
+    "subtitle": "Descubre nuestra colección de tutoriales diseñados para ayudarte a dominar Instant3D.",
+    "loading": {
+      "title_placeholder_width": "w-48 sm:w-64",
+      "subtitle_placeholder_width": "w-3/4 max-w-xl"
+    },
+    "empty": {
+      "title": "Aún no hay tutoriales disponibles",
+      "subtitle": "Estamos trabajando en nuevo contenido. ¡Vuelve pronto!"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Bienvenido de Nuevo",
+      "subtitle": "Inicia sesión para acceder a tu plataforma.",
+      "email_placeholder": "Correo electrónico",
+      "password_placeholder": "Contraseña",
+      "remember_me": "Recordarme",
+      "forgot_password": "¿Olvidaste tu contraseña?",
+      "login_button": "Iniciar Sesión",
+      "login_loading_button": "Ingresando...",
+      "or_separator": "O",
+      "google_button": "Continuar con Google",
+      "no_account": "¿No tienes una cuenta?",
+      "register_link": "Regístrate aquí"
+    },
+    "register": {
+      "title": "Registro",
+      "subtitle": "Introduce tus datos para crear tu cuenta aquí",
+      "name_placeholder": "Nombre completo",
+      "password_strength": "Fortaleza:",
+      "register_button": "Registrarse",
+      "register_loading_button": "Registrando...",
+      "google_button": "Continuar con Google",
+      "has_account": "¿Ya tienes una cuenta?",
+      "login_link": "Inicia sesión aquí"
+    },
+    "reset_password": {
+      "title": "Restablecer contraseña",
+      "subtitle": "Ingresa tu correo electrónico para recibir un enlace de restablecimiento",
+      "email_placeholder": "Correo electrónico",
+      "send_button": "Enviar enlace de recuperación",
+      "send_loading_button": "Enviando...",
+      "resend_in": "Reenviar en {{seconds}}s",
+      "back_to_login": "Volver a inicio de sesión",
+      "spam_note": "¿No encuentras el correo? Revisa tu carpeta de spam"
+    },
+    "change_password": {
+      "title": "Restablecer Contraseña",
+      "subtitle": "Ingresa una nueva contraseña segura para tu cuenta.",
+      "new_password_placeholder": "Nueva contraseña",
+      "confirm_password_placeholder": "Confirmar nueva contraseña",
+      "reset_button": "Restablecer Contraseña",
+      "reset_loading_button": "Restableciendo..."
+    },
+    "verify_email": {
+      "title": "Revisa tu correo",
+      "subtitle": "Te hemos enviado un enlace de verificación",
+      "instructions": "Haz clic en el enlace que acabamos de enviarte para verificar tu cuenta y continuar.",
+      "resend_button": "Reenviar correo",
+      "back_to_home": "Volver al inicio"
+    },
+    "action_handler": {
+      "processing": "Procesando tu solicitud",
+      "wait": "Por favor espera un momento...",
+      "success_title": "¡Correo verificado con éxito!",
+      "success_subtitle": "Tu cuenta ha sido verificada correctamente.",
+      "redirecting_dashboard": "Redirigiendo al dashboard...",
+      "error_title": "Error",
+      "redirecting_login": "Redirigiendo al login..."
+    },
+    "correct_email": {
+      "verifying": "Verificando tu correo electrónico...",
+      "success_title": "¡Correo verificado con éxito!",
+      "success_subtitle": "Tu cuenta ha sido activada correctamente.",
+      "redirecting": "Redirigiendo al inicio...",
+      "error_title": "Error de verificación",
+      "resend_link_button": "Solicitar nuevo enlace"
+    },
+    "modals": {
+      "registration_required_title": "Registro Requerido",
+      "registration_required_text": "Parece que eres nuevo por aquí. Para continuar, por favor completa tu registro.",
+      "complete_registration_button": "Completar Registro",
+      "error_title": "Ocurrió un Error",
+      "close_button": "Cerrar",
+      "requirements_title": "Crea una Contraseña Segura",
+      "requirements_subtitle": "Tu contraseña debe cumplir con los siguientes requisitos:",
+      "req_length": "Tener al menos 6 caracteres",
+      "req_uppercase": "Incluir al menos una letra mayúscula (A-Z)",
+      "req_lowercase": "Incluir al menos una letra minúscula (a-z)",
+      "req_number": "Contener al menos un número (0-9)",
+      "req_special": "Contener al menos un carácter especial (!@#$...)",
+      "understood_button": "Entendido"
+    },
+    "password_strength_labels": {
+      "very_weak": "Muy débil",
+      "weak": "Débil",
+      "regular": "Regular",
+      "strong": "Fuerte",
+      "excellent": "Excelente"
+    }
+  },
+  "dashboard_layout": {
+    "header": {
+      "welcome": "Bienvenido, {{name}}",
+      "connected_as": "Conectado como",
+      "settings": "Configuración",
+      "logout": "Cerrar Sesión",
+      "open_menu": "Abrir menú",
+      "close_menu": "Cerrar menú"
+    },
+    "nav": {
+      "my_objects": "Mis Objetos",
+      "tutorials": "Tutoriales",
+      "documentation": "Documentación",
+      "ai_tools": "Herramientas de IA",
+      "text_to_3d": "Texto a 3D",
+      "image_to_3d": "Imagen a 3D",
+      "text_to_image_to_3d": "Texto A Imagen A 3D",
+      "unique_to_3d": "Unico A 3D",
+      "multi_image_to_3d": "Multi Imagen a 3D",
+      "sketch_to_3d": "Boceto a 3D"
+    }
+  },
+  "visualizer_page": {
+    "title": "Mis Objetos",
+    "subtitle": "Bienvenido a tu espacio de creación 3D. Aquí puedes gestionar y visualizar tus modelos 3D generados por IA. Explora las diferentes categorías y accede a tus objetos de manera rápida y sencilla.",
+    "section_title": "Modelos 3D Creados",
+    "viewer_title_prefix": "Visor 3D: ",
+    "close_viewer_label": "Cerrar visor",
+    "tabs": {
+      "text_to_3d": { "label": "Texto a 3D", "short_label": "Texto 3D" },
+      "image_to_3d": { "label": "Imagen a 3D", "short_label": "Imagen 3D" },
+      "text_image_to_3d": {
+        "label": "Texto a Imagen a 3D",
+        "short_label": "Texto→Img 3D"
+      },
+      "unique_to_3d": { "label": "Único 3D", "short_label": "Único 3D" },
+      "multi_image_to_3d": {
+        "label": "Multi Imagen a 3D",
+        "short_label": "Multi 3D"
+      },
+      "sketch_to_3d": { "label": "Boceto a 3D", "short_label": "Boceto 3D" }
+    },
+    "history": {
+      "loading": "Cargando historial...",
+      "error_prefix": "Error al obtener el historial de ",
+      "empty": "Aún no has generado ningún objeto en esta categoría.",
+      "delete_confirm_prefix": "¿Seguro que deseas eliminar",
+      "delete_confirm_suffix": "?",
+      "delete_confirm_generic": "¿Estás seguro de eliminar esta generación?",
+      "delete_loading": "Eliminando objeto...",
+      "delete_success": "El objeto ha sido eliminado con éxito."
+    },
+    "card": {
+      "preview_unavailable": "Previsualización no disponible",
+      "click_to_view": "Haga clic para ver en 3D",
+      "delete_label": "Eliminar generación",
+      "download_label": "Descargar modelo"
+    }
+  },
+  "tutorial_dash_page": {
+    "title": "Tutoriales",
+    "subtitle": "Aprende a crear increíbles modelos 3D con nuestros tutoriales paso a paso. Desde conceptos básicos hasta técnicas avanzadas, encuentra todo lo que necesitas.",
+    "section_title": "Guías Disponibles",
+    "loading": {
+      "title": "Cargando tutoriales...",
+      "subtitle": "Preparando el contenido educativo"
+    },
+    "empty": {
+      "title": "No hay tutoriales disponibles",
+      "subtitle": "Los tutoriales se están preparando. Vuelve pronto para acceder a contenido educativo sobre generación 3D."
+    }
+  },
+  "config_dash_page": {
+    "title": "Configuración",
+    "subtitle": "Gestiona tu perfil personal y configuraciones de cuenta. Aquí puedes actualizar tu información, cambiar tu imagen de perfil y administrar tu cuenta de Instant3D.",
+    "section_title": "Información del Perfil",
+    "profile_image": {
+      "title": "Imagen de Perfil",
+      "description": "Actualiza tu imagen de perfil para personalizar tu cuenta",
+      "change_image_prompt": "Haz clic para cambiar tu imagen"
+    },
+    "username": {
+      "title": "Nombre de Usuario",
+      "description": "Nombre de usuario con el que te registraste en la plataforma",
+      "save_button": "Guardar",
+      "error_empty": "El nombre no puede estar vacío"
+    },
+    "email": {
+      "title": "Correo Electrónico",
+      "description": "La dirección de correo electrónico utilizada para registrarte en Instant3D",
+      "cannot_change": "El correo electrónico no puede ser modificado"
+    },
+    "danger_zone": {
+      "title": "Zona de Peligro",
+      "description": "Eliminar tu cuenta de forma permanente. Esta acción es irreversible y eliminará todos tus datos, modelos y configuraciones.",
+      "delete_button": "Eliminar mi cuenta",
+      "delete_modal_message": "¿Estás seguro de que deseas eliminar tu cuenta?",
+      "delete_modal_irreversible": "Esta acción no se puede deshacer.",
+      "delete_modal_confirm": "Sí, continuar",
+      "delete_modal_cancel": "Cancelar",
+      "delete_modal_title": "Confirmación Requerida"
+    },
+    "modals": {
+      "loading_user": "Actualizando su usuario",
+      "loading_image": "Actualizando su imagen de perfil",
+      "loading_delete": "Eliminando tu cuenta...",
+      "loading_delete_wait": "Esto puede tardar un momento.",
+      "success_user_updated": "Su usuario se ha actualizado",
+      "success_image_updated": "Su imagen se ha actualizado",
+      "accept_button": "Aceptar",
+      "success_title": "¡Éxito!"
+    }
+  },
+  "generation_pages": {
+    "text_to_3d": {
+      "title": "Texto a 3D"
+    },
+    "image_to_3d": {
+      "title": "Imagen a 3D"
+    },
+    "text_image_to_3d": {
+      "title": "Texto e Imagen a 3D"
+    },
+    "unique_to_3d": {
+      "title": "Único a 3D"
+    },
+    "multi_image_to_3d": {
+      "title": "Multi Imagen a 3D"
+    },
+    "sketch_to_3d": {
+      "title": "Boceto a 3D"
+    },
+    "common": {
+      "generation_name_label": "Nombre de la Generación",
+      "prompt_label": "Prompt",
+      "style_label": "Estilo Visual",
+      "details_label": "Detalles Adicionales",
+      "upload_image_label": "Sube tu Imagen",
+      "upload_views_label": "Sube tus Vistas",
+      "generate_button": "Generar Modelo 3D",
+      "name_placeholder_generic": "Ej: Mi nueva creación",
+      "prompt_placeholder_generic": "Describe detalladamente el modelo 3D...",
+      "details_placeholder_generic": "Ej: volando sobre pico nevado, atardecer",
+      "drag_and_drop_prompt": "Arrastra una imagen o haz clic",
+      "file_types": "PNG, JPG, JPEG (MAX. 10MB)",
+      "drag_and_drop_views": "Arrastra o haz clic para subir la vista",
+      "canvas_description_placeholder": "Describe tu boceto (opcional)...",
+      "canvas_generate_button": "Generar",
+      "pencil_tooltip": "Lápiz",
+      "eraser_tooltip": "Borrador",
+      "clear_canvas_tooltip": "Limpiar lienzo",
+      "operation_takes_time": "Esta operación puede tardar varios minutos."
+    },
+    "styles": {
+      "disney": "Disney",
+      "pixar": "Pixar",
+      "realistic": "Realista",
+      "anime": "Anime",
+      "chibi": "Chibi"
+    },
+    "results": {
+      "waiting": "Esperando generación...",
+      "instructions": "Aquí podrás ver tu modelo 3D una vez generado",
+      "generated_2d_image": "Imagen 2D Generada:",
+      "download_button": "Descargar GLB"
+    }
+  },
+  "model_viewer": {
+    "loading_model": "Cargando modelo 3D...",
+    "waiting_title": "Esperando generación...",
+    "waiting_subtitle": "Aquí podrás ver tu modelo 3D una vez generado",
+    "controls": {
+      "wireframe": "Malla",
+      "rotate": "Rotación",
+      "texture": "Textura",
+      "download": "Descargar"
+    },
+    "texture_preview": "Ver textura",
+    "texture_download": "Descargar"
+  },
+  "loading_steps": {
+    "boceto3D": [
+      "Analizando tu boceto...",
+      "Interpretando las formas principales...",
+      "Generando la malla 3D base...",
+      "Extrapolando volumen y profundidad...",
+      "Refinando la geometría del modelo...",
+      "Casi listo, finalizando el modelo..."
+    ],
+    "imagen3D": [
+      "Procesando la imagen de entrada...",
+      "Identificando contornos y profundidad...",
+      "Creando un mapa de normales...",
+      "Construyendo el modelo 3D inicial...",
+      "Proyectando texturas sobre la malla...",
+      "Optimizando el resultado final..."
+    ],
+    "texto3D": [
+      "Interpretando tu descripción...",
+      "Generando conceptos visuales...",
+      "Creando una forma 3D a partir del texto...",
+      "Aplicando un estilo base...",
+      "Añadiendo detalles y texturas...",
+      "El modelo 3D está casi listo..."
+    ],
+    "textimg3D": [
+      "Interpretando tu descripción...",
+      "Generando una imagen 2D base...",
+      "Analizando la imagen generada...",
+      "Extruyendo la imagen a 3D...",
+      "Refinando la forma y las texturas...",
+      "Tu creación 3D está por terminar..."
+    ],
+    "multiimagen3D": [
+      "Analizando las vistas (frontal, lateral, trasera)...",
+      "Alineando las imágenes en el espacio 3D...",
+      "Fusionando las perspectivas...",
+      "Reconstruyendo la geometría completa...",
+      "Generando una textura unificada...",
+      "Compilando el modelo 3D final..."
+    ],
+    "unico3D": [
+      "Iniciando escaneo fotogramétrico...",
+      "Calculando puntos de interés...",
+      "Reconstruyendo la nube de puntos...",
+      "Creando la malla 3D...",
+      "Generando la textura a partir de la imagen...",
+      "Finalizando el modelo 3D de alta fidelidad..."
+    ],
+    "default": [
+      "Iniciando proceso...",
+      "Contactando con los servidores de IA...",
+      "La solicitud está en cola...",
+      "Procesando datos...",
+      "Generando resultado...",
+      "Casi hemos terminado..."
+    ]
+  },
+  "error_boundary": {
+    "title": "¡Ups! Algo salió mal.",
+    "subtitle": "Ocurrió un error inesperado en la aplicación. Por favor, intenta refrescar la página.",
+    "button": "Refrescar Página",
+    "details_summary": "Detalles del Error (Dev)"
+  }
+}

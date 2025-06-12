@@ -1,11 +1,14 @@
 import { Modal, Button } from "flowbite-react";
 import { CheckCircle, Sparkle } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 
 export const SuccessModal = ({
   showSuccessModal,
   closeSuccessModal,
   message,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <Modal
       show={showSuccessModal}
@@ -13,13 +16,8 @@ export const SuccessModal = ({
       popup={true}
       onClose={closeSuccessModal}
       theme={{
-        root: {
-          base: "fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm",
-        },
-        content: {
-          base: "relative w-full max-w-sm m-auto",
-          inner: "relative rounded-none bg-transparent",
-        },
+        root: { base: "fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm" },
+        content: { base: "relative w-full max-w-sm m-auto", inner: "relative rounded-none bg-transparent" },
       }}
     >
       <Modal.Body className="p-0 bg-transparent">
@@ -32,20 +30,18 @@ export const SuccessModal = ({
               <CheckCircle size={32} color="#fff" weight="bold" />
             </div>
             <h3 className="text-xl font-bold text-white">
-              ¡Éxito!
+              {t('config_dash_page.modals.success_title')}
             </h3>
           </div>
-
           <p className="mb-6 text-sm text-gray-300">
             {message}
           </p>
-
           <div className="flex justify-center">
             <Button
               className="bg-gradient-to-r from-azul-gradient to-morado-gradient text-white font-semibold hover:brightness-110 rounded-xl w-full py-1.5 transition-all transform hover:scale-105"
               onClick={closeSuccessModal}
             >
-              Aceptar
+              {t('config_dash_page.modals.accept_button')}
             </Button>
           </div>
         </div>

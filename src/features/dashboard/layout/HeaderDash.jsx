@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import { Gear, SignOut, List, X } from "@phosphor-icons/react";
 import logo from "../../../assets/logo.webp";
 import { UserProfile } from "../../../features/auth/components/UserProfile";
+import { useTranslation } from "react-i18next";
 
 export const HeaderDash = ({ userData, toggleMenu, menuOpen, handleLogout }) => {
+  const { t } = useTranslation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -46,7 +48,7 @@ export const HeaderDash = ({ userData, toggleMenu, menuOpen, handleLogout }) => 
                 `}
               >
                 <div className="px-4 py-3 border-b border-linea">
-                  <p className="text-sm font-medium text-gray-400">Conectado como</p>
+                  <p className="text-sm font-medium text-gray-400">{t("dashboard_layout.header.connected_as")}</p>
                   <p className="text-sm truncate">{userData?.email || "Usuario"}</p>
                 </div>
                 <div className="py-1">
@@ -56,7 +58,7 @@ export const HeaderDash = ({ userData, toggleMenu, menuOpen, handleLogout }) => 
                     onClick={() => setIsDropdownOpen(false)}
                   >
                     <Gear size={20} color="#6666ff" className="mr-3 transition-transform duration-200 group-hover/item:rotate-90" />
-                    <span>Configuración</span>
+                    <span>{t("dashboard_layout.header.settings")}</span>
                   </Link>
                   <div className="border-t border-linea my-1"></div>
                   <button
@@ -67,7 +69,7 @@ export const HeaderDash = ({ userData, toggleMenu, menuOpen, handleLogout }) => 
                     className="w-full flex items-center px-4 py-3 text-sm text-red-500 hover:bg-red-500 hover:text-white transition-colors duration-200 group/item"
                   >
                     <SignOut size={20} className="mr-3 transform scale-x-[-1] transition-transform duration-200 group-hover/item:translate-x-1" />
-                    <span>Cerrar Sesión</span>
+                    <span>{t("dashboard_layout.header.logout")}</span>
                   </button>
                 </div>
               </div>
@@ -75,7 +77,7 @@ export const HeaderDash = ({ userData, toggleMenu, menuOpen, handleLogout }) => 
             <div className="flex sm:hidden items-center gap-3">  
               <button
                 name="menu"
-                aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+                aria-label={menuOpen ? t("dashboard_layout.header.close_menu") : t("dashboard_layout.header.open_menu")}
                 className={`
                   w-11 h-11 rounded-lg shadow-lg
                   bg-gradient-to-br from-azul-gradient to-morado-gradient

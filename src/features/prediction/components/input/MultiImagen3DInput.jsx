@@ -8,6 +8,7 @@ import { useMultiImageUpload } from "../../hooks/useMultiImageUpload";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
 import { uploadPredictionPreview } from "../../services/predictionApi";
+import { useTranslation } from "react-i18next";
 
 function dataURLtoBlob(dataurl) {
     const arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1];
@@ -21,6 +22,7 @@ function dataURLtoBlob(dataurl) {
 }
 
 export const MultiImagen3DInput = ({ isCollapsed }) => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { dispatch, clearResult, prediction_multiimg3d_result } = usePredictions();
   const [generationName, setGenerationName] = useState("");
@@ -99,7 +101,7 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
         const formData = new FormData();
         formData.append('preview', previewBlob, 'preview.png');
         formData.append('generation_name', prediction_multiimg3d_result.generation_name);
-        formData.append('prediction_type_api', 'MultiImagen3D'); // <-- TIPO CORRECTO
+        formData.append('prediction_type_api', 'MultiImagen3D');
 
         await uploadPredictionPreview(token, formData);
         console.log("Previsualización subida con éxito para 'Multi Imagen a 3D'.");
@@ -127,7 +129,7 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
           <div className="flex items-center gap-4">
             <div>
               <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-azul-gradient to-morado-gradient">
-                Multi Imagen a 3D
+                {t("generation_pages.multi_image_to_3d.title")}
               </h1>
               <div className="h-1 w-24 bg-gradient-to-r from-azul-gradient to-morado-gradient rounded-full mt-1.5"></div>
             </div>
@@ -143,12 +145,12 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
                 <div className="flex items-center gap-3 mb-2">
                   <TextAa size={18} className="text-azul-gradient" />
                   <h3 className="text-sm font-semibold text-white">
-                    Nombre de la Generación
+                    {t("generation_pages.common.generation_name_label")}
                   </h3>
                 </div>
                 <input
                   type="text"
-                  placeholder="Ej: Mi personaje completo"
+                  placeholder={t("generation_pages.common.name_placeholder_generic")}
                   value={generationName}
                   onChange={(e) => setGenerationName(e.target.value)}
                   disabled={predictionLoading}
@@ -164,12 +166,12 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
                 <div className="flex items-center gap-3 mb-2">
                   <UploadSimple size={18} className="text-azul-gradient" />
                   <h3 className="text-sm font-semibold text-white">
-                    Sube tus Vistas
+                    {t("generation_pages.common.upload_views_label")}
                   </h3>
                 </div>
 
                 <div className="flex gap-2 mb-2">
-                  {["frontal", "lateral", "trasera"].map((type) => (
+                  {["frontal", "lateral", "trasera"].map((type, index) => (
                     <button
                       key={type}
                       onClick={() => !predictionLoading && selectImageType(type)}
@@ -180,7 +182,7 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
                           : "border-linea/30 hover:border-azul-gradient/50 bg-principal/50 text-gray-300 hover:text-white"
                       }`}
                     >
-                      <span className="capitalize">{type}</span>
+                      <span className="capitalize">{t(`methods.multi_image_to_3d.views.${index}`)}</span>
                       {imageFiles[type] && (
                         <CheckCircle
                           size={14}
@@ -235,11 +237,11 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
                         weight="light"
                       />
                       <p className="text-sm text-gray-300 capitalize">
-                        Arrastra o haz clic para subir la vista{" "}
-                        <strong>{currentImageType}</strong>
+                        {t("generation_pages.common.drag_and_drop_views")}{" "}
+                        <strong>{t(`methods.multi_image_to_3d.views.${["frontal", "lateral", "trasera"].indexOf(currentImageType)}`)}</strong>
                       </p>
                       <p className="mt-1 text-xs text-gray-500">
-                        PNG, JPG, JPEG (MAX. 10MB)
+                        {t("generation_pages.common.file_types")}
                       </p>
                     </div>
                   )}
@@ -253,7 +255,7 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
                   className="w-full text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-3 rounded-lg border-none flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-lg hover:shadow-morado-gradient/20 hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 disabled:cursor-not-allowed"
                 >
                   <Sparkle size={22} weight="fill" />
-                  Generar Modelo 3D
+                  {t("generation_pages.common.generate_button")}
                 </button>
               </div>
             </div>

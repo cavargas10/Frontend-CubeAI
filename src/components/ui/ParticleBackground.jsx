@@ -3,12 +3,8 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { PointMaterial } from "@react-three/drei";
 import * as THREE from "three";
 
-// Particle component that handles the actual particles
 function Particles({ count = 1000 }) {
-  // Create a reference to the points
   const points = useRef();
-
-  // Generate random positions for particles
   const particlesPosition = useMemo(() => {
     const positions = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
@@ -20,23 +16,22 @@ function Particles({ count = 1000 }) {
     return positions;
   }, [count]);
 
-  // Generate colors for particles
   const particlesColors = useMemo(() => {
     const colors = new Float32Array(count * 3);
     const colorPalette = [
-      "#4CC9F0", // bright cyan
-      "#4895EF", // bright blue
-      "#4361EE", // indigo blue
-      "#3F37C9", // deep blue
-      "#F72585", // hot pink
-      "#7209B7", // purple
-      "#B5179E", // magenta
-      "#560BAD", // violet
-      "#480CA8", // deep purple
-      "#3A0CA3", // royal blue
-      "#3F37C9", // indigo
-      "#4361EE", // bright indigo
-      "#4CC9F0", // cyan
+      "#4CC9F0", 
+      "#4895EF", 
+      "#4361EE", 
+      "#3F37C9", 
+      "#F72585", 
+      "#7209B7", 
+      "#B5179E", 
+      "#560BAD", 
+      "#480CA8", 
+      "#3A0CA3", 
+      "#3F37C9", 
+      "#4361EE", 
+      "#4CC9F0", 
     ];
 
     for (let i = 0; i < count; i++) {
@@ -51,16 +46,13 @@ function Particles({ count = 1000 }) {
     return colors;
   }, [count]);
 
-  // Animation loop
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
 
     if (points.current) {
-      // Rotate the entire point cloud
       points.current.rotation.x = time * 0.03;
       points.current.rotation.y = time * 0.02;
 
-      // Update individual particle positions for a flowing effect
       const positions = points.current.geometry.attributes.position.array;
       for (let i = 0; i < count; i++) {
         const i3 = i * 3;
@@ -68,7 +60,6 @@ function Particles({ count = 1000 }) {
         const y = positions[i3 + 1];
         const z = positions[i3 + 2];
 
-        // Apply a sine wave movement
         positions[i3] = x + Math.sin(time * 0.2 + i * 0.01) * 0.01;
         positions[i3 + 1] = y + Math.cos(time * 0.2 + i * 0.01) * 0.01;
         positions[i3 + 2] = z + Math.sin(time * 0.2 + i * 0.02) * 0.01;

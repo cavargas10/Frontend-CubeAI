@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getAuth, applyActionCode, checkActionCode } from "firebase/auth";
 import { CheckCircle, XCircle } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 
 export const ActionHandlerPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const auth = getAuth();
@@ -62,7 +64,7 @@ export const ActionHandlerPage = () => {
     };
 
     handleAction();
-  }, [searchParams, navigate, auth]);
+  }, [searchParams, navigate, auth]); 
 
   return (
     <div className="h-screen pt-16 bg-fondologin text-gray-100 flex items-center justify-center overflow-hidden">
@@ -93,9 +95,9 @@ export const ActionHandlerPage = () => {
               </div>
             </div>
             <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-azul-gradient to-morado-gradient mb-2">
-              Procesando tu solicitud
+              {t("auth.action_handler.processing")}
             </h1>
-            <p className="text-base">Por favor espera un momento...</p>
+            <p className="text-base">{t("auth.action_handler.wait")}</p>
           </div>
         )}
 
@@ -110,13 +112,13 @@ export const ActionHandlerPage = () => {
               </div>
             </div>
             <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-green-600 mb-2">
-              ¡Correo verificado con éxito!
+              {t("auth.action_handler.success_title")}
             </h1>
             <p className="text-base mb-4">
-              Tu cuenta ha sido verificada correctamente.
+              {t("auth.action_handler.success_subtitle")}
             </p>
             <p className="text-sm text-gray-400">
-              Redirigiendo al dashboard...
+              {t("auth.action_handler.redirecting_dashboard")}
             </p>
           </div>
         )}
@@ -130,11 +132,11 @@ export const ActionHandlerPage = () => {
             </div>
             <div>
               <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-red-600 mb-2">
-                Error
+                {t("auth.action_handler.error_title")}
               </h1>
               <p className="text-base mb-4">{error}</p>
               <p className="text-sm text-gray-400">
-                Redirigiendo al login...
+                {t("auth.action_handler.redirecting_login")}
               </p>
             </div>
           </div>

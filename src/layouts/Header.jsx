@@ -4,8 +4,10 @@ import logo from "../assets/logo.webp";
 import { Button } from "../components/ui/Button";
 import { Link } from "react-router-dom";
 import { List, X, CaretRight } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 
 export const Header = ({ user }) => {
+  const { t } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
@@ -69,7 +71,7 @@ export const Header = ({ user }) => {
                   : "text-white hover:text-[#A975FF]"
               }`}
             >
-              Inicio
+              {t("header.home")}
             </Link>
             <Link
               to="/documentos"
@@ -79,7 +81,7 @@ export const Header = ({ user }) => {
                   : "text-white hover:text-[#A975FF]"
               }`}
             >
-              Documentación
+              {t("header.docs")}
             </Link>
             <Link
               to="/tutoriales"
@@ -89,7 +91,7 @@ export const Header = ({ user }) => {
                   : "text-white hover:text-[#A975FF]"
               }`}
             >
-              Tutoriales
+              {t("header.tutorials")}
             </Link>
           </nav>
 
@@ -98,14 +100,14 @@ export const Header = ({ user }) => {
               to="/login"
               className="text-sm font-medium py-2 px-4 rounded-md bg-gradient-to-r from-[#3333EA] to-[#A975FF] text-white shadow-sm hover:shadow-md transition-all"
             >
-              Iniciar sesión
+              {t("header.login")}
             </Link>
 
             <Button
               to="/register"
               className="text-sm font-medium py-2 px-4 rounded-md bg-white text-[#0A0B20] hover:bg-gray-200 shadow-md hover:shadow-lg transition-all"
             >
-              Registrarse
+              {t("header.register")}
             </Button>
           </div>
 
@@ -206,7 +208,7 @@ export const Header = ({ user }) => {
                   <span
                     className={`transition-all duration-200 ${location.pathname === "/" ? "ml-2" : "ml-0"}`}
                   >
-                    Inicio
+                    {t("header.home")}
                   </span>
                   <CaretRight
                     size={20}
@@ -237,7 +239,7 @@ export const Header = ({ user }) => {
                   <span
                     className={`transition-all duration-200 ${location.pathname.includes("/documentos") ? "ml-2" : "ml-0"}`}
                   >
-                    Documentación
+                    {t("header.docs")}
                   </span>
                   <CaretRight
                     size={20}
@@ -268,7 +270,7 @@ export const Header = ({ user }) => {
                   <span
                     className={`transition-all duration-200 ${location.pathname === "/tutoriales" ? "ml-2" : "ml-0"}`}
                   >
-                    Tutoriales
+                    {t("header.tutorials")}
                   </span>
                   <CaretRight
                     size={20}
@@ -294,7 +296,7 @@ export const Header = ({ user }) => {
                   "
                   onClick={toggleMenu}
                 >
-                  Iniciar sesión
+                  {t("header.login")}
                 </Link>
 
                 <Button
@@ -309,7 +311,7 @@ export const Header = ({ user }) => {
                   "
                   onClick={toggleMenu}
                 >
-                  Registrarse
+                  {t("header.register")}
                 </Button>
               </div>
             </div>

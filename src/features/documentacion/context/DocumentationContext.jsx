@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useContext, useMemo } from 'react';
 import client from '../../../config/client'; 
 import { GET_HYGRAPH } from '../../../lib/hygraph/queries'; 
+import { useTranslation } from 'react-i18next';
 
 const DocumentationContext = createContext();
 
@@ -18,16 +19,24 @@ export const DocumentationProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const { i18n } = useTranslation();
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       setError(null);
       try {
-        const data = await client.request(GET_HYGRAPH);
+        const currentLanguage = i18n.language || 'es';
+        const variables = {
+          locales: [currentLanguage, 'es']
+        };
+        
+        const data = await client.request(GET_HYGRAPH, variables);
+        
         setCategorias(data.categorias || []);
         
-        const flattened = data.categorias.flatMap(categoria => 
-          categoria.documentos.map(doc => ({
+        const flattened = (data.categorias || []).flatMap(categoria => 
+          (categoria.documentos || []).map(doc => ({
             slug: doc.slug,
             titulo: doc.titulo,
             categoriaSlug: categoria.slug, 
@@ -46,7 +55,7 @@ export const DocumentationProvider = ({ children }) => {
       }
     };
     fetchData();
-  }, []);
+  }, [i18n.language]); 
 
   const value = useMemo(() => ({
     categorias,

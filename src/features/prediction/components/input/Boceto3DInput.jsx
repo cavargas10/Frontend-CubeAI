@@ -8,6 +8,7 @@ import { useCanvasDrawing } from "../../hooks/useCanvasDrawing";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
 import { uploadPredictionPreview } from "../../services/predictionApi";
+import { useTranslation } from "react-i18next";
 
 function dataURLtoBlob(dataurl) {
     const arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1];
@@ -21,6 +22,7 @@ function dataURLtoBlob(dataurl) {
 }
 
 export const Boceto3DInput = ({ isCollapsed }) => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { dispatch, clearResult, prediction_boceto3d_result } = usePredictions();
   const [generationName, setGenerationName] = useState("");
@@ -206,7 +208,7 @@ export const Boceto3DInput = ({ isCollapsed }) => {
           <div className="flex items-center gap-4">
             <div>
               <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-azul-gradient to-morado-gradient">
-                Boceto a 3D
+                {t("generation_pages.sketch_to_3d.title")}
               </h1>
               <div className="h-1 w-24 bg-gradient-to-r from-azul-gradient to-morado-gradient rounded-full mt-1.5"></div>
             </div>
@@ -221,12 +223,12 @@ export const Boceto3DInput = ({ isCollapsed }) => {
                 <div className="flex items-center gap-3 mb-2">
                   <TextAa size={18} className="text-azul-gradient" />
                   <h3 className="text-sm font-semibold text-white">
-                    Nombre de la Generación
+                    {t("generation_pages.common.generation_name_label")}
                   </h3>
                 </div>
                 <input
                   type="text"
-                  placeholder="Ej: Mi dibujo rápido"
+                  placeholder={t("generation_pages.common.name_placeholder_generic")}
                   value={generationName}
                   onChange={(e) => setGenerationName(e.target.value)}
                   disabled={predictionLoading}
@@ -265,7 +267,7 @@ export const Boceto3DInput = ({ isCollapsed }) => {
                           ? "bg-gradient-to-r from-azul-gradient to-morado-gradient text-white shadow-md"
                           : "text-gray-300 hover:bg-white/20"
                       }`}
-                      title="Lápiz"
+                      title={t("generation_pages.common.pencil_tooltip")}
                     >
                       <PencilSimple size={20} weight="bold" />
                     </button>
@@ -277,7 +279,7 @@ export const Boceto3DInput = ({ isCollapsed }) => {
                           ? "bg-gradient-to-r from-azul-gradient to-morado-gradient text-white shadow-md"
                           : "text-gray-300 hover:bg-white/20"
                       }`}
-                      title="Borrador"
+                      title={t("generation_pages.common.eraser_tooltip")}
                     >
                       <Eraser size={20} weight="bold" />
                     </button>
@@ -286,7 +288,7 @@ export const Boceto3DInput = ({ isCollapsed }) => {
                       onClick={clearCanvas}
                       disabled={predictionLoading}
                       className="p-2 rounded-lg flex items-center justify-center transition-all text-gray-300 hover:bg-red-500/80 hover:text-white"
-                      title="Limpiar lienzo"
+                      title={t("generation_pages.common.clear_canvas_tooltip")}
                     >
                       <Trash size={20} weight="bold" />
                     </button>
@@ -295,7 +297,7 @@ export const Boceto3DInput = ({ isCollapsed }) => {
                     <div className="bg-principal/80 backdrop-blur-sm border border-linea/20 rounded-lg p-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                       <input
                         type="text"
-                        placeholder="Describe tu boceto (opcional)..."
+                        placeholder={t("generation_pages.common.canvas_description_placeholder")}
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         disabled={predictionLoading}
@@ -307,7 +309,7 @@ export const Boceto3DInput = ({ isCollapsed }) => {
                         className="text-sm font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2 px-4 rounded-md border-none flex items-center justify-center gap-2 transition-all hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 whitespace-nowrap"
                       >
                         <Sparkle size={16} weight="fill" />
-                        Generar
+                        {t("generation_pages.common.canvas_generate_button")}
                       </button>
                     </div>
                   </div>

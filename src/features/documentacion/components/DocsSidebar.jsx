@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { CaretLineRight, CaretLineLeft } from "@phosphor-icons/react"; 
-import { useDocumentation } from "../context/DocumentationContext"; 
+import { CaretLineRight, CaretLineLeft } from "@phosphor-icons/react";
+import { useDocumentation } from "../context/DocumentationContext";
+import { useTranslation } from "react-i18next";
 
 export const DocsSidebar = () => {
   const { categorias, loading: contextLoading, error: contextError } = useDocumentation();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -30,17 +32,17 @@ export const DocsSidebar = () => {
   };
 
   if (contextLoading) {
-    return <div className="p-4 text-white animate-pulse">Cargando menú...</div>;
+    return <div className="p-4 text-white animate-pulse">{t('docs.sidebar.loading')}</div>;
   }
 
   if (contextError) {
-    return <div className="p-4 text-red-400">Error al cargar el menú.</div>;
+    return <div className="p-4 text-red-400">{t('docs.sidebar.error')}</div>;
   }
 
   const renderLinks = (isMobile = false) => (
     <div className={`${isMobile ? 'space-y-3 p-4' : 'space-y-3'}`}>
       {(!categorias || categorias.length === 0) && !contextLoading && (
-        <p className="text-gray-400 px-3 py-2">No hay categorías disponibles.</p>
+        <p className="text-gray-400 px-3 py-2">{t('docs.sidebar.no_categories')}</p>
       )}
       {categorias.map((categoria) => (
         <div key={categoria.slug}>
@@ -110,7 +112,7 @@ export const DocsSidebar = () => {
             focus:outline-none focus:ring-4 focus:ring-morado-gradient/40
             flex items-center justify-center
           `}
-          aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
+          aria-label={isMenuOpen ? t('docs.mobile_menu.close_menu') : t('docs.mobile_menu.open_menu')}
           aria-expanded={isMenuOpen}
           aria-controls="mobile-docs-drawer"
         >
@@ -164,7 +166,7 @@ export const DocsSidebar = () => {
         aria-hidden={!isMenuOpen}
       >
         <div className="flex items-center justify-between p-4 border-b border-linea/20 sticky top-0 z-10 bg-fondologin">
-          <h2 className="text-lg font-bold text-white">Documentación</h2>
+          <h2 className="text-lg font-bold text-white">{t('docs.mobile_menu.title')}</h2>
         </div>
         
         <nav className="flex-grow overflow-y-auto custom-scrollbar">

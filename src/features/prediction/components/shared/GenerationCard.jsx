@@ -1,6 +1,8 @@
 import { DownloadSimple, Trash, Cube } from "@phosphor-icons/react";
+import { useTranslation } from 'react-i18next';
 
 const DownloadButton = ({ download }) => {
+  const { t } = useTranslation();
   const handleDownload = (e) => {
     e.stopPropagation(); 
     const link = document.createElement("a");
@@ -15,7 +17,7 @@ const DownloadButton = ({ download }) => {
     <button
       onClick={handleDownload}
       className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-full shadow-lg hover:shadow-xl transition-all text-xs"
-      aria-label={`Descargar modelo ${download.format}`}
+      aria-label={`${t('visualizer_page.card.download_label')} ${download.format}`}
     >
       <DownloadSimple size={16} weight="bold" />
       {download.format}
@@ -24,6 +26,7 @@ const DownloadButton = ({ download }) => {
 };
 
 export const GenerationCard = ({ generation, formatDate, openModal, open3DViewer }) => {
+  const { t } = useTranslation();
   const { previewImageUrl, downloads } = generation;
 
   const handleCardClick = () => {
@@ -47,8 +50,8 @@ export const GenerationCard = ({ generation, formatDate, openModal, open3DViewer
       ) : (
         <div className="w-full h-full flex flex-col items-center justify-center bg-gray-900 text-gray-400 p-4 text-center">
             <Cube size={40} className="mb-2 opacity-50"/>
-            <span className="text-sm font-medium">Previsualización no disponible</span>
-            <span className="text-xs opacity-70 mt-1">Haga clic para ver en 3D</span>
+            <span className="text-sm font-medium">{t('visualizer_page.card.preview_unavailable')}</span>
+            <span className="text-xs opacity-70 mt-1">{t('visualizer_page.card.click_to_view')}</span>
         </div>
       )}
       
@@ -72,7 +75,7 @@ export const GenerationCard = ({ generation, formatDate, openModal, open3DViewer
               e.stopPropagation();
               openModal(generation);
             }}
-            aria-label="Eliminar generación"
+            aria-label={t('visualizer_page.card.delete_label')}
           >
             <Trash size={16} color="white" weight="bold" />
           </button>

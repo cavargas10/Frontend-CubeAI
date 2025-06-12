@@ -1,11 +1,11 @@
 import { gql } from "graphql-request";
 
 export const GET_HYGRAPH = gql`
-  query MyQuery {
-    categorias {
+  query MyQuery($locales: [Locale!]!) {
+    categorias(locales: $locales) {
       titulo
       slug
-      documentos {
+      documentos(locales: $locales) {
         titulo
         slug
         contenido {
@@ -14,7 +14,7 @@ export const GET_HYGRAPH = gql`
       }
     }
 
-    tutoriales {
+    tutoriales(locales: $locales) {
       titulo
       subtitulo
       tipos

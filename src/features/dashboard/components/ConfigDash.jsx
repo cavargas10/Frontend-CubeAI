@@ -1,24 +1,15 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Pencil,
-  User,
-  Envelope,
-  Trash,
-  Image,
-  Shield,
-} from "@phosphor-icons/react";
-import {
-  updateUserName,
-  updateUserProfilePicture,
-  deleteUserAccount,
-} from "../../auth/services/userApi";
+import { Pencil, User, Envelope, Trash, Image, Shield } from "@phosphor-icons/react";
+import { updateUserName, updateUserProfilePicture, deleteUserAccount } from "../../auth/services/userApi";
 import { DeleteConfirmationModal } from "../../../components/modals/DeleteConfirmationModal";
 import { LoadingModal } from "../../../components/modals/LoadingModal";
 import { SuccessModal } from "../../../components/modals/SuccessModal";
 import { useAuth } from "../../auth/hooks/useAuth"; 
+import { useTranslation } from "react-i18next";
 
 export const ConfigDash = ({ isCollapsed }) => {
+  const { t } = useTranslation();
   const { user, userData, refetchUserData } = useAuth();
   const [newName, setNewName] = useState("");
   const [isNameChanged, setIsNameChanged] = useState(false);
@@ -26,21 +17,21 @@ export const ConfigDash = ({ isCollapsed }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showLoadingModal, setShowLoadingModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState("");
+  const [loadingSteps, setLoadingSteps] = useState([]); 
   const [successMessage, setSuccessMessage] = useState("");
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
   const handleNameChange = (event) => {
-    const value = event.target.value; // No usamos trim aquí para permitir espacios intermedios
+    const value = event.target.value;
     setNewName(value);
     setIsNameChanged(userData && value.trim() !== userData.name);
-    setNameError(value.trim() === "" ? "El nombre no puede estar vacío" : "");
+    setNameError(value.trim() === "" ? t("config_dash_page.username.error_empty") : "");
   };
 
   const handleNameSubmit = async () => {
     if (!isNameChanged || newName.trim() === "" || !user) return;
-    setLoadingMessage("Actualizando su usuario");
+    setLoadingSteps([t("config_dash_page.modals.loading_user")]);
     setShowLoadingModal(true);
     try {
       const token = await user.getIdToken();
@@ -49,7 +40,7 @@ export const ConfigDash = ({ isCollapsed }) => {
       setNewName("");
       setIsNameChanged(false);
       setShowLoadingModal(false);
-      setSuccessMessage("Su usuario se ha actualizado");
+      setSuccessMessage(t("config_dash_page.modals.success_user_updated"));
       setShowSuccessModal(true);
     } catch (error) {
       console.error("Error actualizando el nombre:", error);
@@ -70,7 +61,7 @@ export const ConfigDash = ({ isCollapsed }) => {
 
   const handleProfilePictureSubmit = async (file) => {
     if (!user) return;
-    setLoadingMessage("Actualizando su imagen de perfil");
+    setLoadingSteps([t("config_dash_page.modals.loading_image")]);
     setShowLoadingModal(true);
     const formData = new FormData();
     formData.append("profile_picture", file);
@@ -79,7 +70,7 @@ export const ConfigDash = ({ isCollapsed }) => {
       await updateUserProfilePicture(token, formData);
       await refetchUserData();
       setShowLoadingModal(false);
-      setSuccessMessage("Su imagen se ha actualizado");
+      setSuccessMessage(t("config_dash_page.modals.success_image_updated"));
       setShowSuccessModal(true);
     } catch (error) {
       console.error("Error actualizando la imagen de perfil:", error);
@@ -89,19 +80,25 @@ export const ConfigDash = ({ isCollapsed }) => {
 
   const handleDeleteAccount = async () => {
     if (!user) return;
+    setLoadingSteps([
+      t("config_dash_page.modals.loading_delete"),
+      t("config_dash_page.modals.loading_delete_wait"),
+    ]);
+    setShowLoadingModal(true); 
     try {
       const token = await user.getIdToken();
       await deleteUserAccount(token);
       navigate("/");
     } catch (error) {
       console.error("Error eliminando la cuenta:", error);
+      setShowLoadingModal(false); 
     }
   };
 
   const openDeleteModal = () => setShowDeleteModal(true);
   const closeDeleteModal = () => setShowDeleteModal(false);
   const confirmDelete = () => {
-    closeDeleteModal(); // Cerramos el modal antes de la acción
+    closeDeleteModal();
     handleDeleteAccount();
   };
 
@@ -134,15 +131,13 @@ export const ConfigDash = ({ isCollapsed }) => {
           <div className="flex items-center gap-4 mb-3">
             <div>
               <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-azul-gradient to-morado-gradient pb-2">
-                Configuración
+                {t("config_dash_page.title")}
               </h1>
               <div className="h-1 w-32 bg-gradient-to-r from-azul-gradient to-morado-gradient rounded-full mt-2"></div>
             </div>
           </div>
           <p className="text-lg leading-relaxed text-justify">
-            Gestiona tu perfil personal y configuraciones de cuenta. Aquí puedes
-            actualizar tu información, cambiar tu imagen de perfil y administrar
-            tu cuenta de Instant3D.
+            {t("config_dash_page.subtitle")}
           </p>
         </div>
         <hr className="border-t-2 border-linea/20 my-5" />
@@ -150,7 +145,7 @@ export const ConfigDash = ({ isCollapsed }) => {
           <div className="flex items-center gap-3 mb-6">
             <div className="w-1 h-8 bg-gradient-to-b from-azul-gradient to-morado-gradient rounded-full"></div>
             <h2 className="text-2xl font-bold text-white">
-              Información del Perfil
+              {t("config_dash_page.section_title")}
             </h2>
           </div>
           <div className="relative bg-principal/30 backdrop-blur-sm border border-linea/20 rounded-2xl p-6">
@@ -160,11 +155,11 @@ export const ConfigDash = ({ isCollapsed }) => {
                   <div className="flex items-center gap-3 mb-4">
                     <Image size={20} className="text-azul-gradient" />
                     <h3 className="text-lg font-semibold text-white">
-                      Imagen de Perfil
+                      {t("config_dash_page.profile_image.title")}
                     </h3>
                   </div>
                   <p className="text-gray-400 text-sm mb-6">
-                    Actualiza tu imagen de perfil para personalizar tu cuenta
+                    {t("config_dash_page.profile_image.description")}
                   </p>
                   <div className="flex-1 flex flex-col items-center justify-center space-y-6">
                     <div className="relative group">
@@ -196,7 +191,7 @@ export const ConfigDash = ({ isCollapsed }) => {
                         {userData.name || "Usuario"}
                       </p>
                       <p className="text-xs text-gray-400">
-                        Haz clic para cambiar tu imagen
+                        {t("config_dash_page.profile_image.change_image_prompt")}
                       </p>
                     </div>
                   </div>
@@ -214,11 +209,11 @@ export const ConfigDash = ({ isCollapsed }) => {
                   <div className="flex items-center gap-3 mb-4">
                     <User size={20} className="text-azul-gradient" />
                     <h3 className="text-lg font-semibold text-white">
-                      Nombre de Usuario
+                      {t("config_dash_page.username.title")}
                     </h3>
                   </div>
                   <p className="text-gray-400 text-sm mb-4">
-                    Nombre de usuario con el que te registraste en la plataforma
+                    {t("config_dash_page.username.description")}
                   </p>
                   <div className="space-y-3">
                     <div className="flex flex-col sm:flex-row gap-3">
@@ -241,7 +236,7 @@ export const ConfigDash = ({ isCollapsed }) => {
                             : "bg-gray-600 cursor-not-allowed text-gray-400"
                         }`}
                       >
-                        Guardar
+                        {t("config_dash_page.username.save_button")}
                       </button>
                     </div>
                     {nameError && (
@@ -256,12 +251,11 @@ export const ConfigDash = ({ isCollapsed }) => {
                   <div className="flex items-center gap-3 mb-4">
                     <Envelope size={20} className="text-morado-gradient" />
                     <h3 className="text-lg font-semibold text-white">
-                      Correo Electrónico
+                      {t("config_dash_page.email.title")}
                     </h3>
                   </div>
                   <p className="text-gray-400 text-sm mb-4">
-                    La dirección de correo electrónico utilizada para
-                    registrarte en Instant3D
+                    {t("config_dash_page.email.description")}
                   </p>
                   <input
                     type="email"
@@ -270,7 +264,7 @@ export const ConfigDash = ({ isCollapsed }) => {
                     className="w-full p-3 rounded-lg bg-principal/30 border-2 border-linea/20 text-gray-300 cursor-not-allowed"
                   />
                   <p className="text-xs text-gray-500 mt-2">
-                    El correo electrónico no puede ser modificado
+                    {t("config_dash_page.email.cannot_change")}
                   </p>
                 </div>
               </div>
@@ -280,13 +274,11 @@ export const ConfigDash = ({ isCollapsed }) => {
                 <div className="flex items-center gap-3 mb-4">
                   <Shield size={20} className="text-red-400" />
                   <h3 className="text-lg font-semibold text-red-400">
-                    Zona de Peligro
+                    {t("config_dash_page.danger_zone.title")}
                   </h3>
                 </div>
                 <p className="text-gray-400 text-sm mb-4">
-                  Eliminar tu cuenta de forma permanente. Esta acción es
-                  irreversible y eliminará todos tus datos, modelos y
-                  configuraciones.
+                  {t("config_dash_page.danger_zone.description")}
                 </p>
                 <button
                   type="button"
@@ -294,7 +286,7 @@ export const ConfigDash = ({ isCollapsed }) => {
                   className="flex items-center gap-2 px-4 py-3 rounded-lg bg-red-500/20 hover:bg-red-500 text-red-400 hover:text-white border border-red-500/30 hover:border-red-500 transition-all duration-300 hover:scale-105"
                 >
                   <Trash size={18} />
-                  Eliminar mi cuenta
+                  {t("config_dash_page.danger_zone.delete_button")}
                 </button>
               </div>
             </div>
@@ -306,11 +298,11 @@ export const ConfigDash = ({ isCollapsed }) => {
         showModal={showDeleteModal}
         closeModal={closeDeleteModal}
         onConfirm={confirmDelete}
-        message="¿Estás seguro de que deseas eliminar tu cuenta?"
+        message={t("config_dash_page.danger_zone.delete_modal_message")}
       />
       <LoadingModal
         showLoadingModal={showLoadingModal}
-        steps={["Eliminando tu cuenta...", "Esto puede tardar un momento."]}
+        steps={loadingSteps}
       />
       <SuccessModal
         showSuccessModal={showSuccessModal}

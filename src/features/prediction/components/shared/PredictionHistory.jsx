@@ -1,5 +1,3 @@
-// src/features/prediction/components/shared/PredictionHistory.jsx
-
 import { useState, useEffect, useCallback } from "react";
 import { auth } from "../../../../config/firebase";
 import { GenerationCard } from "./GenerationCard";
@@ -7,12 +5,13 @@ import { DeleteConfirmationModal } from "../../../../components/modals/DeleteCon
 import { SuccessModal } from "../../../../components/modals/SuccessModal";
 import { LoadingModal } from "../../../../components/modals/LoadingModal";
 import { getGenerations, deleteGeneration } from "../../services/predictionApi";
+import { useTranslation } from "react-i18next";
 
 export const PredictionHistory = ({ selectedTab, open3DViewer }) => {
+  const { t } = useTranslation();
   const [generations, setGenerations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [apiError, setApiError] = useState(null);
-
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
@@ -36,13 +35,13 @@ export const PredictionHistory = ({ selectedTab, open3DViewer }) => {
     } catch (error) {
       console.error(`Error fetching ${selectedTab} generations:`, error);
       setApiError(
-        error.message || `Error al obtener el historial de ${selectedTab}.`
+        `${t('visualizer_page.history.error_prefix')}${selectedTab}.`
       );
       setGenerations([]);
     } finally {
       setIsLoading(false);
     }
-  }, [selectedTab]);
+  }, [selectedTab, t]);
 
   useEffect(() => {
     fetchGenerations();
@@ -68,6 +67,13 @@ export const PredictionHistory = ({ selectedTab, open3DViewer }) => {
   const closeDeleteModal = () => {
     setGenerationToDelete(null);
     setShowDeleteModal(false);
+  };
+  
+  const getDeleteConfirmationMessage = () => {
+    if (generationToDelete) {
+        return `${t('visualizer_page.history.delete_confirm_prefix')} "${generationToDelete.generation_name}"${t('visualizer_page.history.delete_confirm_suffix')}`;
+    }
+    return t('visualizer_page.history.delete_confirm_generic');
   };
 
   const handleDeleteGeneration = async () => {
@@ -112,7 +118,7 @@ export const PredictionHistory = ({ selectedTab, open3DViewer }) => {
       {!isLoading && generations.length === 0 && !apiError && (
         <div className="flex justify-center items-center h-60">
           <p className="text-xl text-gray-500 text-center px-4">
-            Aún no has generado ningún objeto en esta categoría.
+            {t('visualizer_page.history.empty')}
           </p>
         </div>
       )}
@@ -135,20 +141,16 @@ export const PredictionHistory = ({ selectedTab, open3DViewer }) => {
         showModal={showDeleteModal}
         closeModal={closeDeleteModal}
         onConfirm={handleDeleteGeneration}
-        message={
-          generationToDelete
-            ? `¿Seguro que deseas eliminar "${generationToDelete.generation_name}"?`
-            : "¿Estás seguro de eliminar esta generación?"
-        }
+        message={getDeleteConfirmationMessage()}
       />
       <LoadingModal
         showLoadingModal={deleteLoading}
-        steps={["Eliminando objeto..."]}
+        steps={[t('visualizer_page.history.delete_loading')]}
       />
       <SuccessModal
         showSuccessModal={showSuccessModal}
         closeSuccessModal={closeSuccessModal}
-        message="El objeto ha sido eliminado con éxito."
+        message={t('visualizer_page.history.delete_success')}
       />
     </div>
   );

@@ -1,4 +1,8 @@
+import { useTranslation } from "react-i18next";
+
 export const UserProfile = ({ userData }) => {
+  const { t } = useTranslation();
+
   const handleImageError = (event) => {
     event.target.src = "/usuario.webp";
     event.target.onerror = null;
@@ -12,7 +16,7 @@ export const UserProfile = ({ userData }) => {
   return (
     <div className="flex items-center justify-end gap-3 cursor-pointer">
       <p className="hidden sm:block text-sm text-white font-medium transition-colors duration-300 hover:text-[#A975FF] whitespace-nowrap">
-        Bienvenido, {userData.name}
+        {t("dashboard_layout.header.welcome", { name: userData.name })}
       </p>
 
       <div className={`relative rounded-full ${gradientBorderSize} bg-gradient-to-br from-azul-gradient to-morado-gradient shadow-md transition-transform duration-300 group-hover:scale-110`}>

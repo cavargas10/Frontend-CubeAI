@@ -5,14 +5,14 @@ import { useAuth } from "./features/auth/hooks/useAuth";
 import { PredictionProvider } from "./features/prediction/context/PredictionContext";
 import { ProtectedRoute } from "./features/auth/components/ProtectedRoute";
 import { ErrorBoundaryFallbackUI } from "./components/ui/ErrorBoundaryFallbackUI";
-import { DocumentationProvider } from "./features/documentacion/context/DocumentationContext"; 
+import { DocumentationProvider } from "./features/documentacion/context/DocumentationContext";
 
 const PublicLayout = lazy(() =>
   import("./layouts/PublicLayout/PublicLayout").then((module) => ({
     default: module.PublicLayout,
   }))
 );
-const DocsLayout = lazy(() => 
+const DocsLayout = lazy(() =>
   import("./layouts/DocsLayout").then((module) => ({
     default: module.DocsLayout,
   }))
@@ -68,8 +68,14 @@ const ActionHandlerPage = lazy(() =>
 );
 
 const DocsViewer = lazy(() =>
-  import("./features/documentacion/components/DocsViewer").then((module) => ({ 
+  import("./features/documentacion/components/DocsViewer").then((module) => ({
     default: module.DocsViewer,
+  }))
+);
+
+const DocsIndexRedirect = lazy(() =>
+  import("./features/documentacion/components/DocsIndexRedirect").then((module) => ({
+    default: module.DocsIndexRedirect,
   }))
 );
 class ErrorBoundary extends React.Component {
@@ -116,8 +122,8 @@ export function App() {
         <BrowserRouter>
           <Suspense fallback={<Loading />}>
             <Routes>
-              <Route path="/" element={<PublicLayout />}> 
-                <Route index element={<HomePage />} /> 
+              <Route path="/" element={<PublicLayout />}>
+                <Route index element={<HomePage />} />
                 <Route path="tutoriales" element={<TutorialsPage />} />
                 <Route path="login" element={<LoginPage />} />
                 <Route
@@ -131,20 +137,19 @@ export function App() {
                 <Route path="action-handler" element={<ActionHandlerPage />} />
                 <Route path="change-password" element={<ChangePasswordPage />} />
                 <Route path="correct-email" element={<CorrectEmailPage />} />
-                
-                <Route 
-                  path="documentos" 
+                <Route
+                  path="documentos"
                   element={
                     <DocumentationProvider>
                       <DocsLayout />
                     </DocumentationProvider>
                   }
-                > 
-                  <Route index element={<Navigate to="documento/empezar" replace />} />
+                >
+                  <Route index element={<DocsIndexRedirect />} />
                   <Route path="documento/:slug" element={<DocsViewer />} />
-                  <Route path="*" element={<Navigate to="documento/empezar" replace />} />
+                  <Route path="*" element={<DocsIndexRedirect />} />
                 </Route>
-                 <Route path="*" element={<Navigate to="/" replace />} /> 
+                <Route path="*" element={<Navigate to="/" replace />} />
               </Route>
 
               <Route
@@ -157,7 +162,7 @@ export function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route path="*" element={<Navigate to="/" replace />} />  
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>
         </BrowserRouter>

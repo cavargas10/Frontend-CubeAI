@@ -6,54 +6,50 @@ import {
   PaintBrush,
   Image,
 } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 
 export function BenefitsSection() {
+  const { t } = useTranslation();
   const beneficios = [
     {
       icon: Clock,
-      title: "Ahorra Tiempo",
-      description:
-        "Deja de perder días modelando. El 3D se puede hacer en sólo unos minutos utilizando nuestra IA.",
+      title: t("benefits.item1.title"),
+      description: t("benefits.item1.description"),
       gradient: "from-primary/10 to-purple-500/10",
       iconGradient: "from-azul-gradient to-morado-gradient",
     },
     {
       icon: Cpu,
-      title: "Interfaz Intuitiva",
-      description:
-        "Interfaz sencilla e intuitiva. No es necesario convertirse en un experto en modelaje o en avisos.",
+      title: t("benefits.item2.title"),
+      description: t("benefits.item2.description"),
       gradient: "from-blue-500/10 to-primary/10",
       iconGradient: "from-azul-gradient to-morado-gradient",
     },
     {
       icon: DownloadSimple,
-      title: "Exportación Flexible",
-      description:
-        "Exporte su modelo 3D como un archivo OBJ o GLB para usarlo sin problemas donde quiera.",
+      title: t("benefits.item3.title"),
+      description: t("benefits.item3.description"),
       gradient: "from-primary/10 to-purple-500/10",
       iconGradient: "from-azul-gradient to-morado-gradient",
     },
     {
       icon: Database,
-      title: "Almacenamiento",
-      description:
-        "Genera el objeto 3D que necesites y guárdalo en nuestra base de datos, para que lo puedas utilizar en un futuro.",
+      title: t("benefits.item4.title"),
+      description: t("benefits.item4.description"),
       gradient: "from-blue-500/10 to-primary/10",
       iconGradient: "from-azul-gradient to-morado-gradient",
     },
     {
       icon: PaintBrush,
-      title: "Múltiples Estilos",
-      description:
-        "Elige entre varios estilos como: Anime, Pixar, Disney, Realista, Chibi para personalizar tus creaciones 3D.",
+      title: t("benefits.item5.title"),
+      description: t("benefits.item5.description"),
       gradient: "from-primary/10 to-purple-500/10",
       iconGradient: "from-azul-gradient to-morado-gradient",
     },
     {
       icon: Image,
-      title: "Extracción de Texturas",
-      description:
-        "Descarga y utiliza las texturas generadas por la IA para tus proyectos. Ideal para desarrolladores de juegos y diseñadores 3D.",
+      title: t("benefits.item6.title"),
+      description: t("benefits.item6.description"),
       gradient: "from-blue-500/10 to-primary/10",
       iconGradient: "from-azul-gradient to-morado-gradient",
     },
@@ -65,14 +61,13 @@ export function BenefitsSection() {
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
             <div className="inline-block rounded-lg bg-primary/10 border border-primary/20 px-3 py-1 text-sm font-bold text-primary mb-2 bg-azul-gradient">
-              Ventajas
+              {t("benefits.badge")}
             </div>
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl bg-gradient-to-r from-azul-gradient via-primary to-morado-gradient bg-clip-text text-transparent text-glow">
-              Beneficios de Nuestra Plataforma
+              {t("benefits.title")}
             </h2>
             <p className="max-w-[900px] text-foreground/80 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Descubre por qué los profesionales y entusiastas eligen nuestra
-              tecnología para sus necesidades de creación 3D.
+              {t("benefits.subtitle")}
             </p>
           </div>
         </div>

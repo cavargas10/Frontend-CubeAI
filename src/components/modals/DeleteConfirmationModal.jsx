@@ -1,5 +1,6 @@
 import { Modal, Button } from "flowbite-react";
 import { WarningCircle } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 
 export const DeleteConfirmationModal = ({
   showModal,
@@ -7,6 +8,8 @@ export const DeleteConfirmationModal = ({
   onConfirm,
   message,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <Modal
       show={showModal}
@@ -14,13 +17,8 @@ export const DeleteConfirmationModal = ({
       popup={true}
       onClose={closeModal}
       theme={{
-        root: {
-          base: "fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm",
-        },
-        content: {
-          base: "relative w-full max-w-sm m-auto",
-          inner: "relative rounded-none bg-transparent",
-        },
+        root: { base: "fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm" },
+        content: { base: "relative w-full max-w-sm m-auto", inner: "relative rounded-none bg-transparent" },
       }}
     >
       <Modal.Body className="p-0 bg-transparent">
@@ -30,30 +28,28 @@ export const DeleteConfirmationModal = ({
               <WarningCircle size={32} color="#fff" weight="bold" />
             </div>
             <h3 className="text-xl font-bold text-white">
-              Confirmación Requerida
+              {t('config_dash_page.danger_zone.delete_modal_title')}
             </h3>
           </div>
-
           <p className="mb-6 text-sm text-gray-300">
             {message}
             <br />
             <span className="font-semibold text-red-400 mt-2 block">
-              Esta acción no se puede deshacer.
+              {t('config_dash_page.danger_zone.delete_modal_irreversible')}
             </span>
           </p>
-
           <div className="flex justify-center gap-4">
             <Button
               className="flex-1 bg-red-600 text-white font-semibold hover:bg-red-700 rounded-xl transition-all"
               onClick={onConfirm}
             >
-              Sí, continuar
+              {t('config_dash_page.danger_zone.delete_modal_confirm')}
             </Button>
             <Button
               className="flex-1 bg-linea/50 text-white hover:bg-linea/80 font-semibold rounded-xl transition-all"
               onClick={closeModal}
             >
-              Cancelar
+              {t('config_dash_page.danger_zone.delete_modal_cancel')}
             </Button>
           </div>
         </div>

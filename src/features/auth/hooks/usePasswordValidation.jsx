@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
-// Expresiones regulares para la validación
 const REGEX = {
   uppercase: /[A-Z]/,
   lowercase: /[a-z]/,
@@ -9,6 +9,8 @@ const REGEX = {
 };
 
 export const usePasswordValidation = (password) => {
+  const { t } = useTranslation();
+
   const validations = useMemo(() => ({
     length: password.length >= 6,
     uppercase: REGEX.uppercase.test(password),
@@ -25,19 +27,19 @@ export const usePasswordValidation = (password) => {
     switch (strengthScore) {
       case 0:
       case 1:
-        return 'Muy débil';
+        return t('auth.password_strength_labels.very_weak');
       case 2:
-        return 'Débil';
+        return t('auth.password_strength_labels.weak');
       case 3:
-        return 'Regular';
+        return t('auth.password_strength_labels.regular');
       case 4:
-        return 'Fuerte';
+        return t('auth.password_strength_labels.strong');
       case 5:
-        return 'Excelente';
+        return t('auth.password_strength_labels.excellent');
       default:
         return '';
     }
-  }, [strengthScore]);
+  }, [strengthScore, t]); 
 
   return { validations, allRequirementsMet, strengthScore, strengthLabel };
 };

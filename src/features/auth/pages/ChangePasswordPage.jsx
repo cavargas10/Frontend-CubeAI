@@ -6,8 +6,10 @@ import { Eye, EyeSlash, Lock, Question } from "@phosphor-icons/react";
 import { GeometricParticles } from "../../../components/ui/GeometricParticles";
 import { usePasswordValidation } from "../hooks/usePasswordValidation";
 import { RequirementsModal } from "../../../components/modals/RequirementsModal";
+import { useTranslation } from "react-i18next";
 
 export const ChangePasswordPage = () => {
+  const { t } = useTranslation();
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -17,7 +19,6 @@ export const ChangePasswordPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-
   const queryParams = new URLSearchParams(location.search);
   const oobCode = queryParams.get("oobCode");
 
@@ -81,13 +82,12 @@ export const ChangePasswordPage = () => {
       </div>
       <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-6 sm:p-12 h-full">
         <div className="w-full max-w-md space-y-8">
-          {/* Título */}
           <div className="text-center">
             <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-azul-gradient to-morado-gradient mb-2">
-              Restablecer Contraseña
+              {t("auth.change_password.title")}
             </h1>
             <p className="text-base text-gray-400 text-center">
-              Ingresa una nueva contraseña segura para tu cuenta.
+              {t("auth.change_password.subtitle")}
             </p>
           </div>
           {success && (
@@ -109,7 +109,7 @@ export const ChangePasswordPage = () => {
               <input
                 className={`appearance-none rounded-md block w-full px-3 py-3 pl-10 pr-20 border bg-principal placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors`}
                 type={showPassword ? "text" : "password"}
-                placeholder="Nueva contraseña"
+                placeholder={t("auth.change_password.new_password_placeholder")}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
               />
@@ -149,7 +149,7 @@ export const ChangePasswordPage = () => {
                     : "border-linea"
                 } bg-principal placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors`}
                 type={showPassword ? "text" : "password"}
-                placeholder="Confirmar nueva contraseña"
+                placeholder={t("auth.change_password.confirm_password_placeholder")}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
@@ -171,7 +171,7 @@ export const ChangePasswordPage = () => {
             {newPassword.length > 0 && (
               <div className="mt-2">
                 <div className="flex justify-between items-center mb-1">
-                  <span className="text-xs text-gray-400">Fortaleza:</span>
+                  <span className="text-xs text-gray-400">{t("auth.register.password_strength")}</span>
                   <span className="text-xs font-medium">{strengthLabel}</span>
                 </div>
                 <div className="h-1.5 w-full bg-secondary/30 rounded-full overflow-hidden">
@@ -219,10 +219,10 @@ export const ChangePasswordPage = () => {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  Restableciendo...
+                  {t("auth.change_password.reset_loading_button")}
                 </span>
               ) : (
-                "Restablecer Contraseña"
+                t("auth.change_password.reset_button")
               )}
             </button>
           </form>

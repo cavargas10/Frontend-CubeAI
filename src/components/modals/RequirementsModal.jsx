@@ -1,5 +1,6 @@
 import { Modal, Button } from "flowbite-react";
 import { XCircle, CheckCircle, ShieldCheck } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 
 const RequirementItem = ({ isMet, text }) => {
   const Icon = isMet ? CheckCircle : XCircle;
@@ -23,6 +24,8 @@ export const RequirementsModal = ({
   closeModal,
   password,
 }) => {
+  const { t } = useTranslation();
+
   const validations = {
     length: /.{6,}/.test(password),
     uppercase: /[A-Z]/.test(password),
@@ -54,33 +57,33 @@ export const RequirementsModal = ({
               <ShieldCheck size={32} color="#fff" weight="bold" />
             </div>
             <h3 className="text-xl font-bold text-white">
-              Crea una Contraseña Segura
+              {t("auth.modals.requirements_title")}
             </h3>
             <p className="text-sm text-gray-400 mt-1">
-              Tu contraseña debe cumplir con los siguientes requisitos:
+              {t("auth.modals.requirements_subtitle")}
             </p>
           </div>
 
           <ul className="space-y-3 text-left mb-6">
             <RequirementItem
               isMet={validations.length}
-              text="Tener al menos 6 caracteres"
+              text={t("auth.modals.req_length")}
             />
             <RequirementItem
               isMet={validations.uppercase}
-              text="Incluir al menos una letra mayúscula (A-Z)"
+              text={t("auth.modals.req_uppercase")}
             />
             <RequirementItem
               isMet={validations.lowercase}
-              text="Incluir al menos una letra minúscula (a-z)"
+              text={t("auth.modals.req_lowercase")}
             />
             <RequirementItem
               isMet={validations.number}
-              text="Contener al menos un número (0-9)"
+              text={t("auth.modals.req_number")}
             />
             <RequirementItem
               isMet={validations.special}
-              text="Contener al menos un carácter especial (!@#$...)"
+              text={t("auth.modals.req_special")}
             />
           </ul>
 
@@ -89,7 +92,7 @@ export const RequirementsModal = ({
               className="bg-gradient-to-r from-azul-gradient to-morado-gradient text-white font-semibold hover:brightness-110 rounded-xl w-full py-1.5 transition-all transform hover:scale-105"
               onClick={closeModal}
             >
-              Entendido
+              {t("auth.modals.understood_button")}
             </Button>
           </div>
         </div>

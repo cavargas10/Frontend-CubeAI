@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Modal } from "flowbite-react";
+import { useTranslation } from "react-i18next";
 
 const defaultSteps = [
   "Iniciando...",
@@ -9,7 +10,9 @@ const defaultSteps = [
 ];
 
 export const LoadingModal = ({ showLoadingModal, steps }) => {
-  const activeSteps = steps && steps.length > 0 ? steps : defaultSteps;
+  const { t } = useTranslation();
+  
+  const activeSteps = steps && steps.length > 0 ? steps : defaultSteps.map(s => t(s, s)); 
   const [currentMessage, setCurrentMessage] = useState(activeSteps[0]);
 
   useEffect(() => {
@@ -42,13 +45,8 @@ export const LoadingModal = ({ showLoadingModal, steps }) => {
       popup={true}
       onClose={() => {}} 
       theme={{
-        root: {
-          base: "fixed inset-0 z-[100] flex items-center justify-center backdrop-blur-sm",
-        },
-        content: {
-          base: "relative w-full max-w-sm m-auto",
-          inner: "relative rounded-none bg-transparent",
-        },
+        root: { base: "fixed inset-0 z-[100] flex items-center justify-center backdrop-blur-sm" },
+        content: { base: "relative w-full max-w-sm m-auto", inner: "relative rounded-none bg-transparent" },
       }}
     >
       <Modal.Body className="p-0 bg-transparent">
@@ -62,7 +60,7 @@ export const LoadingModal = ({ showLoadingModal, steps }) => {
               {currentMessage}
             </h3>
             <p className="text-sm text-gray-400">
-              Esta operación puede tardar varios minutos.
+              {t('generation_pages.common.operation_takes_time')}
             </p>
           </div>
         </div>

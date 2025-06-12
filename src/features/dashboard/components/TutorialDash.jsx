@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { BookOpen, Play, Clock } from "@phosphor-icons/react";
+import { BookOpen } from "@phosphor-icons/react";
 import hygraphClient from "../../../config/client";
 import { GET_HYGRAPH } from "../../../lib/hygraph/queries";
 import { TutorialCard } from "../../../components/ui/TutorialCard";
+import { useTranslation } from "react-i18next";
 
 export const TutorialDash = ({ isCollapsed }) => {
+  const { t, i18n } = useTranslation();
   const [tutoriales, setTutoriales] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -12,7 +14,9 @@ export const TutorialDash = ({ isCollapsed }) => {
     const fetchTutoriales = async () => {
       try {
         setLoading(true);
-        const data = await hygraphClient.request(GET_HYGRAPH);
+        const currentLanguage = i18n.language || 'es';
+        const variables = { locales: [currentLanguage, 'es'] };
+        const data = await hygraphClient.request(GET_HYGRAPH, variables);
         setTutoriales(data.tutoriales);
       } catch (error) {
         console.error("Error fetching tutorials:", error);
@@ -21,7 +25,7 @@ export const TutorialDash = ({ isCollapsed }) => {
       }
     };
     fetchTutoriales();
-  }, []);
+  }, [i18n.language]); 
 
   return (
     <section
@@ -36,21 +40,20 @@ export const TutorialDash = ({ isCollapsed }) => {
           <div className="flex items-center gap-4 mb-3">
             <div>
               <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-azul-gradient to-morado-gradient pb-2">
-                Tutoriales
+                {t("tutorial_dash_page.title")}
               </h1>
               <div className="h-1 w-32 bg-gradient-to-r from-azul-gradient to-morado-gradient rounded-full mt-2"></div>
             </div>
           </div>          
           <p className="text-lg leading-relaxed text-justify">
-            Aprende a crear increíbles modelos 3D con nuestros tutoriales paso a paso. 
-            Desde conceptos básicos hasta técnicas avanzadas, encuentra todo lo que necesitas.
+            {t("tutorial_dash_page.subtitle")}
           </p>
         </div>
         <hr className="border-t-2 border-linea/20 my-5" />
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-1 h-8 bg-gradient-to-b from-azul-gradient to-morado-gradient rounded-full"></div>
-            <h2 className="text-2xl font-bold text-white">Guías Disponibles</h2>
+            <h2 className="text-2xl font-bold text-white">{t("tutorial_dash_page.section_title")}</h2>
           </div>
           <div className="relative">
             <div className="relative bg-principal/30 backdrop-blur-sm border border-linea/20 rounded-2xl p-6">
@@ -61,8 +64,8 @@ export const TutorialDash = ({ isCollapsed }) => {
                     <div className="animate-spin rounded-full h-16 w-16 border-r-2 border-l-2 border-morado-gradient absolute inset-0 animate-reverse"></div>
                   </div>
                   <div className="text-center">
-                    <p className="text-white font-medium">Cargando tutoriales...</p>
-                    <p className="text-gray-400 text-sm mt-1">Preparando el contenido educativo</p>
+                    <p className="text-white font-medium">{t("tutorial_dash_page.loading.title")}</p>
+                    <p className="text-gray-400 text-sm mt-1">{t("tutorial_dash_page.loading.subtitle")}</p>
                   </div>
                 </div>
               ) : tutoriales.length > 0 ? (
@@ -83,11 +86,10 @@ export const TutorialDash = ({ isCollapsed }) => {
                   </div>
                   <div className="text-center">
                     <h3 className="text-xl font-semibold text-white mb-2">
-                      No hay tutoriales disponibles
+                      {t("tutorial_dash_page.empty.title")}
                     </h3>
                     <p className="text-gray-400 max-w-md">
-                      Los tutoriales se están preparando. Vuelve pronto para acceder 
-                      a contenido educativo sobre generación 3D.
+                      {t("tutorial_dash_page.empty.subtitle")}
                     </p>
                   </div>
                 </div>

@@ -1,18 +1,20 @@
 import { useDocumentation } from "../context/DocumentationContext"; 
+import { useTranslation } from "react-i18next";
 
 export const DocsContentAll = () => {
   const { categorias, loading, error } = useDocumentation();
+  const { t } = useTranslation();
 
   if (loading) {
-    return <div className="p-4 text-white animate-pulse">Cargando todos los documentos...</div>;
+    return <div className="p-4 text-white animate-pulse">{t('docs.content_all.loading')}</div>;
   }
 
   if (error) {
-    return <div className="p-4 text-red-400">Error al cargar documentos: {error}</div>;
+    return <div className="p-4 text-red-400">{t('docs.content_all.error_prefix')}{error}</div>;
   }
 
   if (!categorias || categorias.length === 0) {
-    return <div className="p-4 text-gray-400">No hay documentos para mostrar.</div>;
+    return <div className="p-4 text-gray-400">{t('docs.content_all.no_docs')}</div>;
   }
 
   return (

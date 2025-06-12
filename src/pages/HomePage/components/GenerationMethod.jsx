@@ -9,9 +9,12 @@ export function GenerationMethod({
   inputImage,
   inputImages,
   intermediateImage,
+  intermediateLabel, 
   outputImage,
+  outputLabel,
   icon,
   index = 0,
+  views, 
 }) {
   const isEven = index % 2 === 0;
 
@@ -68,11 +71,11 @@ export function GenerationMethod({
                 >
                   <img
                     src={img}
-                    alt={`Vista ${["Frontal", "Lateral", "Trasera"][idx]}`}
+                    alt={`Vista ${views[idx]}`} 
                     className="w-[80%] h-[80%] object-cover mx-auto my-4"
                   />
                   <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-center text-xs py-1">
-                    {["Frontal", "Lateral", "Trasera"][idx]}
+                    {views[idx]} 
                   </div>
                 </div>
               ))}
@@ -126,7 +129,7 @@ export function GenerationMethod({
                   className="w-[80%] h-[80%] object-cover mx-auto my-4"
                 />
                 <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-center text-xs py-1">
-                  Imagen Intermedia
+                  {intermediateLabel} 
                 </div>
               </div>
               <div className="flex justify-center items-center py-2 relative">
@@ -167,7 +170,7 @@ export function GenerationMethod({
               />
             )}
             <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-center text-xs py-1">
-              Modelo 3D
+              {outputLabel} 
             </div>
           </div>
         </div>

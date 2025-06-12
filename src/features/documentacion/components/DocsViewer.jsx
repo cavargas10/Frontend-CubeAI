@@ -2,19 +2,20 @@ import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useDocumentation } from "../context/DocumentationContext";
 import { ArrowLeft, ArrowRight } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 
 export const DocsViewer = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { categorias, flatDocs, loading: contextLoading, error: contextError } = useDocumentation();
-
+  const { t } = useTranslation();
   const [documento, setDocumento] = useState(null);
   const [pageLoading, setPageLoading] = useState(true);
   const [pageError, setPageError] = useState(null);
   const contentRef = useRef(null);
-
   const [prevDoc, setPrevDoc] = useState(null);
   const [nextDoc, setNextDoc] = useState(null);
+  const firstDocSlug = flatDocs?.[0]?.slug || 'empezar';
 
   useEffect(() => {
     if (contextLoading) {
@@ -23,7 +24,7 @@ export const DocsViewer = () => {
     }
     if (contextError) {
       setPageLoading(false);
-      setPageError("Error al cargar la estructura de la documentación.");
+      setPageError(t('docs.sidebar.error'));
       console.error("Context error:", contextError);
       return;
     }
@@ -69,7 +70,7 @@ export const DocsViewer = () => {
     }
     setPageLoading(false); 
 
-  }, [slug, categorias, flatDocs, contextLoading, contextError, navigate]); 
+  }, [slug, categorias, flatDocs, contextLoading, contextError, navigate, t]); 
   useLayoutEffect(() => {
     if (!pageLoading && documento && contentRef.current) {
       const mainScrollableArea = contentRef.current.closest('main');
@@ -95,7 +96,7 @@ export const DocsViewer = () => {
     return (
       <div className="flex flex-col justify-center items-center min-h-[calc(100vh-10rem)] text-center p-4">
         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-morado-gradient mb-4"></div>
-        <p className="text-lg text-white">Cargando documento...</p>
+        <p className="text-lg text-white">{t('docs.loading_view.title')}</p>
       </div>
     );
   }
@@ -106,13 +107,13 @@ export const DocsViewer = () => {
         <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-red-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h2 className="text-2xl font-semibold text-red-400 mb-3">Error al Cargar</h2>
+        <h2 className="text-2xl font-semibold text-red-400 mb-3">{t('docs.error_view.title')}</h2>
         <p className="text-white max-w-md">{pageError}</p>
         <Link
-          to="/documentos/documento/empezar"
+          to={`/documentos/documento/${firstDocSlug}`}
           className="mt-8 inline-block px-6 py-2.5 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-lg hover:opacity-90 transition-opacity shadow-md"
         >
-          Volver a la Documentación
+          {t('docs.error_view.button_text')}
         </Link>
       </div>
     );
@@ -121,12 +122,12 @@ export const DocsViewer = () => {
   if (!documento) { 
     return (
       <div className="flex flex-col justify-center items-center min-h-[calc(100vh-10rem)] text-center p-4">
-        <p className="text-xl text-white">Documento no disponible o no encontrado.</p>
+        <p className="text-xl text-white">{t('docs.error_view.not_found_title')}</p>
         <Link
-          to="/documentos/documento/empezar"
+          to={`/documentos/documento/${firstDocSlug}`}
           className="mt-8 inline-block px-6 py-2.5 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-lg hover:opacity-90 transition-opacity shadow-md"
         >
-          Ir a la Documentación
+          {t('docs.error_view.button_not_found')}
         </Link>
       </div>
     );
@@ -134,7 +135,6 @@ export const DocsViewer = () => {
 
   return (
     <article ref={contentRef} className="prose prose-invert w-full max-w-none mt-4">
-
       <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold bg-gradient-to-r from-azul-gradient to-morado-gradient text-transparent bg-clip-text"
           style={{textShadow: "0 0 15px rgba(147, 51, 234, 0.3), 0 0 5px rgba(59, 130, 246, 0.2)"}}
       >
@@ -155,7 +155,7 @@ export const DocsViewer = () => {
               </div>
               <div className="flex flex-col min-w-0 flex-1">
                 <span className="text-xs font-medium text-gray-400 group-hover:text-purple-400 transition-colors uppercase tracking-wide">
-                  Anterior
+                  {t('docs.viewer.previous')}
                 </span>
                 <span className="text-sm font-semibold text-white group-hover:text-purple-100 transition-colors truncate mt-0.5">
                   {prevDoc.titulo}
@@ -164,11 +164,10 @@ export const DocsViewer = () => {
             </Link>
           ) : (
             <div className="w-full h-[72px] flex items-center justify-center rounded-xl bg-fondologin/50 border border-slate-800/50">
-              <span className="text-gray-600 text-sm">Sin documento anterior</span>
+              <span className="text-gray-600 text-sm">{t('docs.viewer.no_previous')}</span>
             </div>
           )}
         </div>
-
         <div className="w-full sm:w-1/2">
           {nextDoc ? (
             <Link
@@ -177,7 +176,7 @@ export const DocsViewer = () => {
             >
               <div className="flex flex-col min-w-0 flex-1 text-right">
                 <span className="text-xs font-medium text-gray-400 group-hover:text-blue-400 transition-colors uppercase tracking-wide">
-                  Siguiente
+                  {t('docs.viewer.next')}
                 </span>
                 <span className="text-sm font-semibold text-white group-hover:text-blue-100 transition-colors truncate mt-0.5">
                   {nextDoc.titulo}
@@ -189,7 +188,7 @@ export const DocsViewer = () => {
             </Link>
           ) : (
             <div className="w-full h-[72px] flex items-center justify-center rounded-xl bg-fondologin/50 border border-slate-800/50">
-              <span className="text-gray-600 text-sm">Sin documento siguiente</span>
+              <span className="text-gray-600 text-sm">{t('docs.viewer.no_next')}</span>
             </div>
           )}
         </div>
