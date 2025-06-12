@@ -64,7 +64,7 @@ Este proyecto tiene como objetivo principal investigar y desarrollar una soluci�
 ## 📁 Estructura del Proyecto (Frontend)
 
 La estructura del proyecto está organizada para facilitar la modularidad y escalabilidad, siguiendo una arquitectura por funcionalidades (*features*):
-
+```
 Frontend-CubeAI/
 ├── public/ # Archivos estáticos (imágenes, locales para i18n)
 ├── src/
@@ -87,7 +87,7 @@ Frontend-CubeAI/
 ├── vite.config.js # Configuración de Vite
 ├── tailwind.config.js # Configuración de Tailwind CSS
 └── README.md # Este archivo
-
+```
 *(Las variables de entorno sensibles como las claves de API de Firebase, Hygraph y la URL del backend son necesarias para la funcionalidad completa y se gestionan de forma segura en el entorno de despliegue).*
 
 ## 🚀 Despliegue
