@@ -4,6 +4,7 @@
 
 body {
   @apply bg-white dark:bg-[#0f102f];
+  color-scheme: light dark;
 }
 
 body::-webkit-scrollbar {
