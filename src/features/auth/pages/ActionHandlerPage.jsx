@@ -67,12 +67,12 @@ export const ActionHandlerPage = () => {
   }, [searchParams, navigate, auth]); 
 
   return (
-    <div className="h-screen pt-16 bg-fondologin text-gray-100 flex items-center justify-center overflow-hidden">
+    <div className="h-screen pt-16 bg-white dark:bg-fondologin text-gray-800 dark:text-gray-100 flex items-center justify-center overflow-hidden">
       <div className="w-full max-w-md space-y-8 p-6 sm:p-12">
         {processing && (
           <div className="text-center">
             <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-azul-gradient to-morado-gradient p-0.5">
-              <div className="w-full h-full rounded-full bg-fondologin flex items-center justify-center">
+              <div className="w-full h-full rounded-full bg-white dark:bg-fondologin flex items-center justify-center">
                 <svg
                   className="animate-spin h-10 w-10 text-azul-gradient"
                   fill="none"
@@ -97,14 +97,14 @@ export const ActionHandlerPage = () => {
             <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-azul-gradient to-morado-gradient mb-2">
               {t("auth.action_handler.processing")}
             </h1>
-            <p className="text-base">{t("auth.action_handler.wait")}</p>
+            <p className="text-base text-gray-600 dark:text-gray-400">{t("auth.action_handler.wait")}</p>
           </div>
         )}
 
         {!processing && !error && (
           <div className="text-center">
             <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-green-500 to-green-600 p-0.5">
-              <div className="w-full h-full rounded-full bg-fondologin flex items-center justify-center">
+              <div className="w-full h-full rounded-full bg-white dark:bg-fondologin flex items-center justify-center">
                 <CheckCircle
                   className="h-10 w-10 text-green-500"
                   weight="fill"
@@ -114,10 +114,10 @@ export const ActionHandlerPage = () => {
             <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-green-600 mb-2">
               {t("auth.action_handler.success_title")}
             </h1>
-            <p className="text-base mb-4">
+            <p className="text-base mb-4 text-gray-600 dark:text-gray-300">
               {t("auth.action_handler.success_subtitle")}
             </p>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               {t("auth.action_handler.redirecting_dashboard")}
             </p>
           </div>
@@ -126,7 +126,7 @@ export const ActionHandlerPage = () => {
         {!processing && error && (
           <div className="text-center space-y-6">
             <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-red-500 to-red-600 p-0.5">
-              <div className="w-full h-full rounded-full bg-fondologin flex items-center justify-center">
+              <div className="w-full h-full rounded-full bg-white dark:bg-fondologin flex items-center justify-center">
                 <XCircle className="h-10 w-10 text-red-500" weight="fill" />
               </div>
             </div>
@@ -134,8 +134,8 @@ export const ActionHandlerPage = () => {
               <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-red-600 mb-2">
                 {t("auth.action_handler.error_title")}
               </h1>
-              <p className="text-base mb-4">{error}</p>
-              <p className="text-sm text-gray-400">
+              <p className="text-base mb-4 text-gray-600 dark:text-gray-300">{error}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 {t("auth.action_handler.redirecting_login")}
               </p>
             </div>

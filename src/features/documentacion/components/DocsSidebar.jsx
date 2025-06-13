@@ -32,17 +32,17 @@ export const DocsSidebar = () => {
   };
 
   if (contextLoading) {
-    return <div className="p-4 text-white animate-pulse">{t('docs.sidebar.loading')}</div>;
+    return <div className="p-4 text-gray-400 dark:text-white animate-pulse">{t('docs.sidebar.loading')}</div>;
   }
 
   if (contextError) {
-    return <div className="p-4 text-red-400">{t('docs.sidebar.error')}</div>;
+    return <div className="p-4 text-red-500 dark:text-red-400">{t('docs.sidebar.error')}</div>;
   }
 
   const renderLinks = (isMobile = false) => (
     <div className={`${isMobile ? 'space-y-3 p-4' : 'space-y-3'}`}>
       {(!categorias || categorias.length === 0) && !contextLoading && (
-        <p className="text-gray-400 px-3 py-2">{t('docs.sidebar.no_categories')}</p>
+        <p className="text-gray-500 dark:text-gray-400 px-3 py-2">{t('docs.sidebar.no_categories')}</p>
       )}
       {categorias.map((categoria) => (
         <div key={categoria.slug}>
@@ -51,7 +51,7 @@ export const DocsSidebar = () => {
               ${isMobile ? 'px-0' : 'px-0'}
               pt-3 pb-1.5 text-sm font-bold uppercase tracking-wider
               bg-clip-text text-transparent bg-gradient-to-r from-azul-gradient to-morado-gradient
-              ${!isMobile ? 'border-b border-linea/25 mb-1.5' : 'mb-2'}
+              border-b border-gray-200 dark:border-linea/25 mb-1.5
             `}
           >
             {categoria.titulo}
@@ -69,8 +69,8 @@ export const DocsSidebar = () => {
                         : 'py-2 px-3 text-sm'
                       }
                       ${isActive
-                        ? "bg-gradient-to-r from-[#3333EA]/30 to-[#A975FF]/30 text-white font-semibold shadow-sm border-l-4 border-[#A975FF]"
-                        : "text-white hover:bg-linea/15 hover:translate-x-0.5"
+                        ? "bg-gradient-to-r from-[#3333EA]/10 to-[#A975FF]/10 text-gray-900 dark:text-white font-semibold shadow-sm border-l-4 border-[#A975FF]"
+                        : "text-gray-600 dark:text-white hover:bg-gray-200 dark:hover:bg-linea/15 hover:translate-x-0.5"
                       }
                     `}
                     to={`/documentos/documento/${documento.slug}`}
@@ -155,8 +155,8 @@ export const DocsSidebar = () => {
         id="mobile-docs-drawer"
         className={`
           sm:hidden fixed left-0 bottom-0 z-50
-          w-72 max-w-[80vw] bg-fondologin 
-          shadow-2xl border-r border-linea/20
+          w-72 max-w-[80vw] bg-gray-50 dark:bg-fondologin 
+          shadow-2xl border-r border-gray-200 dark:border-linea/20
           transform transition-transform duration-300 ease-in-out
           flex flex-col
           ${headerHeightClass} 
@@ -165,8 +165,8 @@ export const DocsSidebar = () => {
         style={{ height: `calc(100vh - 4rem)` }} 
         aria-hidden={!isMenuOpen}
       >
-        <div className="flex items-center justify-between p-4 border-b border-linea/20 sticky top-0 z-10 bg-fondologin">
-          <h2 className="text-lg font-bold text-white">{t('docs.mobile_menu.title')}</h2>
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-linea/20 sticky top-0 z-10 bg-gray-50 dark:bg-fondologin">
+          <h2 className="text-lg font-bold text-gray-800 dark:text-white">{t('docs.mobile_menu.title')}</h2>
         </div>
         
         <nav className="flex-grow overflow-y-auto custom-scrollbar">

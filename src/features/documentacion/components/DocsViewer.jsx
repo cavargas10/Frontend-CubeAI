@@ -71,6 +71,7 @@ export const DocsViewer = () => {
     setPageLoading(false); 
 
   }, [slug, categorias, flatDocs, contextLoading, contextError, navigate, t]); 
+
   useLayoutEffect(() => {
     if (!pageLoading && documento && contentRef.current) {
       const mainScrollableArea = contentRef.current.closest('main');
@@ -96,7 +97,7 @@ export const DocsViewer = () => {
     return (
       <div className="flex flex-col justify-center items-center min-h-[calc(100vh-10rem)] text-center p-4">
         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-morado-gradient mb-4"></div>
-        <p className="text-lg text-white">{t('docs.loading_view.title')}</p>
+        <p className="text-lg text-gray-700 dark:text-white">{t('docs.loading_view.title')}</p>
       </div>
     );
   }
@@ -107,8 +108,8 @@ export const DocsViewer = () => {
         <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-red-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h2 className="text-2xl font-semibold text-red-400 mb-3">{t('docs.error_view.title')}</h2>
-        <p className="text-white max-w-md">{pageError}</p>
+        <h2 className="text-2xl font-semibold text-red-500 dark:text-red-400 mb-3">{t('docs.error_view.title')}</h2>
+        <p className="text-gray-600 dark:text-white max-w-md">{pageError}</p>
         <Link
           to={`/documentos/documento/${firstDocSlug}`}
           className="mt-8 inline-block px-6 py-2.5 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-lg hover:opacity-90 transition-opacity shadow-md"
@@ -122,7 +123,7 @@ export const DocsViewer = () => {
   if (!documento) { 
     return (
       <div className="flex flex-col justify-center items-center min-h-[calc(100vh-10rem)] text-center p-4">
-        <p className="text-xl text-white">{t('docs.error_view.not_found_title')}</p>
+        <p className="text-xl text-gray-700 dark:text-white">{t('docs.error_view.not_found_title')}</p>
         <Link
           to={`/documentos/documento/${firstDocSlug}`}
           className="mt-8 inline-block px-6 py-2.5 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-lg hover:opacity-90 transition-opacity shadow-md"
@@ -134,7 +135,7 @@ export const DocsViewer = () => {
   }
 
   return (
-    <article ref={contentRef} className="prose prose-invert w-full max-w-none mt-4">
+    <article ref={contentRef} className="prose w-full max-w-none mt-4 dark:prose-invert">
       <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold bg-gradient-to-r from-azul-gradient to-morado-gradient text-transparent bg-clip-text"
           style={{textShadow: "0 0 15px rgba(147, 51, 234, 0.3), 0 0 5px rgba(59, 130, 246, 0.2)"}}
       >
@@ -143,28 +144,29 @@ export const DocsViewer = () => {
       <div
         dangerouslySetInnerHTML={{ __html: documento.contenido.html }}
       />
-      <div className="mt-12 pt-8 border-t border-gray-700/50 flex flex-col sm:flex-row justify-between items-stretch gap-4 not-prose">
+      {/* ✅ CORRECCIÓN APLICADA AQUÍ */}
+      <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700/50 flex flex-col sm:flex-row justify-between items-stretch gap-4 not-prose">
         <div className="w-full sm:w-1/2">
           {prevDoc ? (
             <Link
               to={`/documentos/documento/${prevDoc.slug}`}
-              className="nav-button group w-full flex items-center p-4 rounded-xl bg-fondologin border border-slate-700/50 hover:bg-fondologin/80 hover:border-purple-500/50 hover:shadow-lg hover:shadow-purple-500/10 transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 focus:ring-offset-fondologin no-underline hover:no-underline"
+              className="nav-button group w-full flex items-center p-4 rounded-xl bg-gray-50 dark:bg-fondologin border border-gray-200 dark:border-slate-700/50 hover:bg-gray-100 dark:hover:bg-fondologin/80 hover:border-purple-500 dark:hover:border-purple-500/50 hover:shadow-lg dark:hover:shadow-purple-500/10 transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-fondologin"
             >
               <div className="flex items-center justify-center w-10 h-10 rounded-full border border-purple-500/30 group-hover:border-purple-400 group-hover:bg-purple-500/10 transition-all mr-4">
                 <ArrowLeft size={20} weight="bold" className="text-purple-400 group-hover:text-purple-300 transition-colors" />
               </div>
               <div className="flex flex-col min-w-0 flex-1">
-                <span className="text-xs font-medium text-gray-400 group-hover:text-purple-400 transition-colors uppercase tracking-wide">
+                <span className="text-xs font-medium text-gray-500 dark:text-gray-400 group-hover:text-purple-400 transition-colors uppercase tracking-wide">
                   {t('docs.viewer.previous')}
                 </span>
-                <span className="text-sm font-semibold text-white group-hover:text-purple-100 transition-colors truncate mt-0.5">
+                <span className="text-sm font-semibold text-gray-800 dark:text-white group-hover:text-purple-500 dark:group-hover:text-purple-100 transition-colors truncate mt-0.5">
                   {prevDoc.titulo}
                 </span>
               </div>
             </Link>
           ) : (
-            <div className="w-full h-[72px] flex items-center justify-center rounded-xl bg-fondologin/50 border border-slate-800/50">
-              <span className="text-gray-600 text-sm">{t('docs.viewer.no_previous')}</span>
+            <div className="w-full h-[72px] flex items-center justify-center rounded-xl bg-gray-100/50 dark:bg-fondologin/50 border border-gray-200/50 dark:border-slate-800/50">
+              <span className="text-gray-500 dark:text-gray-600 text-sm">{t('docs.viewer.no_previous')}</span>
             </div>
           )}
         </div>
@@ -172,13 +174,13 @@ export const DocsViewer = () => {
           {nextDoc ? (
             <Link
               to={`/documentos/documento/${nextDoc.slug}`}
-              className="nav-button group w-full flex items-center justify-end p-4 rounded-xl bg-fondologin border border-slate-700/50 hover:bg-fondologin/80 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 focus:ring-offset-fondologin no-underline hover:no-underline"
+              className="nav-button group w-full flex items-center justify-end p-4 rounded-xl bg-gray-50 dark:bg-fondologin border border-gray-200 dark:border-slate-700/50 hover:bg-gray-100 dark:hover:bg-fondologin/80 hover:border-blue-500 dark:hover:border-blue-500/50 hover:shadow-lg dark:hover:shadow-blue-500/10 transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-fondologin no-underline hover:no-underline"
             >
               <div className="flex flex-col min-w-0 flex-1 text-right">
-                <span className="text-xs font-medium text-gray-400 group-hover:text-blue-400 transition-colors uppercase tracking-wide">
+                <span className="text-xs font-medium text-gray-500 dark:text-gray-400 group-hover:text-blue-400 transition-colors uppercase tracking-wide">
                   {t('docs.viewer.next')}
                 </span>
-                <span className="text-sm font-semibold text-white group-hover:text-blue-100 transition-colors truncate mt-0.5">
+                <span className="text-sm font-semibold text-gray-800 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-100 transition-colors truncate mt-0.5">
                   {nextDoc.titulo}
                 </span>
               </div>
@@ -187,8 +189,8 @@ export const DocsViewer = () => {
               </div>
             </Link>
           ) : (
-            <div className="w-full h-[72px] flex items-center justify-center rounded-xl bg-fondologin/50 border border-slate-800/50">
-              <span className="text-gray-600 text-sm">{t('docs.viewer.no_next')}</span>
+            <div className="w-full h-[72px] flex items-center justify-center rounded-xl bg-gray-100/50 dark:bg-fondologin/50 border border-gray-200/50 dark:border-slate-800/50">
+              <span className="text-gray-500 dark:text-gray-600 text-sm">{t('docs.viewer.no_next')}</span>
             </div>
           )}
         </div>

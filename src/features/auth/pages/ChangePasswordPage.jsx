@@ -73,7 +73,7 @@ export const ChangePasswordPage = () => {
   };
 
   return (
-    <div className="h-screen pt-16 bg-fondologin text-gray-100 flex items-center justify-center overflow-hidden">
+    <div className="h-screen pt-16 bg-white dark:bg-fondologin text-gray-800 dark:text-gray-100 flex items-center justify-center overflow-hidden">
       <div className="hidden lg:block lg:w-1/2 relative overflow-hidden h-full">
         <div className="absolute inset-0">
           <GeometricParticles />
@@ -86,18 +86,18 @@ export const ChangePasswordPage = () => {
             <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-azul-gradient to-morado-gradient mb-2">
               {t("auth.change_password.title")}
             </h1>
-            <p className="text-base text-gray-400 text-center">
+            <p className="text-base text-gray-600 dark:text-gray-400 text-center">
               {t("auth.change_password.subtitle")}
             </p>
           </div>
           {success && (
-            <div className="p-4 rounded-lg bg-green-500/20 text-green-500 text-sm text-center">
+            <div className="p-4 rounded-lg bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 text-sm text-center">
               ¡Contraseña restablecida con éxito! Serás redirigido al inicio de
               sesión en breve.
             </div>
           )}
           {error && (
-            <div className="p-4 rounded-lg bg-red-500/20 text-red-500 text-sm text-center">
+            <div className="p-4 rounded-lg bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400 text-sm text-center">
               {error}
             </div>
           )}
@@ -107,7 +107,7 @@ export const ChangePasswordPage = () => {
                 <Lock className="h-5 w-5 text-gray-400" aria-hidden="true" />
               </div>
               <input
-                className={`appearance-none rounded-md block w-full px-3 py-3 pl-10 pr-20 border bg-principal placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors`}
+                className={`appearance-none rounded-md block w-full px-3 py-3 pl-10 pr-20 border bg-gray-50 dark:bg-principal placeholder-gray-500 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors border-gray-300 dark:border-linea`}
                 type={showPassword ? "text" : "password"}
                 placeholder={t("auth.change_password.new_password_placeholder")}
                 value={newPassword}
@@ -116,7 +116,7 @@ export const ChangePasswordPage = () => {
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center space-x-2 z-20">
                 <button
                   type="button"
-                  className="text-gray-400 hover:text-gray-300 focus:outline-none"
+                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 focus:outline-none"
                   onClick={() => setShowRequirementsModal(true)}
                   aria-label="Mostrar requisitos de contraseña"
                 >
@@ -124,7 +124,7 @@ export const ChangePasswordPage = () => {
                 </button>
                 <button
                   type="button"
-                  className="text-gray-400 hover:text-gray-300 focus:outline-none"
+                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 focus:outline-none"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={
                     showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
@@ -143,11 +143,11 @@ export const ChangePasswordPage = () => {
                 <Lock className="h-5 w-5 text-gray-400" aria-hidden="true" />
               </div>
               <input
-                className={`appearance-none rounded-md block w-full px-3 py-3 pl-10 pr-10 border ${
+                className={`appearance-none rounded-md block w-full px-3 py-3 pl-10 pr-10 border bg-gray-50 dark:bg-principal placeholder-gray-500 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors ${
                   confirmPassword && !passwordMatch
                     ? "border-red-500"
-                    : "border-linea"
-                } bg-principal placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors`}
+                    : "border-gray-300 dark:border-linea"
+                }`}
                 type={showPassword ? "text" : "password"}
                 placeholder={t("auth.change_password.confirm_password_placeholder")}
                 value={confirmPassword}
@@ -155,7 +155,7 @@ export const ChangePasswordPage = () => {
               />
               <button
                 type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-300 focus:outline-none z-20"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 focus:outline-none z-20"
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label={
                   showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
@@ -171,10 +171,10 @@ export const ChangePasswordPage = () => {
             {newPassword.length > 0 && (
               <div className="mt-2">
                 <div className="flex justify-between items-center mb-1">
-                  <span className="text-xs text-gray-400">{t("auth.register.password_strength")}</span>
-                  <span className="text-xs font-medium">{strengthLabel}</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">{t("auth.register.password_strength")}</span>
+                  <span className="text-xs font-medium text-gray-800 dark:text-white">{strengthLabel}</span>
                 </div>
-                <div className="h-1.5 w-full bg-secondary/30 rounded-full overflow-hidden">
+                <div className="h-1.5 w-full bg-gray-200 dark:bg-secondary/30 rounded-full overflow-hidden">
                   <div
                     className={`h-full transition-all duration-300 ${
                       strengthScore <= 1
@@ -193,7 +193,7 @@ export const ChangePasswordPage = () => {
             )}
             <button
               type="button"
-              className="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-md text-white bg-gradient-to-r from-azul-gradient to-morado-gradient hover:from-azul-gradient/90 hover:to-morado-gradient/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-fondologin focus:ring-morado-gradient disabled:opacity-60 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+              className="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-md text-white bg-gradient-to-r from-azul-gradient to-morado-gradient hover:from-azul-gradient/90 hover:to-morado-gradient/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-fondologin disabled:opacity-60 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
               onClick={handleResetPassword}
               disabled={isLoading || !isFormValid || !oobCode}
             >

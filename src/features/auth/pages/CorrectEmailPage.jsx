@@ -50,14 +50,14 @@ export const CorrectEmailPage = () => {
   }, [searchParams, navigate, auth]);
 
   return (
-    <div className="h-screen pt-16 bg-fondologin text-gray-100 flex items-center justify-center overflow-hidden">
+    <div className="h-screen pt-16 bg-white dark:bg-fondologin text-gray-800 dark:text-gray-100 flex items-center justify-center overflow-hidden">
       <div className="w-full max-w-md space-y-8 p-6 sm:p-12">
         {status === "loading" && (
           <div className="flex flex-col items-center justify-center">
             <h1 className="text-2xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-azul-gradient to-morado-gradient py-1 mb-4">
               {t("auth.correct_email.verifying")}
             </h1>
-            <div className="w-10 h-10 border-4 border-t-transparent border-linea rounded-full animate-spin"></div>
+            <div className="w-10 h-10 border-4 border-t-transparent border-gray-300 dark:border-linea rounded-full animate-spin"></div>
           </div>
         )}
 
@@ -82,10 +82,10 @@ export const CorrectEmailPage = () => {
             <h1 className="text-2xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-green-700 py-1">
               {t("auth.correct_email.success_title")}
             </h1>
-            <p className="text-gray-400 text-sm text-center mt-2">
+            <p className="text-gray-600 dark:text-gray-400 text-sm text-center mt-2">
               {t("auth.correct_email.success_subtitle")}
             </p>
-            <p className="text-gray-400 text-xs text-center mt-1">
+            <p className="text-gray-500 dark:text-gray-400 text-xs text-center mt-1">
               {t("auth.correct_email.redirecting")}
             </p>
           </div>
@@ -112,11 +112,11 @@ export const CorrectEmailPage = () => {
             <h1 className="text-2xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-red-700 py-1">
               {t("auth.correct_email.error_title")}
             </h1>
-            <p className="text-gray-400 text-sm text-center mt-2">
+            <p className="text-gray-600 dark:text-gray-400 text-sm text-center mt-2">
               {errorMessage}
             </p>
             <button
-              className="mt-4 w-full flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-md text-white bg-gradient-to-r from-azul-gradient to-morado-gradient hover:from-azul-gradient/90 hover:to-morado-gradient/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-fondologin focus:ring-morado-gradient disabled:opacity-60 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+              className="mt-4 w-full flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-md text-white bg-gradient-to-r from-azul-gradient to-morado-gradient hover:from-azul-gradient/90 hover:to-morado-gradient/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-fondologin disabled:opacity-60 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
               onClick={() => navigate("/verify-email")}
             >
               {t("auth.correct_email.resend_link_button")}

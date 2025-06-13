@@ -50,16 +50,16 @@ export const LoadingModal = ({ showLoadingModal, steps }) => {
       }}
     >
       <Modal.Body className="p-0 bg-transparent">
-        <div className="text-center bg-principal rounded-2xl py-8 px-6 border-2 border-linea/50 shadow-2xl shadow-azul-gradient/10">
+        <div className="text-center bg-white dark:bg-principal rounded-2xl py-8 px-6 border-2 border-gray-200 dark:border-linea/50 shadow-2xl shadow-azul-gradient/10">
           <div className="flex flex-col items-center">
             <div className="relative w-20 h-20 mb-6">
               <div className="absolute inset-0 rounded-full border-4 border-t-transparent border-azul-gradient animate-spin"></div>
               <div className="absolute inset-0 rounded-full border-4 border-b-transparent border-morado-gradient animate-spin [animation-direction:reverse] [animation-duration:1.5s]"></div>
             </div>
-            <h3 key={currentMessage} className="mb-2 text-lg font-semibold text-white animate-[fadeIn_0.5s_ease-in-out]">
+            <h3 key={currentMessage} className="mb-2 text-lg font-semibold text-gray-800 dark:text-white animate-[fadeIn_0.5s_ease-in-out]">
               {currentMessage}
             </h3>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               {t('generation_pages.common.operation_takes_time')}
             </p>
           </div>

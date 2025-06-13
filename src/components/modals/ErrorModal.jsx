@@ -17,16 +17,16 @@ export const ErrorModal = ({ showModal, closeModal, errorMessage }) => {
       }}
     >
       <Modal.Body className="p-0 bg-transparent">
-        <div className="text-center bg-principal rounded-2xl py-6 px-6 border-2 border-red-500/30 shadow-2xl shadow-red-500/10">
+        <div className="text-center bg-white dark:bg-principal rounded-2xl py-6 px-6 border-2 border-red-200 dark:border-red-500/30 shadow-2xl shadow-red-500/10">
           <div className="flex flex-col items-center mb-5">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center mb-3 shadow-lg">
               <XCircle size={32} color="#fff" weight="bold" />
             </div>
-            <h3 className="text-xl font-bold text-red-400">
+            <h3 className="text-xl font-bold text-red-500 dark:text-red-400">
               {t('auth.modals.error_title')}
             </h3>
           </div>
-          <div className="mb-6 text-sm text-gray-300">
+          <div className="mb-6 text-sm text-gray-600 dark:text-gray-300">
             {errorMessage}
           </div>
           <div className="flex justify-center">

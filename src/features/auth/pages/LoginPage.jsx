@@ -133,14 +133,14 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="h-screen pt-16 bg-fondologin text-gray-100 flex selection:bg-morado-gradient selection:text-white overflow-hidden">
+    <div className="h-screen pt-16 bg-white text-gray-800 dark:bg-fondologin dark:text-gray-100 flex selection:bg-morado-gradient selection:text-white overflow-hidden">
       <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-6 sm:p-12 h-full">
         <div className="w-full max-w-md space-y-8">
           <div>
             <h2 className="text-center text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-azul-gradient to-morado-gradient py-1">
               {t("auth.login.title")}
             </h2>
-            <p className="mt-2 text-center text-sm">
+            <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
               {t("auth.login.subtitle")}
             </p>
           </div>
@@ -159,7 +159,7 @@ export const LoginPage = () => {
                 type="email"
                 autoComplete="email"
                 required
-                className="appearance-none rounded-md block w-full px-3 py-3 pl-10 border border-linea bg-principal placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors"
+                className="appearance-none rounded-md block w-full px-3 py-3 pl-10 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors dark:border-linea dark:bg-principal dark:text-white"
                 placeholder={t("auth.login.email_placeholder")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -179,14 +179,14 @@ export const LoginPage = () => {
                 type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
                 required
-                className="appearance-none rounded-md block w-full px-3 py-3 pl-10 pr-10 border border-linea bg-principal placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors"
+                className="appearance-none rounded-md block w-full px-3 py-3 pl-10 pr-10 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors dark:border-linea dark:bg-principal dark:text-white"
                 placeholder={t("auth.login.password_placeholder")}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
               <button
                 type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-300 focus:outline-none z-20"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 focus:outline-none z-20"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (
@@ -203,13 +203,13 @@ export const LoginPage = () => {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-morado-gradient bg-principal border-linea rounded focus:ring-morado-gradient focus:ring-offset-2 focus:ring-offset-fondologin"
+                  className="h-4 w-4 text-morado-gradient bg-gray-100 border-gray-300 rounded focus:ring-morado-gradient focus:ring-offset-2 focus:ring-offset-white dark:bg-principal dark:border-linea dark:focus:ring-offset-fondologin"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
                 />
                 <label
                   htmlFor="remember-me"
-                  className="ml-2 block text-gray-300"
+                  className="ml-2 block text-gray-700 dark:text-gray-300"
                 >
                   {t("auth.login.remember_me")}
                 </label>
@@ -230,7 +230,7 @@ export const LoginPage = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-md text-white bg-gradient-to-r from-azul-gradient to-morado-gradient hover:from-azul-gradient/90 hover:to-morado-gradient/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-fondologin focus:ring-morado-gradient disabled:opacity-60 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+                className="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-md text-white bg-gradient-to-r from-azul-gradient to-morado-gradient hover:from-azul-gradient/90 hover:to-morado-gradient/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-fondologin disabled:opacity-60 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
               >
                 {isLoading ? (
                   <span className="flex items-center">
@@ -268,10 +268,10 @@ export const LoginPage = () => {
               className="absolute inset-0 flex items-center"
               aria-hidden="true"
             >
-              <div className="w-full border-t border-linea/70" />
+              <div className="w-full border-t border-gray-300 dark:border-linea/70" />
             </div>
             <div className="relative flex justify-center text-xs">
-              <span className="px-2 bg-fondologin text-gray-500 uppercase">
+              <span className="px-2 bg-white dark:bg-fondologin text-gray-500 uppercase">
                 {t("auth.login.or_separator")}
               </span>
             </div>
@@ -282,9 +282,9 @@ export const LoginPage = () => {
               type="button"
               onClick={handleGoogleLogin}
               disabled={isLoading}
-              className="w-full group relative overflow-hidden inline-flex items-center justify-center py-3 px-4 rounded-xl shadow-lg bg-white/5 backdrop-blur-sm border border-white/10 text-white font-medium hover:bg-white/10 hover:border-white/20 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-fondologin focus:ring-white/20 disabled:opacity-60 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98]"
+              className="w-full group relative overflow-hidden inline-flex items-center justify-center py-3 px-4 rounded-xl shadow-lg bg-gray-50 dark:bg-white/5 backdrop-blur-sm border border-gray-200 dark:border-white/10 text-gray-800 dark:text-white font-medium hover:bg-gray-100 dark:hover:bg-white/10 dark:hover:border-white/20 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-fondologin focus:ring-gray-300 dark:focus:ring-white/20 disabled:opacity-60 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98]"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out dark:via-white/5"></div>
               <div className="relative z-10 flex items-center">
                 <div className="w-5 h-5 mr-2 flex items-center justify-center">
                   <svg viewBox="0 0 24 24" className="w-5 h-5">
@@ -306,14 +306,14 @@ export const LoginPage = () => {
                     />
                   </svg>
                 </div>
-                <span className="text-white/90 group-hover:text-white transition-colors duration-200">
+                <span className="text-gray-800/90 group-hover:text-gray-900 dark:text-white/90 dark:group-hover:text-white transition-colors duration-200">
                   {t("auth.login.google_button")}
                 </span>
               </div>
             </button>
           </div>
 
-          <p className="mt-8 text-center text-sm">
+          <p className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
             {t("auth.login.no_account")}{" "}
             <button
               type="button"

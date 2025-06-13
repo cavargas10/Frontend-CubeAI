@@ -13,7 +13,7 @@ export function MethodsSection() {
   const methodsT = t("methods", { returnObjects: true });
 
   return (
-    <section id="caracteristicas" className="py-20">
+    <section id="caracteristicas" className="py-20 bg-transparent">
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
@@ -23,7 +23,7 @@ export function MethodsSection() {
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl bg-gradient-to-r from-azul-gradient to-morado-gradient bg-clip-text text-transparent text-glow">
               {methodsT.title}
             </h2>
-            <p className="max-w-[900px] text-foreground/80 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+            <p className="max-w-[900px] text-slate-600 dark:text-foreground/80 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
               {methodsT.subtitle}
             </p>
           </div>

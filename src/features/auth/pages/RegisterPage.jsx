@@ -172,7 +172,7 @@ export const RegisterPage = ({ BASE_URL }) => {
   };
 
   return (
-    <div className="h-screen pt-16 bg-fondologin text-gray-100 flex selection:bg-morado-gradient selection:text-white overflow-hidden">
+    <div className="h-screen pt-16 bg-white text-gray-800 dark:bg-fondologin dark:text-gray-100 flex selection:bg-morado-gradient selection:text-white overflow-hidden">
       <div className="hidden lg:block lg:w-1/2 relative overflow-hidden h-full">
         <div className="absolute inset-0">
           <GeometricParticles />
@@ -186,7 +186,7 @@ export const RegisterPage = ({ BASE_URL }) => {
             <h2 className="text-center text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-azul-gradient to-morado-gradient py-1">
               {t("auth.register.title")}
             </h2>
-            <p className="mt-2 text-center text-sm">
+            <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
               {t("auth.register.subtitle")}
             </p>
           </div>
@@ -204,7 +204,7 @@ export const RegisterPage = ({ BASE_URL }) => {
                 type="text"
                 autoComplete="name"
                 required
-                className="appearance-none rounded-md block w-full px-3 py-3 pl-10 border border-linea bg-principal placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors"
+                className="appearance-none rounded-md block w-full px-3 py-3 pl-10 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors dark:border-linea dark:bg-principal dark:text-white"
                 placeholder={t("auth.register.name_placeholder")}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -223,7 +223,7 @@ export const RegisterPage = ({ BASE_URL }) => {
                 type="email"
                 autoComplete="email"
                 required
-                className="appearance-none rounded-md block w-full px-3 py-3 pl-10 border border-linea bg-principal placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors"
+                className="appearance-none rounded-md block w-full px-3 py-3 pl-10 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors dark:border-linea dark:bg-principal dark:text-white"
                 placeholder={t("auth.login.email_placeholder")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -239,7 +239,7 @@ export const RegisterPage = ({ BASE_URL }) => {
                 type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
                 required
-                className="appearance-none rounded-md block w-full px-3 py-3 pl-10 pr-20 border border-linea bg-principal placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors"
+                className="appearance-none rounded-md block w-full px-3 py-3 pl-10 pr-20 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient focus:border-morado-gradient sm:text-sm transition-colors dark:border-linea dark:bg-principal dark:text-white"
                 placeholder={t("auth.login.password_placeholder")}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -247,7 +247,7 @@ export const RegisterPage = ({ BASE_URL }) => {
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center space-x-2 z-20">
                 <button
                   type="button"
-                  className="text-gray-400 hover:text-gray-300 focus:outline-none"
+                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 focus:outline-none"
                   onClick={() => setShowRequirementsModal(true)}
                   aria-label="Mostrar requisitos de contraseña"
                 >
@@ -255,7 +255,7 @@ export const RegisterPage = ({ BASE_URL }) => {
                 </button>
                 <button
                   type="button"
-                  className="text-gray-400 hover:text-gray-300 focus:outline-none"
+                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 focus:outline-none"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={
                     showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
@@ -272,10 +272,10 @@ export const RegisterPage = ({ BASE_URL }) => {
             {password.length > 0 && (
               <div className="mt-2">
                 <div className="flex justify-between items-center mb-1">
-                  <span className="text-xs text-gray-400">{t("auth.register.password_strength")}</span>
-                  <span className="text-xs font-medium">{strengthLabel}</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">{t("auth.register.password_strength")}</span>
+                  <span className="text-xs font-medium text-gray-800 dark:text-white">{strengthLabel}</span>
                 </div>
-                <div className="h-1.5 w-full bg-secondary/30 rounded-full overflow-hidden">
+                <div className="h-1.5 w-full bg-gray-200 dark:bg-secondary/30 rounded-full overflow-hidden">
                   <div
                     className={`h-full transition-all duration-300 ${
                       strengthScore <= 1
@@ -297,7 +297,7 @@ export const RegisterPage = ({ BASE_URL }) => {
                 type="button"
                 onClick={handleRegister}
                 disabled={isLoading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-md text-white bg-gradient-to-r from-azul-gradient to-morado-gradient hover:from-azul-gradient/90 hover:to-morado-gradient/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-fondologin focus:ring-morado-gradient disabled:opacity-60 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+                className="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-md text-white bg-gradient-to-r from-azul-gradient to-morado-gradient hover:from-azul-gradient/90 hover:to-morado-gradient/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-fondologin disabled:opacity-60 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
               >
                 {isLoading ? (
                   <span className="flex items-center">
@@ -335,10 +335,10 @@ export const RegisterPage = ({ BASE_URL }) => {
               className="absolute inset-0 flex items-center"
               aria-hidden="true"
             >
-              <div className="w-full border-t border-linea/70" />
+              <div className="w-full border-t border-gray-300 dark:border-linea/70" />
             </div>
             <div className="relative flex justify-center text-xs">
-              <span className="px-2 bg-fondologin text-gray-500 uppercase">
+              <span className="px-2 bg-white dark:bg-fondologin text-gray-500 uppercase">
                 {t("auth.login.or_separator")}
               </span>
             </div>
@@ -349,9 +349,9 @@ export const RegisterPage = ({ BASE_URL }) => {
               type="button"
               onClick={handleGoogleSignUp}
               disabled={isLoading}
-              className="w-full group relative overflow-hidden inline-flex items-center justify-center py-3 px-4 rounded-xl shadow-lg bg-white/5 backdrop-blur-sm border border-white/10 text-white font-medium hover:bg-white/10 hover:border-white/20 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-fondologin focus:ring-white/20 disabled:opacity-60 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98]"
+              className="w-full group relative overflow-hidden inline-flex items-center justify-center py-3 px-4 rounded-xl shadow-lg bg-gray-50 dark:bg-white/5 backdrop-blur-sm border border-gray-200 dark:border-white/10 text-gray-800 dark:text-white font-medium hover:bg-gray-100 dark:hover:bg-white/10 dark:hover:border-white/20 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-fondologin focus:ring-gray-300 dark:focus:ring-white/20 disabled:opacity-60 transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98]"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out dark:via-white/5"></div>
               <div className="relative z-10 flex items-center">
                 <div className="w-5 h-5 mr-2 flex items-center justify-center">
                   <svg viewBox="0 0 24 24" className="w-5 h-5">
@@ -373,13 +373,13 @@ export const RegisterPage = ({ BASE_URL }) => {
                     />
                   </svg>
                 </div>
-                <span className="text-white/90 group-hover:text-white transition-colors duration-200">
+                <span className="text-gray-800/90 group-hover:text-gray-900 dark:text-white/90 dark:group-hover:text-white transition-colors duration-200">
                   {t("auth.register.google_button")}
                 </span>
               </div>
             </button>
           </div>
-          <p className="text-center text-sm">
+          <p className="text-center text-sm text-gray-600 dark:text-gray-400">
             {t("auth.register.has_account")}{" "}
             <button
               type="button"

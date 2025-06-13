@@ -7,7 +7,7 @@ export function HeroSection() {
   const { t } = useTranslation();
 
   return (
-    <section className="py-10 md:py-14">
+    <section className="py-10 md:py-14 bg-transparent">
       <div className="container px-4 md:px-6">
         <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
           <div className="flex flex-col justify-center space-y-4">
@@ -15,7 +15,7 @@ export function HeroSection() {
               <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-gradient-to-r from-azul-gradient via-primary to-morado-gradient bg-clip-text text-transparent text-glow">
                 {t("hero.title")}
               </h1>
-              <p className="max-w-[600px] text-foreground/80 md:text-xl">
+              <p className="max-w-[600px] text-slate-600 dark:text-gray-300 md:text-xl">
                 {t("hero.subtitle")}
               </p>
             </div>

@@ -56,7 +56,7 @@ export function BenefitsSection() {
   ];
 
   return (
-    <section className="py-20 bg-secondary/5 overflow-hidden relative">
+    <section className="py-20 bg-transparent">
       <div className="container px-4 md:px-6 relative z-10">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
@@ -66,7 +66,7 @@ export function BenefitsSection() {
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl bg-gradient-to-r from-azul-gradient via-primary to-morado-gradient bg-clip-text text-transparent text-glow">
               {t("benefits.title")}
             </h2>
-            <p className="max-w-[900px] text-foreground/80 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+            <p className="max-w-[900px] text-slate-600 dark:text-gray-300 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
               {t("benefits.subtitle")}
             </p>
           </div>
@@ -78,10 +78,11 @@ export function BenefitsSection() {
               key={index}
               className={`
                 group
-                flex flex-col rounded-xl border border-border/40 
+                flex flex-col rounded-xl 
                 bg-secondary/10 backdrop-blur-xl 
                 overflow-hidden shadow-lg 
                 transition-all duration-300 
+                border border-slate-300/70 dark:border-border/40 
                 hover:border-azul-gradient 
                 hover:shadow-[0_10px_30px_rgba(51,51,234,0.2),0_0_15px_rgba(51,51,234,0.8)]
                 ${index === 4 ? "md:col-span-2 lg:col-span-1" : ""}
@@ -110,16 +111,16 @@ export function BenefitsSection() {
                       `}
                     >
                       <beneficio.icon
-                        className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-125"
+                        className="h-5 w-5 text-white dark:text-primary transition-transform duration-300 group-hover:scale-125"
                         weight="bold"
                       />
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold font-heading">
+                  <h3 className="text-xl font-bold font-heading text-slate-800 dark:text-white">
                     {beneficio.title}
                   </h3>
                 </div>
-                <p className="text-foreground/80 flex-grow">
+                <p className="text-slate-600 dark:text-gray-300 flex-grow">
                   {beneficio.description}
                 </p>
               </div>

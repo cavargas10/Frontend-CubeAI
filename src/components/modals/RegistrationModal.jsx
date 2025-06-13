@@ -24,18 +24,18 @@ export const RegistrationModal = ({ showModal, closeModal, email }) => {
       }}
     >
       <Modal.Body className="p-0 bg-transparent">
-        <div className="text-center bg-principal rounded-2xl py-6 px-6 border-2 border-linea/50 shadow-2xl shadow-morado-gradient/10">
+        <div className="text-center bg-white dark:bg-principal rounded-2xl py-6 px-6 border-2 border-gray-200 dark:border-linea/50 shadow-2xl shadow-morado-gradient/10">
           <div className="relative flex flex-col items-center mb-5">
             <Sparkle size={20} className="text-azul-gradient absolute top-0 left-10 opacity-70 animate-pulse" />
             <Sparkle size={16} className="text-morado-gradient absolute top-8 right-8 opacity-60 animate-pulse [animation-delay:0.5s]" />
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-azul-gradient to-morado-gradient flex items-center justify-center mb-3 shadow-lg">
               <UserPlus size={32} color="#fff" weight="bold" />
             </div>
-            <h3 className="text-xl font-bold text-white">
+            <h3 className="text-xl font-bold text-gray-800 dark:text-white">
               {t('auth.modals.registration_required_title')}
             </h3>
           </div>
-          <p className="mb-6 text-sm text-gray-300">
+          <p className="mb-6 text-sm text-gray-600 dark:text-gray-300">
             {t('auth.modals.registration_required_text')}
           </p>
           <div className="flex flex-col gap-3">
@@ -46,7 +46,7 @@ export const RegistrationModal = ({ showModal, closeModal, email }) => {
               {t('auth.modals.complete_registration_button')}
             </Button>
             <Button
-              className="bg-linea/50 text-white hover:bg-linea/80 font-semibold rounded-xl w-full py-1.5 transition-all"
+              className="bg-gray-200 dark:bg-linea/50 text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-linea/80 font-semibold rounded-xl w-full py-1.5 transition-all"
               onClick={closeModal}
             >
               {t('global.cancel')}

@@ -67,19 +67,19 @@ export const ResetPasswordPage = () => {
   };
 
   return (
-    <div className="h-screen pt-16 bg-fondologin text-gray-100 flex overflow-hidden">
+    <div className="h-screen pt-16 bg-white dark:bg-fondologin text-gray-800 dark:text-gray-100 flex overflow-hidden">
       <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-6 sm:p-12 h-full">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center">
             <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-azul-gradient to-morado-gradient p-0.5">
-              <div className="w-full h-full rounded-full bg-fondologin flex items-center justify-center">
+              <div className="w-full h-full rounded-full bg-white dark:bg-fondologin flex items-center justify-center">
                 <Envelope className="h-10 w-10 text-azul-gradient" weight="bold" />
               </div>
             </div>
             <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-azul-gradient to-morado-gradient mb-2">
               {t("auth.reset_password.title")}
             </h1>
-            <p className="text-base">
+            <p className="text-base text-gray-600 dark:text-gray-400">
               {t("auth.reset_password.subtitle")}
             </p>
           </div>
@@ -89,10 +89,10 @@ export const ResetPasswordPage = () => {
                 <Envelope className="h-5 w-5 text-gray-400" aria-hidden="true" />
               </div>
               <input
-                className={`appearance-none rounded-md block w-full px-3 py-3 pl-10 border bg-principal placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient sm:text-sm transition-colors ${
+                className={`appearance-none rounded-md block w-full px-3 py-3 pl-10 border bg-gray-50 dark:bg-principal placeholder-gray-500 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient sm:text-sm transition-colors ${
                   email && !isValidEmail
                     ? "border-red-500 focus:border-red-500"
-                    : "border-linea focus:border-morado-gradient"
+                    : "border-gray-300 dark:border-linea focus:border-morado-gradient"
                 }`}
                 type="email"
                 placeholder={t("auth.reset_password.email_placeholder")}
@@ -101,22 +101,22 @@ export const ResetPasswordPage = () => {
               />
             </div>
             {email && !isValidEmail && (
-              <p className="text-red-400 text-sm mt-1">
+              <p className="text-red-500 text-sm mt-1">
                 Ingresa un correo electrónico válido.
               </p>
             )}
           </div>
           {errorMessage && (
-            <div className="flex items-start space-x-3 p-4 rounded-lg bg-red-500/10 border border-red-500/20">
-              <XCircle className="h-5 w-5 text-red-400 mt-0.5 flex-shrink-0" weight="fill" />
-              <p className="text-red-200 text-sm">{errorMessage}</p>
+            <div className="flex items-start space-x-3 p-4 rounded-lg bg-red-100 dark:bg-red-500/10 border border-red-300 dark:border-red-500/20">
+              <XCircle className="h-5 w-5 text-red-500 dark:text-red-400 mt-0.5 flex-shrink-0" weight="fill" />
+              <p className="text-red-700 dark:text-red-200 text-sm">{errorMessage}</p>
             </div>
           )}
 
           {message && (
-            <div className="flex items-center space-x-3 p-2 rounded-lg bg-green-500/10 border border-green-500/20">
-              <CheckCircle className="h-5 w-5 text-green-400 flex-shrink-0" weight="fill" />
-              <p className="text-green-200 text-sm">{message}</p>
+            <div className="flex items-center space-x-3 p-3 rounded-lg bg-green-100 dark:bg-green-500/10 border border-green-300 dark:border-green-500/20">
+              <CheckCircle className="h-5 w-5 text-green-500 dark:text-green-400 flex-shrink-0" weight="fill" />
+              <p className="text-green-700 dark:text-green-200 text-sm">{message}</p>
             </div>
           )}
           <div className="space-y-3">
@@ -141,14 +141,14 @@ export const ResetPasswordPage = () => {
             </button>
             <button
               onClick={handleGoToLogin}
-              className="w-full py-3 px-4 rounded-lg border border-linea/50 bg-transparent hover:bg-secondary/10 text-gray-300 hover:text-white font-medium text-sm transition-all flex items-center justify-center space-x-2"
+              className="w-full py-3 px-4 rounded-lg border border-gray-300 dark:border-linea/50 bg-transparent hover:bg-gray-100 dark:hover:bg-secondary/10 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium text-sm transition-all flex items-center justify-center space-x-2"
             >
               <ArrowLeft className="h-4 w-4" />
               <span>{t("auth.reset_password.back_to_login")}</span>
             </button>
           </div>
           <div className="text-center">
-            <p className="text-xs">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
               {t("auth.reset_password.spam_note")}
             </p>
           </div>

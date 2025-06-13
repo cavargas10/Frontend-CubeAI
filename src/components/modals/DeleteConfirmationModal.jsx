@@ -22,19 +22,19 @@ export const DeleteConfirmationModal = ({
       }}
     >
       <Modal.Body className="p-0 bg-transparent">
-        <div className="text-center bg-principal rounded-2xl py-6 px-6 border-2 border-red-500/30 shadow-2xl shadow-red-500/10">
+        <div className="text-center bg-white dark:bg-principal rounded-2xl py-6 px-6 border-2 border-red-200 dark:border-red-500/30 shadow-2xl shadow-red-500/10">
           <div className="flex flex-col items-center mb-5">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center mb-3 shadow-lg">
               <WarningCircle size={32} color="#fff" weight="bold" />
             </div>
-            <h3 className="text-xl font-bold text-white">
+            <h3 className="text-xl font-bold text-gray-800 dark:text-white">
               {t('config_dash_page.danger_zone.delete_modal_title')}
             </h3>
           </div>
-          <p className="mb-6 text-sm text-gray-300">
+          <p className="mb-6 text-sm text-gray-600 dark:text-gray-300">
             {message}
             <br />
-            <span className="font-semibold text-red-400 mt-2 block">
+            <span className="font-semibold text-red-500 dark:text-red-400 mt-2 block">
               {t('config_dash_page.danger_zone.delete_modal_irreversible')}
             </span>
           </p>
@@ -46,7 +46,7 @@ export const DeleteConfirmationModal = ({
               {t('config_dash_page.danger_zone.delete_modal_confirm')}
             </Button>
             <Button
-              className="flex-1 bg-linea/50 text-white hover:bg-linea/80 font-semibold rounded-xl transition-all"
+              className="flex-1 bg-gray-200 dark:bg-linea/50 text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-linea/80 font-semibold rounded-xl transition-all"
               onClick={closeModal}
             >
               {t('config_dash_page.danger_zone.delete_modal_cancel')}

@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from "react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useAuth } from "./features/auth/hooks/useAuth";
+import { useTheme } from "./hooks/useTheme";
 import { PredictionProvider } from "./features/prediction/context/PredictionContext";
 import { ProtectedRoute } from "./features/auth/components/ProtectedRoute";
 import { ErrorBoundaryFallbackUI } from "./components/ui/ErrorBoundaryFallbackUI";
@@ -22,7 +23,6 @@ const DashboardLayout = lazy(() =>
     default: module.DashboardLayout,
   }))
 );
-
 const HomePage = lazy(() =>
   import("./pages/HomePage").then((module) => ({ default: module.HomePage }))
 );
@@ -66,17 +66,15 @@ const ActionHandlerPage = lazy(() =>
     default: module.ActionHandlerPage,
   }))
 );
-
 const DocsViewer = lazy(() =>
   import("./features/documentacion/components/DocsViewer").then((module) => ({
     default: module.DocsViewer,
   }))
 );
-
 const DocsIndexRedirect = lazy(() =>
-  import("./features/documentacion/components/DocsIndexRedirect").then((module) => ({
-    default: module.DocsIndexRedirect,
-  }))
+  import("./features/documentacion/components/DocsIndexRedirect").then(
+    (module) => ({ default: module.DocsIndexRedirect })
+  )
 );
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -104,12 +102,13 @@ class ErrorBoundary extends React.Component {
 }
 
 export const Loading = () => (
-  <div className="fixed inset-0 z-[200] flex justify-center items-center bg-principal/90 backdrop-blur-md">
+  <div className="fixed inset-0 z-[200] flex justify-center items-center bg-white/80 dark:bg-principal/90 backdrop-blur-md">
     <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-morado-gradient"></div>
   </div>
 );
 
 export function App() {
+  useTheme();
   const { loadingAuth } = useAuth();
 
   if (loadingAuth) {
@@ -135,7 +134,10 @@ export function App() {
                 <Route path="verify-email" element={<VerifyEmailPage />} />
                 <Route path="reset-password" element={<ResetPasswordPage />} />
                 <Route path="action-handler" element={<ActionHandlerPage />} />
-                <Route path="change-password" element={<ChangePasswordPage />} />
+                <Route
+                  path="change-password"
+                  element={<ChangePasswordPage />}
+                />
                 <Route path="correct-email" element={<CorrectEmailPage />} />
                 <Route
                   path="documentos"

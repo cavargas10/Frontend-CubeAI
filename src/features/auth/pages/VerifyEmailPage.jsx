@@ -83,7 +83,7 @@ export const VerifyEmailPage = () => {
   };
 
   return (
-    <div className="h-screen pt-16 bg-fondologin text-gray-100 flex overflow-hidden">
+    <div className="h-screen pt-16 bg-white dark:bg-fondologin text-gray-800 dark:text-gray-100 flex overflow-hidden">
       <div className="hidden lg:block lg:w-1/2 relative overflow-hidden h-full">
         <div className="absolute inset-0">
           <GeometricParticles />
@@ -95,40 +95,40 @@ export const VerifyEmailPage = () => {
         <div className="w-full max-w-md space-y-8">
           <div className="text-center">
             <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-azul-gradient to-morado-gradient p-0.5">
-              <div className="w-full h-full rounded-full bg-fondologin flex items-center justify-center">
+              <div className="w-full h-full rounded-full bg-white dark:bg-fondologin flex items-center justify-center">
                 <Envelope className="h-10 w-10 text-azul-gradient" weight="bold" />
               </div>
             </div>
             <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-azul-gradient to-morado-gradient mb-2">
               {t("auth.verify_email.title")}
             </h1>
-            <p className="text-base">
+            <p className="text-base text-gray-600 dark:text-gray-400">
               {t("auth.verify_email.subtitle")}
             </p>
           </div>
 
           <div className="text-center space-y-4">
-            <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-secondary/20 border border-linea/50">
-              <span className="text-white font-medium text-sm">
+            <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-gray-100 dark:bg-secondary/20 border border-gray-200 dark:border-linea/50">
+              <span className="text-gray-800 dark:text-white font-medium text-sm">
                 {email}
               </span>
             </div>
-            <p className="text-sm leading-relaxed max-w-sm mx-auto">
+            <p className="text-sm leading-relaxed max-w-sm mx-auto text-gray-600 dark:text-gray-300">
               {t("auth.verify_email.instructions")}
             </p>
           </div>
 
           {errorMessage && (
-            <div className="flex items-start space-x-3 p-4 rounded-lg bg-red-500/10 border border-red-500/20">
-              <XCircle className="h-5 w-5 text-red-400 mt-0.5 flex-shrink-0" weight="fill" />
-              <p className="text-red-200 text-sm">{errorMessage}</p>
+            <div className="flex items-start space-x-3 p-4 rounded-lg bg-red-100 dark:bg-red-500/10 border border-red-300 dark:border-red-500/20">
+              <XCircle className="h-5 w-5 text-red-500 dark:text-red-400 mt-0.5 flex-shrink-0" weight="fill" />
+              <p className="text-red-700 dark:text-red-200 text-sm">{errorMessage}</p>
             </div>
           )}
 
           {resendSuccess && (
-            <div className="flex items-center space-x-3 p-2 rounded-lg bg-green-500/10 border border-green-500/20">
-              <CheckCircle className="h-5 w-5 text-green-400 flex-shrink-0" weight="fill" />
-              <p className="text-green-200 text-sm">¡Correo reenviado correctamente!</p>
+            <div className="flex items-center space-x-3 p-3 rounded-lg bg-green-100 dark:bg-green-500/10 border border-green-300 dark:border-green-500/20">
+              <CheckCircle className="h-5 w-5 text-green-500 dark:text-green-400 flex-shrink-0" weight="fill" />
+              <p className="text-green-700 dark:text-green-200 text-sm">¡Correo reenviado correctamente!</p>
             </div>
           )}
 
@@ -155,7 +155,7 @@ export const VerifyEmailPage = () => {
 
             <button
               onClick={handleGoToLogin}
-              className="w-full py-3 px-4 rounded-lg border border-linea/50 bg-transparent hover:bg-secondary/10 text-gray-300 hover:text-white font-medium text-sm transition-all flex items-center justify-center space-x-2"
+              className="w-full py-3 px-4 rounded-lg border border-gray-300 dark:border-linea/50 bg-transparent hover:bg-gray-100 dark:hover:bg-secondary/10 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium text-sm transition-all flex items-center justify-center space-x-2"
             >
               <ArrowLeft className="h-4 w-4" />
               <span>{t("auth.verify_email.back_to_home")}</span>
@@ -163,7 +163,7 @@ export const VerifyEmailPage = () => {
           </div>
 
           <div className="text-center">
-            <p className="text-xs">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
               {t("auth.reset_password.spam_note")}
             </p>
           </div>

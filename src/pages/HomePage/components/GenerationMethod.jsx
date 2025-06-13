@@ -9,19 +9,23 @@ export function GenerationMethod({
   inputImage,
   inputImages,
   intermediateImage,
-  intermediateLabel, 
+  intermediateLabel,
   outputImage,
   outputLabel,
   icon,
   index = 0,
-  views, 
+  views,
 }) {
   const isEven = index % 2 === 0;
 
   return (
-    <div className="flex flex-col rounded-2xl border border-border/40 bg-secondary/10 backdrop-blur-xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-[0_10px_30px_rgba(51,51,234,0.2),0_0_15px_rgba(51,51,234,0.8)] hover:border-azul-gradient group">
+    <div className="flex flex-col rounded-2xl bg-secondary/10 backdrop-blur-xl overflow-hidden shadow-lg transition-all duration-300 group
+                    border border-slate-300/70 dark:border-border/40
+                    hover:shadow-[0_10px_30px_rgba(51,51,234,0.2),0_0_15px_rgba(51,51,234,0.8)] 
+                    hover:border-azul-gradient"
+    >
       <div
-        className={`p-6 border-b border-border/40 group-hover:border-azul-gradient transition-all duration-300 ${
+        className={`p-6 border-b border-slate-300/70 dark:border-border/40 group-hover:border-azul-gradient transition-all duration-300 ${
           isEven
             ? "bg-gradient-to-r from-[#3333EA]/10 to-[#A975FF]/10"
             : "bg-gradient-to-r from-[#A975FF]/10 to-[#3333EA]/10"
@@ -52,11 +56,11 @@ export function GenerationMethod({
                 : icon}
             </div>
           </div>
-          <h3 className="text-xl font-bold font-heading text-primary tracking-wide">
+          <h3 className="text-xl font-bold font-heading text-slate-800 dark:text-white tracking-wide">
             {title}
           </h3>
         </div>
-        <p className="text-foreground/80 mt-3 text-sm lg:text-base">
+        <p className="text-slate-600 dark:text-gray-300 mt-3 text-sm lg:text-base">
           {description}
         </p>
       </div>
@@ -67,28 +71,31 @@ export function GenerationMethod({
               {inputImages.map((img, idx) => (
                 <div
                   key={idx}
-                  className="relative w-full max-w-[250px] aspect-square rounded-2xl overflow-hidden border border-border/40 group-hover:border-azul-gradient shadow-md flex-shrink-0 transition-all duration-300"
+                  className="relative w-full max-w-[250px] aspect-square rounded-2xl overflow-hidden shadow-md flex-shrink-0 transition-all duration-300
+                               border border-slate-300/70 dark:border-border/40 group-hover:border-azul-gradient"
                 >
                   <img
                     src={img}
-                    alt={`Vista ${views[idx]}`} 
+                    alt={`Vista ${views[idx]}`}
                     className="w-[80%] h-[80%] object-cover mx-auto my-4"
                   />
                   <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-center text-xs py-1">
-                    {views[idx]} 
+                    {views[idx]}
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="relative w-full max-w-[250px] aspect-square rounded-2xl overflow-hidden border border-border/40 group-hover:border-azul-gradient shadow-md flex-shrink-0 transition-all duration-300">
+            <div className="relative w-full max-w-[250px] aspect-square rounded-2xl overflow-hidden shadow-md flex-shrink-0 transition-all duration-300
+                           border border-slate-300/70 dark:border-border/40 group-hover:border-azul-gradient"
+            >
               {inputText ? (
                 <div className="flex items-center justify-center w-full h-full">
-                  <div className="bg-black/90 p-6 rounded-lg text-center max-w-[80%]">
-                    <strong className="text-white block mb-2">
+                  <div className="bg-slate-100 dark:bg-black/90 p-6 rounded-lg text-center max-w-[80%]">
+                    <strong className="text-slate-800 dark:text-white block mb-2">
                       Prompt de usuario:
                     </strong>
-                    <span className="text-white/80 text-sm lg:text-base font-medium">
+                    <span className="text-slate-600 dark:text-gray-300 text-sm lg:text-base font-medium">
                       {inputText}
                     </span>
                   </div>
@@ -108,13 +115,13 @@ export function GenerationMethod({
           <div className="flex justify-center items-center py-2 relative">
             <div className="lg:hidden w-16 h-16 rounded-full bg-gradient-to-r from-azul-gradient to-morado-gradient flex items-center justify-center shadow-md group-hover:bg-gradient-to-r group-hover:from-azul-gradient group-hover:to-morado-gradient transition-all duration-300 animate-fade-down">
               <ArrowDown
-                className="h-6 w-6 text-primary group-hover:scale-125 transition-all duration-300"
+                className="h-6 w-6 text-white group-hover:scale-125 transition-all duration-300"
                 weight="bold"
               />
             </div>
             <div className="hidden lg:flex w-16 h-16 rounded-full bg-gradient-to-r from-azul-gradient to-morado-gradient items-center justify-center shadow-md group-hover:bg-gradient-to-r group-hover:from-azul-gradient group-hover:to-morado-gradient transition-all duration-300 animate-fade-right">
               <ArrowRight
-                className="h-6 w-6 text-primary group-hover:scale-125 transition-all duration-300"
+                className="h-6 w-6 text-white group-hover:scale-125 transition-all duration-300"
                 weight="bold"
               />
             </div>
@@ -122,26 +129,28 @@ export function GenerationMethod({
           </div>
           {intermediateImage && (
             <>
-              <div className="relative w-full max-w-[250px] aspect-square rounded-2xl overflow-hidden border border-border/40 group-hover:border-azul-gradient shadow-md flex-shrink-0 transition-all duration-300">
+              <div className="relative w-full max-w-[250px] aspect-square rounded-2xl overflow-hidden shadow-md flex-shrink-0 transition-all duration-300
+                             border border-slate-300/70 dark:border-border/40 group-hover:border-azul-gradient"
+              >
                 <img
                   src={intermediateImage}
                   alt={`Imagen intermedia para ${title}`}
                   className="w-[80%] h-[80%] object-cover mx-auto my-4"
                 />
                 <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-center text-xs py-1">
-                  {intermediateLabel} 
+                  {intermediateLabel}
                 </div>
               </div>
               <div className="flex justify-center items-center py-2 relative">
                 <div className="lg:hidden w-16 h-16 rounded-full bg-gradient-to-r from-azul-gradient to-morado-gradient flex items-center justify-center shadow-md group-hover:bg-gradient-to-r group-hover:from-azul-gradient group-hover:to-morado-gradient transition-all duration-300 animate-fade-down">
                   <ArrowDown
-                    className="h-6 w-6 text-primary group-hover:scale-125 transition-all duration-300"
+                    className="h-6 w-6 text-white group-hover:scale-125 transition-all duration-300"
                     weight="bold"
                   />
                 </div>
                 <div className="hidden lg:flex w-16 h-16 rounded-full bg-gradient-to-r from-azul-gradient to-morado-gradient items-center justify-center shadow-md group-hover:bg-gradient-to-r group-hover:from-azul-gradient group-hover:to-morado-gradient transition-all duration-300 animate-fade-right">
                   <ArrowRight
-                    className="h-6 w-6 text-primary group-hover:scale-125 transition-all duration-300"
+                    className="h-6 w-6 text-white group-hover:scale-125 transition-all duration-300"
                     weight="bold"
                   />
                 </div>
@@ -149,7 +158,9 @@ export function GenerationMethod({
               </div>
             </>
           )}
-          <div className="relative w-full max-w-[250px] aspect-square rounded-2xl overflow-hidden border border-border/40 group-hover:border-azul-gradient shadow-md transition-all duration-300 group-hover:shadow-lg flex-shrink-0">
+          <div className="relative w-full max-w-[250px] aspect-square rounded-2xl overflow-hidden shadow-md transition-all duration-300 group-hover:shadow-lg flex-shrink-0
+                         border border-slate-300/70 dark:border-border/40 group-hover:border-azul-gradient"
+          >
             <div className="absolute inset-0 bg-gradient-to-b from-background/20 to-background/5 z-10"></div>
             {outputImage.endsWith(".webm") ? (
               <video
@@ -170,7 +181,7 @@ export function GenerationMethod({
               />
             )}
             <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-center text-xs py-1">
-              {outputLabel} 
+              {outputLabel}
             </div>
           </div>
         </div>

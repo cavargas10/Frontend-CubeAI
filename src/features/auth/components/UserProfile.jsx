@@ -15,7 +15,7 @@ export const UserProfile = ({ userData }) => {
 
   return (
     <div className="flex items-center justify-end gap-3 cursor-pointer">
-      <p className="hidden sm:block text-sm text-white font-medium transition-colors duration-300 hover:text-[#A975FF] whitespace-nowrap">
+      <p className="hidden sm:block text-sm text-gray-800 dark:text-white font-medium transition-colors duration-300 hover:text-[#A975FF] whitespace-nowrap">
         {t("dashboard_layout.header.welcome", { name: userData.name })}
       </p>
 
@@ -24,12 +24,12 @@ export const UserProfile = ({ userData }) => {
           <img
             src={userData.profile_picture}
             alt={`Foto de perfil de ${userData.name}`}
-            className={`${profileImageSize} rounded-full object-cover border-2 border-principal`}
+            className={`${profileImageSize} rounded-full object-cover border-2 border-white dark:border-principal`}
             onError={handleImageError}
           />
         ) : (
-          <div className={`${profileImageSize} rounded-full flex items-center justify-center bg-principal`}>
-            <span className="text-white text-base font-semibold">{userData.name?.charAt(0).toUpperCase()}</span>
+          <div className={`${profileImageSize} rounded-full flex items-center justify-center bg-gray-200 dark:bg-principal`}>
+            <span className="text-gray-700 dark:text-white text-base font-semibold">{userData.name?.charAt(0).toUpperCase()}</span>
           </div>
         )}
       </div>
