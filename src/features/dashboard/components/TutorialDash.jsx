@@ -29,7 +29,7 @@ export const TutorialDash = ({ isCollapsed }) => {
 
   return (
     <section
-      className={`min-h-screen bg-fondologin text-white transition-all duration-300 ease-in-out relative w-full ${
+      className={`min-h-screen bg-white dark:bg-fondologin text-gray-800 dark:text-white transition-all duration-300 ease-in-out relative w-full ${
         isCollapsed
           ? "sm:pl-[80px]"
           : "md:pl-[267px] 2xl:pl-[300px]"
@@ -49,23 +49,25 @@ export const TutorialDash = ({ isCollapsed }) => {
             {t("tutorial_dash_page.subtitle")}
           </p>
         </div>
-        <hr className="border-t-2 border-linea/20 my-5" />
+        <hr className="border-t-2 border-gray-200 dark:border-linea/20 my-5" />
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-1 h-8 bg-gradient-to-b from-azul-gradient to-morado-gradient rounded-full"></div>
-            <h2 className="text-2xl font-bold text-white">{t("tutorial_dash_page.section_title")}</h2>
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-white">{t("tutorial_dash_page.section_title")}</h2>
           </div>
           <div className="relative">
-            <div className="relative bg-principal/30 backdrop-blur-sm border border-linea/20 rounded-2xl p-6">
+            {/* ✅ Contenedor principal de los tutoriales adaptado */}
+            <div className="relative bg-gray-50 dark:bg-principal/30 backdrop-blur-sm border border-gray-200 dark:border-linea/20 rounded-2xl p-6">
               {loading ? (
                 <div className="flex flex-col items-center justify-center h-64 space-y-4">
                   <div className="relative">
                     <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-azul-gradient"></div>
                     <div className="animate-spin rounded-full h-16 w-16 border-r-2 border-l-2 border-morado-gradient absolute inset-0 animate-reverse"></div>
                   </div>
+                  {/* ✅ Textos de carga adaptados */}
                   <div className="text-center">
-                    <p className="text-white font-medium">{t("tutorial_dash_page.loading.title")}</p>
-                    <p className="text-gray-400 text-sm mt-1">{t("tutorial_dash_page.loading.subtitle")}</p>
+                    <p className="text-gray-800 dark:text-white font-medium">{t("tutorial_dash_page.loading.title")}</p>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">{t("tutorial_dash_page.loading.subtitle")}</p>
                   </div>
                 </div>
               ) : tutoriales.length > 0 ? (
@@ -75,20 +77,22 @@ export const TutorialDash = ({ isCollapsed }) => {
                       key={tutorial.id || tutorial.titulo || index}
                       className="transform transition-all duration-300 hover:scale-105"
                     >
+                      {/* ✅ TutorialCard ya está adaptado para ambos temas */}
                       <TutorialCard tutorial={tutorial} />
                     </div>
                   ))}
                 </div>
               ) : (
+                // ✅ Mensaje de "no hay tutoriales" adaptado
                 <div className="flex flex-col items-center justify-center h-64 space-y-4">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-azul-gradient/20 to-morado-gradient/20 flex items-center justify-center">
+                  <div className="w-20 h-20 rounded-full bg-gray-100 dark:bg-gradient-to-br from-azul-gradient/20 to-morado-gradient/20 flex items-center justify-center">
                     <BookOpen size={32} className="text-azul-gradient" />
                   </div>
                   <div className="text-center">
-                    <h3 className="text-xl font-semibold text-white mb-2">
+                    <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">
                       {t("tutorial_dash_page.empty.title")}
                     </h3>
-                    <p className="text-gray-400 max-w-md">
+                    <p className="text-gray-500 dark:text-gray-400 max-w-md">
                       {t("tutorial_dash_page.empty.subtitle")}
                     </p>
                   </div>

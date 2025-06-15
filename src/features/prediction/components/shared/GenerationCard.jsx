@@ -38,7 +38,9 @@ export const GenerationCard = ({ generation, formatDate, openModal, open3DViewer
   return (
     <div 
       onClick={handleCardClick}
-      className="relative w-full h-[220px] rounded-2xl overflow-hidden shadow-lg bg-principal group cursor-pointer border-2 border-transparent hover:border-morado-gradient transition-all duration-300"
+      className="relative w-full h-[220px] rounded-2xl overflow-hidden shadow-lg group cursor-pointer 
+                 bg-gray-200 dark:bg-principal 
+                 border-2 border-transparent hover:border-morado-gradient transition-all duration-300"
     >
       {previewImageUrl ? (
         <img 
@@ -48,13 +50,15 @@ export const GenerationCard = ({ generation, formatDate, openModal, open3DViewer
           loading="lazy"
         />
       ) : (
-        <div className="w-full h-full flex flex-col items-center justify-center bg-gray-900 text-gray-400 p-4 text-center">
+        // ✅ Vista para cuando no hay previsualización, adaptada a ambos temas
+        <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-400 dark:text-gray-400 p-4 text-center">
             <Cube size={40} className="mb-2 opacity-50"/>
             <span className="text-sm font-medium">{t('visualizer_page.card.preview_unavailable')}</span>
             <span className="text-xs opacity-70 mt-1">{t('visualizer_page.card.click_to_view')}</span>
         </div>
       )}
       
+      {/* ✅ La superposición oscura se mantiene en ambos temas para asegurar la legibilidad del texto */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent transition-opacity duration-300"></div>
 
       <div className="absolute inset-0 flex flex-col justify-end p-3 text-white">
@@ -63,6 +67,7 @@ export const GenerationCard = ({ generation, formatDate, openModal, open3DViewer
           {formatDate(generation.timestamp)}
         </p>
 
+        {/* ✅ Los botones ya usan gradientes y colores que funcionan bien, no necesitan cambios */}
         <div className="flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <div className="flex gap-2">
             {downloads && downloads.map(d => (

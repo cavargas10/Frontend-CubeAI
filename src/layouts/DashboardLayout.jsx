@@ -14,7 +14,7 @@ import { MultiImagen3DInput } from "../features/prediction/components/input/Mult
 import { Boceto3DInput } from "../features/prediction/components/input/Boceto3DInput";
 
 export const DashboardLayout = () => {
-  const { handleLogout, userData } = useAuth();
+  const { handleLogout, userData, refetchUserData } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
   const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -47,7 +47,12 @@ export const DashboardLayout = () => {
           />
           <Route
             path="configdash"
-            element={<ConfigDash isCollapsed={isNavCollapsed} />}
+            element={
+              <ConfigDash 
+                isCollapsed={isNavCollapsed} 
+                onUserDataUpdate={refetchUserData} 
+              />
+            }
           />
           <Route
             path="imagen3D"

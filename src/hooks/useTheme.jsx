@@ -1,30 +1,55 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export const useTheme = () => {
-  useEffect(() => {
-    // 1. Definimos la media query para detectar la preferencia del sistema.
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  const [isDark, setIsDark] = useState(false);
 
-    // 2. Función para manejar el cambio de tema.
-    const handleChange = () => {
-      if (mediaQuery.matches) {
-        // Si el sistema está en modo oscuro, añadimos la clase 'dark'.
-        document.documentElement.classList.add('dark');
-      } else {
-        // Si no, la quitamos.
-        document.documentElement.classList.remove('dark');
+  useEffect(() => {
+    // Verificar si hay un tema guardado en localStorage
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    const shouldBeDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+    
+    setIsDark(shouldBeDark);
+    
+    if (shouldBeDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+
+    // Escuchar cambios en las preferencias del sistema
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e) => {
+      if (!localStorage.getItem('theme')) {
+        const shouldBeDark = e.matches;
+        setIsDark(shouldBeDark);
+        if (shouldBeDark) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
       }
     };
 
-    // 3. Ejecutamos la función una vez al cargar el componente para establecer el tema inicial.
-    handleChange();
-
-    // 4. Añadimos un listener para que el tema cambie automáticamente si el usuario lo cambia en su sistema.
     mediaQuery.addEventListener('change', handleChange);
-
-    // 5. Limpiamos el listener cuando el componente se desmonte para evitar memory leaks.
     return () => {
       mediaQuery.removeEventListener('change', handleChange);
     };
-  }, []); // El array vacío asegura que este efecto se ejecute solo una vez.
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = !isDark;
+    setIsDark(newTheme);
+    
+    if (newTheme) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  };
+
+  return { isDark, toggleTheme };
 };

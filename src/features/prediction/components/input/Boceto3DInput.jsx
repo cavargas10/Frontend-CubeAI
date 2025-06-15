@@ -1,5 +1,11 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from "react";
-import { Sparkle, PencilSimple, Eraser, Trash, TextAa } from "@phosphor-icons/react";
+import {
+  Sparkle,
+  PencilSimple,
+  Eraser,
+  Trash,
+  TextAa,
+} from "@phosphor-icons/react";
 import { ErrorModal } from "../../../../components/modals/ErrorModal";
 import { LoadingModal } from "../../../../components/modals/LoadingModal";
 import { Boceto3DResult } from "../results/Boceto3DResult";
@@ -11,20 +17,22 @@ import { uploadPredictionPreview } from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
 
 function dataURLtoBlob(dataurl) {
-    const arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1];
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while(n--){
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new Blob([u8arr], {type:mime});
+  const arr = dataurl.split(","),
+    mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], { type: mime });
 }
 
 export const Boceto3DInput = ({ isCollapsed }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const { dispatch, clearResult, prediction_boceto3d_result } = usePredictions();
+  const { dispatch, clearResult, prediction_boceto3d_result } =
+    usePredictions();
   const [generationName, setGenerationName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -121,7 +129,7 @@ export const Boceto3DInput = ({ isCollapsed }) => {
     setGenerationName("");
     setDescription("");
     clearPredictionError();
-    clearResult('boceto3d');
+    clearResult("boceto3d");
     clearCanvas();
   }, [clearCanvas, clearPredictionError, clearResult]);
 
@@ -142,8 +150,11 @@ export const Boceto3DInput = ({ isCollapsed }) => {
       );
       return;
     }
-    
-    dispatch({ type: 'SET_PREDICTION', payload: { type: 'boceto3d', result: null } });
+
+    dispatch({
+      type: "SET_PREDICTION",
+      payload: { type: "boceto3d", result: null },
+    });
 
     const image = getCanvasDataURL("image/png");
     if (!image) {
@@ -160,7 +171,10 @@ export const Boceto3DInput = ({ isCollapsed }) => {
 
     const result = await submitPrediction("boceto3D", formData);
     if (result) {
-      dispatch({ type: 'SET_PREDICTION', payload: { type: 'boceto3d', result } });
+      dispatch({
+        type: "SET_PREDICTION",
+        payload: { type: "boceto3d", result },
+      });
     }
   }, [
     generationName,
@@ -173,33 +187,43 @@ export const Boceto3DInput = ({ isCollapsed }) => {
     dispatch,
   ]);
 
-  const handlePreviewUpload = useCallback(async (dataURL) => {
-    if (!user || !prediction_boceto3d_result || !prediction_boceto3d_result.generation_name) return;
-    if (prediction_boceto3d_result.previewImageUrl) return;
+  const handlePreviewUpload = useCallback(
+    async (dataURL) => {
+      if (
+        !user ||
+        !prediction_boceto3d_result ||
+        !prediction_boceto3d_result.generation_name
+      )
+        return;
+      if (prediction_boceto3d_result.previewImageUrl) return;
 
-    try {
+      try {
         const token = await user.getIdToken();
         const previewBlob = dataURLtoBlob(dataURL);
-        
+
         const formData = new FormData();
-        formData.append('preview', previewBlob, 'preview.png');
-        formData.append('generation_name', prediction_boceto3d_result.generation_name);
-        formData.append('prediction_type_api', 'Boceto3D');
+        formData.append("preview", previewBlob, "preview.png");
+        formData.append(
+          "generation_name",
+          prediction_boceto3d_result.generation_name
+        );
+        formData.append("prediction_type_api", "Boceto3D");
 
         await uploadPredictionPreview(token, formData);
         console.log("Previsualización subida con éxito para 'Boceto a 3D'.");
-        
-    } catch (error) {
+      } catch (error) {
         console.error("Error al subir la previsualización:", error);
-    }
-  }, [user, prediction_boceto3d_result]);
+      }
+    },
+    [user, prediction_boceto3d_result]
+  );
 
   const isButtonDisabled =
     predictionLoading || !generationName.trim() || isCanvasEmpty();
 
   return (
     <section
-      className={`w-full bg-fondologin text-white transition-all duration-300 ease-in-out relative flex flex-col h-[calc(100vh-4rem)] ${
+      className={`w-full bg-white dark:bg-fondologin text-gray-800 dark:text-white transition-all duration-300 ease-in-out relative flex flex-col h-[calc(100vh-4rem)] ${
         isCollapsed ? "sm:pl-[80px]" : "md:pl-[267px] 2xl:pl-[300px]"
       }`}
     >
@@ -214,35 +238,39 @@ export const Boceto3DInput = ({ isCollapsed }) => {
             </div>
           </div>
         </div>
-        <hr className="border-t-2 border-linea/20 mb-6 flex-shrink-0" />
+        <hr className="border-t-2 border-gray-200 dark:border-linea/20 mb-6 flex-shrink-0" />
 
         <div className="flex-grow flex flex-col xl:grid xl:grid-cols-5 gap-4">
           <div className="xl:col-span-2">
-            <div className="bg-principal/30 backdrop-blur-sm border border-linea/20 rounded-2xl p-4 h-full flex flex-col space-y-4">
+            <div className="bg-gray-50 dark:bg-principal/30 backdrop-blur-sm border border-gray-200 dark:border-linea/20 rounded-2xl p-4 h-full flex flex-col space-y-4">
               <div className="flex-shrink-0">
                 <div className="flex items-center gap-3 mb-2">
                   <TextAa size={18} className="text-azul-gradient" />
-                  <h3 className="text-sm font-semibold text-white">
+                  <h3 className="text-sm font-semibold text-gray-800 dark:text-white">
                     {t("generation_pages.common.generation_name_label")}
                   </h3>
                 </div>
                 <input
                   type="text"
-                  placeholder={t("generation_pages.common.name_placeholder_generic")}
+                  placeholder={t(
+                    "generation_pages.common.name_placeholder_generic"
+                  )}
                   value={generationName}
                   onChange={(e) => setGenerationName(e.target.value)}
                   disabled={predictionLoading}
-                  className={`w-full p-2.5 rounded-lg bg-principal/50 border-2 ${
+                  className={`w-full p-2.5 rounded-lg bg-white dark:bg-principal/50 border-2 text-gray-800 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300 ${
                     generationName.trim()
                       ? "border-azul-gradient"
-                      : "border-linea/30"
-                  } text-white placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300`}
+                      : "border-gray-300 dark:border-linea/30"
+                  }`}
                 />
               </div>
               <div className="flex-grow flex flex-col min-h-0">
                 <div
-                  className={`w-full min-h-[400px] xl:min-h-0 xl:flex-grow rounded-lg overflow-hidden relative ${
-                    predictionLoading ? "opacity-60 pointer-events-none" : ""
+                  className={`w-full min-h-[400px] xl:min-h-0 xl:flex-grow rounded-lg overflow-hidden relative border-2 ${
+                    predictionLoading
+                      ? "opacity-60 pointer-events-none"
+                      : "border-gray-300 dark:border-linea/30"
                   }`}
                   style={{ touchAction: "none" }}
                 >
@@ -258,14 +286,15 @@ export const Boceto3DInput = ({ isCollapsed }) => {
                       className="w-full h-full block"
                     />
                   </div>
-                  <div className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-2 bg-[#1f2437]/80 backdrop-blur-sm p-1.5 rounded-xl border border-linea/20">
+                  {/* --- Barra de Herramientas del Canvas --- */}
+                  <div className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-2 bg-gray-100/80 dark:bg-[#1f2437]/80 backdrop-blur-sm p-1.5 rounded-xl border border-gray-200 dark:border-linea/20">
                     <button
                       onClick={() => setTool("pencil")}
                       disabled={predictionLoading}
                       className={`p-2 rounded-lg flex items-center justify-center transition-all ${
                         drawingState.tool === "pencil"
                           ? "bg-gradient-to-r from-azul-gradient to-morado-gradient text-white shadow-md"
-                          : "text-gray-300 hover:bg-white/20"
+                          : "text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/20"
                       }`}
                       title={t("generation_pages.common.pencil_tooltip")}
                     >
@@ -277,36 +306,38 @@ export const Boceto3DInput = ({ isCollapsed }) => {
                       className={`p-2 rounded-lg flex items-center justify-center transition-all ${
                         drawingState.tool === "eraser"
                           ? "bg-gradient-to-r from-azul-gradient to-morado-gradient text-white shadow-md"
-                          : "text-gray-300 hover:bg-white/20"
+                          : "text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/20"
                       }`}
                       title={t("generation_pages.common.eraser_tooltip")}
                     >
                       <Eraser size={20} weight="bold" />
                     </button>
-                    <div className="h-px w-full bg-linea/30 my-1" />
+                    <div className="h-px w-full bg-gray-300 dark:bg-linea/30 my-1" />
                     <button
                       onClick={clearCanvas}
                       disabled={predictionLoading}
-                      className="p-2 rounded-lg flex items-center justify-center transition-all text-gray-300 hover:bg-red-500/80 hover:text-white"
+                      className="p-2 rounded-lg flex items-center justify-center transition-all text-gray-600 dark:text-gray-300 hover:bg-red-500/80 hover:text-white"
                       title={t("generation_pages.common.clear_canvas_tooltip")}
                     >
                       <Trash size={20} weight="bold" />
                     </button>
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 p-2">
-                    <div className="bg-principal/80 backdrop-blur-sm border border-linea/20 rounded-lg p-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                    <div className="bg-white/80 dark:bg-principal/80 backdrop-blur-sm border border-gray-200 dark:border-linea/20 rounded-lg p-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                       <input
                         type="text"
-                        placeholder={t("generation_pages.common.canvas_description_placeholder")}
+                        placeholder={t(
+                          "generation_pages.common.canvas_description_placeholder"
+                        )}
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         disabled={predictionLoading}
-                        className="flex-1 text-sm bg-transparent text-white border-none focus:ring-0 placeholder-gray-400 px-1 py-1"
+                        className="flex-1 text-sm bg-transparent text-gray-800 dark:text-white border-none focus:ring-0 placeholder-gray-500 dark:placeholder-gray-400 px-1 py-1"
                       />
                       <button
                         onClick={handleLocalPrediction}
                         disabled={isButtonDisabled}
-                        className="text-sm font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2 px-4 rounded-md border-none flex items-center justify-center gap-2 transition-all hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 whitespace-nowrap"
+                        className="text-sm font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2 px-4 rounded-md border-none flex items-center justify-center gap-2 transition-all hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 whitespace-nowrap text-white"
                       >
                         <Sparkle size={16} weight="fill" />
                         {t("generation_pages.common.canvas_generate_button")}
@@ -319,7 +350,9 @@ export const Boceto3DInput = ({ isCollapsed }) => {
           </div>
 
           <div className="xl:col-span-3 flex-grow min-h-[500px] md:min-h-[600px] xl:min-h-0">
-            <Boceto3DResult onFirstLoad={handlePreviewUpload} />
+            <div className="h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0 border-2 border-gray-200 dark:border-linea/20 rounded-3xl overflow-hidden">
+              <Boceto3DResult onFirstLoad={handlePreviewUpload} />
+            </div>
           </div>
         </div>
       </div>
@@ -328,10 +361,7 @@ export const Boceto3DInput = ({ isCollapsed }) => {
         closeModal={clearPredictionError}
         errorMessage={predictionError || ""}
       />
-      <LoadingModal
-        showLoadingModal={predictionLoading}
-        steps={loadingSteps}
-      />
+      <LoadingModal showLoadingModal={predictionLoading} steps={loadingSteps} />
     </section>
   );
 };
