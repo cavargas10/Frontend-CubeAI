@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   Sparkle,
   TextAa,
@@ -7,12 +7,15 @@ import {
   ChatText,
 } from "@phosphor-icons/react";
 import { ErrorModal } from "../../../../components/modals/ErrorModal";
-import { LoadingModal } from "../../../../components/modals/LoadingModal";
+import { ProgressModal } from "../../../../components/modals/ProgressModal";
 import { TextImg3DResult } from "../results/TextImg3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
-import { uploadPredictionPreview } from "../../services/predictionApi";
+import {
+  uploadPredictionPreview,
+  getJobStatus,
+} from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
 
 function dataURLtoBlob(dataurl) {
@@ -32,6 +35,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
   const { user } = useAuth();
   const { dispatch, clearResult, prediction_textimg3d_result } =
     usePredictions();
+
   const [generationName, setGenerationName] = useState("");
   const [subject, setSubject] = useState("");
   const [selectedStyle, setSelectedStyle] = useState(null);
@@ -46,28 +50,85 @@ export const TextImg3DInput = ({ isCollapsed }) => {
   ];
 
   const {
-    isLoading: predictionLoading,
-    error: predictionError,
-    loadingSteps,
+    isLoading: isSubmitting,
+    error: submissionError,
     submitPrediction,
-    clearError: clearPredictionError,
-    setError: setPredictionError,
+    clearError: clearSubmissionError,
   } = usePredictionHandler(user);
+
+  const [activeJobId, setActiveJobId] = useState(null);
+  const [jobStatus, setJobStatus] = useState(null);
+  const [pollingError, setPollingError] = useState(null);
+  const pollingIntervalRef = useRef(null);
 
   const resetComponentState = useCallback(() => {
     setGenerationName("");
     setSubject("");
     setSelectedStyle(null);
     setAdditionalDetails("");
-    clearPredictionError();
+    clearSubmissionError();
+    setPollingError(null);
     clearResult("textimg3d");
-  }, [clearPredictionError, clearResult]);
+  }, [clearSubmissionError, clearResult]);
 
   useEffect(() => {
     return () => {
       resetComponentState();
     };
   }, [resetComponentState]);
+
+  const stopPolling = () => {
+    if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current);
+      pollingIntervalRef.current = null;
+    }
+  };
+
+  const handleJobCompletion = (result) => {
+    stopPolling();
+    dispatch({
+      type: "SET_PREDICTION",
+      payload: { type: "textimg3d", result },
+    });
+    setTimeout(() => {
+      setActiveJobId(null);
+      setJobStatus(null);
+    }, 2000);
+  };
+
+  const handleJobFailure = (errorMsg) => {
+    stopPolling();
+    setPollingError(errorMsg || "La generación ha fallado.");
+  };
+
+  const pollJobStatus = useCallback(
+    async (jobId) => {
+      if (!user) return;
+      try {
+        const token = await user.getIdToken();
+        const status = await getJobStatus(token, jobId);
+        setJobStatus(status);
+
+        if (status.status === "completed") {
+          handleJobCompletion(status.result);
+        } else if (status.status === "failed") {
+          handleJobFailure(status.error);
+        }
+      } catch (err) {
+        handleJobFailure(err.message);
+      }
+    },
+    [user, dispatch]
+  );
+
+  useEffect(() => {
+    if (activeJobId) {
+      pollingIntervalRef.current = setInterval(() => {
+        pollJobStatus(activeJobId);
+      }, 5000);
+    }
+    return () => stopPolling();
+  }, [activeJobId, pollJobStatus]);
 
   const handleLocalPrediction = async () => {
     if (
@@ -76,29 +137,34 @@ export const TextImg3DInput = ({ isCollapsed }) => {
       !selectedStyle ||
       !additionalDetails.trim()
     ) {
-      setPredictionError(
+      setPollingError(
         "Todos los campos (Nombre, Prompt, Estilo, Detalles) son obligatorios"
       );
       return;
     }
 
-    dispatch({
-      type: "SET_PREDICTION",
-      payload: { type: "textimg3d", result: null },
-    });
+    clearResult("textimg3d");
+    setPollingError(null);
+    setJobStatus(null);
 
-    const result = await submitPrediction("textimg3D", {
+    const payload = {
       generationName,
       subject,
       style: selectedStyle,
       additionalDetails,
-    });
+    };
 
-    if (result) {
-      dispatch({
-        type: "SET_PREDICTION",
-        payload: { type: "textimg3d", result },
+    const response = await submitPrediction("TextImg3D", payload);
+
+    if (response && response.job_id) {
+      setActiveJobId(response.job_id);
+      setJobStatus({
+        status: response.status,
+        position_in_queue: response.position_in_queue,
+        queue_size: response.position_in_queue,
       });
+    } else {
+      setPollingError(submissionError || "No se pudo iniciar la generación.");
     }
   };
 
@@ -135,12 +201,27 @@ export const TextImg3DInput = ({ isCollapsed }) => {
     [user, prediction_textimg3d_result]
   );
 
+  const isFormDisabled = isSubmitting || !!activeJobId;
   const isButtonDisabled =
-    predictionLoading ||
+    isFormDisabled ||
     !generationName.trim() ||
     !subject.trim() ||
     !selectedStyle ||
     !additionalDetails.trim();
+
+  const closeModalAndReset = () => {
+    stopPolling();
+    setActiveJobId(null);
+    setJobStatus(null);
+    setPollingError(null);
+  };
+
+  const showProgress =
+    !!activeJobId &&
+    jobStatus?.status !== "completed" &&
+    jobStatus?.status !== "failed";
+  const showError =
+    !!pollingError || (!!activeJobId && jobStatus?.status === "failed");
 
   return (
     <section
@@ -179,7 +260,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
                   )}
                   value={generationName}
                   onChange={(e) => setGenerationName(e.target.value)}
-                  disabled={predictionLoading}
+                  disabled={isFormDisabled}
                   className={`w-full p-2 rounded-lg bg-white dark:bg-principal/50 border-2 text-gray-800 dark:text-white text-sm placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300 ${
                     generationName.trim()
                       ? "border-azul-gradient"
@@ -202,7 +283,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
                   )}
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  disabled={predictionLoading}
+                  disabled={isFormDisabled}
                   className={`w-full p-2 rounded-lg bg-white dark:bg-principal/50 border-2 text-gray-800 dark:text-white text-sm placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300 ${
                     subject.trim()
                       ? "border-azul-gradient"
@@ -225,7 +306,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
                   )}
                   value={additionalDetails}
                   onChange={(e) => setAdditionalDetails(e.target.value)}
-                  disabled={predictionLoading}
+                  disabled={isFormDisabled}
                   className={`w-full p-2 rounded-lg bg-white dark:bg-principal/50 border-2 text-gray-800 dark:text-white text-sm placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300 ${
                     additionalDetails.trim()
                       ? "border-azul-gradient"
@@ -246,7 +327,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
                     <button
                       key={style.value}
                       onClick={() => setSelectedStyle(style.value)}
-                      disabled={predictionLoading}
+                      disabled={isFormDisabled}
                       className={`border-2 rounded-lg py-2 px-2 flex items-center justify-center transition-all text-xs h-10 ${
                         selectedStyle === style.value
                           ? "border-azul-gradient bg-azul-gradient/10 dark:bg-azul-gradient/20 shadow-md scale-105 font-semibold ring-2 ring-azul-gradient/50 text-gray-800 dark:text-white"
@@ -262,7 +343,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
                     <button
                       key={style.value}
                       onClick={() => setSelectedStyle(style.value)}
-                      disabled={predictionLoading}
+                      disabled={isFormDisabled}
                       className={`border-2 rounded-lg py-2 px-2 flex items-center justify-center transition-all text-xs h-10 ${
                         selectedStyle === style.value
                           ? "border-azul-gradient bg-azul-gradient/10 dark:bg-azul-gradient/20 shadow-md scale-105 font-semibold ring-2 ring-azul-gradient/50 text-gray-800 dark:text-white"
@@ -287,7 +368,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
               </div>
             </div>
           </div>
-          {/* Columna de resultado ya adaptada a través de ModelResultViewer */}
+
           <div className="xl:col-span-3 flex-grow min-h-0">
             <div className="h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0 border-2 border-gray-200 dark:border-linea/20 rounded-3xl overflow-hidden">
               <TextImg3DResult onFirstLoad={handlePreviewUpload} />
@@ -296,12 +377,14 @@ export const TextImg3DInput = ({ isCollapsed }) => {
         </div>
       </div>
 
+      <ProgressModal show={showProgress} jobStatus={jobStatus} />
       <ErrorModal
-        showModal={!!predictionError}
-        closeModal={clearPredictionError}
-        errorMessage={predictionError || ""}
+        showModal={showError}
+        closeModal={closeModalAndReset}
+        errorMessage={
+          pollingError || jobStatus?.error || "Ha ocurrido un error."
+        }
       />
-      <LoadingModal showLoadingModal={predictionLoading} steps={loadingSteps} />
     </section>
   );
 };
