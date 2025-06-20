@@ -1,13 +1,13 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Sparkle, UploadSimple, TextAa } from "@phosphor-icons/react";
 import { ErrorModal } from "../../../../components/modals/ErrorModal";
-import { LoadingModal } from "../../../../components/modals/LoadingModal";
+import { ProgressModal } from "../../../../components/modals/ProgressModal";
 import { Unico3DResult } from "../results/Unico3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
-import { uploadPredictionPreview } from "../../services/predictionApi";
+import { uploadPredictionPreview, getJobStatus } from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
 
 function dataURLtoBlob(dataurl) {
@@ -27,7 +27,6 @@ export const Unico3DInput = ({ isCollapsed }) => {
   const { user } = useAuth();
   const { dispatch, clearResult, prediction_unico3d_result } = usePredictions();
   const [generationName, setGenerationName] = useState("");
-
   const {
     imageFile,
     imagePreview,
@@ -40,20 +39,24 @@ export const Unico3DInput = ({ isCollapsed }) => {
   } = useImageUpload();
 
   const {
-    isLoading: predictionLoading,
-    error: predictionError,
-    loadingSteps,
+    isLoading: isSubmitting,
+    error: submissionError,
     submitPrediction,
-    clearError: clearPredictionError,
-    setError: setPredictionError,
+    clearError: clearSubmissionError,
   } = usePredictionHandler(user);
+
+  const [activeJobId, setActiveJobId] = useState(null);
+  const [jobStatus, setJobStatus] = useState(null);
+  const [pollingError, setPollingError] = useState(null);
+  const pollingIntervalRef = useRef(null);
 
   const resetComponentState = useCallback(() => {
     setGenerationName("");
     resetImageState();
-    clearPredictionError();
+    clearSubmissionError();
+    setPollingError(null);
     clearResult("unico3d");
-  }, [resetImageState, clearPredictionError, clearResult]);
+  }, [resetImageState, clearSubmissionError, clearResult]);
 
   useEffect(() => {
     return () => {
@@ -61,31 +64,85 @@ export const Unico3DInput = ({ isCollapsed }) => {
     };
   }, [resetComponentState]);
 
+  const stopPolling = () => {
+    if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current);
+      pollingIntervalRef.current = null;
+    }
+  };
+
+  const handleJobCompletion = (result) => {
+    stopPolling();
+    dispatch({
+      type: "SET_PREDICTION",
+      payload: { type: "unico3d", result },
+    });
+    setTimeout(() => {
+        setActiveJobId(null);
+        setJobStatus(null);
+    }, 2000);
+  };
+  
+  const handleJobFailure = (errorMsg) => {
+      stopPolling();
+      setPollingError(errorMsg || "La generación ha fallado.");
+  };
+
+  const pollJobStatus = useCallback(async (jobId) => {
+    if (!user) return;
+    try {
+      const token = await user.getIdToken();
+      const status = await getJobStatus(token, jobId);
+      setJobStatus(status);
+
+      if (status.status === 'completed') {
+        handleJobCompletion(status.result);
+      } else if (status.status === 'failed') {
+        handleJobFailure(status.error);
+      }
+    } catch (err) {
+      handleJobFailure(err.message);
+    }
+  }, [user, dispatch]);
+
+  useEffect(() => {
+    if (activeJobId) {
+      pollingIntervalRef.current = setInterval(() => {
+        pollJobStatus(activeJobId);
+      }, 5000);
+    }
+    return () => stopPolling();
+  }, [activeJobId, pollJobStatus]);
+
   const handleLocalPrediction = async () => {
     if (!generationName.trim()) {
-      setPredictionError("Por favor, ingrese un nombre para la generación");
+      setPollingError("Por favor, ingrese un nombre para la generación");
       return;
     }
     if (!imageFile) {
-      setPredictionError("No se ha seleccionado ninguna imagen");
+      setPollingError("No se ha seleccionado ninguna imagen");
       return;
     }
-    dispatch({
-      type: "SET_PREDICTION",
-      payload: { type: "unico3d", result: null },
-    });
+    
+    clearResult("unico3d");
+    setPollingError(null);
+    setJobStatus(null);
 
     const formData = new FormData();
     formData.append("image", imageFile);
     formData.append("generationName", generationName);
 
-    const result = await submitPrediction("unico3D", formData);
+    const response = await submitPrediction("Unico3D", formData);
 
-    if (result) {
-      dispatch({
-        type: "SET_PREDICTION",
-        payload: { type: "unico3d", result },
-      });
+    if (response && response.job_id) {
+        setActiveJobId(response.job_id);
+        setJobStatus({
+            status: response.status,
+            position_in_queue: response.position_in_queue,
+            queue_size: response.position_in_queue
+        });
+    } else {
+        setPollingError(submissionError || "No se pudo iniciar la generación.");
     }
   };
 
@@ -120,8 +177,18 @@ export const Unico3DInput = ({ isCollapsed }) => {
     [user, prediction_unico3d_result]
   );
 
-  const isButtonDisabled =
-    predictionLoading || !generationName.trim() || !imageFile;
+  const isFormDisabled = isSubmitting || !!activeJobId;
+  const isButtonDisabled = isFormDisabled || !generationName.trim() || !imageFile;
+
+  const closeModalAndReset = () => {
+      stopPolling();
+      setActiveJobId(null);
+      setJobStatus(null);
+      setPollingError(null);
+  };
+  
+  const showProgress = !!activeJobId && jobStatus?.status !== 'completed' && jobStatus?.status !== 'failed';
+  const showError = !!pollingError || (!!activeJobId && jobStatus?.status === 'failed');
 
   return (
     <section
@@ -160,7 +227,7 @@ export const Unico3DInput = ({ isCollapsed }) => {
                   )}
                   value={generationName}
                   onChange={(e) => setGenerationName(e.target.value)}
-                  disabled={predictionLoading}
+                  disabled={isFormDisabled}
                   className={`w-full p-2.5 rounded-lg bg-white dark:bg-principal/50 border-2 text-gray-800 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300 ${
                     generationName.trim()
                       ? "border-azul-gradient"
@@ -186,7 +253,7 @@ export const Unico3DInput = ({ isCollapsed }) => {
                         : "border-gray-300 dark:border-linea/30"
                   } 
                   ${
-                    predictionLoading
+                    isFormDisabled
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:border-azul-gradient/50"
                   }`}
@@ -194,7 +261,7 @@ export const Unico3DInput = ({ isCollapsed }) => {
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
                   onClick={() =>
-                    !predictionLoading &&
+                    !isFormDisabled &&
                     document.getElementById("fileInput-unico3d").click()
                   }
                 >
@@ -203,7 +270,7 @@ export const Unico3DInput = ({ isCollapsed }) => {
                     type="file"
                     accept="image/*"
                     onChange={handleFileChange}
-                    disabled={predictionLoading}
+                    disabled={isFormDisabled}
                     className="hidden"
                   />
                   {imagePreview ? (
@@ -251,12 +318,15 @@ export const Unico3DInput = ({ isCollapsed }) => {
         </div>
       </div>
 
-      <ErrorModal
-        showModal={!!predictionError}
-        closeModal={clearPredictionError}
-        errorMessage={predictionError || ""}
+      <ProgressModal 
+        show={showProgress} 
+        jobStatus={jobStatus}
       />
-      <LoadingModal showLoadingModal={predictionLoading} steps={loadingSteps} />
+      <ErrorModal
+        showModal={showError}
+        closeModal={closeModalAndReset}
+        errorMessage={pollingError || jobStatus?.error || "Ha ocurrido un error."}
+      />
     </section>
   );
 };
