@@ -441,7 +441,7 @@
     "texture_download": "Descargar"
   },
   "loading_steps": {
-    "boceto3D": [
+    "Boceto3D": [
       "Analizando tu boceto...",
       "Interpretando las formas principales...",
       "Generando la malla 3D base...",
@@ -449,7 +449,7 @@
       "Refinando la geometría del modelo...",
       "Casi listo, finalizando el modelo..."
     ],
-    "imagen3D": [
+    "Imagen3D": [
       "Procesando la imagen de entrada...",
       "Identificando contornos y profundidad...",
       "Creando un mapa de normales...",
@@ -457,7 +457,7 @@
       "Proyectando texturas sobre la malla...",
       "Optimizando el resultado final..."
     ],
-    "texto3D": [
+    "Texto3D": [
       "Interpretando tu descripción...",
       "Generando conceptos visuales...",
       "Creando una forma 3D a partir del texto...",
@@ -465,7 +465,7 @@
       "Añadiendo detalles y texturas...",
       "El modelo 3D está casi listo..."
     ],
-    "textimg3D": [
+    "TextImg3D": [
       "Interpretando tu descripción...",
       "Generando una imagen 2D base...",
       "Analizando la imagen generada...",
@@ -473,7 +473,7 @@
       "Refinando la forma y las texturas...",
       "Tu creación 3D está por terminar..."
     ],
-    "multiimagen3D": [
+    "MultiImagen3D": [
       "Analizando las vistas (frontal, lateral, trasera)...",
       "Alineando las imágenes en el espacio 3D...",
       "Fusionando las perspectivas...",
@@ -481,7 +481,7 @@
       "Generando una textura unificada...",
       "Compilando el modelo 3D final..."
     ],
-    "unico3D": [
+    "Unico3D": [
       "Iniciando escaneo fotogramétrico...",
       "Calculando puntos de interés...",
       "Reconstruyendo la nube de puntos...",

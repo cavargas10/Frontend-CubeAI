@@ -134,7 +134,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
     setPollingError(null);
     setJobStatus(null);
 
-    const jobType = "texto3D";
+    const jobType = "Texto3D";
     const payload = {
       generationName,
       prompt: userPrompt,

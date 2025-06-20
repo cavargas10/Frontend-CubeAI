@@ -441,7 +441,7 @@
     "texture_download": "Download"
   },
   "loading_steps": {
-    "boceto3D": [
+    "Boceto3D": [
       "Analyzing your sketch...",
       "Interpreting main shapes...",
       "Generating base 3D mesh...",
@@ -449,7 +449,7 @@
       "Refining model geometry...",
       "Almost ready, finalizing the model..."
     ],
-    "imagen3D": [
+    "Imagen3D": [
       "Processing input image...",
       "Identifying contours and depth...",
       "Creating a normal map...",
@@ -457,7 +457,7 @@
       "Projecting textures onto the mesh...",
       "Optimizing the final result..."
     ],
-    "texto3D": [
+    "Texto3D": [
       "Interpreting your description...",
       "Generating visual concepts...",
       "Creating a 3D shape from text...",
@@ -465,7 +465,7 @@
       "Adding details and textures...",
       "The 3D model is almost ready..."
     ],
-    "textimg3D": [
+    "TextImg3D": [
       "Interpreting your description...",
       "Generating a 2D base image...",
       "Analyzing the generated image...",
@@ -473,7 +473,7 @@
       "Refining shape and textures...",
       "Your 3D creation is almost finished..."
     ],
-    "multiimagen3D": [
+    "MultiImagen3D": [
       "Analyzing views (front, side, back)...",
       "Aligning images in 3D space...",
       "Merging perspectives...",
@@ -481,7 +481,7 @@
       "Generating a unified texture...",
       "Compiling the final 3D model..."
     ],
-    "unico3D": [
+    "Unico3D": [
       "Initiating photogrammetric scan...",
       "Calculating points of interest...",
       "Reconstructing the point cloud...",
