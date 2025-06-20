@@ -66,21 +66,33 @@ export const getGenerations = async (token, generationType) => {
 
 export const deleteGeneration = async (token, generation) => {
   try {
-    if (
-      !generation ||
-      !generation.prediction_type ||
-      !generation.generation_name
-    ) {
+    if (!generation || !generation.prediction_type || !generation.generation_name) {
       throw new Error("Datos de generación inválidos para la eliminación.");
     }
-    const response = await api.delete(`/generation`, {
-      headers: { Authorization: `Bearer ${token}` },
-      data: {
-        prediction_type: generation.prediction_type,
-        generation_name: generation.generation_name,
-      },
-    });
-    return { success: true, data: response.data };
+
+    const readableToApiTypeMap = {
+      "Imagen a 3D": "Imagen3D",
+      "Texto a 3D": "Texto3D",
+      "Texto a Imagen a 3D": "TextImg3D",
+      "Unico a 3D": "Unico3D",
+      "Multi Imagen a 3D": "MultiImagen3D",
+      "Boceto a 3D": "Boceto3D",
+    };
+    
+    const predictionType = readableToApiTypeMap[generation.prediction_type];
+    if (!predictionType) {
+        throw new Error(`Tipo de predicción desconocido: ${generation.prediction_type}`);
+    }
+    
+    const generationName = generation.generation_name;
+
+    const response = await api.delete(
+      `/generation/${predictionType}/${generationName}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return response.data || { success: true, message: "Cuenta eliminada correctamente." };
   } catch (error) {
     handleApiError(error, "Error al eliminar la generación");
   }
