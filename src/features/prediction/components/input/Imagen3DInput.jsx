@@ -183,6 +183,7 @@ export const Imagen3DInput = ({ isCollapsed }) => {
 
   const isButtonDisabled =
     isSubmitting || !!activeJobId || !generationName.trim() || !imageFile;
+  const isFormDisabled = isSubmitting || !!activeJobId;
 
   const closeModalAndReset = () => {
     stopPolling();
