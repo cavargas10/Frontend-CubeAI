@@ -30,11 +30,12 @@ const ProcessingSpinner = () => (
 );
 
 export const ProgressModal = ({ show, jobStatus }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const intervalRef = useRef(null);
   const jobType = jobStatus?.job_type || "default";
-  const steps = t(`loading_steps.${jobType}`, { returnObjects: true });
+  const stepsKey = `loading_steps.${jobType}`;
+  const steps = i18n.getResource(i18n.language, 'translation', stepsKey) || [];
 
   useEffect(() => {
     const clearCurrentInterval = () => {
