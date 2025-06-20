@@ -6,23 +6,26 @@ import { Texto3DResult } from "../results/Texto3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
-import { uploadPredictionPreview, getJobStatus } from "../../services/predictionApi";
+import {
+  uploadPredictionPreview,
+  getJobStatus,
+} from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
 
 function dataURLtoBlob(dataurl) {
-    const arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1];
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while(n--){
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new Blob([u8arr], {type:mime});
+  const arr = dataurl.split(","),
+    mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], { type: mime });
 }
 
 export const Texto3DInput = ({ isCollapsed }) => {
   const { t } = useTranslation();
-
   const { user } = useAuth();
   const { dispatch, clearResult, prediction_text3d_result } = usePredictions();
 
@@ -30,8 +33,16 @@ export const Texto3DInput = ({ isCollapsed }) => {
   const [userPrompt, setUserPrompt] = useState("");
   const [selectedStyle, setSelectedStyle] = useState(null);
 
+  const styles = [
+    { name: t("generation_pages.styles.disney"), value: "disney" },
+    { name: t("generation_pages.styles.pixar"), value: "pixar" },
+    { name: t("generation_pages.styles.realistic"), value: "realistic" },
+    { name: t("generation_pages.styles.anime"), value: "anime" },
+    { name: t("generation_pages.styles.chibi"), value: "chibi" },
+  ];
+
   const {
-    isLoading: isSubmitting, 
+    isLoading: isSubmitting,
     error: submissionError,
     submitPrediction,
     clearError: clearSubmissionError,
@@ -42,128 +53,157 @@ export const Texto3DInput = ({ isCollapsed }) => {
   const [pollingError, setPollingError] = useState(null);
   const pollingIntervalRef = useRef(null);
 
-  const styles = [
-    { name: t("generation_pages.styles.disney"), value: "disney" },
-    { name: t("generation_pages.styles.pixar"), value: "pixar" },
-    { name: t("generation_pages.styles.realistic"), value: "realistic" },
-    { name: t("generation_pages.styles.anime"), value: "anime" },
-    { name: t("generation_pages.styles.chibi"), value: "chibi" },
-  ];
+  const resetComponentState = useCallback(() => {
+    setGenerationName("");
+    setUserPrompt("");
+    setSelectedStyle(null);
+    clearSubmissionError();
+    setPollingError(null);
+    clearResult("text3d");
+  }, [clearSubmissionError, clearResult]);
 
-  const stopPolling = useCallback(() => {
+  useEffect(() => {
+    return () => {
+      resetComponentState();
+    };
+  }, [resetComponentState]);
+
+  const stopPolling = () => {
     if (pollingIntervalRef.current) {
       clearInterval(pollingIntervalRef.current);
       pollingIntervalRef.current = null;
     }
-  }, []);
+  };
 
-  const handleJobCompletion = useCallback((result) => {
+  const handleJobCompletion = (result) => {
     stopPolling();
-    setJobStatus({ status: 'completed', result }); 
-    dispatch({ type: 'SET_PREDICTION', payload: { type: 'text3d', result: result } });
+    dispatch({
+      type: "SET_PREDICTION",
+      payload: { type: "text3d", result: result },
+    });
 
     setTimeout(() => {
-        setActiveJobId(null);
-        setJobStatus(null);
+      setActiveJobId(null);
+      setJobStatus(null);
     }, 2000);
-  }, [dispatch, stopPolling]);
-  
-  const handleJobFailure = useCallback((errorMsg) => {
-      stopPolling();
-      setPollingError(errorMsg || "La generación ha fallado.");
-      setJobStatus({ status: 'failed', error: errorMsg }); 
-  }, [stopPolling]);
+  };
 
-  const pollJobStatus = useCallback(async (jobId) => {
-    if (!user) return;
-    try {
-      const token = await user.getIdToken();
-      const status = await getJobStatus(token, jobId);
-      setJobStatus(status); 
+  const handleJobFailure = (errorMsg) => {
+    stopPolling();
+    setPollingError(errorMsg || "La generación ha fallado.");
+  };
 
-      if (status.status === 'completed') {
-        handleJobCompletion(status.result);
-      } else if (status.status === 'failed') {
-        handleJobFailure(status.error);
+  const pollJobStatus = useCallback(
+    async (jobId, jobType) => {
+      if (!user) return;
+      try {
+        const token = await user.getIdToken();
+        const status = await getJobStatus(token, jobId);
+        setJobStatus({ ...status, job_type: jobType });
+
+        if (status.status === "completed") {
+          handleJobCompletion(status.result);
+        } else if (status.status === "failed") {
+          handleJobFailure(status.error);
+        }
+      } catch (err) {
+        handleJobFailure(err.message);
       }
-    } catch (err) {
-      handleJobFailure(err.message);
-    }
-  }, [user, handleJobCompletion, handleJobFailure]);
+    },
+    [user, dispatch]
+  );
 
   useEffect(() => {
-    if (activeJobId && jobStatus?.status !== 'completed' && jobStatus?.status !== 'failed') {
+    if (activeJobId && jobStatus?.job_type) {
       pollingIntervalRef.current = setInterval(() => {
-        pollJobStatus(activeJobId);
-      }, 5000); 
+        pollJobStatus(activeJobId, jobStatus.job_type);
+      }, 5000);
     }
-    
     return () => stopPolling();
-  }, [activeJobId, pollJobStatus, jobStatus]);
+  }, [activeJobId, pollJobStatus, jobStatus?.job_type]);
 
   const handleLocalPrediction = async () => {
     if (!generationName.trim() || !userPrompt.trim() || !selectedStyle) {
-      setPollingError("Todos los campos (Nombre, Prompt, Estilo) son obligatorios");
+      setPollingError(
+        "Todos los campos (Nombre, Prompt, Estilo) son obligatorios"
+      );
       return;
     }
-    
-    clearResult('text3d');
+
+    clearResult("text3d");
     setPollingError(null);
     setJobStatus(null);
-    clearSubmissionError();
 
+    const jobType = "Texto3D";
     const payload = {
       generationName,
       prompt: userPrompt,
       selectedStyle,
     };
 
-    const response = await submitPrediction("texto3D", payload);
+    const response = await submitPrediction(jobType, payload);
 
     if (response && response.job_id) {
       setActiveJobId(response.job_id);
-      setJobStatus({ 
-          status: response.status, 
-          position_in_queue: response.position_in_queue,
-          queue_size: response.position_in_queue || 1
+      setJobStatus({
+        ...response,
+        job_type: jobType,
       });
     } else {
-        setPollingError(submissionError || "No se pudo iniciar la generación. Inténtalo de nuevo.");
+      setPollingError(submissionError || "No se pudo iniciar la generación.");
     }
   };
 
-  const handlePreviewUpload = useCallback(async (dataURL) => {
-    if (!user || !prediction_text3d_result || !prediction_text3d_result.generation_name) return;
-    if (prediction_text3d_result.previewImageUrl) return;
+  const handlePreviewUpload = useCallback(
+    async (dataURL) => {
+      if (
+        !user ||
+        !prediction_text3d_result ||
+        !prediction_text3d_result.generation_name
+      )
+        return;
+      if (prediction_text3d_result.previewImageUrl) return;
 
-    try {
+      try {
         const token = await user.getIdToken();
         const previewBlob = dataURLtoBlob(dataURL);
         const formData = new FormData();
-        formData.append('preview', previewBlob, 'preview.png');
-        formData.append('generation_name', prediction_text3d_result.generation_name);
-        formData.append('prediction_type_api', 'Texto3D');
+        formData.append("preview", previewBlob, "preview.png");
+        formData.append(
+          "generation_name",
+          prediction_text3d_result.generation_name
+        );
+        formData.append("prediction_type_api", "Texto3D");
 
         await uploadPredictionPreview(token, formData);
         console.log("Previsualización subida con éxito para 'Texto a 3D'.");
-        
-    } catch (error) {
+      } catch (error) {
         console.error("Error al subir la previsualización:", error);
-    }
-  }, [user, prediction_text3d_result]);
+      }
+    },
+    [user, prediction_text3d_result]
+  );
 
-  const isButtonDisabled = isSubmitting || !!activeJobId;
+  const isFormDisabled = isSubmitting || !!activeJobId;
+  const isButtonDisabled =
+    isFormDisabled ||
+    !generationName.trim() ||
+    !userPrompt.trim() ||
+    !selectedStyle;
 
   const closeModalAndReset = () => {
-      stopPolling();
-      setActiveJobId(null);
-      setJobStatus(null);
-      setPollingError(null);
-      clearSubmissionError();
+    stopPolling();
+    setActiveJobId(null);
+    setJobStatus(null);
+    setPollingError(null);
   };
-  
-  const showProgress = !!activeJobId && jobStatus?.status !== 'completed' && jobStatus?.status !== 'failed';
-  const showError = !!pollingError || (!!activeJobId && jobStatus?.status === 'failed');
+
+  const showProgress =
+    !!activeJobId &&
+    jobStatus?.status !== "completed" &&
+    jobStatus?.status !== "failed";
+  const showError =
+    !!pollingError || (!!activeJobId && jobStatus?.status === "failed");
 
   return (
     <section
@@ -197,10 +237,12 @@ export const Texto3DInput = ({ isCollapsed }) => {
                 </div>
                 <input
                   type="text"
-                  placeholder={t("generation_pages.common.name_placeholder_generic")}
+                  placeholder={t(
+                    "generation_pages.common.name_placeholder_generic"
+                  )}
                   value={generationName}
                   onChange={(e) => setGenerationName(e.target.value)}
-                  disabled={isButtonDisabled}
+                  disabled={isFormDisabled}
                   className={`w-full p-2 rounded-lg bg-white dark:bg-principal/50 border-2 text-gray-800 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300 ${
                     generationName.trim()
                       ? "border-azul-gradient"
@@ -217,10 +259,12 @@ export const Texto3DInput = ({ isCollapsed }) => {
                   </h3>
                 </div>
                 <textarea
-                  placeholder={t("generation_pages.common.prompt_placeholder_generic")}
+                  placeholder={t(
+                    "generation_pages.common.prompt_placeholder_generic"
+                  )}
                   value={userPrompt}
                   onChange={(e) => setUserPrompt(e.target.value)}
-                  disabled={isButtonDisabled}
+                  disabled={isFormDisabled}
                   className={`w-full p-2 rounded-lg bg-white dark:bg-principal/50 border-2 text-gray-800 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300 min-h-[80px] flex-grow resize-none ${
                     userPrompt.trim()
                       ? "border-azul-gradient"
@@ -241,7 +285,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
                     <button
                       key={style.value}
                       onClick={() => setSelectedStyle(style.value)}
-                      disabled={isButtonDisabled}
+                      disabled={isFormDisabled}
                       className={`border-2 rounded-lg py-2 px-2 flex items-center justify-center transition-all text-xs h-10 ${
                         selectedStyle === style.value
                           ? "border-azul-gradient bg-azul-gradient/10 dark:bg-azul-gradient/20 shadow-md scale-105 font-semibold ring-2 ring-azul-gradient/50 text-gray-800 dark:text-white"
@@ -257,7 +301,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
                     <button
                       key={style.value}
                       onClick={() => setSelectedStyle(style.value)}
-                      disabled={isButtonDisabled}
+                      disabled={isFormDisabled}
                       className={`border-2 rounded-lg py-2 px-2 flex items-center justify-center transition-all text-xs h-10 ${
                         selectedStyle === style.value
                           ? "border-azul-gradient bg-azul-gradient/10 dark:bg-azul-gradient/20 shadow-md scale-105 font-semibold ring-2 ring-azul-gradient/50 text-gray-800 dark:text-white"
@@ -282,6 +326,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
               </div>
             </div>
           </div>
+
           <div className="xl:col-span-3 flex-grow min-h-0">
             <div className="h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0 border-2 border-gray-200 dark:border-linea/20 rounded-3xl overflow-hidden">
               <Texto3DResult onFirstLoad={handlePreviewUpload} />
@@ -289,17 +334,15 @@ export const Texto3DInput = ({ isCollapsed }) => {
           </div>
         </div>
       </div>
-      
-      <ProgressModal 
-        show={showProgress} 
-        jobStatus={jobStatus} 
-      />
 
+      <ProgressModal show={showProgress} jobStatus={jobStatus} />
       <ErrorModal
         showModal={showError}
         closeModal={closeModalAndReset}
-        errorMessage={pollingError || (jobStatus?.status === 'failed' && jobStatus.error) || "Ha ocurrido un error."}
+        errorMessage={
+          pollingError || jobStatus?.error || "Ha ocurrido un error."
+        }
       />
     </section>
   );
-}; 
+};

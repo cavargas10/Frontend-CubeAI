@@ -498,6 +498,14 @@
       "Casi hemos terminado..."
     ]
   },
+  "progress_modal": {
+    "initiating_title": "Iniciando...",
+    "initiating_message": "Enviando tu solicitud a la cola de generación.",
+    "queued_title": "¡Tu creación está en la cola!",
+    "queued_message": "Eres el número {{position}} de {{total}} en la fila. ¡Gracias por tu paciencia!",
+    "processing_title": "¡Tu creación está en marcha!",
+    "processing_message_default": "El modelo de IA está trabajando en tu objeto 3D..."
+  },
   "error_boundary": {
     "title": "¡Ups! Algo salió mal.",
     "subtitle": "Ocurrió un error inesperado en la aplicación. Por favor, intenta refrescar la página.",

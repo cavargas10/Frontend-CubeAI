@@ -4,10 +4,8 @@ export const useTheme = () => {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    // Verificar si hay un tema guardado en localStorage
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
     const shouldBeDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
     
     setIsDark(shouldBeDark);
@@ -18,7 +16,6 @@ export const useTheme = () => {
       document.documentElement.classList.remove('dark');
     }
 
-    // Escuchar cambios en las preferencias del sistema
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = (e) => {
       if (!localStorage.getItem('theme')) {

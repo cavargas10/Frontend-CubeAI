@@ -498,6 +498,14 @@
       "We're almost done..."
     ]
   },
+  "progress_modal": {
+    "initiating_title": "Initiating...",
+    "initiating_message": "Sending your request to the generation queue.",
+    "queued_title": "Your creation is in the queue!",
+    "queued_message": "You are number {{position}} of {{total}} in line. Thank you for your patience!",
+    "processing_title": "Your creation is in progress!",
+    "processing_message_default": "The AI model is working on your 3D object..."
+  },
   "error_boundary": {
     "title": "Oops! Something went wrong.",
     "subtitle": "An unexpected error occurred in the application. Please try refreshing the page.",

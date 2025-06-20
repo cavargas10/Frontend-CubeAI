@@ -110,7 +110,6 @@ export const PredictionHistory = ({ selectedTab, open3DViewer }) => {
       )}
 
       {apiError && (
-        // ✅ Mensaje de error adaptado
         <div className="my-4 p-3 bg-red-100 dark:bg-red-900/50 border border-red-300 dark:border-red-700 rounded-md text-red-700 dark:text-red-300 text-center">
           {apiError}
         </div>
@@ -118,7 +117,6 @@ export const PredictionHistory = ({ selectedTab, open3DViewer }) => {
 
       {!isLoading && generations.length === 0 && !apiError && (
         <div className="flex justify-center items-center h-60">
-          {/* ✅ Mensaje de historial vacío adaptado */}
           <p className="text-xl text-gray-400 dark:text-gray-500 text-center px-4">
             {t('visualizer_page.history.empty')}
           </p>

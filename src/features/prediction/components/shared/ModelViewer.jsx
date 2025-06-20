@@ -18,8 +18,6 @@ export const ModelViewer = ({ url, showWireframe = false, showTexture = true, on
     }
   );
 
-  // ✅ SOLUCIÓN: Clonar la escena para no mutar el original cacheado.
-  // SkeletonUtils.clone es el método correcto para clonar modelos con esqueletos (armatures).
   const clonedScene = useMemo(() => {
     if (gltf.scene) {
       return SkeletonUtils.clone(gltf.scene);
@@ -31,14 +29,12 @@ export const ModelViewer = ({ url, showWireframe = false, showTexture = true, on
   useEffect(() => {
     if (!clonedScene) return;
     
-    materialsRef.current = {}; // Limpiar referencias de materiales anteriores
-
-    // Guardamos los materiales originales de la escena clonada
+    materialsRef.current = {}; 
+    
     clonedScene.traverse((child) => {
       if (child.isMesh) {
-        materialsRef.current[child.uuid] = child.material; // No necesitamos clonar aquí porque ya trabajamos sobre una copia
+        materialsRef.current[child.uuid] = child.material;
 
-        // Lógica para extraer la textura para la previsualización
         if (child.material.map && onTextureLoad) {
           try {
             const texture = child.material.map;
@@ -58,17 +54,14 @@ export const ModelViewer = ({ url, showWireframe = false, showTexture = true, on
     });
   }, [clonedScene, onTextureLoad]);
 
-  // Este efecto ahora aplica los cambios de material sobre la copia segura.
   useEffect(() => {
     if (!clonedScene) return;
 
     clonedScene.traverse((child) => {
       if (child.isMesh && materialsRef.current[child.uuid]) {
         if (showTexture) {
-          // Si hay que mostrar textura, restauramos el material original guardado.
           child.material = materialsRef.current[child.uuid];
         } else {
-          // Si no, creamos un nuevo material gris solo para este renderizado.
           child.material = new THREE.MeshStandardMaterial({
             color: "#808080",
             roughness: 0.5,
