@@ -302,4 +302,4 @@ export const Texto3DInput = ({ isCollapsed }) => {
       />
     </section>
   );
-};
+}; 
