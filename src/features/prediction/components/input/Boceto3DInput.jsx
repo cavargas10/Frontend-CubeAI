@@ -7,13 +7,13 @@ import {
   TextAa,
 } from "@phosphor-icons/react";
 import { ErrorModal } from "../../../../components/modals/ErrorModal";
-import { LoadingModal } from "../../../../components/modals/LoadingModal";
+import { ProgressModal } from "../../../../components/modals/ProgressModal";
 import { Boceto3DResult } from "../results/Boceto3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useCanvasDrawing } from "../../hooks/useCanvasDrawing";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
-import { uploadPredictionPreview } from "../../services/predictionApi";
+import { uploadPredictionPreview, getJobStatus } from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
 
 function dataURLtoBlob(dataurl) {
@@ -37,12 +37,10 @@ export const Boceto3DInput = ({ isCollapsed }) => {
   const [description, setDescription] = useState("");
 
   const {
-    isLoading: predictionLoading,
-    error: predictionError,
-    loadingSteps,
+    isLoading: isSubmitting,
+    error: submissionError,
     submitPrediction,
-    clearError: clearPredictionError,
-    setError: setPredictionError,
+    clearError: clearSubmissionError,
   } = usePredictionHandler(user);
 
   const canvasConfig = useMemo(
@@ -79,59 +77,19 @@ export const Boceto3DInput = ({ isCollapsed }) => {
     [initializeCanvas]
   );
 
-  const getCanvasDataURL = useCallback((type = "image/png", quality) => {
-    if (!canvasForDataRef.current) return null;
-    return canvasForDataRef.current.toDataURL(type, quality);
-  }, []);
-
-  const setTool = useCallback(
-    (newTool) => {
-      setDrawingState((prev) => ({ ...prev, tool: newTool }));
-    },
-    [setDrawingState]
-  );
-
-  const drawingHandlers = useMemo(
-    () => ({
-      onMouseDown: startDrawing,
-      onMouseUp: stopDrawing,
-      onMouseLeave: stopDrawing,
-      onMouseMove: handleDraw,
-      onTouchStart: startDrawing,
-      onTouchEnd: stopDrawing,
-      onTouchMove: handleDraw,
-    }),
-    [startDrawing, stopDrawing, handleDraw]
-  );
-
-  const dataURLtoFile = useCallback(
-    (dataURL, filename) => {
-      try {
-        const arr = dataURL.split(",");
-        const mimeMatch = arr[0].match(/:(.*?);/);
-        const mime = mimeMatch ? mimeMatch[1] : "image/png";
-        const bstr = atob(arr[1]);
-        let n = bstr.length;
-        const u8arr = new Uint8Array(n);
-        while (n--) {
-          u8arr[n] = bstr.charCodeAt(n);
-        }
-        return new File([u8arr], filename, { type: mime });
-      } catch (error) {
-        setPredictionError("Error al procesar el boceto. Intente de nuevo.");
-        return null;
-      }
-    },
-    [setPredictionError]
-  );
+  const [activeJobId, setActiveJobId] = useState(null);
+  const [jobStatus, setJobStatus] = useState(null);
+  const [pollingError, setPollingError] = useState(null);
+  const pollingIntervalRef = useRef(null);
 
   const resetComponentState = useCallback(() => {
     setGenerationName("");
     setDescription("");
-    clearPredictionError();
+    clearSubmissionError();
     clearResult("boceto3d");
     clearCanvas();
-  }, [clearCanvas, clearPredictionError, clearResult]);
+    setPollingError(null);
+  }, [clearCanvas, clearSubmissionError, clearResult]);
 
   useEffect(() => {
     return () => {
@@ -139,26 +97,90 @@ export const Boceto3DInput = ({ isCollapsed }) => {
     };
   }, [resetComponentState]);
 
+  const stopPolling = () => {
+    if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current);
+      pollingIntervalRef.current = null;
+    }
+  };
+
+  const handleJobCompletion = (result) => {
+    stopPolling();
+    dispatch({ type: "SET_PREDICTION", payload: { type: "boceto3d", result } });
+    setTimeout(() => {
+        setActiveJobId(null);
+        setJobStatus(null);
+    }, 2000);
+  };
+  
+  const handleJobFailure = (errorMsg) => {
+      stopPolling();
+      setPollingError(errorMsg || "La generación ha fallado.");
+  };
+
+  const pollJobStatus = useCallback(async (jobId) => {
+    if (!user) return;
+    try {
+      const token = await user.getIdToken();
+      const status = await getJobStatus(token, jobId);
+      setJobStatus(status);
+
+      if (status.status === 'completed') {
+        handleJobCompletion(status.result);
+      } else if (status.status === 'failed') {
+        handleJobFailure(status.error);
+      }
+    } catch (err) {
+      handleJobFailure(err.message);
+    }
+  }, [user, dispatch]);
+
+  useEffect(() => {
+    if (activeJobId) {
+      pollingIntervalRef.current = setInterval(() => {
+        pollJobStatus(activeJobId);
+      }, 5000);
+    }
+    return () => stopPolling();
+  }, [activeJobId, pollJobStatus]);
+
+  const getCanvasDataURL = useCallback((type = "image/png", quality) => {
+    if (!canvasForDataRef.current) return null;
+    return canvasForDataRef.current.toDataURL(type, quality);
+  }, []);
+
+  const dataURLtoFile = useCallback(
+    (dataURL, filename) => {
+      try {
+        const blob = dataURLtoBlob(dataURL);
+        return new File([blob], filename, { type: blob.type });
+      } catch (error) {
+        setPollingError("Error al procesar el boceto. Intente de nuevo.");
+        return null;
+      }
+    },
+    [setPollingError]
+  );
+  
   const handleLocalPrediction = useCallback(async () => {
     if (!generationName.trim()) {
-      setPredictionError("Por favor, ingrese un nombre para la generación.");
+      setPollingError("Por favor, ingrese un nombre para la generación.");
       return;
     }
     if (isCanvasEmpty()) {
-      setPredictionError(
+      setPollingError(
         "Por favor, dibuje algo en el lienzo antes de generar."
       );
       return;
     }
 
-    dispatch({
-      type: "SET_PREDICTION",
-      payload: { type: "boceto3d", result: null },
-    });
+    clearResult("boceto3d");
+    setPollingError(null);
+    setJobStatus(null);
 
     const image = getCanvasDataURL("image/png");
     if (!image) {
-      setPredictionError("No se pudo obtener la imagen del lienzo.");
+      setPollingError("No se pudo obtener la imagen del lienzo.");
       return;
     }
     const imageFile = dataURLtoFile(image, "boceto.png");
@@ -169,12 +191,17 @@ export const Boceto3DInput = ({ isCollapsed }) => {
     formData.append("generationName", generationName);
     formData.append("description", description);
 
-    const result = await submitPrediction("boceto3D", formData);
-    if (result) {
-      dispatch({
-        type: "SET_PREDICTION",
-        payload: { type: "boceto3d", result },
-      });
+    const response = await submitPrediction("Boceto3D", formData);
+
+    if (response && response.job_id) {
+        setActiveJobId(response.job_id);
+        setJobStatus({
+            status: response.status,
+            position_in_queue: response.position_in_queue,
+            queue_size: response.position_in_queue
+        });
+    } else {
+        setPollingError(submissionError || "No se pudo iniciar la generación.");
     }
   }, [
     generationName,
@@ -183,8 +210,10 @@ export const Boceto3DInput = ({ isCollapsed }) => {
     getCanvasDataURL,
     isCanvasEmpty,
     dataURLtoFile,
-    setPredictionError,
+    setPollingError,
     dispatch,
+    clearResult,
+    submissionError
   ]);
 
   const handlePreviewUpload = useCallback(
@@ -218,8 +247,38 @@ export const Boceto3DInput = ({ isCollapsed }) => {
     [user, prediction_boceto3d_result]
   );
 
-  const isButtonDisabled =
-    predictionLoading || !generationName.trim() || isCanvasEmpty();
+  const setTool = useCallback(
+    (newTool) => {
+      setDrawingState((prev) => ({ ...prev, tool: newTool }));
+    },
+    [setDrawingState]
+  );
+
+  const drawingHandlers = useMemo(
+    () => ({
+      onMouseDown: startDrawing,
+      onMouseUp: stopDrawing,
+      onMouseLeave: stopDrawing,
+      onMouseMove: handleDraw,
+      onTouchStart: startDrawing,
+      onTouchEnd: stopDrawing,
+      onTouchMove: handleDraw,
+    }),
+    [startDrawing, stopDrawing, handleDraw]
+  );
+  
+  const isFormDisabled = isSubmitting || !!activeJobId;
+  const isButtonDisabled = isFormDisabled || !generationName.trim() || isCanvasEmpty();
+
+  const closeModalAndReset = () => {
+      stopPolling();
+      setActiveJobId(null);
+      setJobStatus(null);
+      setPollingError(null);
+  };
+  
+  const showProgress = !!activeJobId && jobStatus?.status !== 'completed' && jobStatus?.status !== 'failed';
+  const showError = !!pollingError || (!!activeJobId && jobStatus?.status === 'failed');
 
   return (
     <section
@@ -257,7 +316,7 @@ export const Boceto3DInput = ({ isCollapsed }) => {
                   )}
                   value={generationName}
                   onChange={(e) => setGenerationName(e.target.value)}
-                  disabled={predictionLoading}
+                  disabled={isFormDisabled}
                   className={`w-full p-2.5 rounded-lg bg-white dark:bg-principal/50 border-2 text-gray-800 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300 ${
                     generationName.trim()
                       ? "border-azul-gradient"
@@ -268,7 +327,7 @@ export const Boceto3DInput = ({ isCollapsed }) => {
               <div className="flex-grow flex flex-col min-h-0">
                 <div
                   className={`w-full min-h-[400px] xl:min-h-0 xl:flex-grow rounded-lg overflow-hidden relative border-2 ${
-                    predictionLoading
+                    isFormDisabled
                       ? "opacity-60 pointer-events-none"
                       : "border-gray-300 dark:border-linea/30"
                   }`}
@@ -286,11 +345,10 @@ export const Boceto3DInput = ({ isCollapsed }) => {
                       className="w-full h-full block"
                     />
                   </div>
-                  {/* --- Barra de Herramientas del Canvas --- */}
                   <div className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-2 bg-gray-100/80 dark:bg-[#1f2437]/80 backdrop-blur-sm p-1.5 rounded-xl border border-gray-200 dark:border-linea/20">
                     <button
                       onClick={() => setTool("pencil")}
-                      disabled={predictionLoading}
+                      disabled={isFormDisabled}
                       className={`p-2 rounded-lg flex items-center justify-center transition-all ${
                         drawingState.tool === "pencil"
                           ? "bg-gradient-to-r from-azul-gradient to-morado-gradient text-white shadow-md"
@@ -302,7 +360,7 @@ export const Boceto3DInput = ({ isCollapsed }) => {
                     </button>
                     <button
                       onClick={() => setTool("eraser")}
-                      disabled={predictionLoading}
+                      disabled={isFormDisabled}
                       className={`p-2 rounded-lg flex items-center justify-center transition-all ${
                         drawingState.tool === "eraser"
                           ? "bg-gradient-to-r from-azul-gradient to-morado-gradient text-white shadow-md"
@@ -315,7 +373,7 @@ export const Boceto3DInput = ({ isCollapsed }) => {
                     <div className="h-px w-full bg-gray-300 dark:bg-linea/30 my-1" />
                     <button
                       onClick={clearCanvas}
-                      disabled={predictionLoading}
+                      disabled={isFormDisabled}
                       className="p-2 rounded-lg flex items-center justify-center transition-all text-gray-600 dark:text-gray-300 hover:bg-red-500/80 hover:text-white"
                       title={t("generation_pages.common.clear_canvas_tooltip")}
                     >
@@ -331,7 +389,7 @@ export const Boceto3DInput = ({ isCollapsed }) => {
                         )}
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        disabled={predictionLoading}
+                        disabled={isFormDisabled}
                         className="flex-1 text-sm bg-transparent text-gray-800 dark:text-white border-none focus:ring-0 placeholder-gray-500 dark:placeholder-gray-400 px-1 py-1"
                       />
                       <button
@@ -356,12 +414,16 @@ export const Boceto3DInput = ({ isCollapsed }) => {
           </div>
         </div>
       </div>
-      <ErrorModal
-        showModal={!!predictionError}
-        closeModal={clearPredictionError}
-        errorMessage={predictionError || ""}
+      
+      <ProgressModal 
+        show={showProgress} 
+        jobStatus={jobStatus}
       />
-      <LoadingModal showLoadingModal={predictionLoading} steps={loadingSteps} />
+      <ErrorModal
+        showModal={showError}
+        closeModal={closeModalAndReset}
+        errorMessage={pollingError || jobStatus?.error || "Ha ocurrido un error."}
+      />
     </section>
   );
 };
