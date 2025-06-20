@@ -31,42 +31,41 @@ const ProcessingSpinner = () => (
 
 export const ProgressModal = ({ show, jobStatus }) => {
   const { t } = useTranslation();
-  const [currentStepMessage, setCurrentStepMessage] = useState("");
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const intervalRef = useRef(null);
+  const jobType = jobStatus?.job_type || "default";
+  const steps = t(`loading_steps.${jobType}`, { returnObjects: true });
 
   useEffect(() => {
-    if (intervalRef.current) {
+    const clearCurrentInterval = () => {
+      if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
-    }
-    
-    if (show && jobStatus?.status === "processing") {
-      const jobType = jobStatus.job_type || "default";
-      const steps = t(`loading_steps.${jobType}`, { returnObjects: true });
-
-      if (Array.isArray(steps) && steps.length > 0) {
-        let stepIndex = 0;
-        setCurrentStepMessage(steps[stepIndex]);
-
-        intervalRef.current = setInterval(() => {
-          stepIndex++;
-          if (stepIndex < steps.length) {
-            setCurrentStepMessage(steps[stepIndex]);
-          } else {
-            clearInterval(intervalRef.current);
-          }
-        }, 10000);
-      } else {
-        setCurrentStepMessage(t('progress_modal.processing_message_default'));
       }
+    };
+
+    if (show && jobStatus?.status === "processing") {
+      clearCurrentInterval();
+      
+      setCurrentStepIndex(0);
+
+      intervalRef.current = setInterval(() => {
+        setCurrentStepIndex(prevIndex => {
+          if (Array.isArray(steps) && prevIndex < steps.length - 1) {
+            return prevIndex + 1;
+          }
+          clearCurrentInterval();
+          return prevIndex;
+        });
+      }, 10000);
+    } else {
+      clearCurrentInterval();
+      setCurrentStepIndex(0);
     }
 
-    return () => {
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-        }
-    };
-  }, [show, jobStatus?.status, jobStatus?.job_type, t]);
+    return () => clearCurrentInterval();
+    
+  }, [show, jobStatus?.status, steps]);
 
   const getTitle = () => {
     switch (jobStatus?.status) {
@@ -84,7 +83,10 @@ export const ProgressModal = ({ show, jobStatus }) => {
       case "queued":
         return t('progress_modal.queued_message', { position: jobStatus.position_in_queue, total: jobStatus.queue_size });
       case "processing":
-        return currentStepMessage;
+        if (Array.isArray(steps) && steps[currentStepIndex]) {
+            return steps[currentStepIndex];
+        }
+        return t('progress_modal.processing_message_default');
       default:
         return t('progress_modal.initiating_message');
     }
