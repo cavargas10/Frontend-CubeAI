@@ -1,12 +1,12 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Sparkle, TextAa, TextT, PaintBrush } from "@phosphor-icons/react";
 import { ErrorModal } from "../../../../components/modals/ErrorModal";
-import { LoadingModal } from "../../../../components/modals/LoadingModal";
+import { ProgressModal } from "../../../../components/modals/ProgressModal";
 import { Texto3DResult } from "../results/Texto3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
-import { uploadPredictionPreview } from "../../services/predictionApi";
+import { uploadPredictionPreview, getJobStatus } from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
 
 function dataURLtoBlob(dataurl) {
@@ -25,9 +25,23 @@ export const Texto3DInput = ({ isCollapsed }) => {
 
   const { user } = useAuth();
   const { dispatch, clearResult, prediction_text3d_result } = usePredictions();
+
   const [generationName, setGenerationName] = useState("");
   const [userPrompt, setUserPrompt] = useState("");
   const [selectedStyle, setSelectedStyle] = useState(null);
+
+  const {
+    isLoading: isSubmitting, 
+    error: submissionError,
+    submitPrediction,
+    clearError: clearSubmissionError,
+  } = usePredictionHandler(user);
+
+  const [activeJobId, setActiveJobId] = useState(null);
+  const [jobStatus, setJobStatus] = useState(null);
+  const [pollingError, setPollingError] = useState(null);
+  const pollingIntervalRef = useRef(null);
+
   const styles = [
     { name: t("generation_pages.styles.disney"), value: "disney" },
     { name: t("generation_pages.styles.pixar"), value: "pixar" },
@@ -36,45 +50,85 @@ export const Texto3DInput = ({ isCollapsed }) => {
     { name: t("generation_pages.styles.chibi"), value: "chibi" },
   ];
 
-  const {
-    isLoading: predictionLoading,
-    error: predictionError,
-    loadingSteps,
-    submitPrediction,
-    clearError: clearPredictionError,
-    setError: setPredictionError,
-  } = usePredictionHandler(user);
+  const stopPolling = useCallback(() => {
+    if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current);
+      pollingIntervalRef.current = null;
+    }
+  }, []);
 
-  const resetComponentState = useCallback(() => {
-    setGenerationName("");
-    setUserPrompt("");
-    setSelectedStyle(null);
-    clearPredictionError();
-    clearResult('text3d');
-  }, [clearPredictionError, clearResult]);
+  const handleJobCompletion = useCallback((result) => {
+    stopPolling();
+    setJobStatus({ status: 'completed', result }); 
+    dispatch({ type: 'SET_PREDICTION', payload: { type: 'text3d', result: result } });
+
+    setTimeout(() => {
+        setActiveJobId(null);
+        setJobStatus(null);
+    }, 2000);
+  }, [dispatch, stopPolling]);
+  
+  const handleJobFailure = useCallback((errorMsg) => {
+      stopPolling();
+      setPollingError(errorMsg || "La generación ha fallado.");
+      setJobStatus({ status: 'failed', error: errorMsg }); 
+  }, [stopPolling]);
+
+  const pollJobStatus = useCallback(async (jobId) => {
+    if (!user) return;
+    try {
+      const token = await user.getIdToken();
+      const status = await getJobStatus(token, jobId);
+      setJobStatus(status); 
+
+      if (status.status === 'completed') {
+        handleJobCompletion(status.result);
+      } else if (status.status === 'failed') {
+        handleJobFailure(status.error);
+      }
+    } catch (err) {
+      handleJobFailure(err.message);
+    }
+  }, [user, handleJobCompletion, handleJobFailure]);
 
   useEffect(() => {
-    return () => {
-      resetComponentState();
-    };
-  }, [resetComponentState]);
+    if (activeJobId && jobStatus?.status !== 'completed' && jobStatus?.status !== 'failed') {
+      pollingIntervalRef.current = setInterval(() => {
+        pollJobStatus(activeJobId);
+      }, 5000); 
+    }
+    
+    return () => stopPolling();
+  }, [activeJobId, pollJobStatus, jobStatus]);
 
   const handleLocalPrediction = async () => {
     if (!generationName.trim() || !userPrompt.trim() || !selectedStyle) {
-      setPredictionError("Todos los campos (Nombre, Prompt, Estilo) son obligatorios");
+      setPollingError("Todos los campos (Nombre, Prompt, Estilo) son obligatorios");
       return;
     }
     
-    dispatch({ type: 'SET_PREDICTION', payload: { type: 'text3d', result: null } });
+    clearResult('text3d');
+    setPollingError(null);
+    setJobStatus(null);
+    clearSubmissionError();
 
-    const result = await submitPrediction("texto3D", {
+    const payload = {
       generationName,
       prompt: userPrompt,
       selectedStyle,
-    });
-    
-    if (result) {
-      dispatch({ type: 'SET_PREDICTION', payload: { type: 'text3d', result } });
+    };
+
+    const response = await submitPrediction("texto3D", payload);
+
+    if (response && response.job_id) {
+      setActiveJobId(response.job_id);
+      setJobStatus({ 
+          status: response.status, 
+          position_in_queue: response.position_in_queue,
+          queue_size: response.position_in_queue || 1
+      });
+    } else {
+        setPollingError(submissionError || "No se pudo iniciar la generación. Inténtalo de nuevo.");
     }
   };
 
@@ -98,11 +152,18 @@ export const Texto3DInput = ({ isCollapsed }) => {
     }
   }, [user, prediction_text3d_result]);
 
-  const isButtonDisabled =
-    predictionLoading ||
-    !generationName.trim() ||
-    !userPrompt.trim() ||
-    !selectedStyle;
+  const isButtonDisabled = isSubmitting || !!activeJobId;
+
+  const closeModalAndReset = () => {
+      stopPolling();
+      setActiveJobId(null);
+      setJobStatus(null);
+      setPollingError(null);
+      clearSubmissionError();
+  };
+  
+  const showProgress = !!activeJobId && jobStatus?.status !== 'completed' && jobStatus?.status !== 'failed';
+  const showError = !!pollingError || (!!activeJobId && jobStatus?.status === 'failed');
 
   return (
     <section
@@ -125,7 +186,6 @@ export const Texto3DInput = ({ isCollapsed }) => {
         <hr className="border-t-2 border-gray-200 dark:border-linea/20 mb-6 flex-shrink-0" />
 
         <div className="flex-grow flex flex-col xl:grid xl:grid-cols-5 gap-4">
-          {/* --- Columna de Inputs --- */}
           <div className="xl:col-span-2 flex-shrink-0">
             <div className="bg-gray-50 dark:bg-principal/30 backdrop-blur-sm border border-gray-200 dark:border-linea/20 rounded-2xl p-3 h-full flex flex-col space-y-2">
               <div>
@@ -140,7 +200,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
                   placeholder={t("generation_pages.common.name_placeholder_generic")}
                   value={generationName}
                   onChange={(e) => setGenerationName(e.target.value)}
-                  disabled={predictionLoading}
+                  disabled={isButtonDisabled}
                   className={`w-full p-2 rounded-lg bg-white dark:bg-principal/50 border-2 text-gray-800 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300 ${
                     generationName.trim()
                       ? "border-azul-gradient"
@@ -160,7 +220,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
                   placeholder={t("generation_pages.common.prompt_placeholder_generic")}
                   value={userPrompt}
                   onChange={(e) => setUserPrompt(e.target.value)}
-                  disabled={predictionLoading}
+                  disabled={isButtonDisabled}
                   className={`w-full p-2 rounded-lg bg-white dark:bg-principal/50 border-2 text-gray-800 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300 min-h-[80px] flex-grow resize-none ${
                     userPrompt.trim()
                       ? "border-azul-gradient"
@@ -176,13 +236,12 @@ export const Texto3DInput = ({ isCollapsed }) => {
                     {t("generation_pages.common.style_label")}
                   </h3>
                 </div>
-                {/* --- Botones de Estilo --- */}
                 <div className="grid grid-cols-3 gap-2">
                   {styles.slice(0, 3).map((style) => (
                     <button
                       key={style.value}
                       onClick={() => setSelectedStyle(style.value)}
-                      disabled={predictionLoading}
+                      disabled={isButtonDisabled}
                       className={`border-2 rounded-lg py-2 px-2 flex items-center justify-center transition-all text-xs h-10 ${
                         selectedStyle === style.value
                           ? "border-azul-gradient bg-azul-gradient/10 dark:bg-azul-gradient/20 shadow-md scale-105 font-semibold ring-2 ring-azul-gradient/50 text-gray-800 dark:text-white"
@@ -198,7 +257,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
                     <button
                       key={style.value}
                       onClick={() => setSelectedStyle(style.value)}
-                      disabled={predictionLoading}
+                      disabled={isButtonDisabled}
                       className={`border-2 rounded-lg py-2 px-2 flex items-center justify-center transition-all text-xs h-10 ${
                         selectedStyle === style.value
                           ? "border-azul-gradient bg-azul-gradient/10 dark:bg-azul-gradient/20 shadow-md scale-105 font-semibold ring-2 ring-azul-gradient/50 text-gray-800 dark:text-white"
@@ -223,7 +282,6 @@ export const Texto3DInput = ({ isCollapsed }) => {
               </div>
             </div>
           </div>
-          {/* --- Columna del Resultado --- */}
           <div className="xl:col-span-3 flex-grow min-h-0">
             <div className="h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0 border-2 border-gray-200 dark:border-linea/20 rounded-3xl overflow-hidden">
               <Texto3DResult onFirstLoad={handlePreviewUpload} />
@@ -231,15 +289,16 @@ export const Texto3DInput = ({ isCollapsed }) => {
           </div>
         </div>
       </div>
+      
+      <ProgressModal 
+        show={showProgress} 
+        jobStatus={jobStatus} 
+      />
 
       <ErrorModal
-        showModal={!!predictionError}
-        closeModal={clearPredictionError}
-        errorMessage={predictionError || ""}
-      />
-      <LoadingModal
-        showLoadingModal={predictionLoading}
-        steps={loadingSteps}
+        showModal={showError}
+        closeModal={closeModalAndReset}
+        errorMessage={pollingError || (jobStatus?.status === 'failed' && jobStatus.error) || "Ha ocurrido un error."}
       />
     </section>
   );

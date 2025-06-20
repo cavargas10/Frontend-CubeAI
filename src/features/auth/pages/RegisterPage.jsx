@@ -22,6 +22,7 @@ import { RequirementsModal } from "../../../components/modals/RequirementsModal"
 import { GeometricParticles } from "../../../components/ui/GeometricParticles";
 import { usePasswordValidation } from "../hooks/usePasswordValidation";
 import { useTranslation } from "react-i18next";
+import { registerUserInBackend } from '../services/userApi';
 
 export const RegisterPage = ({ BASE_URL }) => {
   const { t } = useTranslation();
@@ -64,20 +65,12 @@ export const RegisterPage = ({ BASE_URL }) => {
     }
     const token = await user.getIdToken();
     try {
-      await axios.post(
-        `${BASE_URL}/register_user`,
-        {
-          name: nameFromInput || user.displayName || "Usuario",
-          profile_picture:
-            photoUrlFromInput || user.photoURL || "/usuario.webp",
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
+      await registerUserInBackend(
+        token,
+        nameFromInput || user.displayName || "Usuario",
+        photoUrlFromInput || user.photoURL || "/usuario.webp"
       );
+
       console.log(
         "Datos del usuario enviados/actualizados en el backend para UID:",
         user.uid
