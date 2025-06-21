@@ -6,6 +6,7 @@ import { SuccessModal } from "../../../../components/modals/SuccessModal";
 import { LoadingModal } from "../../../../components/modals/LoadingModal";
 import { getGenerations, deleteGeneration } from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
+import { BrandedSpinner } from '../../../../components/ui/BrandedSpinner';
 
 export const PredictionHistory = ({ selectedTab, open3DViewer }) => {
   const { t } = useTranslation();
@@ -35,7 +36,7 @@ export const PredictionHistory = ({ selectedTab, open3DViewer }) => {
     } catch (error) {
       console.error(`Error fetching ${selectedTab} generations:`, error);
       setApiError(
-        `${t('visualizer_page.history.error_prefix')}${selectedTab}.`
+        `${t("visualizer_page.history.error_prefix")}${selectedTab}.`
       );
       setGenerations([]);
     } finally {
@@ -68,12 +69,12 @@ export const PredictionHistory = ({ selectedTab, open3DViewer }) => {
     setGenerationToDelete(null);
     setShowDeleteModal(false);
   };
-  
+
   const getDeleteConfirmationMessage = () => {
     if (generationToDelete) {
-        return `${t('visualizer_page.history.delete_confirm_prefix')} "${generationToDelete.generation_name}"${t('visualizer_page.history.delete_confirm_suffix')}`;
+      return `${t("visualizer_page.history.delete_confirm_prefix")} "${generationToDelete.generation_name}"${t("visualizer_page.history.delete_confirm_suffix")}`;
     }
-    return t('visualizer_page.history.delete_confirm_generic');
+    return t("visualizer_page.history.delete_confirm_generic");
   };
 
   const handleDeleteGeneration = async () => {
@@ -102,10 +103,7 @@ export const PredictionHistory = ({ selectedTab, open3DViewer }) => {
     <div className="w-full px-4 sm:px-0">
       {isLoading && (
         <div className="flex justify-center items-center h-60">
-          <div className="relative w-16 h-16">
-            <div className="absolute inset-0 rounded-full border-4 border-t-transparent border-azul-gradient animate-spin"></div>
-            <div className="absolute inset-0 rounded-full border-4 border-b-transparent border-morado-gradient animate-spin [animation-direction:reverse] [animation-duration:1.5s]"></div>
-          </div>
+          <BrandedSpinner size="md" />
         </div>
       )}
 
@@ -118,7 +116,7 @@ export const PredictionHistory = ({ selectedTab, open3DViewer }) => {
       {!isLoading && generations.length === 0 && !apiError && (
         <div className="flex justify-center items-center h-60">
           <p className="text-xl text-gray-400 dark:text-gray-500 text-center px-4">
-            {t('visualizer_page.history.empty')}
+            {t("visualizer_page.history.empty")}
           </p>
         </div>
       )}
@@ -145,12 +143,12 @@ export const PredictionHistory = ({ selectedTab, open3DViewer }) => {
       />
       <LoadingModal
         showLoadingModal={deleteLoading}
-        steps={[t('visualizer_page.history.delete_loading')]}
+        steps={[t("visualizer_page.history.delete_loading")]}
       />
       <SuccessModal
         showSuccessModal={showSuccessModal}
         closeSuccessModal={closeSuccessModal}
-        message={t('visualizer_page.history.delete_success')}
+        message={t("visualizer_page.history.delete_success")}
       />
     </div>
   );

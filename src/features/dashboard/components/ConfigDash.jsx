@@ -18,8 +18,9 @@ import { LoadingModal } from "../../../components/modals/LoadingModal";
 import { SuccessModal } from "../../../components/modals/SuccessModal";
 import { useAuth } from "../../auth/hooks/useAuth";
 import { useTranslation } from "react-i18next";
+import { BrandedSpinner } from '../../../components/ui/BrandedSpinner';
 
-export const ConfigDash = ({ isCollapsed, onUserDataUpdate }) => { 
+export const ConfigDash = ({ isCollapsed, onUserDataUpdate }) => {
   const { t } = useTranslation();
   const { user, userData, refetchUserData } = useAuth();
   const [newName, setNewName] = useState("");
@@ -54,7 +55,7 @@ export const ConfigDash = ({ isCollapsed, onUserDataUpdate }) => {
       if (onUserDataUpdate) {
         await onUserDataUpdate();
       }
-      
+
       setNewName("");
       setIsNameChanged(false);
       setShowLoadingModal(false);
@@ -91,7 +92,7 @@ export const ConfigDash = ({ isCollapsed, onUserDataUpdate }) => {
       if (onUserDataUpdate) {
         await onUserDataUpdate();
       }
-      
+
       setShowLoadingModal(false);
       setSuccessMessage(t("config_dash_page.modals.success_image_updated"));
       setShowSuccessModal(true);
@@ -136,7 +137,7 @@ export const ConfigDash = ({ isCollapsed, onUserDataUpdate }) => {
       >
         <div className="relative z-10 px-4 sm:px-6 md:px-8 pt-6 pb-8">
           <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-azul-gradient"></div>
+            <BrandedSpinner size="md" />
           </div>
         </div>
       </section>

@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Envelope, ArrowLeft, CheckCircle, XCircle } from "@phosphor-icons/react";
+import {
+  Envelope,
+  ArrowLeft,
+  CheckCircle,
+  XCircle,
+} from "@phosphor-icons/react";
 import { auth } from "../../../config/firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { GeometricParticles } from "../../../components/ui/GeometricParticles";
 import { useTranslation } from "react-i18next";
+import { InlineSpinner } from '../../../components/ui/InlineSpinner';
 
 export const ResetPasswordPage = () => {
   const { t } = useTranslation();
@@ -73,7 +79,10 @@ export const ResetPasswordPage = () => {
           <div className="text-center">
             <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-azul-gradient to-morado-gradient p-0.5">
               <div className="w-full h-full rounded-full bg-white dark:bg-fondologin flex items-center justify-center">
-                <Envelope className="h-10 w-10 text-azul-gradient" weight="bold" />
+                <Envelope
+                  className="h-10 w-10 text-azul-gradient"
+                  weight="bold"
+                />
               </div>
             </div>
             <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-azul-gradient to-morado-gradient mb-2">
@@ -86,7 +95,10 @@ export const ResetPasswordPage = () => {
           <div className="space-y-3">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                <Envelope className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                <Envelope
+                  className="h-5 w-5 text-gray-400"
+                  aria-hidden="true"
+                />
               </div>
               <input
                 className={`appearance-none rounded-md block w-full px-3 py-3 pl-10 border bg-gray-50 dark:bg-principal placeholder-gray-500 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-morado-gradient sm:text-sm transition-colors ${
@@ -108,15 +120,25 @@ export const ResetPasswordPage = () => {
           </div>
           {errorMessage && (
             <div className="flex items-start space-x-3 p-4 rounded-lg bg-red-100 dark:bg-red-500/10 border border-red-300 dark:border-red-500/20">
-              <XCircle className="h-5 w-5 text-red-500 dark:text-red-400 mt-0.5 flex-shrink-0" weight="fill" />
-              <p className="text-red-700 dark:text-red-200 text-sm">{errorMessage}</p>
+              <XCircle
+                className="h-5 w-5 text-red-500 dark:text-red-400 mt-0.5 flex-shrink-0"
+                weight="fill"
+              />
+              <p className="text-red-700 dark:text-red-200 text-sm">
+                {errorMessage}
+              </p>
             </div>
           )}
 
           {message && (
             <div className="flex items-center space-x-3 p-3 rounded-lg bg-green-100 dark:bg-green-500/10 border border-green-300 dark:border-green-500/20">
-              <CheckCircle className="h-5 w-5 text-green-500 dark:text-green-400 flex-shrink-0" weight="fill" />
-              <p className="text-green-700 dark:text-green-200 text-sm">{message}</p>
+              <CheckCircle
+                className="h-5 w-5 text-green-500 dark:text-green-400 flex-shrink-0"
+                weight="fill"
+              />
+              <p className="text-green-700 dark:text-green-200 text-sm">
+                {message}
+              </p>
             </div>
           )}
           <div className="space-y-3">
@@ -127,10 +149,7 @@ export const ResetPasswordPage = () => {
             >
               {isLoading ? (
                 <div className="flex items-center justify-center">
-                  <svg className="animate-spin -ml-1 mr-3 h-4 w-4" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
+                  <InlineSpinner className="h-4 w-4 mr-3" />
                   {t("auth.reset_password.send_loading_button")}
                 </div>
               ) : countdown > 0 ? (

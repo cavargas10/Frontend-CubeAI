@@ -3,14 +3,12 @@ import { useLocation, Link } from "react-router-dom";
 import logo from "../assets/logo.webp";
 import { List, X, CaretRight } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
-import { useAuthContext } from "../features/auth/context/AuthContext";
 
 export const Header = () => {
   const { t } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-  const { isAuthenticated } = useAuthContext();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,14 +32,10 @@ export const Header = () => {
       document.body.style.overflow = "unset";
     };
   }, [isMenuOpen]);
-
+  
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-
-  if (isAuthenticated) {
-    return null;
-  }
 
   return (
     <>

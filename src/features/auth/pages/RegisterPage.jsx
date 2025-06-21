@@ -22,11 +22,12 @@ import { RequirementsModal } from "../../../components/modals/RequirementsModal"
 import { GeometricParticles } from "../../../components/ui/GeometricParticles";
 import { usePasswordValidation } from "../hooks/usePasswordValidation";
 import { useTranslation } from "react-i18next";
-import { registerUserInBackend } from '../services/userApi';
+import { registerUserInBackend } from "../services/userApi";
+import { InlineSpinner } from '../../../components/ui/InlineSpinner';
 
 export const RegisterPage = ({ BASE_URL }) => {
   const { t } = useTranslation();
-  
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -265,8 +266,12 @@ export const RegisterPage = ({ BASE_URL }) => {
             {password.length > 0 && (
               <div className="mt-2">
                 <div className="flex justify-between items-center mb-1">
-                  <span className="text-xs text-gray-500 dark:text-gray-400">{t("auth.register.password_strength")}</span>
-                  <span className="text-xs font-medium text-gray-800 dark:text-white">{strengthLabel}</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    {t("auth.register.password_strength")}
+                  </span>
+                  <span className="text-xs font-medium text-gray-800 dark:text-white">
+                    {strengthLabel}
+                  </span>
                 </div>
                 <div className="h-1.5 w-full bg-gray-200 dark:bg-secondary/30 rounded-full overflow-hidden">
                   <div
@@ -294,26 +299,7 @@ export const RegisterPage = ({ BASE_URL }) => {
               >
                 {isLoading ? (
                   <span className="flex items-center">
-                    <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
+                    <InlineSpinner className="h-5 w-5 mr-3" />
                     {t("auth.register.register_loading_button")}
                   </span>
                 ) : (
