@@ -1,13 +1,14 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Sparkle, UploadSimple, TextAa } from "@phosphor-icons/react";
 import { ErrorModal } from "../../../../components/modals/ErrorModal";
 import { ProgressModal } from "../../../../components/modals/ProgressModal";
 import { Imagen3DResult } from "../results/Imagen3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
+import { useAsyncGeneration } from "../../hooks/useAsyncGeneration";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
-import { uploadPredictionPreview, getJobStatus } from "../../services/predictionApi";
+import { uploadPredictionPreview } from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
 
 function dataURLtoBlob(dataurl) {
@@ -26,7 +27,6 @@ export const Imagen3DInput = ({ isCollapsed }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const { dispatch, clearResult, prediction_img3d_result } = usePredictions();
-  
   const [generationName, setGenerationName] = useState("");
   const {
     imageFile,
@@ -39,25 +39,33 @@ export const Imagen3DInput = ({ isCollapsed }) => {
     resetImageState,
   } = useImageUpload();
 
+  const [jobId, setJobId] = useState(null);
+  const [jobType, setJobType] = useState(null);
   const {
     isLoading: isSubmitting,
     error: submissionError,
     submitPrediction,
-    clearError: clearSubmissionError,
   } = usePredictionHandler(user);
 
-  const [activeJobId, setActiveJobId] = useState(null);
-  const [jobStatus, setJobStatus] = useState(null);
-  const [pollingError, setPollingError] = useState(null);
-  const pollingIntervalRef = useRef(null);
-
+  const { jobStatus, result, pollingError, reset: resetPolling } = useAsyncGeneration(jobId, jobType);
   const resetComponentState = useCallback(() => {
     setGenerationName("");
     resetImageState();
-    clearSubmissionError();
-    setPollingError(null);
+    setJobId(null);
+    setJobType(null);
+    resetPolling();
     clearResult("img3d");
-  }, [resetImageState, clearSubmissionError, clearResult]);
+  }, [resetImageState, clearResult, resetPolling]);
+
+  useEffect(() => {
+    if (result) {
+      dispatch({ type: "SET_PREDICTION", payload: { type: "img3d", result } });
+      setTimeout(() => {
+        setJobId(null);
+        setJobType(null);
+      }, 2000);
+    }
+  }, [result, dispatch]);
 
   useEffect(() => {
     return () => {
@@ -65,109 +73,36 @@ export const Imagen3DInput = ({ isCollapsed }) => {
     };
   }, [resetComponentState]);
 
-  const stopPolling = () => {
-    if (pollingIntervalRef.current) {
-      clearInterval(pollingIntervalRef.current);
-      pollingIntervalRef.current = null;
-    }
-  };
-
-  const handleJobCompletion = (result) => {
-    stopPolling();
-    dispatch({ type: "SET_PREDICTION", payload: { type: "img3d", result } });
-    
-    setTimeout(() => {
-        setActiveJobId(null);
-        setJobStatus(null);
-    }, 2000);
-  };
-  
-  const handleJobFailure = (errorMsg) => {
-      stopPolling();
-      setPollingError(errorMsg || "La generación ha fallado.");
-  };
-
-  const pollJobStatus = useCallback(async (jobId, jobType) => {
-    if (!user) return;
-    try {
-      const token = await user.getIdToken();
-      const status = await getJobStatus(token, jobId);
-      setJobStatus({ ...status, job_type: jobType });
-
-      if (status.status === 'completed') {
-        handleJobCompletion(status.result);
-      } else if (status.status === 'failed') {
-        handleJobFailure(status.error);
-      }
-    } catch (err) {
-      handleJobFailure(err.message);
-    }
-  }, [user, dispatch]);
-
-  useEffect(() => {
-    if (activeJobId && jobStatus?.job_type) {
-      pollingIntervalRef.current = setInterval(() => {
-        pollJobStatus(activeJobId, jobStatus.job_type);
-      }, 5000);
-    }
-    return () => stopPolling();
-  }, [activeJobId, pollJobStatus, jobStatus?.job_type]);
-
   const handleLocalPrediction = async () => {
-    if (!generationName.trim()) {
-      setPollingError("Por favor, ingrese un nombre para la generación");
+    if (!generationName.trim() || !imageFile) {
       return;
     }
-    if (!imageFile) {
-      setPollingError("No se ha seleccionado ninguna imagen");
-      return;
-    }
-    
-    clearResult("img3d");
-    setPollingError(null);
-    setJobStatus(null);
 
-    const jobType = "Imagen3D";
+    clearResult("img3d");
+    const currentJobType = "Imagen3D";
+    setJobType(currentJobType);
+    
     const formData = new FormData();
     formData.append("image", imageFile);
     formData.append("generationName", generationName);
 
-    const response = await submitPrediction(jobType, formData);
-
+    const response = await submitPrediction(currentJobType, formData);
     if (response && response.job_id) {
-      setActiveJobId(response.job_id);
-      setJobStatus({
-          ...response,
-          job_type: jobType,
-      });
-    } else {
-        setPollingError(submissionError || "No se pudo iniciar la generación.");
+      setJobId(response.job_id);
     }
   };
 
   const handlePreviewUpload = useCallback(
     async (dataURL) => {
-      if (
-        !user ||
-        !prediction_img3d_result ||
-        !prediction_img3d_result.generation_name
-      )
-        return;
-      if (prediction_img3d_result.previewImageUrl) return;
-
+      if (!user || !prediction_img3d_result?.generation_name || prediction_img3d_result?.previewImageUrl) return;
       try {
         const token = await user.getIdToken();
         const previewBlob = dataURLtoBlob(dataURL);
         const formData = new FormData();
         formData.append("preview", previewBlob, "preview.png");
-        formData.append(
-          "generation_name",
-          prediction_img3d_result.generation_name
-        );
+        formData.append("generation_name", prediction_img3d_result.generation_name);
         formData.append("prediction_type_api", "Imagen3D");
-
         await uploadPredictionPreview(token, formData);
-        console.log("Previsualización subida con éxito para 'Imagen a 3D'.");
       } catch (error) {
         console.error("Error al subir la previsualización:", error);
       }
@@ -175,18 +110,11 @@ export const Imagen3DInput = ({ isCollapsed }) => {
     [user, prediction_img3d_result]
   );
 
-  const isFormDisabled = isSubmitting || !!activeJobId;
+  const finalError = submissionError || pollingError;
+  const isFormDisabled = isSubmitting || !!jobId;
   const isButtonDisabled = isFormDisabled || !generationName.trim() || !imageFile;
-
-  const closeModalAndReset = () => {
-    stopPolling();
-    setActiveJobId(null);
-    setJobStatus(null);
-    setPollingError(null);
-  };
-
-  const showProgress = !!activeJobId && jobStatus?.status !== 'completed' && jobStatus?.status !== 'failed';
-  const showError = !!pollingError || (!!activeJobId && jobStatus?.status === 'failed');
+  const showProgress = isFormDisabled && !finalError && jobStatus?.status !== 'completed';
+  const showErrorModal = !!finalError;
 
   return (
     <section
@@ -205,9 +133,7 @@ export const Imagen3DInput = ({ isCollapsed }) => {
             </div>
           </div>
         </div>
-
         <hr className="border-t-2 border-gray-200 dark:border-linea/20 mb-6 flex-shrink-0" />
-
         <div className="flex-grow flex flex-col xl:grid xl:grid-cols-5 xl:gap-4">
           <div className="xl:col-span-2 mb-6 xl:mb-0">
             <div className="bg-gray-50 dark:bg-principal/30 backdrop-blur-sm border border-gray-200 dark:border-linea/20 rounded-2xl p-4 h-full flex flex-col space-y-4">
@@ -233,7 +159,6 @@ export const Imagen3DInput = ({ isCollapsed }) => {
                   }`}
                 />
               </div>
-
               <div className="flex-grow flex flex-col min-h-0">
                 <div className="flex items-center gap-3 mb-2">
                   <UploadSimple size={18} className="text-azul-gradient" />
@@ -295,7 +220,6 @@ export const Imagen3DInput = ({ isCollapsed }) => {
                   )}
                 </div>
               </div>
-
               <div className="mt-auto flex-shrink-0">
                 <button
                   onClick={handleLocalPrediction}
@@ -316,15 +240,11 @@ export const Imagen3DInput = ({ isCollapsed }) => {
           </div>
         </div>
       </div>
-
-      <ProgressModal 
-        show={showProgress} 
-        jobStatus={jobStatus}
-      />
+      <ProgressModal show={showProgress} jobStatus={jobStatus} />
       <ErrorModal
-        showModal={showError}
-        closeModal={closeModalAndReset}
-        errorMessage={pollingError || jobStatus?.error || "Ha ocurrido un error."}
+        showModal={showErrorModal}
+        closeModal={resetComponentState}
+        errorMessage={finalError || t('errors.generic_error_occurred')}
       />
     </section>
   );
