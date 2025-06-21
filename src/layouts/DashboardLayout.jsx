@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-import { useAuth } from "../features/auth/hooks/useAuth";
+import { useAuthContext } from "../features/auth/context/AuthContext";
 import { NavDash } from "../features/dashboard/layout/NavDash";
 import { HeaderDash } from "../features/dashboard/layout/HeaderDash";
 import { Visualizador } from "../features/dashboard/components/Visualizador";
@@ -14,7 +14,7 @@ import { MultiImagen3DInput } from "../features/prediction/components/input/Mult
 import { Boceto3DInput } from "../features/prediction/components/input/Boceto3DInput";
 
 export const DashboardLayout = () => {
-  const { handleLogout, userData, refetchUserData } = useAuth();
+  const { handleLogout, userData, refetchUserData } = useAuthContext();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
   const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -48,9 +48,9 @@ export const DashboardLayout = () => {
           <Route
             path="configdash"
             element={
-              <ConfigDash 
-                isCollapsed={isNavCollapsed} 
-                onUserDataUpdate={refetchUserData} 
+              <ConfigDash
+                isCollapsed={isNavCollapsed}
+                onUserDataUpdate={refetchUserData}
               />
             }
           />

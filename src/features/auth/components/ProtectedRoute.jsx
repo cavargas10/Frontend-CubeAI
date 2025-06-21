@@ -1,5 +1,5 @@
 import { Navigate, useLocation } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth"; 
+import { useAuthContext } from "../context/AuthContext";
 
 const Loading = () => (
     <div className="fixed inset-0 flex justify-center items-center bg-white dark:bg-principal z-50">
@@ -8,7 +8,7 @@ const Loading = () => (
 );
 
 export const ProtectedRoute = ({ children }) => {
-  const { user, loadingAuth } = useAuth();
+  const { user, loadingAuth } = useAuthContext();
   const location = useLocation(); 
 
   if (loadingAuth) {

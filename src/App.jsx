@@ -7,6 +7,7 @@ import { PredictionProvider } from "./features/prediction/context/PredictionCont
 import { ProtectedRoute } from "./features/auth/components/ProtectedRoute";
 import { ErrorBoundaryFallbackUI } from "./components/ui/ErrorBoundaryFallbackUI";
 import { DocumentationProvider } from "./features/documentacion/context/DocumentationContext";
+import { AuthProvider } from './features/auth/context/AuthContext'; 
 
 const PublicLayout = lazy(() =>
   import("./layouts/PublicLayout/PublicLayout").then((module) => ({
@@ -109,11 +110,6 @@ export const Loading = () => (
 
 export function App() {
   useTheme();
-  const { loadingAuth } = useAuth();
-
-  if (loadingAuth) {
-    return <Loading />;
-  }
 
   return (
     <div className="text-white ">
@@ -157,11 +153,13 @@ export function App() {
               <Route
                 path="/dashboard/*"
                 element={
-                  <ProtectedRoute>
-                    <PredictionProvider>
-                      <DashboardLayout />
-                    </PredictionProvider>
-                  </ProtectedRoute>
+                  <AuthProvider> 
+                    <ProtectedRoute>
+                      <PredictionProvider>
+                        <DashboardLayout />
+                      </PredictionProvider>
+                    </ProtectedRoute>
+                  </AuthProvider>
                 }
               />
               <Route path="*" element={<Navigate to="/" replace />} />
