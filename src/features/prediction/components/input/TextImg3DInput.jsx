@@ -12,10 +12,7 @@ import { TextImg3DResult } from "../results/TextImg3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
-import {
-  uploadPredictionPreview,
-  getJobStatus,
-} from "../../services/predictionApi";
+import { uploadPredictionPreview, getJobStatus } from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
 
 function dataURLtoBlob(dataurl) {
@@ -76,7 +73,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
       resetComponentState();
     };
   }, [resetComponentState]);
-
+  
   const stopPolling = () => {
     if (pollingIntervalRef.current) {
       clearInterval(pollingIntervalRef.current);
@@ -86,50 +83,44 @@ export const TextImg3DInput = ({ isCollapsed }) => {
 
   const handleJobCompletion = (result) => {
     stopPolling();
-    dispatch({
-      type: "SET_PREDICTION",
-      payload: { type: "textimg3d", result },
-    });
+    dispatch({ type: "SET_PREDICTION", payload: { type: "textimg3d", result } });
     setTimeout(() => {
-      setActiveJobId(null);
-      setJobStatus(null);
+        setActiveJobId(null);
+        setJobStatus(null);
     }, 2000);
   };
-
+  
   const handleJobFailure = (errorMsg) => {
-    stopPolling();
-    setPollingError(errorMsg || "La generación ha fallado.");
+      stopPolling();
+      setPollingError(errorMsg || "La generación ha fallado.");
   };
 
-  const pollJobStatus = useCallback(
-    async (jobId) => {
-      if (!user) return;
-      try {
-        const token = await user.getIdToken();
-        const status = await getJobStatus(token, jobId);
-        setJobStatus(status);
+  const pollJobStatus = useCallback(async (jobId, jobType) => {
+    if (!user) return;
+    try {
+      const token = await user.getIdToken();
+      const status = await getJobStatus(token, jobId);
+      setJobStatus({ ...status, job_type: jobType });
 
-        if (status.status === "completed") {
-          handleJobCompletion(status.result);
-        } else if (status.status === "failed") {
-          handleJobFailure(status.error);
-        }
-      } catch (err) {
-        handleJobFailure(err.message);
+      if (status.status === 'completed') {
+        handleJobCompletion(status.result);
+      } else if (status.status === 'failed') {
+        handleJobFailure(status.error);
       }
-    },
-    [user, dispatch]
-  );
+    } catch (err) {
+      handleJobFailure(err.message);
+    }
+  }, [user, dispatch]);
 
   useEffect(() => {
-    if (activeJobId) {
+    if (activeJobId && jobStatus?.job_type) {
       pollingIntervalRef.current = setInterval(() => {
-        pollJobStatus(activeJobId);
+        pollJobStatus(activeJobId, jobStatus.job_type);
       }, 5000);
     }
     return () => stopPolling();
-  }, [activeJobId, pollJobStatus]);
-
+  }, [activeJobId, pollJobStatus, jobStatus?.job_type]);
+  
   const handleLocalPrediction = async () => {
     if (
       !generationName.trim() ||
@@ -147,6 +138,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
     setPollingError(null);
     setJobStatus(null);
 
+    const jobType = "TextImg3D";
     const payload = {
       generationName,
       subject,
@@ -154,17 +146,16 @@ export const TextImg3DInput = ({ isCollapsed }) => {
       additionalDetails,
     };
 
-    const response = await submitPrediction("TextImg3D", payload);
+    const response = await submitPrediction(jobType, payload);
 
     if (response && response.job_id) {
-      setActiveJobId(response.job_id);
-      setJobStatus({
-        status: response.status,
-        position_in_queue: response.position_in_queue,
-        queue_size: response.position_in_queue,
-      });
+        setActiveJobId(response.job_id);
+        setJobStatus({
+            ...response,
+            job_type: jobType,
+        });
     } else {
-      setPollingError(submissionError || "No se pudo iniciar la generación.");
+        setPollingError(submissionError || "No se pudo iniciar la generación.");
     }
   };
 
@@ -181,7 +172,6 @@ export const TextImg3DInput = ({ isCollapsed }) => {
       try {
         const token = await user.getIdToken();
         const previewBlob = dataURLtoBlob(dataURL);
-
         const formData = new FormData();
         formData.append("preview", previewBlob, "preview.png");
         formData.append(
@@ -200,7 +190,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
     },
     [user, prediction_textimg3d_result]
   );
-
+  
   const isFormDisabled = isSubmitting || !!activeJobId;
   const isButtonDisabled =
     isFormDisabled ||
@@ -210,18 +200,14 @@ export const TextImg3DInput = ({ isCollapsed }) => {
     !additionalDetails.trim();
 
   const closeModalAndReset = () => {
-    stopPolling();
-    setActiveJobId(null);
-    setJobStatus(null);
-    setPollingError(null);
+      stopPolling();
+      setActiveJobId(null);
+      setJobStatus(null);
+      setPollingError(null);
   };
-
-  const showProgress =
-    !!activeJobId &&
-    jobStatus?.status !== "completed" &&
-    jobStatus?.status !== "failed";
-  const showError =
-    !!pollingError || (!!activeJobId && jobStatus?.status === "failed");
+  
+  const showProgress = !!activeJobId && jobStatus?.status !== 'completed' && jobStatus?.status !== 'failed';
+  const showError = !!pollingError || (!!activeJobId && jobStatus?.status === 'failed');
 
   return (
     <section
@@ -368,7 +354,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
               </div>
             </div>
           </div>
-
+          
           <div className="xl:col-span-3 flex-grow min-h-0">
             <div className="h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0 border-2 border-gray-200 dark:border-linea/20 rounded-3xl overflow-hidden">
               <TextImg3DResult onFirstLoad={handlePreviewUpload} />
@@ -377,13 +363,14 @@ export const TextImg3DInput = ({ isCollapsed }) => {
         </div>
       </div>
 
-      <ProgressModal show={showProgress} jobStatus={jobStatus} />
+      <ProgressModal 
+        show={showProgress} 
+        jobStatus={jobStatus}
+      />
       <ErrorModal
         showModal={showError}
         closeModal={closeModalAndReset}
-        errorMessage={
-          pollingError || jobStatus?.error || "Ha ocurrido un error."
-        }
+        errorMessage={pollingError || jobStatus?.error || "Ha ocurrido un error."}
       />
     </section>
   );

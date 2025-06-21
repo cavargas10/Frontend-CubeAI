@@ -12,10 +12,7 @@ import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useMultiImageUpload } from "../../hooks/useMultiImageUpload";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
-import {
-  uploadPredictionPreview,
-  getJobStatus,
-} from "../../services/predictionApi";
+import { uploadPredictionPreview, getJobStatus } from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
 
 function dataURLtoBlob(dataurl) {
@@ -35,6 +32,7 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
   const { user } = useAuth();
   const { dispatch, clearResult, prediction_multiimg3d_result } =
     usePredictions();
+  
   const [generationName, setGenerationName] = useState("");
   const {
     imageFiles,
@@ -74,7 +72,7 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
       resetComponentState();
     };
   }, [resetComponentState]);
-
+  
   const stopPolling = () => {
     if (pollingIntervalRef.current) {
       clearInterval(pollingIntervalRef.current);
@@ -84,49 +82,43 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
 
   const handleJobCompletion = (result) => {
     stopPolling();
-    dispatch({
-      type: "SET_PREDICTION",
-      payload: { type: "multiimg3d", result },
-    });
+    dispatch({ type: "SET_PREDICTION", payload: { type: "multiimg3d", result } });
     setTimeout(() => {
-      setActiveJobId(null);
-      setJobStatus(null);
+        setActiveJobId(null);
+        setJobStatus(null);
     }, 2000);
   };
-
+  
   const handleJobFailure = (errorMsg) => {
-    stopPolling();
-    setPollingError(errorMsg || "La generación ha fallado.");
+      stopPolling();
+      setPollingError(errorMsg || "La generación ha fallado.");
   };
 
-  const pollJobStatus = useCallback(
-    async (jobId) => {
-      if (!user) return;
-      try {
-        const token = await user.getIdToken();
-        const status = await getJobStatus(token, jobId);
-        setJobStatus(status);
+  const pollJobStatus = useCallback(async (jobId, jobType) => {
+    if (!user) return;
+    try {
+      const token = await user.getIdToken();
+      const status = await getJobStatus(token, jobId);
+      setJobStatus({ ...status, job_type: jobType });
 
-        if (status.status === "completed") {
-          handleJobCompletion(status.result);
-        } else if (status.status === "failed") {
-          handleJobFailure(status.error);
-        }
-      } catch (err) {
-        handleJobFailure(err.message);
+      if (status.status === 'completed') {
+        handleJobCompletion(status.result);
+      } else if (status.status === 'failed') {
+        handleJobFailure(status.error);
       }
-    },
-    [user, dispatch]
-  );
+    } catch (err) {
+      handleJobFailure(err.message);
+    }
+  }, [user, dispatch]);
 
   useEffect(() => {
-    if (activeJobId) {
+    if (activeJobId && jobStatus?.job_type) {
       pollingIntervalRef.current = setInterval(() => {
-        pollJobStatus(activeJobId);
+        pollJobStatus(activeJobId, jobStatus.job_type);
       }, 5000);
     }
     return () => stopPolling();
-  }, [activeJobId, pollJobStatus]);
+  }, [activeJobId, pollJobStatus, jobStatus?.job_type]);
 
   const handleLocalPrediction = async () => {
     if (!imageFiles.frontal || !imageFiles.lateral || !imageFiles.trasera) {
@@ -143,24 +135,24 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
     clearResult("multiimg3d");
     setPollingError(null);
     setJobStatus(null);
-
+    
+    const jobType = "MultiImagen3D";
     const formData = new FormData();
     formData.append("frontal", imageFiles.frontal);
     formData.append("lateral", imageFiles.lateral);
     formData.append("trasera", imageFiles.trasera);
     formData.append("generationName", generationName);
 
-    const response = await submitPrediction("MultiImagen3D", formData);
+    const response = await submitPrediction(jobType, formData);
 
     if (response && response.job_id) {
-      setActiveJobId(response.job_id);
-      setJobStatus({
-        status: response.status,
-        position_in_queue: response.position_in_queue,
-        queue_size: response.position_in_queue,
-      });
+        setActiveJobId(response.job_id);
+        setJobStatus({
+            ...response,
+            job_type: jobType,
+        });
     } else {
-      setPollingError(submissionError || "No se pudo iniciar la generación.");
+        setPollingError(submissionError || "No se pudo iniciar la generación.");
     }
   };
 
@@ -206,18 +198,14 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
     !imageFiles.trasera;
 
   const closeModalAndReset = () => {
-    stopPolling();
-    setActiveJobId(null);
-    setJobStatus(null);
-    setPollingError(null);
+      stopPolling();
+      setActiveJobId(null);
+      setJobStatus(null);
+      setPollingError(null);
   };
 
-  const showProgress =
-    !!activeJobId &&
-    jobStatus?.status !== "completed" &&
-    jobStatus?.status !== "failed";
-  const showError =
-    !!pollingError || (!!activeJobId && jobStatus?.status === "failed");
+  const showProgress = !!activeJobId && jobStatus?.status !== 'completed' && jobStatus?.status !== 'failed';
+  const showError = !!pollingError || (!!activeJobId && jobStatus?.status === 'failed');
 
   return (
     <section
@@ -380,13 +368,14 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
         </div>
       </div>
 
-      <ProgressModal show={showProgress} jobStatus={jobStatus} />
+      <ProgressModal 
+        show={showProgress} 
+        jobStatus={jobStatus}
+      />
       <ErrorModal
         showModal={showError}
         closeModal={closeModalAndReset}
-        errorMessage={
-          pollingError || jobStatus?.error || "Ha ocurrido un error."
-        }
+        errorMessage={pollingError || jobStatus?.error || "Ha ocurrido un error."}
       />
     </section>
   );

@@ -7,10 +7,7 @@ import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
-import {
-  uploadPredictionPreview,
-  getJobStatus,
-} from "../../services/predictionApi";
+import { uploadPredictionPreview, getJobStatus } from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
 
 function dataURLtoBlob(dataurl) {
@@ -29,6 +26,7 @@ export const Imagen3DInput = ({ isCollapsed }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const { dispatch, clearResult, prediction_img3d_result } = usePredictions();
+  
   const [generationName, setGenerationName] = useState("");
   const {
     imageFile,
@@ -77,46 +75,43 @@ export const Imagen3DInput = ({ isCollapsed }) => {
   const handleJobCompletion = (result) => {
     stopPolling();
     dispatch({ type: "SET_PREDICTION", payload: { type: "img3d", result } });
-
+    
     setTimeout(() => {
-      setActiveJobId(null);
-      setJobStatus(null);
+        setActiveJobId(null);
+        setJobStatus(null);
     }, 2000);
   };
-
+  
   const handleJobFailure = (errorMsg) => {
-    stopPolling();
-    setPollingError(errorMsg || "La generación ha fallado.");
+      stopPolling();
+      setPollingError(errorMsg || "La generación ha fallado.");
   };
 
-  const pollJobStatus = useCallback(
-    async (jobId) => {
-      if (!user) return;
-      try {
-        const token = await user.getIdToken();
-        const status = await getJobStatus(token, jobId);
-        setJobStatus(status);
+  const pollJobStatus = useCallback(async (jobId, jobType) => {
+    if (!user) return;
+    try {
+      const token = await user.getIdToken();
+      const status = await getJobStatus(token, jobId);
+      setJobStatus({ ...status, job_type: jobType });
 
-        if (status.status === "completed") {
-          handleJobCompletion(status.result);
-        } else if (status.status === "failed") {
-          handleJobFailure(status.error);
-        }
-      } catch (err) {
-        handleJobFailure(err.message);
+      if (status.status === 'completed') {
+        handleJobCompletion(status.result);
+      } else if (status.status === 'failed') {
+        handleJobFailure(status.error);
       }
-    },
-    [user, dispatch]
-  );
+    } catch (err) {
+      handleJobFailure(err.message);
+    }
+  }, [user, dispatch]);
 
   useEffect(() => {
-    if (activeJobId) {
+    if (activeJobId && jobStatus?.job_type) {
       pollingIntervalRef.current = setInterval(() => {
-        pollJobStatus(activeJobId);
+        pollJobStatus(activeJobId, jobStatus.job_type);
       }, 5000);
     }
     return () => stopPolling();
-  }, [activeJobId, pollJobStatus]);
+  }, [activeJobId, pollJobStatus, jobStatus?.job_type]);
 
   const handleLocalPrediction = async () => {
     if (!generationName.trim()) {
@@ -127,26 +122,26 @@ export const Imagen3DInput = ({ isCollapsed }) => {
       setPollingError("No se ha seleccionado ninguna imagen");
       return;
     }
-
+    
     clearResult("img3d");
     setPollingError(null);
     setJobStatus(null);
 
+    const jobType = "Imagen3D";
     const formData = new FormData();
     formData.append("image", imageFile);
     formData.append("generationName", generationName);
 
-    const response = await submitPrediction("imagen3D", formData);
+    const response = await submitPrediction(jobType, formData);
 
     if (response && response.job_id) {
       setActiveJobId(response.job_id);
       setJobStatus({
-        status: response.status,
-        position_in_queue: response.position_in_queue,
-        queue_size: response.position_in_queue,
+          ...response,
+          job_type: jobType,
       });
     } else {
-      setPollingError(submissionError || "No se pudo iniciar la generación.");
+        setPollingError(submissionError || "No se pudo iniciar la generación.");
     }
   };
 
@@ -163,7 +158,6 @@ export const Imagen3DInput = ({ isCollapsed }) => {
       try {
         const token = await user.getIdToken();
         const previewBlob = dataURLtoBlob(dataURL);
-
         const formData = new FormData();
         formData.append("preview", previewBlob, "preview.png");
         formData.append(
@@ -181,9 +175,8 @@ export const Imagen3DInput = ({ isCollapsed }) => {
     [user, prediction_img3d_result]
   );
 
-  const isButtonDisabled =
-    isSubmitting || !!activeJobId || !generationName.trim() || !imageFile;
   const isFormDisabled = isSubmitting || !!activeJobId;
+  const isButtonDisabled = isFormDisabled || !generationName.trim() || !imageFile;
 
   const closeModalAndReset = () => {
     stopPolling();
@@ -192,12 +185,8 @@ export const Imagen3DInput = ({ isCollapsed }) => {
     setPollingError(null);
   };
 
-  const showProgress =
-    !!activeJobId &&
-    jobStatus?.status !== "completed" &&
-    jobStatus?.status !== "failed";
-  const showError =
-    !!pollingError || (!!activeJobId && jobStatus?.status === "failed");
+  const showProgress = !!activeJobId && jobStatus?.status !== 'completed' && jobStatus?.status !== 'failed';
+  const showError = !!pollingError || (!!activeJobId && jobStatus?.status === 'failed');
 
   return (
     <section
@@ -252,7 +241,6 @@ export const Imagen3DInput = ({ isCollapsed }) => {
                     {t("generation_pages.common.upload_image_label")}
                   </h3>
                 </div>
-
                 <div
                   className={`relative border-2 border-dashed rounded-lg p-2 text-center cursor-pointer transition-colors flex flex-col items-center justify-center flex-grow 
                   ${
@@ -320,7 +308,7 @@ export const Imagen3DInput = ({ isCollapsed }) => {
               </div>
             </div>
           </div>
-
+          
           <div className="xl:col-span-3 flex-grow">
             <div className="h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0 border-2 border-gray-200 dark:border-linea/20 rounded-3xl overflow-hidden">
               <Imagen3DResult onFirstLoad={handlePreviewUpload} />
@@ -329,13 +317,14 @@ export const Imagen3DInput = ({ isCollapsed }) => {
         </div>
       </div>
 
-      <ProgressModal show={showProgress} jobStatus={jobStatus} />
+      <ProgressModal 
+        show={showProgress} 
+        jobStatus={jobStatus}
+      />
       <ErrorModal
         showModal={showError}
         closeModal={closeModalAndReset}
-        errorMessage={
-          pollingError || jobStatus?.error || "Ha ocurrido un error."
-        }
+        errorMessage={pollingError || jobStatus?.error || "Ha ocurrido un error."}
       />
     </section>
   );

@@ -33,6 +33,7 @@ export const Boceto3DInput = ({ isCollapsed }) => {
   const { user } = useAuth();
   const { dispatch, clearResult, prediction_boceto3d_result } =
     usePredictions();
+  
   const [generationName, setGenerationName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -96,7 +97,7 @@ export const Boceto3DInput = ({ isCollapsed }) => {
       resetComponentState();
     };
   }, [resetComponentState]);
-
+  
   const stopPolling = () => {
     if (pollingIntervalRef.current) {
       clearInterval(pollingIntervalRef.current);
@@ -118,12 +119,12 @@ export const Boceto3DInput = ({ isCollapsed }) => {
       setPollingError(errorMsg || "La generación ha fallado.");
   };
 
-  const pollJobStatus = useCallback(async (jobId) => {
+  const pollJobStatus = useCallback(async (jobId, jobType) => {
     if (!user) return;
     try {
       const token = await user.getIdToken();
       const status = await getJobStatus(token, jobId);
-      setJobStatus(status);
+      setJobStatus({ ...status, job_type: jobType });
 
       if (status.status === 'completed') {
         handleJobCompletion(status.result);
@@ -136,13 +137,13 @@ export const Boceto3DInput = ({ isCollapsed }) => {
   }, [user, dispatch]);
 
   useEffect(() => {
-    if (activeJobId) {
+    if (activeJobId && jobStatus?.job_type) {
       pollingIntervalRef.current = setInterval(() => {
-        pollJobStatus(activeJobId);
+        pollJobStatus(activeJobId, jobStatus.job_type);
       }, 5000);
     }
     return () => stopPolling();
-  }, [activeJobId, pollJobStatus]);
+  }, [activeJobId, pollJobStatus, jobStatus?.job_type]);
 
   const getCanvasDataURL = useCallback((type = "image/png", quality) => {
     if (!canvasForDataRef.current) return null;
@@ -186,19 +187,19 @@ export const Boceto3DInput = ({ isCollapsed }) => {
     const imageFile = dataURLtoFile(image, "boceto.png");
     if (!imageFile) return;
 
+    const jobType = "Boceto3D";
     const formData = new FormData();
     formData.append("image", imageFile);
     formData.append("generationName", generationName);
     formData.append("description", description);
 
-    const response = await submitPrediction("Boceto3D", formData);
+    const response = await submitPrediction(jobType, formData);
 
     if (response && response.job_id) {
         setActiveJobId(response.job_id);
         setJobStatus({
-            status: response.status,
-            position_in_queue: response.position_in_queue,
-            queue_size: response.position_in_queue
+            ...response,
+            job_type: jobType,
         });
     } else {
         setPollingError(submissionError || "No se pudo iniciar la generación.");
@@ -229,7 +230,6 @@ export const Boceto3DInput = ({ isCollapsed }) => {
       try {
         const token = await user.getIdToken();
         const previewBlob = dataURLtoBlob(dataURL);
-
         const formData = new FormData();
         formData.append("preview", previewBlob, "preview.png");
         formData.append(

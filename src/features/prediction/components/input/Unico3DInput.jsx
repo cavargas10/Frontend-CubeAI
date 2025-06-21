@@ -26,6 +26,7 @@ export const Unico3DInput = ({ isCollapsed }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const { dispatch, clearResult, prediction_unico3d_result } = usePredictions();
+
   const [generationName, setGenerationName] = useState("");
   const {
     imageFile,
@@ -88,12 +89,12 @@ export const Unico3DInput = ({ isCollapsed }) => {
       setPollingError(errorMsg || "La generación ha fallado.");
   };
 
-  const pollJobStatus = useCallback(async (jobId) => {
+  const pollJobStatus = useCallback(async (jobId, jobType) => {
     if (!user) return;
     try {
       const token = await user.getIdToken();
       const status = await getJobStatus(token, jobId);
-      setJobStatus(status);
+      setJobStatus({ ...status, job_type: jobType });
 
       if (status.status === 'completed') {
         handleJobCompletion(status.result);
@@ -106,13 +107,13 @@ export const Unico3DInput = ({ isCollapsed }) => {
   }, [user, dispatch]);
 
   useEffect(() => {
-    if (activeJobId) {
+    if (activeJobId && jobStatus?.job_type) {
       pollingIntervalRef.current = setInterval(() => {
-        pollJobStatus(activeJobId);
+        pollJobStatus(activeJobId, jobStatus.job_type);
       }, 5000);
     }
     return () => stopPolling();
-  }, [activeJobId, pollJobStatus]);
+  }, [activeJobId, pollJobStatus, jobStatus?.job_type]);
 
   const handleLocalPrediction = async () => {
     if (!generationName.trim()) {
@@ -128,18 +129,18 @@ export const Unico3DInput = ({ isCollapsed }) => {
     setPollingError(null);
     setJobStatus(null);
 
+    const jobType = "Unico3D";
     const formData = new FormData();
     formData.append("image", imageFile);
     formData.append("generationName", generationName);
 
-    const response = await submitPrediction("Unico3D", formData);
+    const response = await submitPrediction(jobType, formData);
 
     if (response && response.job_id) {
         setActiveJobId(response.job_id);
         setJobStatus({
-            status: response.status,
-            position_in_queue: response.position_in_queue,
-            queue_size: response.position_in_queue
+            ...response,
+            job_type: jobType,
         });
     } else {
         setPollingError(submissionError || "No se pudo iniciar la generación.");
@@ -159,7 +160,6 @@ export const Unico3DInput = ({ isCollapsed }) => {
       try {
         const token = await user.getIdToken();
         const previewBlob = dataURLtoBlob(dataURL);
-
         const formData = new FormData();
         formData.append("preview", previewBlob, "preview.png");
         formData.append(
