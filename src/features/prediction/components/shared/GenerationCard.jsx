@@ -1,5 +1,6 @@
 import { DownloadSimple, Trash, Cube } from "@phosphor-icons/react";
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 const DownloadButton = ({ download }) => {
   const { t } = useTranslation();
@@ -25,13 +26,14 @@ const DownloadButton = ({ download }) => {
   );
 };
 
-export const GenerationCard = ({ generation, formatDate, openModal, open3DViewer }) => {
+export const GenerationCard = ({ generation, formatDate, openModal, predictionType }) => {
   const { t } = useTranslation();
-  const { previewImageUrl, downloads } = generation;
+  const navigate = useNavigate();
+  const { previewImageUrl, downloads, generation_name } = generation;
 
   const handleCardClick = () => {
     if (generation.modelUrl) {
-      open3DViewer(generation);
+      navigate(`?view=${encodeURIComponent(generation_name)}&type=${predictionType}`);
     }
   };
 
@@ -45,29 +47,23 @@ export const GenerationCard = ({ generation, formatDate, openModal, open3DViewer
       {previewImageUrl ? (
         <img 
           src={previewImageUrl} 
-          alt={`Previsualización de ${generation.generation_name}`}
+          alt={`Previsualización de ${generation_name}`}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
           loading="lazy"
         />
       ) : (
-        // ✅ Vista para cuando no hay previsualización, adaptada a ambos temas
         <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-400 dark:text-gray-400 p-4 text-center">
             <Cube size={40} className="mb-2 opacity-50"/>
             <span className="text-sm font-medium">{t('visualizer_page.card.preview_unavailable')}</span>
             <span className="text-xs opacity-70 mt-1">{t('visualizer_page.card.click_to_view')}</span>
         </div>
       )}
-      
-      {/* ✅ La superposición oscura se mantiene en ambos temas para asegurar la legibilidad del texto */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent transition-opacity duration-300"></div>
-
       <div className="absolute inset-0 flex flex-col justify-end p-3 text-white">
-        <h3 className="text-base font-bold truncate drop-shadow-md">{generation.generation_name}</h3>
+        <h3 className="text-base font-bold truncate drop-shadow-md">{generation_name}</h3>
         <p className="text-xs text-gray-300 mb-2 drop-shadow-sm">
           {formatDate(generation.timestamp)}
         </p>
-
-        {/* ✅ Los botones ya usan gradientes y colores que funcionan bien, no necesitan cambios */}
         <div className="flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <div className="flex gap-2">
             {downloads && downloads.map(d => (

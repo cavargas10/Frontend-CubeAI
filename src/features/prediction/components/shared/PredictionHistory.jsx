@@ -131,7 +131,7 @@ export const PredictionHistory = ({ selectedTab, open3DViewer }) => {
               generation={generation}
               formatDate={formatDate}
               openModal={openDeleteModal}
-              open3DViewer={open3DViewer}
+              predictionType={selectedTab}
             />
           ))}
         </div>

@@ -1,28 +1,65 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Textbox, Image, FileImage, Cube, Images, Scribble, X } from "@phosphor-icons/react";
 import { PredictionHistory } from "../../../features/prediction/components/shared/PredictionHistory";
 import { ModelResultViewer } from "../../../features/prediction/components/shared/ModelResultViewer";
 import { useTranslation } from 'react-i18next';
+import { getGenerations } from "../../../features/prediction/services/predictionApi";
+import { useAuthContext } from "../../../features/auth/context/AuthContext";
 
 export const Visualizador = ({ isCollapsed }) => {
   const { t } = useTranslation();
-  const [selectedTab, setSelectedTab] = useState("Texto3D");
-  const [isViewerOpen, setIsViewerOpen] = useState(false);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { user } = useAuthContext();
+  const [selectedTab, setSelectedTab] = useState(searchParams.get('type') || "Texto3D");
   const [selectedGenerationForViewer, setSelectedGenerationForViewer] = useState(null);
+  const [isLoadingViewer, setIsLoadingViewer] = useState(false);
+  const viewParam = searchParams.get('view');
+  const typeParam = searchParams.get('type');
+
+  useEffect(() => {
+    const loadGenerationFromUrl = async () => {
+      if (viewParam && typeParam && user) {
+        setIsLoadingViewer(true);
+        try {
+          const token = await user.getIdToken();
+          const generations = await getGenerations(token, typeParam);
+          const generationToView = generations.find(
+            g => g.generation_name === decodeURIComponent(viewParam)
+          );
+          if (generationToView) {
+            setSelectedGenerationForViewer(generationToView);
+            if (selectedTab !== typeParam) {
+              setSelectedTab(typeParam);
+            }
+          } else {
+            navigate('/dashboard/visualizador', { replace: true });
+          }
+        } catch (error) {
+          console.error("Error loading generation from URL:", error);
+          navigate('/dashboard/visualizador', { replace: true });
+        } finally {
+          setIsLoadingViewer(false);
+        }
+      } else {
+        setSelectedGenerationForViewer(null);
+      }
+    };
+
+    loadGenerationFromUrl();
+  }, [viewParam, typeParam, user, navigate, selectedTab]);
 
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
-  };
-
-  const open3DViewer = (generation) => {
-    setSelectedGenerationForViewer(generation);
-    setIsViewerOpen(true);
+    navigate('/dashboard/visualizador', { replace: true });
   };
 
   const close3DViewer = () => {
-    setIsViewerOpen(false);
-    setSelectedGenerationForViewer(null);
+    navigate('/dashboard/visualizador', { replace: true });
   };
+  
+  const isViewerOpen = !!viewParam && !!selectedGenerationForViewer;
   const tabsT = t('visualizer_page.tabs', { returnObjects: true });
 
   const tabsConfig = [
@@ -34,6 +71,13 @@ export const Visualizador = ({ isCollapsed }) => {
     { id: "Boceto3D", label: tabsT.sketch_to_3d.label, shortLabel: tabsT.sketch_to_3d.short_label, icon: Scribble },
   ];
 
+  const ViewerLoading = () => (
+    <div className="flex-grow flex flex-col items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-morado-gradient"></div>
+        <p className="mt-4 text-white">Cargando modelo...</p>
+    </div>
+  );
+
   return (
     <section
       className={`min-h-screen bg-white dark:bg-fondologin transition-all duration-300 ease-in-out relative w-full flex flex-col ${
@@ -41,8 +85,7 @@ export const Visualizador = ({ isCollapsed }) => {
       }`}
     >
       <div className="relative z-10 px-4 sm:px-6 md:px-8 pt-6 pb-8 flex flex-col flex-grow">
-        {isViewerOpen && selectedGenerationForViewer ? (
-          // --- Vista del Modelo 3D ---
+        {isLoadingViewer ? <ViewerLoading /> : isViewerOpen ? (
           <div className="flex-grow flex flex-col bg-white dark:bg-gradient-to-br from-principal via-[#0F102F] to-principal border-2 border-gray-200 dark:border-linea/20 rounded-3xl shadow-lg dark:shadow-2xl dark:shadow-morado-gradient/10 overflow-hidden">
             <div className="flex items-center justify-between p-3 sm:p-4 bg-gray-50 dark:bg-black/20 border-b border-gray-200 dark:border-linea/30 flex-shrink-0">
               <h3 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-azul-gradient to-morado-gradient text-transparent bg-clip-text truncate pr-4">
@@ -66,7 +109,6 @@ export const Visualizador = ({ isCollapsed }) => {
             </div>
           </div>
         ) : (
-          // --- Vista de la Lista de Generaciones ---
           <>
             <div className="mb-8 flex-shrink-0">
               <div className="flex items-center gap-4 mb-3">
@@ -119,7 +161,7 @@ export const Visualizador = ({ isCollapsed }) => {
             </div>
             <div className="relative flex-grow">
               <div className="relative bg-gray-50 dark:bg-principal/30 backdrop-blur-sm border border-gray-200 dark:border-linea/20 rounded-2xl p-6 h-full">
-                <PredictionHistory selectedTab={selectedTab} open3DViewer={open3DViewer} />
+                <PredictionHistory selectedTab={selectedTab} />
               </div>
             </div>
           </>
