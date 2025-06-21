@@ -9,6 +9,7 @@ import { ProtectedRoute } from "./features/auth/components/ProtectedRoute";
 import { ErrorBoundaryFallbackUI } from "./components/ui/ErrorBoundaryFallbackUI";
 import { DocumentationProvider } from "./features/documentacion/context/DocumentationContext";
 import { AuthProvider } from "./features/auth/context/AuthContext";
+import { LoadingScreen } from "./components/ui/LoadingScreen";
 
 const PublicLayout = lazy(() =>
   import("./layouts/PublicLayout/PublicLayout").then((module) => ({
@@ -103,12 +104,6 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-export const Loading = () => (
-  <div className="fixed inset-0 z-[200] flex justify-center items-center bg-white/80 dark:bg-principal/90 backdrop-blur-md">
-    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-morado-gradient"></div>
-  </div>
-);
-
 export function App() {
   useTheme();
 
@@ -118,7 +113,7 @@ export function App() {
         <ErrorBoundary>
           <BrowserRouter>
             <AuthProvider>
-              <Suspense fallback={<Loading />}>
+              <Suspense fallback={<LoadingScreen />}>
                 <Routes>
                   <Route path="/" element={<PublicLayout />}>
                     <Route index element={<HomePage />} />
