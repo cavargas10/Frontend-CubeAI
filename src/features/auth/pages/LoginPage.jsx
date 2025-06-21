@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { GeometricParticles } from "../../../components/ui/GeometricParticles";
 import {
   Eye,
@@ -13,10 +13,13 @@ import { getDoc, doc } from "firebase/firestore";
 import { RegistrationModal } from "../../../components/modals/RegistrationModal";
 import { ErrorModal } from "../../../components/modals/ErrorModal";
 import { useTranslation } from "react-i18next";
-import { InlineSpinner } from '../../../components/ui/InlineSpinner';
+import { useAuthContext } from "../context/AuthContext";
+import { InlineSpinner } from "../../../components/ui/InlineSpinner";
 
 export const LoginPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { isAuthenticated, loadingAuth } = useAuthContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -26,7 +29,18 @@ export const LoginPage = () => {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [googleEmail, setGoogleEmail] = useState("");
-  const navigate = useNavigate();
+
+  if (loadingAuth) {
+    return (
+      <div className="h-screen w-screen flex items-center justify-center bg-white dark:bg-fondologin">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-morado-gradient"></div>
+      </div>
+    );
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   const handleRegisterClick = () => navigate("/register");
   const handleResetPasswordClick = () => navigate("/reset-password");

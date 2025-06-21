@@ -119,14 +119,7 @@ export function App() {
                     <Route index element={<HomePage />} />
                     <Route path="tutoriales" element={<TutorialsPage />} />
                     <Route path="login" element={<LoginPage />} />
-                    <Route
-                      path="register"
-                      element={
-                        <RegisterPage
-                          BASE_URL={import.meta.env.VITE_BASE_URL}
-                        />
-                      }
-                    />
+                    <Route path="register" element={<RegisterPage />} />
                     <Route path="verify-email" element={<VerifyEmailPage />} />
                     <Route
                       path="reset-password"

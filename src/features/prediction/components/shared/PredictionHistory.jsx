@@ -8,7 +8,7 @@ import { getGenerations, deleteGeneration } from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
 import { BrandedSpinner } from '../../../../components/ui/BrandedSpinner';
 
-export const PredictionHistory = ({ selectedTab, open3DViewer }) => {
+export const PredictionHistory = ({ selectedTab }) => {
   const { t } = useTranslation();
   const [generations, setGenerations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

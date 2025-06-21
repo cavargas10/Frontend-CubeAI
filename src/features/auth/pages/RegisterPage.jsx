@@ -7,8 +7,8 @@ import {
   updateProfile,
   getAdditionalUserInfo,
 } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useNavigate, Navigate } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext";
 import {
   UserCircle,
   Envelope,
@@ -25,9 +25,10 @@ import { useTranslation } from "react-i18next";
 import { registerUserInBackend } from "../services/userApi";
 import { InlineSpinner } from '../../../components/ui/InlineSpinner';
 
-export const RegisterPage = ({ BASE_URL }) => {
+export const RegisterPage = () => {
   const { t } = useTranslation();
-
+  const navigate = useNavigate();
+  const { isAuthenticated, loadingAuth } = useAuthContext(); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -36,7 +37,6 @@ export const RegisterPage = ({ BASE_URL }) => {
   const [errorMessages, setErrorMessages] = useState([]);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
 
   const {
     allRequirementsMet: allPasswordRequirementsMet,
@@ -45,6 +45,18 @@ export const RegisterPage = ({ BASE_URL }) => {
   } = usePasswordValidation(password);
   const isNameValid = name.trim().length > 0;
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  if (loadingAuth) {
+    return (
+      <div className="h-screen w-screen flex items-center justify-center bg-white dark:bg-fondologin">
+         <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-morado-gradient"></div>
+      </div>
+    );
+  }
+  
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   const handleGoToLogin = () => {
     navigate("/login");
