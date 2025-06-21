@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { Modal } from "flowbite-react";
-import { Queue, Gear, Hourglass } from "@phosphor-icons/react";
+import { Queue, Hourglass } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
+import { BrandedSpinner } from "../ui/BrandedSpinner";
 
 const QueueVisualizer = ({ position, total }) => {
   const items = Array.from({ length: total }, (_, i) => i + 1);
@@ -18,19 +19,6 @@ const QueueVisualizer = ({ position, total }) => {
     </div>
   );
 };
-
-const ProcessingSpinner = () => (
-  <div className="relative w-20 h-20 my-4">
-    <div className="absolute inset-0 rounded-full border-4 border-t-transparent border-azul-gradient animate-spin"></div>
-    <div className="absolute inset-0 rounded-full border-4 border-b-transparent border-morado-gradient animate-spin [animation-direction:reverse] [animation-duration:1.5s]"></div>
-    <div className="absolute inset-0 flex items-center justify-center">
-      <Gear
-        size={32}
-        className="text-gray-500 animate-spin [animation-duration:3s]"
-      />
-    </div>
-  </div>
-);
 
 export const ProgressModal = ({ show, jobStatus }) => {
   const { t, i18n } = useTranslation();
@@ -109,6 +97,15 @@ export const ProgressModal = ({ show, jobStatus }) => {
       size="md"
       popup={true}
       onClose={() => {}}
+      theme={{
+        root: {
+          base: "fixed inset-0 z-[100] flex items-center justify-center backdrop-blur-sm",
+        },
+        content: {
+          base: "relative w-full max-w-sm m-auto",
+          inner: "relative rounded-none bg-transparent",
+        },
+      }}
     >
       <Modal.Body className="p-0 bg-transparent">
         <div className="text-center bg-white dark:bg-principal rounded-2xl py-8 px-6 border-2 border-gray-200 dark:border-linea/50 shadow-2xl shadow-azul-gradient/10">
@@ -125,7 +122,11 @@ export const ProgressModal = ({ show, jobStatus }) => {
                 total={jobStatus.queue_size}
               />
             )}
-            {jobStatus?.status === "processing" && <ProcessingSpinner />}
+            {jobStatus?.status === "processing" && (
+              <div className="my-4">
+                <BrandedSpinner size="sm" />
+              </div>
+            )}
 
             <h3
               key={getTitle()}
