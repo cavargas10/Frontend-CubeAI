@@ -1,15 +1,13 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Sparkle, TextAa, TextT, PaintBrush } from "@phosphor-icons/react";
 import { ErrorModal } from "../../../../components/modals/ErrorModal";
 import { ProgressModal } from "../../../../components/modals/ProgressModal";
 import { Texto3DResult } from "../results/Texto3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
+import { useAsyncGeneration } from "../../hooks/useAsyncGeneration";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
-import {
-  uploadPredictionPreview,
-  getJobStatus,
-} from "../../services/predictionApi";
+import { uploadPredictionPreview } from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
 
 function dataURLtoBlob(dataurl) {
@@ -28,10 +26,18 @@ export const Texto3DInput = ({ isCollapsed }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const { dispatch, clearResult, prediction_text3d_result } = usePredictions();
-
   const [generationName, setGenerationName] = useState("");
   const [userPrompt, setUserPrompt] = useState("");
   const [selectedStyle, setSelectedStyle] = useState(null);
+  const [jobId, setJobId] = useState(null);
+  const [jobType, setJobType] = useState(null);
+  const {
+    isLoading: isSubmitting,
+    error: submissionError,
+    submitPrediction,
+  } = usePredictionHandler(user);
+
+  const { jobStatus, result, pollingError, reset: resetPolling } = useAsyncGeneration(jobId, jobType);
 
   const styles = [
     { name: t("generation_pages.styles.disney"), value: "disney" },
@@ -41,26 +47,25 @@ export const Texto3DInput = ({ isCollapsed }) => {
     { name: t("generation_pages.styles.chibi"), value: "chibi" },
   ];
 
-  const {
-    isLoading: isSubmitting,
-    error: submissionError,
-    submitPrediction,
-    clearError: clearSubmissionError,
-  } = usePredictionHandler(user);
-
-  const [activeJobId, setActiveJobId] = useState(null);
-  const [jobStatus, setJobStatus] = useState(null);
-  const [pollingError, setPollingError] = useState(null);
-  const pollingIntervalRef = useRef(null);
-
   const resetComponentState = useCallback(() => {
     setGenerationName("");
     setUserPrompt("");
     setSelectedStyle(null);
-    clearSubmissionError();
-    setPollingError(null);
+    setJobId(null);
+    setJobType(null);
+    resetPolling();
     clearResult("text3d");
-  }, [clearSubmissionError, clearResult]);
+  }, [clearResult, resetPolling]);
+
+  useEffect(() => {
+    if (result) {
+      dispatch({ type: "SET_PREDICTION", payload: { type: "text3d", result } });
+      setTimeout(() => {
+        setJobId(null); 
+        setJobType(null);
+      }, 2000);
+    }
+  }, [result, dispatch]);
 
   useEffect(() => {
     return () => {
@@ -68,142 +73,50 @@ export const Texto3DInput = ({ isCollapsed }) => {
     };
   }, [resetComponentState]);
 
-  const stopPolling = () => {
-    if (pollingIntervalRef.current) {
-      clearInterval(pollingIntervalRef.current);
-      pollingIntervalRef.current = null;
-    }
-  };
-
-  const handleJobCompletion = (result) => {
-    stopPolling();
-    dispatch({
-      type: "SET_PREDICTION",
-      payload: { type: "text3d", result: result },
-    });
-
-    setTimeout(() => {
-      setActiveJobId(null);
-      setJobStatus(null);
-    }, 2000);
-  };
-
-  const handleJobFailure = (errorMsg) => {
-    stopPolling();
-    setPollingError(errorMsg || "La generación ha fallado.");
-  };
-
-  const pollJobStatus = useCallback(
-    async (jobId, jobType) => {
-      if (!user) return;
-      try {
-        const token = await user.getIdToken();
-        const status = await getJobStatus(token, jobId);
-        setJobStatus({ ...status, job_type: jobType });
-
-        if (status.status === "completed") {
-          handleJobCompletion(status.result);
-        } else if (status.status === "failed") {
-          handleJobFailure(status.error);
-        }
-      } catch (err) {
-        handleJobFailure(err.message);
-      }
-    },
-    [user, dispatch]
-  );
-
-  useEffect(() => {
-    if (activeJobId && jobStatus?.job_type) {
-      pollingIntervalRef.current = setInterval(() => {
-        pollJobStatus(activeJobId, jobStatus.job_type);
-      }, 5000);
-    }
-    return () => stopPolling();
-  }, [activeJobId, pollJobStatus, jobStatus?.job_type]);
-
   const handleLocalPrediction = async () => {
     if (!generationName.trim() || !userPrompt.trim() || !selectedStyle) {
-      setPollingError(
-        "Todos los campos (Nombre, Prompt, Estilo) son obligatorios"
-      );
       return;
     }
 
     clearResult("text3d");
-    setPollingError(null);
-    setJobStatus(null);
+    const currentJobType = "Texto3D";
+    setJobType(currentJobType);
 
-    const jobType = "Texto3D";
     const payload = {
       generationName,
       prompt: userPrompt,
       selectedStyle,
     };
-
-    const response = await submitPrediction(jobType, payload);
-
+    
+    const response = await submitPrediction(currentJobType, payload);
     if (response && response.job_id) {
-      setActiveJobId(response.job_id);
-      setJobStatus({
-        ...response,
-        job_type: jobType,
-      });
-    } else {
-      setPollingError(submissionError || "No se pudo iniciar la generación.");
+      setJobId(response.job_id);
     }
   };
 
   const handlePreviewUpload = useCallback(
     async (dataURL) => {
-      if (
-        !user ||
-        !prediction_text3d_result ||
-        !prediction_text3d_result.generation_name
-      )
-        return;
-      if (prediction_text3d_result.previewImageUrl) return;
-
-      try {
-        const token = await user.getIdToken();
-        const previewBlob = dataURLtoBlob(dataURL);
-        const formData = new FormData();
-        formData.append("preview", previewBlob, "preview.png");
-        formData.append(
-          "generation_name",
-          prediction_text3d_result.generation_name
-        );
-        formData.append("prediction_type_api", "Texto3D");
-
-        await uploadPredictionPreview(token, formData);
-        console.log("Previsualización subida con éxito para 'Texto a 3D'.");
-      } catch (error) {
-        console.error("Error al subir la previsualización:", error);
-      }
+        if (!user || !prediction_text3d_result?.generation_name || prediction_text3d_result?.previewImageUrl) return;
+        try {
+            const token = await user.getIdToken();
+            const previewBlob = dataURLtoBlob(dataURL);
+            const formData = new FormData();
+            formData.append("preview", previewBlob, "preview.png");
+            formData.append("generation_name", prediction_text3d_result.generation_name);
+            formData.append("prediction_type_api", "Texto3D");
+            await uploadPredictionPreview(token, formData);
+        } catch (error) {
+            console.error("Error al subir la previsualización:", error);
+        }
     },
     [user, prediction_text3d_result]
   );
-
-  const isFormDisabled = isSubmitting || !!activeJobId;
-  const isButtonDisabled =
-    isFormDisabled ||
-    !generationName.trim() ||
-    !userPrompt.trim() ||
-    !selectedStyle;
-
-  const closeModalAndReset = () => {
-    stopPolling();
-    setActiveJobId(null);
-    setJobStatus(null);
-    setPollingError(null);
-  };
-
-  const showProgress =
-    !!activeJobId &&
-    jobStatus?.status !== "completed" &&
-    jobStatus?.status !== "failed";
-  const showError =
-    !!pollingError || (!!activeJobId && jobStatus?.status === "failed");
+  
+  const finalError = submissionError || pollingError;
+  const isFormDisabled = isSubmitting || !!jobId;
+  const isButtonDisabled = isFormDisabled || !generationName.trim() || !userPrompt.trim() || !selectedStyle;
+  const showProgress = isFormDisabled && !finalError && jobStatus?.status !== 'completed';
+  const showErrorModal = !!finalError;
 
   return (
     <section
@@ -222,9 +135,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
             </div>
           </div>
         </div>
-
         <hr className="border-t-2 border-gray-200 dark:border-linea/20 mb-6 flex-shrink-0" />
-
         <div className="flex-grow flex flex-col xl:grid xl:grid-cols-5 gap-4">
           <div className="xl:col-span-2 flex-shrink-0">
             <div className="bg-gray-50 dark:bg-principal/30 backdrop-blur-sm border border-gray-200 dark:border-linea/20 rounded-2xl p-3 h-full flex flex-col space-y-2">
@@ -326,7 +237,6 @@ export const Texto3DInput = ({ isCollapsed }) => {
               </div>
             </div>
           </div>
-
           <div className="xl:col-span-3 flex-grow min-h-0">
             <div className="h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0 border-2 border-gray-200 dark:border-linea/20 rounded-3xl overflow-hidden">
               <Texto3DResult onFirstLoad={handlePreviewUpload} />
@@ -334,14 +244,11 @@ export const Texto3DInput = ({ isCollapsed }) => {
           </div>
         </div>
       </div>
-
       <ProgressModal show={showProgress} jobStatus={jobStatus} />
       <ErrorModal
-        showModal={showError}
-        closeModal={closeModalAndReset}
-        errorMessage={
-          pollingError || jobStatus?.error || "Ha ocurrido un error."
-        }
+        showModal={showErrorModal}
+        closeModal={resetComponentState}
+        errorMessage={finalError || t('errors.generic_error_occurred')}
       />
     </section>
   );
