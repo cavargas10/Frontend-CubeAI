@@ -1,14 +1,13 @@
 import { Suspense, useState, useEffect, useRef } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
-import { OrbitControls, Grid, Html } from "@react-three/drei";
-import { DownloadSimple, ArrowsClockwise, Aperture, Image as ImageIcon, X } from "@phosphor-icons/react";
+import { OrbitControls, Grid, Html, useGLTF } from "@react-three/drei";
+import { DownloadSimple, ArrowsClockwise, Aperture, Image as ImageIcon } from "@phosphor-icons/react";
 import { HDREnvironment } from "./HDREnvironment";
 import { ModelViewer } from "./ModelViewer";
-import { ModalBase } from "../../../../components/modals/ModalBase";
+import { Modal } from "flowbite-react";
 import { viewerConfig } from "../../config/viewer.config";
 import { useTranslation } from "react-i18next";
 
-// --- ControlButton adaptado para ambos temas ---
 const ControlButton = ({ onClick, title, children, active }) => (
   <button
     onClick={onClick}
@@ -23,7 +22,6 @@ const ControlButton = ({ onClick, title, children, active }) => (
   </button>
 );
 
-// --- Fallback de carga adaptado ---
 const ModelLoadingFallback = () => {
   const { t } = useTranslation();
   return (
@@ -92,9 +90,16 @@ export const ModelResultViewer = ({
     setAutoRotate(true); 
   }, [modelUrl, controls.texture]);
 
+  useEffect(() => {
+    return () => {
+      if(modelUrl) {
+        useGLTF.clear(modelUrl);
+      }
+    }
+  }, [modelUrl]);
+
   return (
     <div className="w-full h-full bg-gray-100 dark:bg-principal rounded-3xl relative overflow-hidden">
-      {/* --- Estado de Espera --- */}
       {!isResultReady && (
         <div className="absolute inset-0 bg-white/50 dark:bg-black/30 backdrop-blur-sm z-20 flex items-center justify-center rounded-3xl">
           <div className="text-center p-6 rounded-2xl bg-white/80 dark:bg-principal/80">
@@ -106,14 +111,12 @@ export const ModelResultViewer = ({
 
       <div className={`relative h-full ${children && isResultReady ? "grid xl:grid-cols-6" : ""}`}>
         {isResultReady && children && (
-          // Esta sección no la estamos usando por ahora, pero la dejo preparada por si acaso
           <div className="xl:col-span-2 xl:border-r xl:border-gray-200 dark:xl:border-linea flex flex-col items-center p-4">
             {children}
           </div>
         )}
         <div className={`${children && isResultReady ? "xl:col-span-4" : "col-span-full"} h-full relative ${children && isResultReady ? "border-t xl:border-t-0 xl:border-gray-200 dark:xl:border-linea" : ""}`}>
           {isResultReady && (
-            // --- Barra de Controles ---
             <div className="absolute top-4 left-4 z-10 flex flex-wrap gap-2 bg-white/80 dark:bg-principal/90 p-3 rounded-2xl backdrop-blur">
               {controls.wireframe && (
                 <ControlButton onClick={() => setShowWireframe(!showWireframe)} title={t('model_viewer.controls.wireframe')} active={showWireframe}>
@@ -145,7 +148,6 @@ export const ModelResultViewer = ({
             </div>
           )}
           {isResultReady && controls.texture && textureToPreview && (
-            // --- Previsualización de Textura ---
             <div className="absolute bottom-4 left-4 z-10 cursor-pointer" onClick={() => setIsTextureZoomed(true)}>
               <div className="bg-white/80 dark:bg-fondologin/90 p-3 rounded-2xl group hover:bg-gray-200 dark:hover:bg-principal transition-colors">
                 <img src={textureToPreview} alt="Vista previa de textura" className="w-16 h-16 object-cover rounded-xl group-hover:opacity-90 transition-opacity"/>
@@ -166,26 +168,39 @@ export const ModelResultViewer = ({
               )}
             </Suspense>
           </Canvas>
-          {/* El modal para ampliar la textura ya usa fondos y botones adaptables, no necesita cambios */}
-          <ModalBase isOpen={isTextureZoomed} onClose={() => setIsTextureZoomed(false)}>
-            <div className={`fixed inset-0 z-[9999] flex items-center justify-center transition-all duration-300 ease-in-out ${isCollapsed ? "sm:pl-[80px]" : "md:pl-[267px] 2xl:pl-[300px]"}`} style={{ paddingTop: '80px', paddingBottom: '20px' }}>
-              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setIsTextureZoomed(false)} />
-              <div className="relative bg-white dark:bg-principal rounded-2xl p-4 shadow-2xl">
-                <div className="w-[500px] h-[500px] flex items-center justify-center relative">
-                  <img src={textureToPreview} alt="Vista completa de textura" className="max-w-full max-h-full object-contain rounded-xl" />
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-                    <a href={textureToPreview} download="textura.png" className="px-4 py-2 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-full flex items-center gap-2 transition-all hover:shadow-lg hover:scale-105 shadow-xl backdrop-blur-sm">
+          <Modal
+              show={isTextureZoomed}
+              onClose={() => setIsTextureZoomed(false)}
+              popup={true}
+              size="xl" 
+              theme={{
+                  root: {
+                      base: "fixed inset-0 z-[100] flex items-center justify-center backdrop-blur-md bg-black/70",
+                      position: "center"
+                  },
+                  content: {
+                      base: "relative h-full w-full p-4 md:h-auto",
+                      inner: "relative rounded-lg bg-white dark:bg-principal shadow-2xl flex flex-col max-h-[90vh] max-w-[90vw]"
+                  }
+              }}
+          >
+              <Modal.Header className="p-3 border-b-0">
+                  <span className="text-lg font-semibold text-gray-800 dark:text-white">{t('model_viewer.texture_preview')}</span>
+              </Modal.Header>
+              <Modal.Body className="p-4 flex-grow flex items-center justify-center">
+                  <img src={textureToPreview} alt="Vista completa de textura" className="max-w-full max-h-full object-contain rounded-lg" />
+              </Modal.Body>
+              <Modal.Footer className="p-3 flex justify-center items-center border-t-0">
+                  <a 
+                      href={textureToPreview} 
+                      download="texture.png" 
+                      className="px-4 py-2 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-full flex items-center gap-2 transition-all hover:shadow-lg hover:scale-105 shadow-xl"
+                  >
                       <DownloadSimple size={18} />
                       <span className="text-sm font-medium">{t('model_viewer.texture_download')}</span>
-                    </a>
-                  </div>
-                </div>
-                <button onClick={() => setIsTextureZoomed(false)} className="absolute -top-3 -right-3 p-2 bg-red-500 hover:bg-red-600 rounded-full transition-colors text-white shadow-lg z-10" aria-label="Cerrar vista de textura">
-                  <X size={20} />
-                </button>
-              </div>
-            </div>
-          </ModalBase>
+                  </a>
+              </Modal.Footer>
+          </Modal>
         </div>
       </div>
     </div>
