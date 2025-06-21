@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import logo from "../assets/logo.webp";
-import { Button } from "../components/ui/Button";
-import { Link } from "react-router-dom";
 import { List, X, CaretRight } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
+import { useAuthContext } from "../features/auth/context/AuthContext";
 
-export const Header = ({ user }) => {
+export const Header = () => {
   const { t } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { isAuthenticated } = useAuthContext();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,15 +35,13 @@ export const Header = ({ user }) => {
     };
   }, [isMenuOpen]);
 
-  const isAuthenticated = !!user;
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   if (isAuthenticated) {
     return null;
   }
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
 
   return (
     <>
@@ -102,12 +100,12 @@ export const Header = ({ user }) => {
             >
               {t("header.login")}
             </Link>
-            <Button
+            <Link
               to="/register"
-              className="text-sm font-medium py-2 px-4 rounded-md bg-gray-800 text-white dark:bg-white dark:text-[#0A0B20] hover:bg-gray-700 dark:hover:bg-gray-200 shadow-md hover:shadow-lg transition-all"
+              className="inline-flex items-center justify-center text-sm font-medium py-2 px-4 rounded-md bg-gray-800 text-white dark:bg-white dark:text-[#0A0B20] hover:bg-gray-700 dark:hover:bg-gray-200 shadow-md hover:shadow-lg transition-all"
             >
               {t("header.register")}
-            </Button>
+            </Link>
           </div>
 
           <button
@@ -270,8 +268,7 @@ export const Header = ({ user }) => {
                 >
                   {t("header.login")}
                 </Link>
-
-                <Button
+                <Link
                   to="/register"
                   className="
                     w-full text-base font-medium py-3 px-4 rounded-lg 
@@ -284,7 +281,7 @@ export const Header = ({ user }) => {
                   onClick={toggleMenu}
                 >
                   {t("header.register")}
-                </Button>
+                </Link>
               </div>
             </div>
           </div>
