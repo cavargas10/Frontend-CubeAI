@@ -1,4 +1,6 @@
 import React, { lazy, Suspense } from "react";
+import { Flowbite } from 'flowbite-react';
+import { flowbiteTheme } from './config/flowbiteTheme';
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useAuth } from "./features/auth/hooks/useAuth";
@@ -112,62 +114,64 @@ export function App() {
   useTheme();
 
   return (
-    <div className="text-white ">
-      <ErrorBoundary>
-        <BrowserRouter>
-          <Suspense fallback={<Loading />}>
-            <Routes>
-              <Route path="/" element={<PublicLayout />}>
-                <Route index element={<HomePage />} />
-                <Route path="tutoriales" element={<TutorialsPage />} />
-                <Route path="login" element={<LoginPage />} />
-                <Route
-                  path="register"
-                  element={
-                    <RegisterPage BASE_URL={import.meta.env.VITE_BASE_URL} />
-                  }
-                />
-                <Route path="verify-email" element={<VerifyEmailPage />} />
-                <Route path="reset-password" element={<ResetPasswordPage />} />
-                <Route path="action-handler" element={<ActionHandlerPage />} />
-                <Route
-                  path="change-password"
-                  element={<ChangePasswordPage />}
-                />
-                <Route path="correct-email" element={<CorrectEmailPage />} />
-                <Route
-                  path="documentos"
-                  element={
-                    <DocumentationProvider>
-                      <DocsLayout />
-                    </DocumentationProvider>
-                  }
-                >
-                  <Route index element={<DocsIndexRedirect />} />
-                  <Route path="documento/:slug" element={<DocsViewer />} />
-                  <Route path="*" element={<DocsIndexRedirect />} />
+    <Flowbite theme={{ theme: flowbiteTheme }}>
+      <div className="text-white ">
+        <ErrorBoundary>
+          <BrowserRouter>
+            <Suspense fallback={<Loading />}>
+              <Routes>
+                <Route path="/" element={<PublicLayout />}>
+                  <Route index element={<HomePage />} />
+                  <Route path="tutoriales" element={<TutorialsPage />} />
+                  <Route path="login" element={<LoginPage />} />
+                  <Route
+                    path="register"
+                    element={
+                      <RegisterPage BASE_URL={import.meta.env.VITE_BASE_URL} />
+                    }
+                  />
+                  <Route path="verify-email" element={<VerifyEmailPage />} />
+                  <Route path="reset-password" element={<ResetPasswordPage />} />
+                  <Route path="action-handler" element={<ActionHandlerPage />} />
+                  <Route
+                    path="change-password"
+                    element={<ChangePasswordPage />}
+                  />
+                  <Route path="correct-email" element={<CorrectEmailPage />} />
+                  <Route
+                    path="documentos"
+                    element={
+                      <DocumentationProvider>
+                        <DocsLayout />
+                      </DocumentationProvider>
+                    }
+                  >
+                    <Route index element={<DocsIndexRedirect />} />
+                    <Route path="documento/:slug" element={<DocsViewer />} />
+                    <Route path="*" element={<DocsIndexRedirect />} />
+                  </Route>
+                  <Route path="*" element={<Navigate to="/" replace />} />
                 </Route>
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Route>
 
-              <Route
-                path="/dashboard/*"
-                element={
-                  <AuthProvider> 
-                    <ProtectedRoute>
-                      <PredictionProvider>
-                        <DashboardLayout />
-                      </PredictionProvider>
-                    </ProtectedRoute>
-                  </AuthProvider>
-                }
-              />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
-      </ErrorBoundary>
-      <SpeedInsights />
-    </div>
+                <Route
+                  path="/dashboard/*"
+                  element={
+                    <AuthProvider> 
+                      <ProtectedRoute>
+                        <PredictionProvider>
+                          <DashboardLayout />
+                        </PredictionProvider>
+                      </ProtectedRoute>
+                    </AuthProvider>
+                  }
+                />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </Suspense>
+          </BrowserRouter>
+        </ErrorBoundary>
+        <SpeedInsights />
+      </div>
+    </Flowbite>
   );
 }

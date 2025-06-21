@@ -16,10 +16,6 @@ export const DeleteConfirmationModal = ({
       size="md"
       popup={true}
       onClose={closeModal}
-      theme={{
-        root: { base: "fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm" },
-        content: { base: "relative w-full max-w-sm m-auto", inner: "relative rounded-none bg-transparent" },
-      }}
     >
       <Modal.Body className="p-0 bg-transparent">
         <div className="text-center bg-white dark:bg-principal rounded-2xl py-6 px-6 border-2 border-red-200 dark:border-red-500/30 shadow-2xl shadow-red-500/10">

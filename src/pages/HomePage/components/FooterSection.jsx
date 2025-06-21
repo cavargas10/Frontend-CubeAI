@@ -1,5 +1,5 @@
 import logo from "../../../assets/logo.webp";
-import { Button } from "../../../components/ui/Button";
+import { Link } from "react-router-dom";
 import { CaretRight } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 
@@ -16,9 +16,7 @@ export const FooterSection = () => {
       </div>
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 relative z-10">
-        <div className="sm:col-span-1 flex flex-col items-center justify-center 
-                       sm:border-r-4 border-slate-300/50 dark:border-white"
-        >
+        <div className="sm:col-span-1 flex flex-col items-center justify-center sm:border-r-4 border-slate-300/50 dark:border-white">
           <img
             src={logo}
             alt="Logo"
@@ -35,15 +33,14 @@ export const FooterSection = () => {
                 {t("footer.subtitle")}
               </p>
             </div>
-
             <div className="flex items-center justify-center">
-              <Button
+              <Link
                 to="/login"
                 className="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-gradient-to-r from-azul-gradient via-primary to-morado-gradient rounded-md shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 transform hover:scale-105 hover:brightness-110"
               >
                 {t("footer.button")}
                 <CaretRight className="ml-2 h-5 w-5 text-white" weight="bold" />
-              </Button>
+              </Link>
             </div>
           </div>
         </div>

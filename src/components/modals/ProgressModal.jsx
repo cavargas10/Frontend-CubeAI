@@ -66,7 +66,7 @@ export const ProgressModal = ({ show, jobStatus }) => {
           clearCurrentInterval();
           return prevIndex;
         });
-      }, 10000);
+      }, 8000);
     } else {
       clearCurrentInterval();
       setCurrentStepIndex(0);
@@ -109,15 +109,6 @@ export const ProgressModal = ({ show, jobStatus }) => {
       size="md"
       popup={true}
       onClose={() => {}}
-      theme={{
-        root: {
-          base: "fixed inset-0 z-[100] flex items-center justify-center backdrop-blur-sm",
-        },
-        content: {
-          base: "relative w-full max-w-sm m-auto",
-          inner: "relative rounded-none bg-transparent",
-        },
-      }}
     >
       <Modal.Body className="p-0 bg-transparent">
         <div className="text-center bg-white dark:bg-principal rounded-2xl py-8 px-6 border-2 border-gray-200 dark:border-linea/50 shadow-2xl shadow-azul-gradient/10">

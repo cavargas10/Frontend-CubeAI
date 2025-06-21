@@ -1,5 +1,5 @@
 import fondo from "../../../assets/fondo.webp";
-import { Button } from "../../../components/ui/Button";
+import { Link } from "react-router-dom";
 import { CaretRight } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 
@@ -19,13 +19,13 @@ export const CTASection = () => {
           {t("cta.title")}
         </h1>
         <div className="flex flex-col gap-2 min-[400px]:flex-row">
-          <Button
+          <Link
             to="/login"
-            className="inline-flex items-center justify-center py-3 px-6 rounded-md bg-gradient-to-r  from-azul-gradient to-morado-gradient text-white text-base font-medium shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 transform hover:scale-105 hover:brightness-110"
+            className="inline-flex items-center justify-center py-3 px-6 rounded-md bg-gradient-to-r from-azul-gradient to-morado-gradient text-white text-base font-medium shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 transform hover:scale-105 hover:brightness-110"
           >
             {t("cta.button")}
             <CaretRight className="ml-2 h-5 w-5 text-white" weight="bold" />
-          </Button>
+          </Link>
         </div>
       </div>
     </div>

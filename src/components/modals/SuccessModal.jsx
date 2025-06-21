@@ -15,10 +15,6 @@ export const SuccessModal = ({
       size="md"
       popup={true}
       onClose={closeSuccessModal}
-      theme={{
-        root: { base: "fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm" },
-        content: { base: "relative w-full max-w-sm m-auto", inner: "relative rounded-none bg-transparent" },
-      }}
     >
       <Modal.Body className="p-0 bg-transparent">
         <div className="text-center bg-white dark:bg-principal rounded-2xl py-6 px-6 border-2 border-green-200 dark:border-linea/50 shadow-2xl shadow-green-500/10">
