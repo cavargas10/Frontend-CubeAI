@@ -1,15 +1,18 @@
 import { Navigate } from 'react-router-dom';
 import { useDocumentation } from '../context/DocumentationContext';
-import { Loading } from '../../../App'; 
+import { PageLoader } from '../../../components/ui/Spinner'; 
 
 export const DocsIndexRedirect = () => {
   const { flatDocs, loading } = useDocumentation();
 
   if (loading) {
-    return <Loading />;
+    return <PageLoader />;
   }
 
-  const firstDocSlug = flatDocs?.[0]?.slug || 'empezar';
+  const firstDocSlug = flatDocs?.[0]?.slug;
+  if (!firstDocSlug) {
+      return <Navigate to="/documentos" replace />;
+  }
   
   return <Navigate to={`/documentos/documento/${firstDocSlug}`} replace />;
 };
