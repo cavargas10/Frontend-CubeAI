@@ -5,7 +5,9 @@ import { useTranslation } from "react-i18next";
 import { BrandedSpinner } from "../ui/BrandedSpinner";
 
 const QueueVisualizer = ({ position, total }) => {
-  const items = Array.from({ length: total }, (_, i) => i + 1);
+  const displayTotal = Math.max(position, total);
+  const items = Array.from({ length: displayTotal }, (_, i) => i + 1);
+
   return (
     <div className="flex items-center justify-center gap-2 my-4">
       {items.map((item) => (
@@ -13,7 +15,9 @@ const QueueVisualizer = ({ position, total }) => {
           key={item}
           size={28}
           weight={item === position ? "fill" : "regular"}
-          className={`transition-all duration-300 ${item === position ? "text-morado-gradient" : "text-gray-400"}`}
+          className={`transition-all duration-300 ${
+            item === position ? "text-morado-gradient" : "text-gray-400"
+          }`}
         />
       ))}
     </div>
@@ -26,7 +30,9 @@ export const ProgressModal = ({ show, jobStatus }) => {
   const intervalRef = useRef(null);
   const jobType = jobStatus?.job_type || "default";
   const stepsKey = `loading_steps.${jobType}`;
-  const steps = i18n.getResource(i18n.language, "translation", stepsKey) || [];
+  const steps =
+    i18n.getResource(i18n.language, "translation", stepsKey) ||
+    i18n.getResource(i18n.language, "translation", "loading_steps.default");
 
   const progressPercentage =
     Array.isArray(steps) && steps.length > 0
@@ -43,7 +49,6 @@ export const ProgressModal = ({ show, jobStatus }) => {
 
     if (show && jobStatus?.status === "processing") {
       clearCurrentInterval();
-
       setCurrentStepIndex(0);
 
       intervalRef.current = setInterval(() => {
@@ -110,22 +115,20 @@ export const ProgressModal = ({ show, jobStatus }) => {
       <Modal.Body className="p-0 bg-transparent">
         <div className="text-center bg-white dark:bg-principal rounded-2xl py-8 px-6 border-2 border-gray-200 dark:border-linea/50 shadow-2xl shadow-azul-gradient/10">
           <div className="flex flex-col items-center">
-            {!jobStatus && (
-              <Hourglass
-                size={40}
-                className="text-gray-400 mb-4 animate-pulse"
-              />
-            )}
-            {jobStatus?.status === "queued" && (
+            {jobStatus?.status === "queued" ? (
               <QueueVisualizer
                 position={jobStatus.position_in_queue}
                 total={jobStatus.queue_size}
               />
-            )}
-            {jobStatus?.status === "processing" && (
+            ) : jobStatus?.status === "processing" ? (
               <div className="my-4">
                 <BrandedSpinner size="sm" />
               </div>
+            ) : (
+              <Hourglass
+                size={40}
+                className="text-gray-400 mb-4 animate-pulse"
+              />
             )}
 
             <h3
@@ -136,7 +139,7 @@ export const ProgressModal = ({ show, jobStatus }) => {
             </h3>
             <p
               key={getMessage()}
-              className="text-sm text-gray-500 dark:text-gray-400 animate-[fadeIn_0.5s_ease-in-out_0.2s] h-10 flex items-center justify-center"
+              className="text-sm text-gray-500 dark:text-gray-400 animate-[fadeIn_0.5s_ease-in-out_0.2s] h-10 flex items-center justify-center text-center"
             >
               {getMessage()}
             </p>

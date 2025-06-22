@@ -10,7 +10,6 @@ import { ErrorModal } from "../../../../components/modals/ErrorModal";
 import { ProgressModal } from "../../../../components/modals/ProgressModal";
 import { TextImg3DResult } from "../results/TextImg3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
-import { useAsyncGeneration } from "../../hooks/useAsyncGeneration";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
 import { uploadPredictionPreview } from "../../services/predictionApi";
@@ -31,7 +30,8 @@ function dataURLtoBlob(dataurl) {
 export const TextImg3DInput = ({ isCollapsed }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const { dispatch, clearResult, prediction_textimg3d_result } = usePredictions();
+  const { dispatch, clearResult, prediction_textimg3d_result } =
+    usePredictions();
   const [generationName, setGenerationName] = useState("");
   const [subject, setSubject] = useState("");
   const [selectedStyle, setSelectedStyle] = useState(null);
@@ -45,34 +45,30 @@ export const TextImg3DInput = ({ isCollapsed }) => {
     { name: t("generation_pages.styles.chibi"), value: "chibi" },
   ];
 
-  const [jobId, setJobId] = useState(null);
-  const [jobType, setJobType] = useState(null);
   const {
-    isLoading: isSubmitting,
-    error: submissionError,
     submitPrediction,
+    isLoading: isSubmitting,
+    jobStatus,
+    result,
+    error: finalError,
+    reset,
   } = usePredictionHandler(user);
-
-  const { jobStatus, result, pollingError, reset: resetPolling } = useAsyncGeneration(jobId, jobType);
 
   const resetComponentState = useCallback(() => {
     setGenerationName("");
     setSubject("");
     setSelectedStyle(null);
     setAdditionalDetails("");
-    setJobId(null);
-    setJobType(null);
-    resetPolling();
+    reset();
     clearResult("textimg3d");
-  }, [clearResult, resetPolling]);
+  }, [reset, clearResult]);
 
   useEffect(() => {
     if (result) {
-      dispatch({ type: "SET_PREDICTION", payload: { type: "textimg3d", result } });
-      setTimeout(() => {
-        setJobId(null);
-        setJobType(null);
-      }, 2000);
+      dispatch({
+        type: "SET_PREDICTION",
+        payload: { type: "textimg3d", result },
+      });
     }
   }, [result, dispatch]);
 
@@ -81,15 +77,19 @@ export const TextImg3DInput = ({ isCollapsed }) => {
       resetComponentState();
     };
   }, [resetComponentState]);
-  
+
   const handleLocalPrediction = async () => {
-    if (!generationName.trim() || !subject.trim() || !selectedStyle || !additionalDetails.trim()) {
+    if (
+      !generationName.trim() ||
+      !subject.trim() ||
+      !selectedStyle ||
+      !additionalDetails.trim()
+    ) {
       return;
     }
 
     clearResult("textimg3d");
     const currentJobType = "TextImg3D";
-    setJobType(currentJobType);
 
     const payload = {
       generationName,
@@ -98,21 +98,26 @@ export const TextImg3DInput = ({ isCollapsed }) => {
       additionalDetails,
     };
 
-    const response = await submitPrediction(currentJobType, payload);
-    if (response && response.job_id) {
-      setJobId(response.job_id);
-    }
+    await submitPrediction(currentJobType, payload);
   };
 
   const handlePreviewUpload = useCallback(
     async (dataURL) => {
-      if (!user || !prediction_textimg3d_result?.generation_name || prediction_textimg3d_result?.previewImageUrl) return;
+      if (
+        !user ||
+        !prediction_textimg3d_result?.generation_name ||
+        prediction_textimg3d_result?.previewImageUrl
+      )
+        return;
       try {
         const token = await user.getIdToken();
         const previewBlob = dataURLtoBlob(dataURL);
         const formData = new FormData();
         formData.append("preview", previewBlob, "preview.png");
-        formData.append("generation_name", prediction_textimg3d_result.generation_name);
+        formData.append(
+          "generation_name",
+          prediction_textimg3d_result.generation_name
+        );
         formData.append("prediction_type_api", "TextImg3D");
         await uploadPredictionPreview(token, formData);
       } catch (error) {
@@ -121,11 +126,16 @@ export const TextImg3DInput = ({ isCollapsed }) => {
     },
     [user, prediction_textimg3d_result]
   );
-  
-  const finalError = submissionError || pollingError;
-  const isFormDisabled = isSubmitting || !!jobId;
-  const isButtonDisabled = isFormDisabled || !generationName.trim() || !subject.trim() || !selectedStyle || !additionalDetails.trim();
-  const showProgress = isFormDisabled && !finalError && jobStatus?.status !== 'completed';
+
+  const isFormDisabled = isSubmitting || !!jobStatus;
+  const isButtonDisabled =
+    isFormDisabled ||
+    !generationName.trim() ||
+    !subject.trim() ||
+    !selectedStyle ||
+    !additionalDetails.trim();
+  const showProgress =
+    isFormDisabled && !finalError && jobStatus?.status !== "completed";
   const showErrorModal = !!finalError;
 
   return (
@@ -271,7 +281,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
               </div>
             </div>
           </div>
-          
+
           <div className="xl:col-span-3 flex-grow min-h-0">
             <div className="h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0 border-2 border-gray-200 dark:border-linea/20 rounded-3xl overflow-hidden">
               <TextImg3DResult onFirstLoad={handlePreviewUpload} />
@@ -283,7 +293,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
       <ErrorModal
         showModal={showErrorModal}
         closeModal={resetComponentState}
-        errorMessage={finalError || t('errors.generic_error_occurred')}
+        errorMessage={finalError || t("errors.generic_error_occurred")}
       />
     </section>
   );

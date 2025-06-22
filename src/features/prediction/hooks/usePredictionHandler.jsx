@@ -38,15 +38,23 @@ export const usePredictionHandler = (user) => {
 
       try {
         const token = await user.getIdToken(true);
-        const initialStatus = await startGenerationJob(token, endpoint, payload);
+        const initialStatus = await startGenerationJob(
+          token,
+          endpoint,
+          payload
+        );
 
-        setJobStatus({ ...initialStatus, job_type: endpoint }); 
         setIsLoading(false);
+        setJobStatus({ ...initialStatus, job_type: endpoint });
 
-        if (initialStatus.status === 'completed' || initialStatus.status === 'failed') {
-            if (initialStatus.status === 'completed') setResult(initialStatus.result);
-            if (initialStatus.status === 'failed') setError(initialStatus.error);
-            return;
+        if (
+          initialStatus.status === "completed" ||
+          initialStatus.status === "failed"
+        ) {
+          if (initialStatus.status === "completed")
+            setResult(initialStatus.result);
+          if (initialStatus.status === "failed") setError(initialStatus.error);
+          return;
         }
 
         const jobId = initialStatus.job_id;
@@ -54,30 +62,34 @@ export const usePredictionHandler = (user) => {
           try {
             const currentToken = await user.getIdToken();
             const statusUpdate = await getJobStatus(currentToken, jobId);
-            
+
             setJobStatus({ ...statusUpdate, job_type: endpoint });
 
-            if (statusUpdate.status === 'completed') {
+            if (statusUpdate.status === "completed") {
               setResult(statusUpdate.result);
               stopPolling();
-            } else if (statusUpdate.status === 'failed') {
-              setError(statusUpdate.error || t('errors.generic_generation_failed'));
+            } else if (statusUpdate.status === "failed") {
+              setError(
+                statusUpdate.error || t("errors.generic_generation_failed")
+              );
               stopPolling();
             }
           } catch (pollingErr) {
-            setError(pollingErr.message || t('errors.generic_polling_failed'));
+            setError(pollingErr.message || t("errors.generic_polling_failed"));
             stopPolling();
           }
-        }, 5000); 
-
+        }, 5000);
       } catch (err) {
-        setError(err.message || "Ha ocurrido un error inesperado al iniciar la generación.");
+        setError(
+          err.message ||
+            "Ha ocurrido un error inesperado al iniciar la generación."
+        );
         setIsLoading(false);
       }
     },
     [user, reset, stopPolling, t]
   );
-  
+
   return {
     submitPrediction,
     isLoading,

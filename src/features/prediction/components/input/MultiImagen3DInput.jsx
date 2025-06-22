@@ -9,7 +9,6 @@ import { ErrorModal } from "../../../../components/modals/ErrorModal";
 import { ProgressModal } from "../../../../components/modals/ProgressModal";
 import { MultiImagen3DResult } from "../results/MultiImagen3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
-import { useAsyncGeneration } from "../../hooks/useAsyncGeneration";
 import { useMultiImageUpload } from "../../hooks/useMultiImageUpload";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
@@ -31,7 +30,8 @@ function dataURLtoBlob(dataurl) {
 export const MultiImagen3DInput = ({ isCollapsed }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const { dispatch, clearResult, prediction_multiimg3d_result } = usePredictions();
+  const { dispatch, clearResult, prediction_multiimg3d_result } =
+    usePredictions();
   const [generationName, setGenerationName] = useState("");
   const {
     imageFiles,
@@ -46,32 +46,28 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
     resetMultiImageState,
   } = useMultiImageUpload();
 
-  const [jobId, setJobId] = useState(null);
-  const [jobType, setJobType] = useState(null);
   const {
-    isLoading: isSubmitting,
-    error: submissionError,
     submitPrediction,
+    isLoading: isSubmitting,
+    jobStatus,
+    result,
+    error: finalError,
+    reset,
   } = usePredictionHandler(user);
-
-  const { jobStatus, result, pollingError, reset: resetPolling } = useAsyncGeneration(jobId, jobType);
 
   const resetComponentState = useCallback(() => {
     setGenerationName("");
     resetMultiImageState();
-    setJobId(null);
-    setJobType(null);
-    resetPolling();
+    reset();
     clearResult("multiimg3d");
-  }, [resetMultiImageState, clearResult, resetPolling]);
+  }, [resetMultiImageState, reset, clearResult]);
 
   useEffect(() => {
     if (result) {
-      dispatch({ type: "SET_PREDICTION", payload: { type: "multiimg3d", result } });
-      setTimeout(() => {
-        setJobId(null);
-        setJobType(null);
-      }, 2000);
+      dispatch({
+        type: "SET_PREDICTION",
+        payload: { type: "multiimg3d", result },
+      });
     }
   }, [result, dispatch]);
 
@@ -82,35 +78,44 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
   }, [resetComponentState]);
 
   const handleLocalPrediction = async () => {
-    if (!imageFiles.frontal || !imageFiles.lateral || !imageFiles.trasera || !generationName.trim()) {
+    if (
+      !imageFiles.frontal ||
+      !imageFiles.lateral ||
+      !imageFiles.trasera ||
+      !generationName.trim()
+    ) {
       return;
     }
 
     clearResult("multiimg3d");
     const currentJobType = "MultiImagen3D";
-    setJobType(currentJobType);
-    
+
     const formData = new FormData();
     formData.append("frontal", imageFiles.frontal);
     formData.append("lateral", imageFiles.lateral);
     formData.append("trasera", imageFiles.trasera);
     formData.append("generationName", generationName);
 
-    const response = await submitPrediction(currentJobType, formData);
-    if (response && response.job_id) {
-      setJobId(response.job_id);
-    }
+    await submitPrediction(currentJobType, formData);
   };
 
   const handlePreviewUpload = useCallback(
     async (dataURL) => {
-      if (!user || !prediction_multiimg3d_result?.generation_name || prediction_multiimg3d_result?.previewImageUrl) return;
+      if (
+        !user ||
+        !prediction_multiimg3d_result?.generation_name ||
+        prediction_multiimg3d_result?.previewImageUrl
+      )
+        return;
       try {
         const token = await user.getIdToken();
         const previewBlob = dataURLtoBlob(dataURL);
         const formData = new FormData();
         formData.append("preview", previewBlob, "preview.png");
-        formData.append("generation_name", prediction_multiimg3d_result.generation_name);
+        formData.append(
+          "generation_name",
+          prediction_multiimg3d_result.generation_name
+        );
         formData.append("prediction_type_api", "MultiImagen3D");
         await uploadPredictionPreview(token, formData);
       } catch (error) {
@@ -120,10 +125,15 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
     [user, prediction_multiimg3d_result]
   );
 
-  const finalError = submissionError || pollingError;
-  const isFormDisabled = isSubmitting || !!jobId;
-  const isButtonDisabled = isFormDisabled || !generationName.trim() || !imageFiles.frontal || !imageFiles.lateral || !imageFiles.trasera;
-  const showProgress = isFormDisabled && !finalError && jobStatus?.status !== 'completed';
+  const isFormDisabled = isSubmitting || !!jobStatus;
+  const isButtonDisabled =
+    isFormDisabled ||
+    !generationName.trim() ||
+    !imageFiles.frontal ||
+    !imageFiles.lateral ||
+    !imageFiles.trasera;
+  const showProgress =
+    isFormDisabled && !finalError && jobStatus?.status !== "completed";
   const showErrorModal = !!finalError;
 
   return (
@@ -251,7 +261,11 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
                         {t("generation_pages.common.drag_and_drop_views")}{" "}
                         <strong className="text-gray-700 dark:text-white">
                           {t(
-                            `methods.multi_image_to_3d.views.${["frontal", "lateral", "trasera"].indexOf(currentImageType)}`
+                            `methods.multi_image_to_3d.views.${[
+                              "frontal",
+                              "lateral",
+                              "trasera",
+                            ].indexOf(currentImageType)}`
                           )}
                         </strong>
                       </p>
@@ -285,7 +299,7 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
       <ErrorModal
         showModal={showErrorModal}
         closeModal={resetComponentState}
-        errorMessage={finalError || t('errors.generic_error_occurred')}
+        errorMessage={finalError || t("errors.generic_error_occurred")}
       />
     </section>
   );

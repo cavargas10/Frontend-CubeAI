@@ -50,7 +50,7 @@ export const Imagen3DInput = ({ isCollapsed }) => {
   const resetComponentState = useCallback(() => {
     setGenerationName("");
     resetImageState();
-    reset(); 
+    reset();
     clearResult("img3d");
   }, [resetImageState, reset, clearResult]);
 
@@ -59,7 +59,7 @@ export const Imagen3DInput = ({ isCollapsed }) => {
       dispatch({ type: "SET_PREDICTION", payload: { type: "img3d", result } });
     }
   }, [result, dispatch]);
-  
+
   useEffect(() => {
     return () => {
       resetComponentState();
@@ -169,8 +169,8 @@ export const Imagen3DInput = ({ isCollapsed }) => {
                     isDragging
                       ? "border-azul-gradient bg-azul-gradient/5"
                       : imagePreview
-                      ? "border-azul-gradient bg-azul-gradient/5"
-                      : "border-gray-300 dark:border-linea/30"
+                        ? "border-azul-gradient bg-azul-gradient/5"
+                        : "border-gray-300 dark:border-linea/30"
                   } 
                   ${
                     isFormDisabled

@@ -4,7 +4,6 @@ import { ErrorModal } from "../../../../components/modals/ErrorModal";
 import { ProgressModal } from "../../../../components/modals/ProgressModal";
 import { Unico3DResult } from "../results/Unico3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
-import { useAsyncGeneration } from "../../hooks/useAsyncGeneration";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
@@ -39,32 +38,28 @@ export const Unico3DInput = ({ isCollapsed }) => {
     resetImageState,
   } = useImageUpload();
 
-  const [jobId, setJobId] = useState(null);
-  const [jobType, setJobType] = useState(null);
   const {
-    isLoading: isSubmitting,
-    error: submissionError,
     submitPrediction,
+    isLoading: isSubmitting,
+    jobStatus,
+    result,
+    error: finalError,
+    reset,
   } = usePredictionHandler(user);
-
-  const { jobStatus, result, pollingError, reset: resetPolling } = useAsyncGeneration(jobId, jobType);
 
   const resetComponentState = useCallback(() => {
     setGenerationName("");
     resetImageState();
-    setJobId(null);
-    setJobType(null);
-    resetPolling();
+    reset();
     clearResult("unico3d");
-  }, [resetImageState, clearResult, resetPolling]);
+  }, [resetImageState, reset, clearResult]);
 
   useEffect(() => {
     if (result) {
-      dispatch({ type: "SET_PREDICTION", payload: { type: "unico3d", result } });
-      setTimeout(() => {
-        setJobId(null);
-        setJobType(null);
-      }, 2000);
+      dispatch({
+        type: "SET_PREDICTION",
+        payload: { type: "unico3d", result },
+      });
     }
   }, [result, dispatch]);
 
@@ -78,30 +73,34 @@ export const Unico3DInput = ({ isCollapsed }) => {
     if (!generationName.trim() || !imageFile) {
       return;
     }
-    
+
     clearResult("unico3d");
     const currentJobType = "Unico3D";
-    setJobType(currentJobType);
 
     const formData = new FormData();
     formData.append("image", imageFile);
     formData.append("generationName", generationName);
 
-    const response = await submitPrediction(currentJobType, formData);
-    if (response && response.job_id) {
-      setJobId(response.job_id);
-    }
+    await submitPrediction(currentJobType, formData);
   };
 
   const handlePreviewUpload = useCallback(
     async (dataURL) => {
-      if (!user || !prediction_unico3d_result?.generation_name || prediction_unico3d_result?.previewImageUrl) return;
+      if (
+        !user ||
+        !prediction_unico3d_result?.generation_name ||
+        prediction_unico3d_result?.previewImageUrl
+      )
+        return;
       try {
         const token = await user.getIdToken();
         const previewBlob = dataURLtoBlob(dataURL);
         const formData = new FormData();
         formData.append("preview", previewBlob, "preview.png");
-        formData.append("generation_name", prediction_unico3d_result.generation_name);
+        formData.append(
+          "generation_name",
+          prediction_unico3d_result.generation_name
+        );
         formData.append("prediction_type_api", "Unico3D");
         await uploadPredictionPreview(token, formData);
       } catch (error) {
@@ -111,10 +110,11 @@ export const Unico3DInput = ({ isCollapsed }) => {
     [user, prediction_unico3d_result]
   );
 
-  const finalError = submissionError || pollingError;
-  const isFormDisabled = isSubmitting || !!jobId;
-  const isButtonDisabled = isFormDisabled || !generationName.trim() || !imageFile;
-  const showProgress = isFormDisabled && !finalError && jobStatus?.status !== 'completed';
+  const isFormDisabled = isSubmitting || !!jobStatus;
+  const isButtonDisabled =
+    isFormDisabled || !generationName.trim() || !imageFile;
+  const showProgress =
+    isFormDisabled && !finalError && jobStatus?.status !== "completed";
   const showErrorModal = !!finalError;
 
   return (
@@ -245,7 +245,7 @@ export const Unico3DInput = ({ isCollapsed }) => {
       <ErrorModal
         showModal={showErrorModal}
         closeModal={resetComponentState}
-        errorMessage={finalError || t('errors.generic_error_occurred')}
+        errorMessage={finalError || t("errors.generic_error_occurred")}
       />
     </section>
   );

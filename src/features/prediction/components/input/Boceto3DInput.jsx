@@ -10,7 +10,6 @@ import { ErrorModal } from "../../../../components/modals/ErrorModal";
 import { ProgressModal } from "../../../../components/modals/ProgressModal";
 import { Boceto3DResult } from "../results/Boceto3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
-import { useAsyncGeneration } from "../../hooks/useAsyncGeneration";
 import { useCanvasDrawing } from "../../hooks/useCanvasDrawing";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
@@ -32,7 +31,8 @@ function dataURLtoBlob(dataurl) {
 export const Boceto3DInput = ({ isCollapsed }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const { dispatch, clearResult, prediction_boceto3d_result } = usePredictions();
+  const { dispatch, clearResult, prediction_boceto3d_result } =
+    usePredictions();
   const [generationName, setGenerationName] = useState("");
   const [description, setDescription] = useState("");
   const canvasConfig = useMemo(
@@ -57,33 +57,30 @@ export const Boceto3DInput = ({ isCollapsed }) => {
     isCanvasEmpty,
   } = useCanvasDrawing(canvasConfig);
   const canvasForDataRef = useRef(null);
-  const [jobId, setJobId] = useState(null);
-  const [jobType, setJobType] = useState(null);
-  const {
-    isLoading: isSubmitting,
-    error: submissionError,
-    submitPrediction,
-  } = usePredictionHandler(user);
 
-  const { jobStatus, result, pollingError, reset: resetPolling } = useAsyncGeneration(jobId, jobType);
+  const {
+    submitPrediction,
+    isLoading: isSubmitting,
+    jobStatus,
+    result,
+    error: finalError,
+    reset,
+  } = usePredictionHandler(user);
 
   const resetComponentState = useCallback(() => {
     setGenerationName("");
     setDescription("");
     clearCanvas();
-    setJobId(null);
-    setJobType(null);
-    resetPolling();
+    reset();
     clearResult("boceto3d");
-  }, [clearCanvas, clearResult, resetPolling]);
+  }, [clearCanvas, reset, clearResult]);
 
   useEffect(() => {
     if (result) {
-      dispatch({ type: "SET_PREDICTION", payload: { type: "boceto3d", result } });
-      setTimeout(() => {
-        setJobId(null);
-        setJobType(null);
-      }, 2000);
+      dispatch({
+        type: "SET_PREDICTION",
+        payload: { type: "boceto3d", result },
+      });
     }
   }, [result, dispatch]);
 
@@ -98,19 +95,16 @@ export const Boceto3DInput = ({ isCollapsed }) => {
     return canvasForDataRef.current.toDataURL(type, quality);
   }, []);
 
-  const dataURLtoFile = useCallback(
-    (dataURL, filename) => {
-      try {
-        const blob = dataURLtoBlob(dataURL);
-        return new File([blob], filename, { type: blob.type });
-      } catch (error) {
-        console.error("Error al convertir dataURL a File:", error);
-        return null;
-      }
-    },
-    []
-  );
-  
+  const dataURLtoFile = useCallback((dataURL, filename) => {
+    try {
+      const blob = dataURLtoBlob(dataURL);
+      return new File([blob], filename, { type: blob.type });
+    } catch (error) {
+      console.error("Error al convertir dataURL a File:", error);
+      return null;
+    }
+  }, []);
+
   const handleLocalPrediction = useCallback(async () => {
     if (!generationName.trim() || isCanvasEmpty()) {
       return;
@@ -118,7 +112,6 @@ export const Boceto3DInput = ({ isCollapsed }) => {
 
     clearResult("boceto3d");
     const currentJobType = "Boceto3D";
-    setJobType(currentJobType);
 
     const image = getCanvasDataURL("image/png");
     if (!image) return;
@@ -130,21 +123,34 @@ export const Boceto3DInput = ({ isCollapsed }) => {
     formData.append("generationName", generationName);
     formData.append("description", description);
 
-    const response = await submitPrediction(currentJobType, formData);
-    if (response && response.job_id) {
-      setJobId(response.job_id);
-    }
-  }, [generationName, description, submitPrediction, getCanvasDataURL, isCanvasEmpty, dataURLtoFile, clearResult]);
+    await submitPrediction(currentJobType, formData);
+  }, [
+    generationName,
+    description,
+    submitPrediction,
+    getCanvasDataURL,
+    isCanvasEmpty,
+    dataURLtoFile,
+    clearResult,
+  ]);
 
   const handlePreviewUpload = useCallback(
     async (dataURL) => {
-      if (!user || !prediction_boceto3d_result?.generation_name || prediction_boceto3d_result?.previewImageUrl) return;
+      if (
+        !user ||
+        !prediction_boceto3d_result?.generation_name ||
+        prediction_boceto3d_result?.previewImageUrl
+      )
+        return;
       try {
         const token = await user.getIdToken();
         const previewBlob = dataURLtoBlob(dataURL);
         const formData = new FormData();
         formData.append("preview", previewBlob, "preview.png");
-        formData.append("generation_name", prediction_boceto3d_result.generation_name);
+        formData.append(
+          "generation_name",
+          prediction_boceto3d_result.generation_name
+        );
         formData.append("prediction_type_api", "Boceto3D");
         await uploadPredictionPreview(token, formData);
       } catch (error) {
@@ -153,10 +159,13 @@ export const Boceto3DInput = ({ isCollapsed }) => {
     },
     [user, prediction_boceto3d_result]
   );
-  
-  const setTool = useCallback((newTool) => {
-    setDrawingState((prev) => ({ ...prev, tool: newTool }));
-  }, [setDrawingState]);
+
+  const setTool = useCallback(
+    (newTool) => {
+      setDrawingState((prev) => ({ ...prev, tool: newTool }));
+    },
+    [setDrawingState]
+  );
 
   const drawingHandlers = useMemo(
     () => ({
@@ -171,17 +180,21 @@ export const Boceto3DInput = ({ isCollapsed }) => {
     [startDrawing, stopDrawing, handleDraw]
   );
 
-  const initializeLocalCanvas = useCallback((node) => {
-    if (node) {
-      initializeCanvas(node);
-      canvasForDataRef.current = node;
-    }
-  }, [initializeCanvas]);
-  
-  const finalError = submissionError || pollingError;
-  const isFormDisabled = isSubmitting || !!jobId;
-  const isButtonDisabled = isFormDisabled || !generationName.trim() || isCanvasEmpty();  
-  const showProgress = isFormDisabled && !finalError && jobStatus?.status !== 'completed';
+  const initializeLocalCanvas = useCallback(
+    (node) => {
+      if (node) {
+        initializeCanvas(node);
+        canvasForDataRef.current = node;
+      }
+    },
+    [initializeCanvas]
+  );
+
+  const isFormDisabled = isSubmitting || !!jobStatus;
+  const isButtonDisabled =
+    isFormDisabled || !generationName.trim() || isCanvasEmpty();
+  const showProgress =
+    isFormDisabled && !finalError && jobStatus?.status !== "completed";
   const showErrorModal = !!finalError;
 
   return (
@@ -320,7 +333,7 @@ export const Boceto3DInput = ({ isCollapsed }) => {
       <ErrorModal
         showModal={showErrorModal}
         closeModal={resetComponentState}
-        errorMessage={finalError || t('errors.generic_error_occurred')}
+        errorMessage={finalError || t("errors.generic_error_occurred")}
       />
     </section>
   );
