@@ -4,7 +4,6 @@ import { ErrorModal } from "../../../../components/modals/ErrorModal";
 import { ProgressModal } from "../../../../components/modals/ProgressModal";
 import { Imagen3DResult } from "../results/Imagen3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
-import { useAsyncGeneration } from "../../hooks/useAsyncGeneration";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { usePredictions } from "../../context/PredictionContext";
@@ -39,34 +38,28 @@ export const Imagen3DInput = ({ isCollapsed }) => {
     resetImageState,
   } = useImageUpload();
 
-  const [jobId, setJobId] = useState(null);
-  const [jobType, setJobType] = useState(null);
   const {
-    isLoading: isSubmitting,
-    error: submissionError,
     submitPrediction,
+    isLoading: isSubmitting,
+    jobStatus,
+    result,
+    error: finalError,
+    reset,
   } = usePredictionHandler(user);
 
-  const { jobStatus, result, pollingError, reset: resetPolling } = useAsyncGeneration(jobId, jobType);
   const resetComponentState = useCallback(() => {
     setGenerationName("");
     resetImageState();
-    setJobId(null);
-    setJobType(null);
-    resetPolling();
+    reset(); 
     clearResult("img3d");
-  }, [resetImageState, clearResult, resetPolling]);
+  }, [resetImageState, reset, clearResult]);
 
   useEffect(() => {
     if (result) {
       dispatch({ type: "SET_PREDICTION", payload: { type: "img3d", result } });
-      setTimeout(() => {
-        setJobId(null);
-        setJobType(null);
-      }, 2000);
     }
   }, [result, dispatch]);
-
+  
   useEffect(() => {
     return () => {
       resetComponentState();
@@ -80,27 +73,30 @@ export const Imagen3DInput = ({ isCollapsed }) => {
 
     clearResult("img3d");
     const currentJobType = "Imagen3D";
-    setJobType(currentJobType);
-    
     const formData = new FormData();
     formData.append("image", imageFile);
     formData.append("generationName", generationName);
 
-    const response = await submitPrediction(currentJobType, formData);
-    if (response && response.job_id) {
-      setJobId(response.job_id);
-    }
+    await submitPrediction(currentJobType, formData);
   };
 
   const handlePreviewUpload = useCallback(
     async (dataURL) => {
-      if (!user || !prediction_img3d_result?.generation_name || prediction_img3d_result?.previewImageUrl) return;
+      if (
+        !user ||
+        !prediction_img3d_result?.generation_name ||
+        prediction_img3d_result?.previewImageUrl
+      )
+        return;
       try {
         const token = await user.getIdToken();
         const previewBlob = dataURLtoBlob(dataURL);
         const formData = new FormData();
         formData.append("preview", previewBlob, "preview.png");
-        formData.append("generation_name", prediction_img3d_result.generation_name);
+        formData.append(
+          "generation_name",
+          prediction_img3d_result.generation_name
+        );
         formData.append("prediction_type_api", "Imagen3D");
         await uploadPredictionPreview(token, formData);
       } catch (error) {
@@ -110,10 +106,11 @@ export const Imagen3DInput = ({ isCollapsed }) => {
     [user, prediction_img3d_result]
   );
 
-  const finalError = submissionError || pollingError;
-  const isFormDisabled = isSubmitting || !!jobId;
-  const isButtonDisabled = isFormDisabled || !generationName.trim() || !imageFile;
-  const showProgress = isFormDisabled && !finalError && jobStatus?.status !== 'completed';
+  const isFormDisabled = isSubmitting || !!jobStatus;
+  const isButtonDisabled =
+    isFormDisabled || !generationName.trim() || !imageFile;
+  const showProgress =
+    isFormDisabled && !finalError && jobStatus?.status !== "completed";
   const showErrorModal = !!finalError;
 
   return (
@@ -172,8 +169,8 @@ export const Imagen3DInput = ({ isCollapsed }) => {
                     isDragging
                       ? "border-azul-gradient bg-azul-gradient/5"
                       : imagePreview
-                        ? "border-azul-gradient bg-azul-gradient/5"
-                        : "border-gray-300 dark:border-linea/30"
+                      ? "border-azul-gradient bg-azul-gradient/5"
+                      : "border-gray-300 dark:border-linea/30"
                   } 
                   ${
                     isFormDisabled
@@ -232,7 +229,7 @@ export const Imagen3DInput = ({ isCollapsed }) => {
               </div>
             </div>
           </div>
-          
+
           <div className="xl:col-span-3 flex-grow">
             <div className="h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0 border-2 border-gray-200 dark:border-linea/20 rounded-3xl overflow-hidden">
               <Imagen3DResult onFirstLoad={handlePreviewUpload} />
@@ -244,7 +241,7 @@ export const Imagen3DInput = ({ isCollapsed }) => {
       <ErrorModal
         showModal={showErrorModal}
         closeModal={resetComponentState}
-        errorMessage={finalError || t('errors.generic_error_occurred')}
+        errorMessage={finalError || t("errors.generic_error_occurred")}
       />
     </section>
   );
