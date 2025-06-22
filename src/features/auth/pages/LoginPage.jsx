@@ -30,6 +30,14 @@ export const LoginPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [googleEmail, setGoogleEmail] = useState("");
 
+  useEffect(() => {
+    const rememberedEmail = localStorage.getItem("rememberedEmail");
+    if (rememberedEmail) {
+      setEmail(rememberedEmail);
+      setRememberMe(true);
+    }
+  }, []);
+
   if (loadingAuth) {
     return (
       <div className="h-screen w-screen flex items-center justify-center bg-white dark:bg-fondologin">
@@ -128,14 +136,6 @@ export const LoginPage = () => {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    const rememberedEmail = localStorage.getItem("rememberedEmail");
-    if (rememberedEmail) {
-      setEmail(rememberedEmail);
-      setRememberMe(true);
-    }
-  }, []);
 
   const closeModal = () => {
     setShowModal(false);
