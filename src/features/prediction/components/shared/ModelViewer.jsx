@@ -7,6 +7,7 @@ import { SkeletonUtils } from 'three-stdlib';
 export const ModelViewer = ({ url, showWireframe = false, showTexture = true, onTextureLoad }) => {
   const [error, setError] = useState(null);
   const materialsRef = useRef({});
+  const wireframeObjectsRef = useRef([]);
 
   const gltf = useLoader(
     GLTFLoader,
@@ -25,15 +26,35 @@ export const ModelViewer = ({ url, showWireframe = false, showTexture = true, on
     return null;
   }, [gltf]);
 
-
   useEffect(() => {
     if (!clonedScene) return;
     
     materialsRef.current = {}; 
+    wireframeObjectsRef.current = [];
     
     clonedScene.traverse((child) => {
       if (child.isMesh) {
         materialsRef.current[child.uuid] = child.material;
+        
+        const edges = new THREE.EdgesGeometry(child.geometry);
+        const wireframeMaterial = new THREE.LineBasicMaterial({ 
+          color: "#FFFFFF",
+          transparent: true,
+          opacity: 0.6
+        });
+        const wireframeLines = new THREE.LineSegments(edges, wireframeMaterial);
+        
+        wireframeLines.position.copy(child.position);
+        wireframeLines.rotation.copy(child.rotation);
+        wireframeLines.scale.copy(child.scale);
+        wireframeLines.visible = false;
+
+        child.parent.add(wireframeLines);
+        
+        wireframeObjectsRef.current.push({
+          meshId: child.uuid,
+          wireframe: wireframeLines
+        });
 
         if (child.material.map && onTextureLoad) {
           try {
@@ -72,29 +93,36 @@ export const ModelViewer = ({ url, showWireframe = false, showTexture = true, on
     });
   }, [clonedScene, showTexture]);
 
+  useEffect(() => {
+    wireframeObjectsRef.current.forEach(({ wireframe }) => {
+      wireframe.visible = showWireframe;
+    });
+  }, [showWireframe]);
+
+  useEffect(() => {
+    return () => {
+      wireframeObjectsRef.current.forEach(({ wireframe }) => {
+        if (wireframe.parent) {
+          wireframe.parent.remove(wireframe);
+        }
+        if (wireframe.geometry) {
+          wireframe.geometry.dispose();
+        }
+        if (wireframe.material) {
+          wireframe.material.dispose();
+        }
+      });
+    };
+  }, []);
 
   if (error || !clonedScene) return null;
 
   return (
-    <>
-      <primitive object={clonedScene} position={[0, 0, 0]} rotation={[0, Math.PI, 0]} scale={[1, 1, 1]} />
-      {showWireframe && (
-        <primitive
-          object={clonedScene.clone()} 
-          onUpdate={(self) => {
-            self.traverse((child) => {
-              if (child.isMesh) {
-                child.material = new THREE.MeshBasicMaterial({
-                  color: "#FFFFFF",
-                  wireframe: true,
-                  transparent: true,
-                  opacity: 0.6,
-                });
-              }
-            });
-          }}
-        />
-      )}
-    </>
+    <primitive 
+      object={clonedScene} 
+      position={[0, 0, 0]} 
+      rotation={[0, Math.PI, 0]} 
+      scale={[1, 1, 1]} 
+    />
   );
 };
