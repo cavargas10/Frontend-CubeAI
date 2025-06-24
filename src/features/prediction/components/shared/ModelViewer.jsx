@@ -4,9 +4,9 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import * as THREE from "three";
 import { SkeletonUtils } from 'three-stdlib';
 
-export const ModelViewer = ({ url, showWireframe = false, showTexture = true, onTextureLoad }) => {
+export const ModelViewer = ({ url, showWireframe = false, showTexture = true, onTextureLoad, onLoad }) => {
   const [error, setError] = useState(null);
-  const materialsRef = useRef({});
+  const originalMaterialsRef = useRef({});
   const wireframeObjectsRef = useRef([]);
 
   const gltf = useLoader(
@@ -29,12 +29,12 @@ export const ModelViewer = ({ url, showWireframe = false, showTexture = true, on
   useEffect(() => {
     if (!clonedScene) return;
     
-    materialsRef.current = {}; 
+    originalMaterialsRef.current = {}; 
     wireframeObjectsRef.current = [];
     
     clonedScene.traverse((child) => {
       if (child.isMesh) {
-        materialsRef.current[child.uuid] = child.material;
+        originalMaterialsRef.current[child.uuid] = child.material;
         
         const edges = new THREE.EdgesGeometry(child.geometry);
         const wireframeMaterial = new THREE.LineBasicMaterial({ 
@@ -51,10 +51,7 @@ export const ModelViewer = ({ url, showWireframe = false, showTexture = true, on
 
         child.parent.add(wireframeLines);
         
-        wireframeObjectsRef.current.push({
-          meshId: child.uuid,
-          wireframe: wireframeLines
-        });
+        wireframeObjectsRef.current.push(wireframeLines);
 
         if (child.material.map && onTextureLoad) {
           try {
@@ -73,15 +70,20 @@ export const ModelViewer = ({ url, showWireframe = false, showTexture = true, on
         }
       }
     });
-  }, [clonedScene, onTextureLoad]);
+
+    if (onLoad) {
+      onLoad();
+    }
+
+  }, [clonedScene, onTextureLoad, onLoad]);
 
   useEffect(() => {
     if (!clonedScene) return;
 
     clonedScene.traverse((child) => {
-      if (child.isMesh && materialsRef.current[child.uuid]) {
+      if (child.isMesh && originalMaterialsRef.current[child.uuid]) {
         if (showTexture) {
-          child.material = materialsRef.current[child.uuid];
+          child.material = originalMaterialsRef.current[child.uuid];
         } else {
           child.material = new THREE.MeshStandardMaterial({
             color: "#808080",
@@ -94,14 +96,14 @@ export const ModelViewer = ({ url, showWireframe = false, showTexture = true, on
   }, [clonedScene, showTexture]);
 
   useEffect(() => {
-    wireframeObjectsRef.current.forEach(({ wireframe }) => {
+    wireframeObjectsRef.current.forEach((wireframe) => {
       wireframe.visible = showWireframe;
     });
   }, [showWireframe]);
 
   useEffect(() => {
     return () => {
-      wireframeObjectsRef.current.forEach(({ wireframe }) => {
+      wireframeObjectsRef.current.forEach((wireframe) => {
         if (wireframe.parent) {
           wireframe.parent.remove(wireframe);
         }

@@ -1,12 +1,12 @@
-import { Suspense, useState, useEffect, useRef } from "react";
+import { Suspense, useState, useEffect, useCallback, useRef } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls, Grid, Html, useGLTF } from "@react-three/drei";
 import { DownloadSimple, ArrowsClockwise, Aperture, Image as ImageIcon } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 import { HDREnvironment } from "./HDREnvironment";
 import { ModelViewer } from "./ModelViewer";
 import { TextureViewer } from "./TextureViewer"; 
 import { viewerConfig } from "../../config/viewer.config";
-import { useTranslation } from "react-i18next";
 import { BrandedSpinner } from "../../../../components/ui/BrandedSpinner";
 
 const ControlButton = ({ onClick, title, children, active }) => (
@@ -22,34 +22,6 @@ const ControlButton = ({ onClick, title, children, active }) => (
     {children}
   </button>
 );
-
-const CanvasInitializingFallback = () => <Html center></Html>;
-
-const CanvasCaptureHandler = ({ onCaptureReady }) => {
-  const { gl, scene, camera } = useThree();
-  const captured = useRef(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (gl.domElement && !captured.current) {
-        gl.render(scene, camera);
-        try {
-          const dataURL = gl.domElement.toDataURL("image/png");
-          if (dataURL.length > 100) { 
-            onCaptureReady(dataURL);
-            captured.current = true;
-          }
-        } catch (e) {
-            console.error("Error capturing canvas:", e);
-        }
-      }
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, [gl, onCaptureReady, scene, camera]);
-
-  return null;
-};
 
 const ModelLoadingFallback = () => {
   const { t } = useTranslation();
@@ -79,24 +51,61 @@ export const ModelResultViewer = ({
   const [showTexture, setShowTexture] = useState(true);
   const [internalTexturePreview, setInternalTexturePreview] = useState(null);
   const [isTextureZoomed, setIsTextureZoomed] = useState(false);
+  const hasLoadedOnce = useRef(false);
   const isResultReady = Boolean(modelUrl);
   const textureToPreview = textureUrl || internalTexturePreview;
 
   useEffect(() => {
+    hasLoadedOnce.current = false;
     setInternalTexturePreview(null);
     setShowTexture(controls.texture);
-    setShowWireframe(false); 
-    setAutoRotate(true); 
-    setIsTextureZoomed(false); 
-  }, [modelUrl, controls.texture]);
-
-  useEffect(() => {
+    setShowWireframe(false);
+    setAutoRotate(true);
+    setIsTextureZoomed(false);
+    
     return () => {
       if(modelUrl) {
         useGLTF.clear(modelUrl);
       }
     }
-  }, [modelUrl]);
+  }, [modelUrl, controls.texture]);
+
+  const captureCanvas = useCallback((gl, scene, camera) => {
+    if (hasLoadedOnce.current || !onFirstLoad) return;
+    
+    requestAnimationFrame(() => {
+        try {
+            gl.render(scene, camera);
+            const dataURL = gl.domElement.toDataURL("image/png");
+            if (dataURL.length > 100) {
+                onFirstLoad(dataURL);
+                hasLoadedOnce.current = true;
+            }
+        } catch (e) {
+            console.error("Error capturing canvas:", e);
+        }
+    });
+  }, [onFirstLoad]);
+
+  const CaptureTrigger = () => {
+    const { gl, scene, camera } = useThree();    
+    const handleModelLoad = useCallback(() => {
+      captureCanvas(gl, scene, camera);
+    }, [gl, scene, camera]);
+      
+    return (
+      <Suspense fallback={<ModelLoadingFallback />}>
+        <ModelViewer 
+          key={modelUrl} 
+          url={modelUrl} 
+          showWireframe={showWireframe} 
+          showTexture={showTexture && controls.texture} 
+          onTextureLoad={setInternalTexturePreview}
+          onLoad={handleModelLoad}
+        />
+      </Suspense>
+    );
+  };
 
   return (
     <div className="w-full h-full bg-gray-100 dark:bg-principal rounded-3xl relative overflow-hidden">
@@ -154,16 +163,11 @@ export const ModelResultViewer = ({
         
         <div className={`w-full h-full ${isTextureZoomed ? 'hidden' : 'block'}`}>
             <Canvas gl={{ preserveDrawingBuffer: true }} camera={{ position: initialCameraPosition, fov: 50 }} className={`h-full rounded-3xl ${!isResultReady ? "opacity-40" : "opacity-100 transition-opacity duration-300"}`}>
-                <Suspense fallback={<CanvasInitializingFallback />}>
+                <Suspense fallback={null}>
                     <Grid position={gridPosition} args={[15, 15]} cellSize={0.5} cellThickness={1} cellColor="#6f6f6f" sectionSize={2.5} sectionThickness={1.5} sectionColor="#9d4bff" fadeDistance={25} fadeStrength={1} infiniteGrid />
                     <HDREnvironment />
                     <OrbitControls minDistance={orbitControlsConfig.minDistance} maxDistance={orbitControlsConfig.maxDistance} autoRotate={isResultReady && autoRotate && controls.rotate} autoRotateSpeed={orbitControlsConfig.autoRotateSpeed} enablePan={true} enabled={isResultReady && !isTextureZoomed} />
-                    {isResultReady && (
-                        <Suspense fallback={<ModelLoadingFallback />}>
-                            <ModelViewer key={modelUrl} url={modelUrl} showWireframe={showWireframe} showTexture={showTexture && controls.texture} onTextureLoad={setInternalTexturePreview} />
-                            {onFirstLoad && <CanvasCaptureHandler onCaptureReady={onFirstLoad} />}
-                        </Suspense>
-                    )}
+                    {isResultReady && <CaptureTrigger />}
                 </Suspense>
             </Canvas>
         </div>
