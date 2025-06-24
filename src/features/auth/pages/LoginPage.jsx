@@ -19,7 +19,7 @@ import { InlineSpinner } from "../../../components/ui/InlineSpinner";
 export const LoginPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { isAuthenticated, loadingAuth } = useAuthContext();
+  const { authStatus } = useAuthContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -38,7 +38,7 @@ export const LoginPage = () => {
     }
   }, []);
 
-  if (loadingAuth) {
+  if (authStatus === "authenticating") {
     return (
       <div className="h-screen w-screen flex items-center justify-center bg-white dark:bg-fondologin">
         <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-morado-gradient"></div>
@@ -46,7 +46,7 @@ export const LoginPage = () => {
     );
   }
 
-  if (isAuthenticated) {
+  if (authStatus === "authenticated") {
     return <Navigate to="/dashboard" replace />;
   }
 

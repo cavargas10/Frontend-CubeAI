@@ -26,20 +26,18 @@ export const useAuth = () => {
   useEffect(() => {
     setLoadingAuth(true);
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      setUser(firebaseUser);
       if (firebaseUser) {
+        setUser(firebaseUser);
         if (firebaseUser.emailVerified) {
           await fetchCurrentUserData(firebaseUser);
         } else {
           setUserData(null);
-          setAuthError(null);
-          console.log("Usuario no verificado.");
-          window.location.href = "/verify-email";
         }
       } else {
+        setUser(null);
         setUserData(null);
-        setAuthError(null);
       }
+      setAuthError(null);
       setLoadingAuth(false);
     });
     return () => unsubscribe();

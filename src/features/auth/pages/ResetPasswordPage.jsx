@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import {
   Envelope,
   ArrowLeft,
@@ -7,13 +7,15 @@ import {
   XCircle,
 } from "@phosphor-icons/react";
 import { auth } from "../../../config/firebase";
+import { useAuthContext } from "../context/AuthContext";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { GeometricParticles } from "../../../components/ui/GeometricParticles";
 import { useTranslation } from "react-i18next";
-import { InlineSpinner } from '../../../components/ui/InlineSpinner';
+import { InlineSpinner } from "../../../components/ui/InlineSpinner";
 
 export const ResetPasswordPage = () => {
   const { t } = useTranslation();
+  const { authStatus } = useAuthContext();
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -21,6 +23,10 @@ export const ResetPasswordPage = () => {
   const [canResend, setCanResend] = useState(true);
   const [countdown, setCountdown] = useState(0);
   const navigate = useNavigate();
+
+  if (authStatus === "authenticated" || authStatus === "unverified") {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   const handleGoToLogin = () => {
     navigate("/login");

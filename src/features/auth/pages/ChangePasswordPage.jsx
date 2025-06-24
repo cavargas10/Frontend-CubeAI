@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Navigate } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext";
 import { verifyPasswordResetCode, confirmPasswordReset } from "firebase/auth";
 import { auth } from "../../../config/firebase";
 import { Eye, EyeSlash, Lock, Question } from "@phosphor-icons/react";
@@ -7,10 +8,11 @@ import { GeometricParticles } from "../../../components/ui/GeometricParticles";
 import { usePasswordValidation } from "../hooks/usePasswordValidation";
 import { RequirementsModal } from "../../../components/modals/RequirementsModal";
 import { useTranslation } from "react-i18next";
-import { InlineSpinner } from '../../../components/ui/InlineSpinner';
+import { InlineSpinner } from "../../../components/ui/InlineSpinner";
 
 export const ChangePasswordPage = () => {
   const { t } = useTranslation();
+  const { authStatus } = useAuthContext();
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -30,6 +32,10 @@ export const ChangePasswordPage = () => {
   } = usePasswordValidation(newPassword);
   const passwordMatch = newPassword === confirmPassword;
   const isFormValid = allPasswordRequirementsMet && passwordMatch;
+
+  if (authStatus === "authenticated" || authStatus === "unverified") {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   useEffect(() => {
     if (!oobCode) {

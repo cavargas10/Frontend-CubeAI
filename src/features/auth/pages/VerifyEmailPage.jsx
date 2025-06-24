@@ -11,6 +11,7 @@ import {
   sendEmailVerification,
   onAuthStateChanged,
 } from "firebase/auth";
+import { useAuthContext } from "../context/AuthContext"; 
 import { GeometricParticles } from "../../../components/ui/GeometricParticles";
 import { useTranslation } from "react-i18next";
 import { InlineSpinner } from '../../../components/ui/InlineSpinner';
@@ -18,6 +19,7 @@ import { InlineSpinner } from '../../../components/ui/InlineSpinner';
 export const VerifyEmailPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { authStatus } = useAuthContext();
   const [searchParams] = useSearchParams();
   const [email, setEmail] = useState("");
   const [isResending, setIsResending] = useState(false);
@@ -25,6 +27,15 @@ export const VerifyEmailPage = () => {
   const [countdown, setCountdown] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
   const auth = getAuth();
+
+   useEffect(() => {
+    if (authStatus === 'authenticated') {
+      navigate('/dashboard', { replace: true });
+    }
+    if (authStatus === 'unauthenticated') {
+      navigate('/login', { replace: true });
+    }
+  }, [authStatus, navigate]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {

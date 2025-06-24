@@ -13,15 +13,24 @@ export const AuthProvider = ({ children }) => {
     refetchUserData 
   } = useAuth();
 
+  const authStatus = useMemo(() => {
+    if (loadingAuth) return 'authenticating';
+    if (!user) return 'unauthenticated';
+    if (!user.emailVerified) return 'unverified';
+    if (user.emailVerified && userData) return 'authenticated';
+    if (user.emailVerified && !userData) return 'loading_data';
+    return 'unauthenticated';
+  }, [user, userData, loadingAuth]);
+
   const value = useMemo(() => ({
     user,
     userData,
     loadingAuth,
+    authStatus,
     authError,
     handleLogout,
-    refetchUserData,
-    isAuthenticated: !!user && user.emailVerified
-  }), [user, userData, loadingAuth, authError, handleLogout, refetchUserData]);
+    refetchUserData
+  }), [user, userData, loadingAuth, authStatus, authError, handleLogout, refetchUserData]);
 
   return (
     <AuthContext.Provider value={value}>

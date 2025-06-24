@@ -23,12 +23,12 @@ import { GeometricParticles } from "../../../components/ui/GeometricParticles";
 import { usePasswordValidation } from "../hooks/usePasswordValidation";
 import { useTranslation } from "react-i18next";
 import { registerUserInBackend } from "../services/userApi";
-import { InlineSpinner } from '../../../components/ui/InlineSpinner';
+import { InlineSpinner } from "../../../components/ui/InlineSpinner";
 
 export const RegisterPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { isAuthenticated, loadingAuth } = useAuthContext(); 
+  const { authStatus } = useAuthContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -46,15 +46,15 @@ export const RegisterPage = () => {
   const isNameValid = name.trim().length > 0;
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  if (loadingAuth) {
+  if (authStatus === "authenticating") {
     return (
       <div className="h-screen w-screen flex items-center justify-center bg-white dark:bg-fondologin">
-         <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-morado-gradient"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-morado-gradient"></div>
       </div>
     );
   }
-  
-  if (isAuthenticated) {
+
+  if (authStatus === "authenticated" || authStatus === "unverified") {
     return <Navigate to="/dashboard" replace />;
   }
 
