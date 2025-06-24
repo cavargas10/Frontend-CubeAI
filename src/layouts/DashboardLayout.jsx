@@ -6,6 +6,7 @@ import { HeaderDash } from "../features/dashboard/layout/HeaderDash";
 import { Visualizador } from "../features/dashboard/components/Visualizador";
 import { TutorialDash } from "../features/dashboard/components/TutorialDash";
 import { ConfigDash } from "../features/dashboard/components/ConfigDash";
+import { GENERATION_TYPES } from "../features/prediction/config/generationTypes";
 import { Imagen3DInput } from "../features/prediction/components/input/Imagen3DInput";
 import { Texto3DInput } from "../features/prediction/components/input/Texto3DInput";
 import { TextImg3DInput } from "../features/prediction/components/input/TextImg3DInput";
@@ -18,6 +19,15 @@ export const DashboardLayout = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
   const toggleMenu = () => setMenuOpen(!menuOpen);
+
+  const inputComponentMap = {
+    Texto3D: Texto3DInput,
+    Imagen3D: Imagen3DInput,
+    TextImg3D: TextImg3DInput,
+    Unico3D: Unico3DInput,
+    MultiImagen3D: MultiImagen3DInput,
+    Boceto3D: Boceto3DInput,
+  };
 
   return (
     <div className="text-white">
@@ -54,30 +64,19 @@ export const DashboardLayout = () => {
               />
             }
           />
-          <Route
-            path="imagen3D"
-            element={<Imagen3DInput isCollapsed={isNavCollapsed} />}
-          />
-          <Route
-            path="texto3D"
-            element={<Texto3DInput isCollapsed={isNavCollapsed} />}
-          />
-          <Route
-            path="textoaimagen"
-            element={<TextImg3DInput isCollapsed={isNavCollapsed} />}
-          />
-          <Route
-            path="unico3D"
-            element={<Unico3DInput isCollapsed={isNavCollapsed} />}
-          />
-          <Route
-            path="multiimagen3D"
-            element={<MultiImagen3DInput isCollapsed={isNavCollapsed} />}
-          />
-          <Route
-            path="boceto3D"
-            element={<Boceto3DInput isCollapsed={isNavCollapsed} />}
-          />
+
+          {GENERATION_TYPES.map((type) => {
+            const InputComponent = inputComponentMap[type.id];
+            if (!InputComponent) return null;
+            return (
+              <Route
+                key={type.id}
+                path={type.path}
+                element={<InputComponent isCollapsed={isNavCollapsed} />}
+              />
+            );
+          })}
+
           <Route path="*" element={<Navigate to="visualizador" replace />} />
         </Routes>
       </main>
