@@ -1,10 +1,10 @@
 import { ModelResultViewer } from "../shared/ModelResultViewer";
-import { usePredictions } from "../../context/PredictionContext";
+import { usePredictionResult } from "../../context/PredictionContext";
 import { viewerConfig } from "../../config/viewer.config";
 
 export const Imagen3DResult = ({ onFirstLoad }) => {
-  const { prediction_img3d_result } = usePredictions();
-  const modelUrl = prediction_img3d_result?.modelUrl;
+  const predictionResult = usePredictionResult("Imagen3D");
+  const modelUrl = predictionResult?.modelUrl;
 
   return (
     <ModelResultViewer

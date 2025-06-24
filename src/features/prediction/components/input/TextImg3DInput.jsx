@@ -11,7 +11,7 @@ import { ProgressModal } from "../../../../components/modals/ProgressModal";
 import { TextImg3DResult } from "../results/TextImg3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useAuth } from "../../../auth/hooks/useAuth";
-import { usePredictions } from "../../context/PredictionContext";
+import { usePredictions, usePredictionResult } from "../../context/PredictionContext";
 import { uploadPredictionPreview } from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
 
@@ -30,8 +30,9 @@ function dataURLtoBlob(dataurl) {
 export const TextImg3DInput = ({ isCollapsed }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const { dispatch, clearResult, prediction_textimg3d_result } =
-    usePredictions();
+  const { dispatch, clearResult } = usePredictions();
+  const prediction_textimg3d_result = usePredictionResult('Texto3D');
+  const PREDICTION_TYPE = "TextImg3D";
   const [generationName, setGenerationName] = useState("");
   const [subject, setSubject] = useState("");
   const [selectedStyle, setSelectedStyle] = useState(null);
@@ -60,15 +61,12 @@ export const TextImg3DInput = ({ isCollapsed }) => {
     setSelectedStyle(null);
     setAdditionalDetails("");
     reset();
-    clearResult("textimg3d");
+    clearResult(PREDICTION_TYPE);
   }, [reset, clearResult]);
 
   useEffect(() => {
     if (result) {
-      dispatch({
-        type: "SET_PREDICTION",
-        payload: { type: "textimg3d", result },
-      });
+      dispatch({ type: "SET_PREDICTION", payload: { type: PREDICTION_TYPE, result } });
     }
   }, [result, dispatch]);
 
@@ -88,8 +86,8 @@ export const TextImg3DInput = ({ isCollapsed }) => {
       return;
     }
 
-    clearResult("textimg3d");
-    const currentJobType = "TextImg3D";
+    clearResult(PREDICTION_TYPE);
+    const currentJobType = PREDICTION_TYPE;
 
     const payload = {
       generationName,
@@ -118,7 +116,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
           "generation_name",
           prediction_textimg3d_result.generation_name
         );
-        formData.append("prediction_type_api", "TextImg3D");
+        formData.append("prediction_type_api", PREDICTION_TYPE);
         await uploadPredictionPreview(token, formData);
       } catch (error) {
         console.error("Error al subir la previsualización:", error);

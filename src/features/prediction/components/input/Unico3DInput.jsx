@@ -6,7 +6,7 @@ import { Unico3DResult } from "../results/Unico3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { useAuth } from "../../../auth/hooks/useAuth";
-import { usePredictions } from "../../context/PredictionContext";
+import { usePredictions, usePredictionResult } from "../../context/PredictionContext";
 import { uploadPredictionPreview } from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
 
@@ -25,7 +25,9 @@ function dataURLtoBlob(dataurl) {
 export const Unico3DInput = ({ isCollapsed }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const { dispatch, clearResult, prediction_unico3d_result } = usePredictions();
+  const { dispatch, clearResult } = usePredictions();
+  const prediction_unico3d_result = usePredictionResult('Unico3D');
+  const PREDICTION_TYPE = "Unico3D";
   const [generationName, setGenerationName] = useState("");
   const {
     imageFile,
@@ -51,15 +53,12 @@ export const Unico3DInput = ({ isCollapsed }) => {
     setGenerationName("");
     resetImageState();
     reset();
-    clearResult("unico3d");
+    clearResult(PREDICTION_TYPE);
   }, [resetImageState, reset, clearResult]);
 
   useEffect(() => {
     if (result) {
-      dispatch({
-        type: "SET_PREDICTION",
-        payload: { type: "unico3d", result },
-      });
+      dispatch({ type: "SET_PREDICTION", payload: { type: PREDICTION_TYPE, result } });
     }
   }, [result, dispatch]);
 
@@ -74,8 +73,8 @@ export const Unico3DInput = ({ isCollapsed }) => {
       return;
     }
 
-    clearResult("unico3d");
-    const currentJobType = "Unico3D";
+    clearResult(PREDICTION_TYPE);
+    const currentJobType = PREDICTION_TYPE;
 
     const formData = new FormData();
     formData.append("image", imageFile);
@@ -101,7 +100,7 @@ export const Unico3DInput = ({ isCollapsed }) => {
           "generation_name",
           prediction_unico3d_result.generation_name
         );
-        formData.append("prediction_type_api", "Unico3D");
+        formData.append("prediction_type_api", PREDICTION_TYPE);
         await uploadPredictionPreview(token, formData);
       } catch (error) {
         console.error("Error al subir la previsualización:", error);

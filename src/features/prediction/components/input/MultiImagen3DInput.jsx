@@ -11,7 +11,7 @@ import { MultiImagen3DResult } from "../results/MultiImagen3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useMultiImageUpload } from "../../hooks/useMultiImageUpload";
 import { useAuth } from "../../../auth/hooks/useAuth";
-import { usePredictions } from "../../context/PredictionContext";
+import { usePredictions, usePredictionResult } from "../../context/PredictionContext";
 import { uploadPredictionPreview } from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
 
@@ -30,8 +30,9 @@ function dataURLtoBlob(dataurl) {
 export const MultiImagen3DInput = ({ isCollapsed }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const { dispatch, clearResult, prediction_multiimg3d_result } =
-    usePredictions();
+  const { dispatch, clearResult } = usePredictions();
+  const prediction_multiimg3d_result = usePredictionResult('MultiImagen3D');
+  const PREDICTION_TYPE = "MultiImagen3D";  
   const [generationName, setGenerationName] = useState("");
   const {
     imageFiles,
@@ -59,15 +60,12 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
     setGenerationName("");
     resetMultiImageState();
     reset();
-    clearResult("multiimg3d");
+    clearResult(PREDICTION_TYPE);
   }, [resetMultiImageState, reset, clearResult]);
 
   useEffect(() => {
     if (result) {
-      dispatch({
-        type: "SET_PREDICTION",
-        payload: { type: "multiimg3d", result },
-      });
+      dispatch({ type: "SET_PREDICTION", payload: { type: PREDICTION_TYPE, result } });
     }
   }, [result, dispatch]);
 
@@ -87,8 +85,8 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
       return;
     }
 
-    clearResult("multiimg3d");
-    const currentJobType = "MultiImagen3D";
+    clearResult(PREDICTION_TYPE);
+    const currentJobType = PREDICTION_TYPE;
 
     const formData = new FormData();
     formData.append("frontal", imageFiles.frontal);
@@ -116,7 +114,7 @@ export const MultiImagen3DInput = ({ isCollapsed }) => {
           "generation_name",
           prediction_multiimg3d_result.generation_name
         );
-        formData.append("prediction_type_api", "MultiImagen3D");
+        formData.append("prediction_type_api", PREDICTION_TYPE);
         await uploadPredictionPreview(token, formData);
       } catch (error) {
         console.error("Error al subir la previsualización:", error);

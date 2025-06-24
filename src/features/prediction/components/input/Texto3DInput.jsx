@@ -5,7 +5,7 @@ import { ProgressModal } from "../../../../components/modals/ProgressModal";
 import { Texto3DResult } from "../results/Texto3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useAuth } from "../../../auth/hooks/useAuth";
-import { usePredictions } from "../../context/PredictionContext";
+import { usePredictions, usePredictionResult } from "../../context/PredictionContext";
 import { uploadPredictionPreview } from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
 
@@ -24,7 +24,9 @@ function dataURLtoBlob(dataurl) {
 export const Texto3DInput = ({ isCollapsed }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const { dispatch, clearResult, prediction_text3d_result } = usePredictions();
+  const { dispatch, clearResult } = usePredictions();
+  const prediction_text3d_result = usePredictionResult('Texto3D');
+  const PREDICTION_TYPE = "Texto3D";
   const [generationName, setGenerationName] = useState("");
   const [userPrompt, setUserPrompt] = useState("");
   const [selectedStyle, setSelectedStyle] = useState(null);
@@ -50,12 +52,12 @@ export const Texto3DInput = ({ isCollapsed }) => {
     setUserPrompt("");
     setSelectedStyle(null);
     reset();
-    clearResult("text3d");
+    clearResult(PREDICTION_TYPE);
   }, [clearResult, reset]);
 
   useEffect(() => {
     if (result) {
-      dispatch({ type: "SET_PREDICTION", payload: { type: "text3d", result } });
+      dispatch({ type: "SET_PREDICTION", payload: { type: PREDICTION_TYPE, result } });
     }
   }, [result, dispatch]);
 
@@ -69,9 +71,8 @@ export const Texto3DInput = ({ isCollapsed }) => {
     if (!generationName.trim() || !userPrompt.trim() || !selectedStyle) {
       return;
     }
-
-    clearResult("text3d");
-    const currentJobType = "Texto3D";
+    clearResult(PREDICTION_TYPE);
+    const currentJobType = PREDICTION_TYPE;
     const payload = {
       generationName,
       prompt: userPrompt,
@@ -98,7 +99,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
           "generation_name",
           prediction_text3d_result.generation_name
         );
-        formData.append("prediction_type_api", "Texto3D");
+        formData.append("prediction_type_api", PREDICTION_TYPE);
         await uploadPredictionPreview(token, formData);
       } catch (error) {
         console.error("Error al subir la previsualización:", error);

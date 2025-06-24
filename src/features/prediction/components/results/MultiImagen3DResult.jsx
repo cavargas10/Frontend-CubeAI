@@ -1,10 +1,10 @@
 import { ModelResultViewer } from "../shared/ModelResultViewer";
-import { usePredictions } from "../../context/PredictionContext";
+import { usePredictionResult } from "../../context/PredictionContext";
 import { viewerConfig } from "../../config/viewer.config";
 
 export const MultiImagen3DResult = ({ onFirstLoad }) => {
-  const { prediction_multiimg3d_result } = usePredictions();
-  const modelUrl = prediction_multiimg3d_result?.modelUrl;
+  const predictionResult = usePredictionResult("MultiImagen3D");
+    const modelUrl = predictionResult?.modelUrl;
 
   return (
     <ModelResultViewer

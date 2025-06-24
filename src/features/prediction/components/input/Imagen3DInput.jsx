@@ -6,7 +6,7 @@ import { Imagen3DResult } from "../results/Imagen3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { useAuth } from "../../../auth/hooks/useAuth";
-import { usePredictions } from "../../context/PredictionContext";
+import { usePredictions, usePredictionResult } from "../../context/PredictionContext";
 import { uploadPredictionPreview } from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
 
@@ -25,7 +25,9 @@ function dataURLtoBlob(dataurl) {
 export const Imagen3DInput = ({ isCollapsed }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const { dispatch, clearResult, prediction_img3d_result } = usePredictions();
+  const { dispatch, clearResult } = usePredictions();
+  const prediction_img3d_result = usePredictionResult('Imagen3D');
+  const PREDICTION_TYPE = "Imagen3D";
   const [generationName, setGenerationName] = useState("");
   const {
     imageFile,
@@ -51,12 +53,12 @@ export const Imagen3DInput = ({ isCollapsed }) => {
     setGenerationName("");
     resetImageState();
     reset();
-    clearResult("img3d");
+    clearResult(PREDICTION_TYPE);
   }, [resetImageState, reset, clearResult]);
 
   useEffect(() => {
     if (result) {
-      dispatch({ type: "SET_PREDICTION", payload: { type: "img3d", result } });
+      dispatch({ type: "SET_PREDICTION", payload: { type: PREDICTION_TYPE, result } });
     }
   }, [result, dispatch]);
 
@@ -71,8 +73,8 @@ export const Imagen3DInput = ({ isCollapsed }) => {
       return;
     }
 
-    clearResult("img3d");
-    const currentJobType = "Imagen3D";
+    clearResult(PREDICTION_TYPE);
+    const currentJobType = PREDICTION_TYPE;
     const formData = new FormData();
     formData.append("image", imageFile);
     formData.append("generationName", generationName);
@@ -97,7 +99,7 @@ export const Imagen3DInput = ({ isCollapsed }) => {
           "generation_name",
           prediction_img3d_result.generation_name
         );
-        formData.append("prediction_type_api", "Imagen3D");
+        formData.append("prediction_type_api", PREDICTION_TYPE);
         await uploadPredictionPreview(token, formData);
       } catch (error) {
         console.error("Error al subir la previsualización:", error);

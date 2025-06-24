@@ -1,13 +1,12 @@
 import { ModelResultViewer } from "../shared/ModelResultViewer";
-import { usePredictions } from "../../context/PredictionContext";
+import { usePredictionResult } from "../../context/PredictionContext";
 import { viewerConfig } from "../../config/viewer.config";
 import { DownloadSimple } from "@phosphor-icons/react";
 
 export const TextImg3DResult = ({ onFirstLoad }) => {
-  const { prediction_textimg3d_result } = usePredictions();
-  const modelUrl = prediction_textimg3d_result?.modelUrl;
-  const imageUrl =
-    prediction_textimg3d_result?.raw_data?.generated_2d_image_url;
+  const predictionResult = usePredictionResult("TextImg3D");
+  const modelUrl = predictionResult?.modelUrl;
+  const imageUrl = predictionResult?.raw_data?.generated_2d_image_url;
 
   return (
     <ModelResultViewer

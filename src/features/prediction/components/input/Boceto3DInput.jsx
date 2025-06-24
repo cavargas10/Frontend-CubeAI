@@ -12,7 +12,7 @@ import { Boceto3DResult } from "../results/Boceto3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useCanvasDrawing } from "../../hooks/useCanvasDrawing";
 import { useAuth } from "../../../auth/hooks/useAuth";
-import { usePredictions } from "../../context/PredictionContext";
+import { usePredictions, usePredictionResult } from "../../context/PredictionContext";
 import { uploadPredictionPreview } from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
 
@@ -31,8 +31,9 @@ function dataURLtoBlob(dataurl) {
 export const Boceto3DInput = ({ isCollapsed }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const { dispatch, clearResult, prediction_boceto3d_result } =
-    usePredictions();
+  const { dispatch, clearResult } = usePredictions();
+  const prediction_boceto3d_result = usePredictionResult('Texto3D');
+  const PREDICTION_TYPE = "Boceto3D";
   const [generationName, setGenerationName] = useState("");
   const [description, setDescription] = useState("");
   const canvasConfig = useMemo(
@@ -72,15 +73,12 @@ export const Boceto3DInput = ({ isCollapsed }) => {
     setDescription("");
     clearCanvas();
     reset();
-    clearResult("boceto3d");
+    clearResult(PREDICTION_TYPE);
   }, [clearCanvas, reset, clearResult]);
 
   useEffect(() => {
     if (result) {
-      dispatch({
-        type: "SET_PREDICTION",
-        payload: { type: "boceto3d", result },
-      });
+      dispatch({ type: "SET_PREDICTION", payload: { type: PREDICTION_TYPE, result } });
     }
   }, [result, dispatch]);
 
@@ -110,8 +108,8 @@ export const Boceto3DInput = ({ isCollapsed }) => {
       return;
     }
 
-    clearResult("boceto3d");
-    const currentJobType = "Boceto3D";
+    clearResult(PREDICTION_TYPE);
+    const currentJobType = PREDICTION_TYPE;
 
     const image = getCanvasDataURL("image/png");
     if (!image) return;
@@ -151,7 +149,7 @@ export const Boceto3DInput = ({ isCollapsed }) => {
           "generation_name",
           prediction_boceto3d_result.generation_name
         );
-        formData.append("prediction_type_api", "Boceto3D");
+        formData.append("prediction_type_api", PREDICTION_TYPE);
         await uploadPredictionPreview(token, formData);
       } catch (error) {
         console.error("Error al subir la previsualización:", error);
