@@ -43,6 +43,7 @@ export function LogosSection() {
                 <img
                   src={logo.src}
                   alt={logo.alt}
+                  loading="lazy"
                   className="max-h-20 w-auto object-contain transition-all duration-500 opacity-90 group-hover:opacity-100 group-hover:scale-125 group-hover:drop-shadow-[0_0_15px_rgba(51,51,234,0.8)]"
                 />
               </div>
