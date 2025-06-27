@@ -1,3 +1,4 @@
+import { lazy } from "react";
 import { HeroSection } from "./HomePage/components/HeroSection";
 import { LogosSection } from "./HomePage/components/LogosSection";
 import { MethodsSection } from "./HomePage/components/MethodsSection";
