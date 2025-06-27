@@ -1,6 +1,6 @@
-import club from "../../../assets/club.png";
-import utpl from "../../../assets/utpl.png";
-import xrlab from "../../../assets/xrlab.png";
+import club from "../../../assets/club.webp";
+import utpl from "../../../assets/utpl.webp";
+import xrlab from "../../../assets/xrlab.webp";
 import { useTranslation } from "react-i18next";
 
 export function LogosSection() {
