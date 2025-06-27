@@ -46,12 +46,6 @@ export const viewerConfig = {
   },
   TextImg3D: {
     ...baseConfig,
-    controls: { 
-      wireframe: true,
-      rotate: true,
-      texture: true,
-      download: false, 
-    },
     downloadFilename: "texto_img_a_3d.glb",
     initialCameraPosition: [0, 0, -1.5],
     orbitControlsConfig: {

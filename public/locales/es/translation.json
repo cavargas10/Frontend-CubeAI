@@ -489,6 +489,14 @@
       "Generando la textura a partir de la imagen...",
       "Finalizando el modelo 3D de alta fidelidad..."
     ],
+    "TextoImagen2D": [
+      "Interpretando tu descripción...",
+      "Generando conceptos visuales...",
+      "Componiendo la imagen base...",
+      "Aplicando el estilo seleccionado...",
+      "Añadiendo detalles finales...",
+      "La imagen 2D está casi lista..."
+    ],
     "default": [
       "Iniciando proceso...",
       "Contactando con los servidores de IA...",

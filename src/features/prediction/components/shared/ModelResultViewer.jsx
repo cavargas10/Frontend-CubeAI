@@ -5,7 +5,8 @@ import { DownloadSimple, ArrowsClockwise, Aperture, Image as ImageIcon } from "@
 import { useTranslation } from "react-i18next";
 import { HDREnvironment } from "./HDREnvironment";
 import { ModelViewer } from "./ModelViewer";
-import { TextureViewer } from "./TextureViewer"; 
+import { TextureViewer } from "./TextureViewer";
+import { ImageViewer } from "./ImageViewer";
 import { viewerConfig } from "../../config/viewer.config";
 import { BrandedSpinner } from "../../../../components/ui/BrandedSpinner";
 
@@ -37,7 +38,7 @@ const ModelLoadingFallback = () => {
 
 export const ModelResultViewer = ({
   modelUrl,
-  textureUrl,
+  originalImageUrl,
   onFirstLoad,
   downloadFilename = viewerConfig.default.downloadFilename,
   controls = viewerConfig.default.controls,
@@ -51,9 +52,10 @@ export const ModelResultViewer = ({
   const [showTexture, setShowTexture] = useState(true);
   const [internalTexturePreview, setInternalTexturePreview] = useState(null);
   const [isTextureZoomed, setIsTextureZoomed] = useState(false);
+  const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
   const hasLoadedOnce = useRef(false);
   const isResultReady = Boolean(modelUrl);
-  const textureToPreview = textureUrl || internalTexturePreview;
+  const textureToPreview = internalTexturePreview;
 
   useEffect(() => {
     hasLoadedOnce.current = false;
@@ -62,6 +64,7 @@ export const ModelResultViewer = ({
     setShowWireframe(false);
     setAutoRotate(true);
     setIsTextureZoomed(false);
+    setIsImageViewerOpen(false);
     
     return () => {
       if(modelUrl) {
@@ -88,7 +91,8 @@ export const ModelResultViewer = ({
   }, [onFirstLoad]);
 
   const CaptureTrigger = () => {
-    const { gl, scene, camera } = useThree();    
+    const { gl, scene, camera } = useThree();
+    
     const handleModelLoad = useCallback(() => {
       captureCanvas(gl, scene, camera);
     }, [gl, scene, camera]);
@@ -158,24 +162,39 @@ export const ModelResultViewer = ({
                 </div>
               </div>
             )}
+            {originalImageUrl && (
+              <div className="absolute bottom-4 right-4 z-10 cursor-pointer" onClick={() => setIsImageViewerOpen(true)}>
+                 <div className="bg-white/80 dark:bg-fondologin/90 p-3 rounded-2xl group hover:bg-gray-200 dark:hover:bg-principal transition-colors">
+                  <img src={originalImageUrl} alt="Imagen 2D Original" className="w-16 h-16 object-cover rounded-xl group-hover:opacity-90 transition-opacity"/>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block text-center">Imagen 2D</span>
+                </div>
+              </div>
+            )}
           </>
         )}
         
-        <div className={`w-full h-full ${isTextureZoomed ? 'hidden' : 'block'}`}>
+        <div className={`w-full h-full ${isTextureZoomed || isImageViewerOpen ? 'hidden' : 'block'}`}>
             <Canvas gl={{ preserveDrawingBuffer: true }} camera={{ position: initialCameraPosition, fov: 50 }} className={`h-full rounded-3xl ${!isResultReady ? "opacity-40" : "opacity-100 transition-opacity duration-300"}`}>
                 <Suspense fallback={null}>
                     <Grid position={gridPosition} args={[15, 15]} cellSize={0.5} cellThickness={1} cellColor="#6f6f6f" sectionSize={2.5} sectionThickness={1.5} sectionColor="#9d4bff" fadeDistance={25} fadeStrength={1} infiniteGrid />
                     <HDREnvironment />
-                    <OrbitControls minDistance={orbitControlsConfig.minDistance} maxDistance={orbitControlsConfig.maxDistance} autoRotate={isResultReady && autoRotate && controls.rotate} autoRotateSpeed={orbitControlsConfig.autoRotateSpeed} enablePan={true} enabled={isResultReady && !isTextureZoomed} />
+                    <OrbitControls minDistance={orbitControlsConfig.minDistance} maxDistance={orbitControlsConfig.maxDistance} autoRotate={isResultReady && autoRotate && controls.rotate} autoRotateSpeed={orbitControlsConfig.autoRotateSpeed} enablePan={true} enabled={isResultReady && !isTextureZoomed && !isImageViewerOpen} />
+                    
                     {isResultReady && <CaptureTrigger />}
+
                 </Suspense>
             </Canvas>
         </div>
-
         {isTextureZoomed && (
             <TextureViewer
                 textureUrl={textureToPreview}
                 onClose={() => setIsTextureZoomed(false)}
+            />
+        )}
+        {isImageViewerOpen && (
+            <ImageViewer
+                imageUrl={originalImageUrl}
+                onClose={() => setIsImageViewerOpen(false)}
             />
         )}
       </div>

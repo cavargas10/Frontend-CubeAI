@@ -488,6 +488,14 @@
       "Creating the 3D mesh...",
       "Generating texture from the image...",
       "Finalizing the high-fidelity 3D model..."
+    ],    
+    "TextoImagen2D": [
+      "Interpreting your description...",
+      "Generating visual concepts...",
+      "Composing the base image...",
+      "Applying the selected style...",
+      "Adding final details...",
+      "The 2D image is almost ready..."
     ],
     "default": [
       "Initiating process...",
