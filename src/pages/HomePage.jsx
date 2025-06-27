@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import { lazy, Suspense } from "react";
 import { HeroSection } from "./HomePage/components/HeroSection";
 import { LogosSection } from "./HomePage/components/LogosSection";
 import { MethodsSection } from "./HomePage/components/MethodsSection";
@@ -15,7 +15,9 @@ const ParticleBackground = lazy(() =>
 export const HomePage = () => {
   return (
     <main className="pt-24 relative"> 
-      <ParticleBackground />     
+      <Suspense fallback={<div>Loading particles...</div>}>
+        <ParticleBackground />
+      </Suspense>     
       <div className="w-full px-10 2xl:px-44 relative z-10">
         <HeroSection />
         <LogosSection />
