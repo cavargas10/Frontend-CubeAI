@@ -7,7 +7,6 @@ import { BenefitsSection } from "./HomePage/components/BenefitsSection";
 import { CTASection } from "./HomePage/components/CTASection";
 import { MarqueeSection } from "./HomePage/components/MarqueeSection";
 import { FooterSection } from "./HomePage/components/FooterSection";
-import { ParticleBackground }from "../components/ui/ParticleBackground";
 
 const ParticleBackground = lazy(() => 
   import("../components/ui/ParticleBackground").then(module => ({ default: module.ParticleBackground }))
