@@ -33,6 +33,8 @@ export function HeroSection() {
             <img
               src={logo} 
               alt="Muestra de modelo 3D"
+              width="600"
+              height="600"
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-background/20" />

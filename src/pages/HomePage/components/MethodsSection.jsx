@@ -23,7 +23,7 @@ export function MethodsSection() {
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl bg-gradient-to-r from-azul-gradient to-morado-gradient bg-clip-text text-transparent text-glow">
               {methodsT.title}
             </h2>
-            <p className="max-w-[900px] text-slate-600 dark:text-foreground/80 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+            <p className="max-w-[900px] text-slate-600 dark:text-gray-300 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
               {methodsT.subtitle}
             </p>
           </div>
