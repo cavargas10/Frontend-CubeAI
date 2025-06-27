@@ -104,6 +104,7 @@ export function GenerationMethod({
                 <img
                   src={inputImage || "/placeholder.svg"}
                   alt={`Entrada para ${title}`}
+                  loading="lazy"
                   className="w-[80%] h-[80%] object-cover mx-auto my-4"
                 />
               )}
