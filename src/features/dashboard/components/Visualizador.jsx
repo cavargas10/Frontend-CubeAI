@@ -105,7 +105,7 @@ export const Visualizador = ({ isCollapsed }) => {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col flex-grow min-h-0 overflow-y-auto">
+          <div className="flex flex-col">
             <div className="mb-8 flex-shrink-0">
               <div className="flex items-center gap-4 mb-3">
                 <div>
