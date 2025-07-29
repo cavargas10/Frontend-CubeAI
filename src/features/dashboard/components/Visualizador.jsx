@@ -74,15 +74,15 @@ export const Visualizador = ({ isCollapsed }) => {
 
   return (
     <section
-      className={`min-h-screen bg-white dark:bg-fondologin transition-all duration-300 ease-in-out relative w-full flex flex-col ${
+      className={`bg-white dark:bg-fondologin transition-all duration-300 ease-in-out w-full flex flex-col h-[calc(100vh-4rem)] ${
         isCollapsed ? "sm:pl-[80px]" : "md:pl-[267px] 2xl:pl-[300px]"
       }`}
     >
-      <div className="relative z-10 px-4 sm:px-6 md:px-8 pt-6 pb-8 flex flex-col flex-grow">
+      <div className="relative z-10 px-4 sm:px-6 md:px-8 pt-6 pb-8 flex flex-col flex-grow min-h-0">
         {isLoadingViewer ? (
           <ViewerLoading />
         ) : isViewerOpen ? (
-          <div className="flex-grow flex flex-col bg-white dark:bg-gradient-to-br from-principal via-[#0F102F] to-principal border-2 border-gray-200 dark:border-linea/20 rounded-3xl shadow-lg dark:shadow-2xl dark:shadow-morado-gradient/10 overflow-hidden">
+          <div className="flex-grow flex flex-col min-h-0 bg-white dark:bg-gradient-to-br from-principal via-[#0F102F] to-principal border-2 border-gray-200 dark:border-linea/20 rounded-3xl shadow-lg dark:shadow-2xl dark:shadow-morado-gradient/10 overflow-hidden">
             <div className="flex items-center justify-between p-3 sm:p-4 bg-gray-50 dark:bg-black/20 border-b border-gray-200 dark:border-linea/30 flex-shrink-0">
               <h3 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-azul-gradient to-morado-gradient text-transparent bg-clip-text truncate pr-4">
                 {selectedGenerationForViewer.generation_name}
@@ -105,7 +105,7 @@ export const Visualizador = ({ isCollapsed }) => {
             </div>
           </div>
         ) : (
-          <>
+          <div className="flex flex-col flex-grow min-h-0 overflow-y-auto">
             <div className="mb-8 flex-shrink-0">
               <div className="flex items-center gap-4 mb-3">
                 <div>
@@ -174,7 +174,7 @@ export const Visualizador = ({ isCollapsed }) => {
                 <PredictionHistory selectedTab={selectedTab} />
               </div>
             </div>
-          </>
+          </div>
         )}
       </div>
     </section>

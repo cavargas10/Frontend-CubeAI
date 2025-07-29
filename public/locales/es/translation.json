@@ -430,7 +430,7 @@
       "generate_2d_button": "Generar Imagen 2D",
       "regenerate_2d_button": "Regenerar Imagen",
       "generate_3d_button": "Generar Modelo 3D",
-      "original_2d_label": "Imagen 2D Original",
+      "original_2d_label": "Ver Imagen",
       "download_2d_button": "Descargar Imagen"
     }
   },

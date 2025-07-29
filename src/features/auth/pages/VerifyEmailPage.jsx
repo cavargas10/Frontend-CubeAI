@@ -128,8 +128,8 @@ export const VerifyEmailPage = () => {
           </div>
 
           <div className="text-center space-y-4">
-            <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-gray-100 dark:bg-secondary/20 border border-gray-200 dark:border-linea/50">
-              <span className="text-gray-800 dark:text-white font-medium text-sm">
+            <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-200 border border-gray-200 dark:border-gray-300">
+              <span className="text-gray-800 dark:text-gray-800 font-medium text-sm">
                 {email}
               </span>
             </div>
