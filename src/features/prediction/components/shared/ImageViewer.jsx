@@ -31,7 +31,7 @@ export const ImageViewer = ({ imageUrl, onClose }) => {
           className="px-4 py-2 bg-gradient-to-r from-azul-gradient to-morado-gradient text-white rounded-full flex items-center gap-2 transition-all hover:shadow-lg hover:scale-105 shadow-xl"
         >
           <DownloadSimple size={18} />
-          <span className="text-sm font-medium">Descargar Imagen</span>
+          <span className="text-sm font-medium">{t("generation_pages.text_image_to_3d_steps.download_2d_button")}</span>
         </a>
       </div>
     </div>

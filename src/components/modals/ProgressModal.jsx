@@ -5,21 +5,9 @@ import { useTranslation } from "react-i18next";
 import { BrandedSpinner } from "../ui/BrandedSpinner";
 
 const QueueVisualizer = ({ position, total }) => {
-  const displayTotal = Math.max(position, total);
-  const items = Array.from({ length: displayTotal }, (_, i) => i + 1);
-
   return (
     <div className="flex items-center justify-center gap-2 my-4">
-      {items.map((item) => (
-        <Queue
-          key={item}
-          size={28}
-          weight={item === position ? "fill" : "regular"}
-          className={`transition-all duration-300 ${
-            item === position ? "text-morado-gradient" : "text-gray-400"
-          }`}
-        />
-      ))}
+      <Queue size={40} className="text-gray-400 animate-pulse" />
     </div>
   );
 };
@@ -82,10 +70,7 @@ export const ProgressModal = ({ show, jobStatus }) => {
   const getMessage = () => {
     switch (jobStatus?.status) {
       case "queued":
-        return t("progress_modal.queued_message", {
-          position: jobStatus.position_in_queue,
-          total: jobStatus.queue_size,
-        });
+        return t("progress_modal.queued_message");
       case "processing":
         if (Array.isArray(steps) && steps[currentStepIndex]) {
           return steps[currentStepIndex];
@@ -116,10 +101,7 @@ export const ProgressModal = ({ show, jobStatus }) => {
         <div className="text-center bg-white dark:bg-principal rounded-2xl py-8 px-6 border-2 border-gray-200 dark:border-linea/50 shadow-2xl shadow-azul-gradient/10">
           <div className="flex flex-col items-center">
             {jobStatus?.status === "queued" ? (
-              <QueueVisualizer
-                position={jobStatus.position_in_queue}
-                total={jobStatus.queue_size}
-              />
+              <QueueVisualizer />
             ) : jobStatus?.status === "processing" ? (
               <div className="my-4">
                 <BrandedSpinner size="sm" />

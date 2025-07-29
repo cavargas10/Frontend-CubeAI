@@ -161,7 +161,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
         <hr className="border-t-2 border-gray-200 dark:border-linea/20 mb-6 flex-shrink-0" />
 
         <div className="flex-grow flex flex-col xl:grid xl:grid-cols-5 gap-4 min-h-0">
-          <div className="xl:col-span-2 flex flex-col">
+          <div className="xl:col-span-2 flex flex-col mb-6 xl:mb-0">
             <div className="bg-gray-50 dark:bg-principal/30 backdrop-blur-sm border border-gray-200 dark:border-linea/20 rounded-2xl p-3 h-full flex flex-col space-y-2">
               <div>
                 <div className="flex items-center gap-3 mb-2">
@@ -253,19 +253,22 @@ export const TextImg3DInput = ({ isCollapsed }) => {
                   ))}
                 </div>
               </div>
-              
+
               <div className="mt-auto pt-2">
                   <button onClick={handleMainButtonClick} disabled={isMainButtonDisabled}
                     className="w-full text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2.5 rounded-lg border-none flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-lg hover:shadow-morado-gradient/20 hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 disabled:cursor-not-allowed text-white"
                   >
                     {currentStep === 1 ? <Sparkle size={22} weight="fill" /> : <Cube size={22} weight="fill" />}
-                    {currentStep === 1 ? "Generar Imagen 2D" : "Generar Modelo 3D"}
+                    {currentStep === 1 
+                      ? t("generation_pages.text_image_to_3d_steps.generate_2d_button") 
+                      : t("generation_pages.text_image_to_3d_steps.generate_3d_button")
+                    }
                   </button>
               </div>
             </div>
           </div>
 
-          <div className="xl:col-span-3 flex flex-col min-h-0">
+          <div className="xl:col-span-3 flex-grow min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0">
             <div className="h-full border-2 border-gray-200 dark:border-linea/20 rounded-3xl overflow-hidden flex flex-col relative">
               {predictionResult ? (
                  <TextImg3DResult onFirstLoad={handlePreviewUpload} />
@@ -280,7 +283,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
                         className="bg-white/80 dark:bg-principal/80 backdrop-blur-md py-2 px-4 rounded-lg flex items-center gap-2 transition-all hover:scale-105 shadow-lg text-gray-800 dark:text-white border border-gray-300 dark:border-linea/20"
                       >
                         <ArrowCounterClockwise size={20} />
-                        Regenerar Imagen
+                        {t("generation_pages.text_image_to_3d_steps.regenerate_2d_button")}
                       </button>
                     </div>
                   )}

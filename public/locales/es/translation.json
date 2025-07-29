@@ -425,6 +425,13 @@
       "instructions": "Aquí podrás ver tu modelo 3D una vez generado",
       "generated_2d_image": "Imagen 2D Generada:",
       "download_button": "Descargar GLB"
+    },
+    "text_image_to_3d_steps": {
+      "generate_2d_button": "Generar Imagen 2D",
+      "regenerate_2d_button": "Regenerar Imagen",
+      "generate_3d_button": "Generar Modelo 3D",
+      "original_2d_label": "Imagen 2D Original",
+      "download_2d_button": "Descargar Imagen"
     }
   },
   "model_viewer": {
@@ -510,7 +517,7 @@
     "initiating_title": "Iniciando...",
     "initiating_message": "Enviando tu solicitud a la cola de generación.",
     "queued_title": "¡Tu creación está en la cola!",
-    "queued_message": "Eres el número {{position}} de {{total}} en la fila. ¡Gracias por tu paciencia!",
+    "queued_message": "Tu trabajo está en cola y será procesado pronto. ¡Gracias por tu paciencia!",
     "processing_title": "¡Tu creación está en marcha!",
     "processing_message_default": "El modelo de IA está trabajando en tu objeto 3D..."
   },

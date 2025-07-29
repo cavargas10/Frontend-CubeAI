@@ -165,8 +165,8 @@ export const ModelResultViewer = ({
             {originalImageUrl && (
               <div className="absolute bottom-4 right-4 z-10 cursor-pointer" onClick={() => setIsImageViewerOpen(true)}>
                  <div className="bg-white/80 dark:bg-fondologin/90 p-3 rounded-2xl group hover:bg-gray-200 dark:hover:bg-principal transition-colors">
-                  <img src={originalImageUrl} alt="Imagen 2D Original" className="w-16 h-16 object-cover rounded-xl group-hover:opacity-90 transition-opacity"/>
-                  <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block text-center">Imagen 2D</span>
+                  <img src={originalImageUrl} alt={t("generation_pages.text_image_to_3d_steps.original_2d_label")} className="w-16 h-16 object-cover rounded-xl group-hover:opacity-90 transition-opacity"/>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block text-center">{t("generation_pages.text_image_to_3d_steps.original_2d_label")}</span>
                 </div>
               </div>
             )}
