@@ -1,18 +1,17 @@
-import { useState, useCallback, useMemo, useEffect, useRef } from "react";
-import {
-  Sparkle,
-  PencilSimple,
-  Eraser,
-  Trash,
-  TextAa,
-} from "@phosphor-icons/react";
+// src/features/prediction/components/input/Boceto3DInput.jsx
+
+import { useState, useEffect, useCallback } from "react";
+import { Sparkle, UploadSimple, TextAa, ChatText } from "@phosphor-icons/react";
 import { ErrorModal } from "../../../../components/modals/ErrorModal";
 import { ProgressModal } from "../../../../components/modals/ProgressModal";
 import { Boceto3DResult } from "../results/Boceto3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
-import { useCanvasDrawing } from "../../hooks/useCanvasDrawing";
+import { useImageUpload } from "../../hooks/useImageUpload";
 import { useAuth } from "../../../auth/hooks/useAuth";
-import { usePredictions, usePredictionResult } from "../../context/PredictionContext";
+import {
+  usePredictions,
+  usePredictionResult,
+} from "../../context/PredictionContext";
 import { uploadPredictionPreview } from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
 
@@ -32,32 +31,22 @@ export const Boceto3DInput = ({ isCollapsed }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const { dispatch, clearResult } = usePredictions();
-  const prediction_boceto3d_result = usePredictionResult('Texto3D');
+  const prediction_boceto3d_result = usePredictionResult("Boceto3D");
   const PREDICTION_TYPE = "Boceto3D";
+
   const [generationName, setGenerationName] = useState("");
   const [description, setDescription] = useState("");
-  const canvasConfig = useMemo(
-    () => ({
-      width: 800,
-      height: 400,
-      pencilConfig: { strokeStyle: "#000000", lineWidth: 2, lineCap: "round" },
-      eraserSize: 20,
-      backgroundColor: "#FFFFFF",
-    }),
-    []
-  );
 
   const {
-    drawingState,
-    setDrawingState,
-    initializeCanvas,
-    startDrawing,
-    stopDrawing,
-    handleDraw,
-    clearCanvas,
-    isCanvasEmpty,
-  } = useCanvasDrawing(canvasConfig);
-  const canvasForDataRef = useRef(null);
+    imageFile,
+    imagePreview,
+    isDragging,
+    handleFileChange,
+    handleDragOver,
+    handleDragLeave,
+    handleDrop,
+    resetImageState,
+  } = useImageUpload();
 
   const {
     submitPrediction,
@@ -71,14 +60,17 @@ export const Boceto3DInput = ({ isCollapsed }) => {
   const resetComponentState = useCallback(() => {
     setGenerationName("");
     setDescription("");
-    clearCanvas();
+    resetImageState();
     reset();
     clearResult(PREDICTION_TYPE);
-  }, [clearCanvas, reset, clearResult]);
+  }, [resetImageState, reset, clearResult]);
 
   useEffect(() => {
     if (result) {
-      dispatch({ type: "SET_PREDICTION", payload: { type: PREDICTION_TYPE, result } });
+      dispatch({
+        type: "SET_PREDICTION",
+        payload: { type: PREDICTION_TYPE, result },
+      });
     }
   }, [result, dispatch]);
 
@@ -88,49 +80,17 @@ export const Boceto3DInput = ({ isCollapsed }) => {
     };
   }, [resetComponentState]);
 
-  const getCanvasDataURL = useCallback((type = "image/png", quality) => {
-    if (!canvasForDataRef.current) return null;
-    return canvasForDataRef.current.toDataURL(type, quality);
-  }, []);
-
-  const dataURLtoFile = useCallback((dataURL, filename) => {
-    try {
-      const blob = dataURLtoBlob(dataURL);
-      return new File([blob], filename, { type: blob.type });
-    } catch (error) {
-      console.error("Error al convertir dataURL a File:", error);
-      return null;
-    }
-  }, []);
-
   const handleLocalPrediction = useCallback(async () => {
-    if (!generationName.trim() || isCanvasEmpty()) {
+    if (!generationName.trim() || !imageFile) {
       return;
     }
-
     clearResult(PREDICTION_TYPE);
-    const currentJobType = PREDICTION_TYPE;
-
-    const image = getCanvasDataURL("image/png");
-    if (!image) return;
-    const imageFile = dataURLtoFile(image, "boceto.png");
-    if (!imageFile) return;
-
     const formData = new FormData();
     formData.append("image", imageFile);
     formData.append("generationName", generationName);
     formData.append("description", description);
-
-    await submitPrediction(currentJobType, formData);
-  }, [
-    generationName,
-    description,
-    submitPrediction,
-    getCanvasDataURL,
-    isCanvasEmpty,
-    dataURLtoFile,
-    clearResult,
-  ]);
+    await submitPrediction(PREDICTION_TYPE, formData);
+  }, [generationName, description, imageFile, submitPrediction, clearResult]);
 
   const handlePreviewUpload = useCallback(
     async (dataURL) => {
@@ -158,39 +118,9 @@ export const Boceto3DInput = ({ isCollapsed }) => {
     [user, prediction_boceto3d_result]
   );
 
-  const setTool = useCallback(
-    (newTool) => {
-      setDrawingState((prev) => ({ ...prev, tool: newTool }));
-    },
-    [setDrawingState]
-  );
-
-  const drawingHandlers = useMemo(
-    () => ({
-      onMouseDown: startDrawing,
-      onMouseUp: stopDrawing,
-      onMouseLeave: stopDrawing,
-      onMouseMove: handleDraw,
-      onTouchStart: startDrawing,
-      onTouchEnd: stopDrawing,
-      onTouchMove: handleDraw,
-    }),
-    [startDrawing, stopDrawing, handleDraw]
-  );
-
-  const initializeLocalCanvas = useCallback(
-    (node) => {
-      if (node) {
-        initializeCanvas(node);
-        canvasForDataRef.current = node;
-      }
-    },
-    [initializeCanvas]
-  );
-
   const isFormDisabled = isSubmitting || !!jobStatus;
   const isButtonDisabled =
-    isFormDisabled || !generationName.trim() || isCanvasEmpty();
+    isFormDisabled || !generationName.trim() || !imageFile;
   const showProgress =
     isFormDisabled && !finalError && jobStatus?.status !== "completed";
   const showErrorModal = !!finalError;
@@ -201,7 +131,7 @@ export const Boceto3DInput = ({ isCollapsed }) => {
         isCollapsed ? "sm:pl-[80px]" : "md:pl-[267px] 2xl:pl-[300px]"
       }`}
     >
-      <div className="relative z-10 px-4 sm:px-6 md:px-8 pt-6 pb-8 flex flex-col flex-grow">
+      <div className="relative z-10 px-4 sm:px-6 md:px-8 pt-6 pb-8 flex flex-col flex-grow min-h-0">
         <div className="mb-6 flex-shrink-0">
           <div className="flex items-center gap-4">
             <div>
@@ -213,16 +143,19 @@ export const Boceto3DInput = ({ isCollapsed }) => {
           </div>
         </div>
         <hr className="border-t-2 border-gray-200 dark:border-linea/20 mb-6 flex-shrink-0" />
-        <div className="flex-grow flex flex-col xl:grid xl:grid-cols-5 gap-4">
-          <div className="xl:col-span-2">
-            <div className="bg-gray-50 dark:bg-principal/30 backdrop-blur-sm border border-gray-200 dark:border-linea/20 rounded-2xl p-4 h-full flex flex-col space-y-4">
-              <div className="flex-shrink-0">
-                <div className="flex items-center gap-3 mb-2">
+
+        <div className="flex-grow flex flex-col xl:grid xl:grid-cols-5 xl:gap-4">
+          <div className="xl:col-span-2 mb-6 xl:mb-0">
+            {/* ¡MODIFICADO! Reducimos el espaciado general de 'space-y-4' a 'space-y-3' */}
+            <div className="bg-gray-50 dark:bg-principal/30 backdrop-blur-sm border border-gray-200 dark:border-linea/20 rounded-2xl p-4 h-full flex flex-col space-y-3">
+              <div>
+                <div className="flex items-center gap-3 mb-1.5">
                   <TextAa size={18} className="text-azul-gradient" />
                   <h3 className="text-sm font-semibold text-gray-800 dark:text-white">
                     {t("generation_pages.common.generation_name_label")}
                   </h3>
                 </div>
+                {/* ¡MODIFICADO! Reducimos el padding vertical de 'p-2.5' a 'p-2' */}
                 <input
                   type="text"
                   placeholder={t(
@@ -231,97 +164,117 @@ export const Boceto3DInput = ({ isCollapsed }) => {
                   value={generationName}
                   onChange={(e) => setGenerationName(e.target.value)}
                   disabled={isFormDisabled}
-                  className={`w-full p-2.5 rounded-lg bg-white dark:bg-principal/50 border-2 text-gray-800 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300 ${
+                  className={`w-full p-2 rounded-lg bg-white dark:bg-principal/50 border-2 text-gray-800 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300 ${
                     generationName.trim()
                       ? "border-azul-gradient"
                       : "border-gray-300 dark:border-linea/30"
                   }`}
                 />
               </div>
-              <div className="flex-grow flex flex-col min-h-0">
-                <div
-                  className={`w-full min-h-[400px] xl:min-h-0 xl:flex-grow rounded-lg overflow-hidden relative border-2 ${
-                    isFormDisabled
-                      ? "opacity-60 pointer-events-none"
+
+              <div>
+                <div className="flex items-center gap-3 mb-1.5">
+                  <ChatText size={18} className="text-azul-gradient" />
+                  <h3 className="text-sm font-semibold text-gray-800 dark:text-white">
+                    {t(
+                      "generation_pages.common.canvas_description_placeholder"
+                    )}
+                  </h3>
+                </div>
+                {/* ¡MODIFICADO! Reducimos el padding vertical de 'p-2.5' a 'p-2' */}
+                <input
+                  type="text"
+                  placeholder={t(
+                    "generation_pages.common.canvas_description_placeholder"
+                  )}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  disabled={isFormDisabled}
+                  className={`w-full p-2 rounded-lg bg-white dark:bg-principal/50 border-2 text-gray-800 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300 ${
+                    description.trim()
+                      ? "border-azul-gradient"
                       : "border-gray-300 dark:border-linea/30"
                   }`}
-                  style={{ touchAction: "none" }}
-                >
-                  <div
-                    className="w-full h-full bg-white"
-                    style={{ cursor: "crosshair" }}
-                    {...drawingHandlers}
-                  >
-                    <canvas
-                      ref={initializeLocalCanvas}
-                      width={canvasConfig.width}
-                      height={canvasConfig.height}
-                      className="w-full h-full block"
-                    />
-                  </div>
-                  <div className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-2 bg-gray-100/80 dark:bg-[#1f2437]/80 backdrop-blur-sm p-1.5 rounded-xl border border-gray-200 dark:border-linea/20">
-                    <button
-                      onClick={() => setTool("pencil")}
-                      disabled={isFormDisabled}
-                      className={`p-2 rounded-lg flex items-center justify-center transition-all ${
-                        drawingState.tool === "pencil"
-                          ? "bg-gradient-to-r from-azul-gradient to-morado-gradient text-white shadow-md"
-                          : "text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/20"
-                      }`}
-                      title={t("generation_pages.common.pencil_tooltip")}
-                    >
-                      <PencilSimple size={20} weight="bold" />
-                    </button>
-                    <button
-                      onClick={() => setTool("eraser")}
-                      disabled={isFormDisabled}
-                      className={`p-2 rounded-lg flex items-center justify-center transition-all ${
-                        drawingState.tool === "eraser"
-                          ? "bg-gradient-to-r from-azul-gradient to-morado-gradient text-white shadow-md"
-                          : "text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/20"
-                      }`}
-                      title={t("generation_pages.common.eraser_tooltip")}
-                    >
-                      <Eraser size={20} weight="bold" />
-                    </button>
-                    <div className="h-px w-full bg-gray-300 dark:bg-linea/30 my-1" />
-                    <button
-                      onClick={clearCanvas}
-                      disabled={isFormDisabled}
-                      className="p-2 rounded-lg flex items-center justify-center transition-all text-gray-600 dark:text-gray-300 hover:bg-red-500/80 hover:text-white"
-                      title={t("generation_pages.common.clear_canvas_tooltip")}
-                    >
-                      <Trash size={20} weight="bold" />
-                    </button>
-                  </div>
-                  <div className="absolute bottom-0 left-0 right-0 p-2">
-                    <div className="bg-white/80 dark:bg-principal/80 backdrop-blur-sm border border-gray-200 dark:border-linea/20 rounded-lg p-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                      <input
-                        type="text"
-                        placeholder={t(
-                          "generation_pages.common.canvas_description_placeholder"
-                        )}
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        disabled={isFormDisabled}
-                        className="flex-1 text-sm bg-transparent text-gray-800 dark:text-white border-none focus:ring-0 placeholder-gray-500 dark:placeholder-gray-400 px-1 py-1"
-                      />
-                      <button
-                        onClick={handleLocalPrediction}
-                        disabled={isButtonDisabled}
-                        className="text-sm font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2 px-4 rounded-md border-none flex items-center justify-center gap-2 transition-all hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 whitespace-nowrap text-white"
-                      >
-                        <Sparkle size={16} weight="fill" />
-                        {t("generation_pages.common.canvas_generate_button")}
-                      </button>
-                    </div>
-                  </div>
+                />
+              </div>
+
+              <div className="flex-grow flex flex-col min-h-0">
+                <div className="flex items-center gap-3 mb-1.5">
+                  <UploadSimple size={18} className="text-azul-gradient" />
+                  <h3 className="text-sm font-semibold text-gray-800 dark:text-white">
+                    {t("generation_pages.common.upload_image_label")}
+                  </h3>
                 </div>
+                <div
+                  className={`relative border-2 border-dashed rounded-lg p-2 text-center cursor-pointer transition-colors flex flex-col items-center justify-center flex-grow 
+                  ${
+                    isDragging
+                      ? "border-azul-gradient bg-azul-gradient/5"
+                      : imagePreview
+                        ? "border-azul-gradient bg-azul-gradient/5"
+                        : "border-gray-300 dark:border-linea/30"
+                  } 
+                  ${
+                    isFormDisabled
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:border-azul-gradient/50"
+                  }`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  onClick={() =>
+                    !isFormDisabled &&
+                    document.getElementById("fileInput-boceto3d").click()
+                  }
+                >
+                  <input
+                    id="fileInput-boceto3d"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    disabled={isFormDisabled}
+                    className="hidden"
+                  />
+                  {imagePreview ? (
+                    <div className="w-full h-full relative min-h-[150px] sm:min-h-[180px] xl:min-h-0">
+                      <img
+                        src={imagePreview}
+                        alt="Vista previa del boceto"
+                        className="absolute inset-0 w-full h-full object-contain rounded-lg"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center p-4 min-h-[150px] sm:min-h-[180px] xl:min-h-0">
+                      <UploadSimple
+                        className="w-8 h-8 text-gray-400 mb-2"
+                        weight="light"
+                      />
+                      <p className="text-sm text-gray-500 dark:text-gray-300">
+                        {t("generation_pages.common.drag_and_drop_prompt")}
+                      </p>
+                      <p className="mt-1 text-xs text-gray-500 dark:text-gray-500">
+                        {t("generation_pages.common.file_types")}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-auto flex-shrink-0">
+                {/* ¡MODIFICADO! Reducimos el padding vertical de 'py-3' a 'py-2.5' */}
+                <button
+                  onClick={handleLocalPrediction}
+                  disabled={isButtonDisabled}
+                  className="w-full text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2.5 rounded-lg border-none flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-lg hover:shadow-morado-gradient/20 hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 disabled:cursor-not-allowed text-white"
+                >
+                  <Sparkle size={20} weight="fill" />
+                  {t("generation_pages.common.generate_button")}
+                </button>
               </div>
             </div>
           </div>
-          <div className="xl:col-span-3 flex-grow min-h-[500px] md:min-h-[600px] xl:min-h-0">
-            <div className="h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0 border-2 border-gray-200 dark:border-linea/20 rounded-3xl overflow-hidden">
+          <div className="xl:col-span-3 flex-grow min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0">
+            <div className="h-full border-2 border-gray-200 dark:border-linea/20 rounded-3xl overflow-hidden">
               <Boceto3DResult onFirstLoad={handlePreviewUpload} />
             </div>
           </div>
