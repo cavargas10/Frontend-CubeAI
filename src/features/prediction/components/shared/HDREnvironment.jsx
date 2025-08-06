@@ -6,7 +6,7 @@ export function HDREnvironment() {
     <Environment
       files={environmentHDR}
       background={false}
-      environmentIntensity={1.5} 
+      environmentIntensity={2.5} 
       environmentRotation={[0, Math.PI / 2, 0]} 
     />
   );

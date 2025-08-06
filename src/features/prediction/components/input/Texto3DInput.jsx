@@ -5,7 +5,10 @@ import { ProgressModal } from "../../../../components/modals/ProgressModal";
 import { Texto3DResult } from "../results/Texto3DResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useAuth } from "../../../auth/hooks/useAuth";
-import { usePredictions, usePredictionResult } from "../../context/PredictionContext";
+import {
+  usePredictions,
+  usePredictionResult,
+} from "../../context/PredictionContext";
 import { uploadPredictionPreview } from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
 
@@ -25,11 +28,11 @@ export const Texto3DInput = ({ isCollapsed }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const { dispatch, clearResult } = usePredictions();
-  const prediction_text3d_result = usePredictionResult('Texto3D');
+  const prediction_text3d_result = usePredictionResult("Texto3D");
   const PREDICTION_TYPE = "Texto3D";
   const [generationName, setGenerationName] = useState("");
   const [userPrompt, setUserPrompt] = useState("");
-  const [selectedStyle, setSelectedStyle] = useState(null);
+  const [selectedStyle, setSelectedStyle] = useState("none");
   const {
     submitPrediction,
     isLoading: isSubmitting,
@@ -40,6 +43,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
   } = usePredictionHandler(user);
 
   const styles = [
+    { name: t("generation_pages.styles.none"), value: "none" },
     { name: t("generation_pages.styles.disney"), value: "disney" },
     { name: t("generation_pages.styles.pixar"), value: "pixar" },
     { name: t("generation_pages.styles.realistic"), value: "realistic" },
@@ -50,14 +54,17 @@ export const Texto3DInput = ({ isCollapsed }) => {
   const resetComponentState = useCallback(() => {
     setGenerationName("");
     setUserPrompt("");
-    setSelectedStyle(null);
+    setSelectedStyle("none");
     reset();
     clearResult(PREDICTION_TYPE);
   }, [clearResult, reset]);
 
   useEffect(() => {
     if (result) {
-      dispatch({ type: "SET_PREDICTION", payload: { type: PREDICTION_TYPE, result } });
+      dispatch({
+        type: "SET_PREDICTION",
+        payload: { type: PREDICTION_TYPE, result },
+      });
     }
   }, [result, dispatch]);
 
@@ -68,18 +75,16 @@ export const Texto3DInput = ({ isCollapsed }) => {
   }, [resetComponentState]);
 
   const handleLocalPrediction = async () => {
-    if (!generationName.trim() || !userPrompt.trim() || !selectedStyle) {
+    if (!generationName.trim() || !userPrompt.trim()) {
       return;
     }
     clearResult(PREDICTION_TYPE);
-    const currentJobType = PREDICTION_TYPE;
     const payload = {
       generationName,
       prompt: userPrompt,
       selectedStyle,
     };
-
-    await submitPrediction(currentJobType, payload);
+    await submitPrediction(PREDICTION_TYPE, payload);
   };
 
   const handlePreviewUpload = useCallback(
@@ -110,10 +115,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
 
   const isFormDisabled = isSubmitting || !!jobStatus;
   const isButtonDisabled =
-    isFormDisabled ||
-    !generationName.trim() ||
-    !userPrompt.trim() ||
-    !selectedStyle;
+    isFormDisabled || !generationName.trim() || !userPrompt.trim();
   const showProgress =
     isFormDisabled && !finalError && jobStatus?.status !== "completed";
   const showErrorModal = !!finalError;
@@ -192,23 +194,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
                   </h3>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
-                  {styles.slice(0, 3).map((style) => (
-                    <button
-                      key={style.value}
-                      onClick={() => setSelectedStyle(style.value)}
-                      disabled={isFormDisabled}
-                      className={`border-2 rounded-lg py-2 px-2 flex items-center justify-center transition-all text-xs h-10 ${
-                        selectedStyle === style.value
-                          ? "border-azul-gradient bg-azul-gradient/10 dark:bg-azul-gradient/20 shadow-md scale-105 font-semibold ring-2 ring-azul-gradient/50 text-gray-800 dark:text-white"
-                          : "border-gray-300 dark:border-linea/30 hover:border-azul-gradient/50 bg-white dark:bg-principal/50 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
-                      }`}
-                    >
-                      <span>{style.name}</span>
-                    </button>
-                  ))}
-                </div>
-                <div className="grid grid-cols-2 gap-2 mt-2">
-                  {styles.slice(3).map((style) => (
+                  {styles.map((style) => (
                     <button
                       key={style.value}
                       onClick={() => setSelectedStyle(style.value)}

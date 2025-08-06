@@ -414,6 +414,7 @@
       "operation_takes_time": "This operation may take several minutes."
     },
     "styles": {
+      "none": "No Style",
       "disney": "Disney",
       "pixar": "Pixar",
       "realistic": "Realistic",
