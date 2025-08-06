@@ -50,7 +50,7 @@
     },
     "sketch_to_3d": {
       "title": "Sketch to 3D",
-      "description": "Draw a simple sketch, and our AI will transform it into a fully realized 3D object.",
+      "description": "Upload an image of a simple sketch, and our AI will transform it into a fully realized 3D object.",
       "input_type": "Sketch"
     },
     "output_label": "3D Model"
@@ -148,9 +148,7 @@
       "not_found_title": "Document not available or not found.",
       "button_not_found": "Go to Documentation"
     },
-    "loading_view": {
-      "title": "Loading document..."
-    },
+    "loading_view": { "title": "Loading document..." },
     "content_all": {
       "loading": "Loading all documents...",
       "error_prefix": "Error loading documents: ",
@@ -374,43 +372,25 @@
     }
   },
   "generation_pages": {
-    "text_to_3d": {
-      "title": "Text to 3D"
-    },
-    "image_to_3d": {
-      "title": "Image to 3D"
-    },
-    "text_image_to_3d": {
-      "title": "Text & Image to 3D"
-    },
-    "unique_to_3d": {
-      "title": "Unique to 3D"
-    },
-    "multi_image_to_3d": {
-      "title": "Multi-Image to 3D"
-    },
-    "sketch_to_3d": {
-      "title": "Sketch to 3D"
-    },
+    "text_to_3d": { "title": "Text to 3D" },
+    "image_to_3d": { "title": "Image to 3D" },
+    "text_image_to_3d": { "title": "Text & Image to 3D" },
+    "unique_to_3d": { "title": "Unique to 3D" },
+    "multi_image_to_3d": { "title": "Multi-Image to 3D" },
+    "sketch_to_3d": { "title": "Sketch to 3D" },
     "common": {
       "generation_name_label": "Generation Name",
       "prompt_label": "Prompt",
       "style_label": "Visual Style",
-      "details_label": "Additional Details",
       "upload_image_label": "Upload your Image",
       "upload_views_label": "Upload your Views",
       "generate_button": "Generate 3D Model",
       "name_placeholder_generic": "e.g., My new creation",
       "prompt_placeholder_generic": "Describe the 3D model in detail...",
-      "details_placeholder_generic": "e.g., flying over snowy peak, sunset",
       "drag_and_drop_prompt": "Drag an image or click to upload",
       "file_types": "PNG, JPG, JPEG (MAX. 10MB)",
       "drag_and_drop_views": "Drag or click to upload the view",
       "canvas_description_placeholder": "Describe your sketch (optional)...",
-      "canvas_generate_button": "Generate",
-      "pencil_tooltip": "Pencil",
-      "eraser_tooltip": "Eraser",
-      "clear_canvas_tooltip": "Clear canvas",
       "operation_takes_time": "This operation may take several minutes."
     },
     "styles": {
@@ -431,7 +411,7 @@
       "generate_2d_button": "Generate 2D Image",
       "regenerate_2d_button": "Regenerate Image",
       "generate_3d_button": "Generate 3D Model",
-      "original_2d_label": "View Image",
+      "original_2d_label": "2D Image",
       "download_2d_button": "Download Image"
     }
   },
@@ -474,8 +454,6 @@
       "The 3D model is almost ready..."
     ],
     "TextImg3D": [
-      "Interpreting your description...",
-      "Generating a 2D base image...",
       "Analyzing the generated image...",
       "Extruding the image to 3D...",
       "Refining shape and textures...",
@@ -496,7 +474,7 @@
       "Creating the 3D mesh...",
       "Generating texture from the image...",
       "Finalizing the high-fidelity 3D model..."
-    ],    
+    ],
     "TextoImagen2D": [
       "Interpreting your description...",
       "Generating visual concepts...",

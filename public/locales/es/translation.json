@@ -50,7 +50,7 @@
     },
     "sketch_to_3d": {
       "title": "Boceto a 3D",
-      "description": "Dibuja un simple boceto y nuestra IA lo transformará en un objeto 3D completamente realizado.",
+      "description": "Sube la imagen de un simple boceto y nuestra IA lo transformará en un objeto 3D completamente realizado.",
       "input_type": "Boceto"
     },
     "output_label": "Modelo 3D"
@@ -148,9 +148,7 @@
       "not_found_title": "Documento no disponible o no encontrado.",
       "button_not_found": "Ir a la Documentación"
     },
-    "loading_view": {
-      "title": "Cargando documento..."
-    },
+    "loading_view": { "title": "Cargando documento..." },
     "content_all": {
       "loading": "Cargando todos los documentos...",
       "error_prefix": "Error al cargar documentos: ",
@@ -374,47 +372,29 @@
     }
   },
   "generation_pages": {
-    "text_to_3d": {
-      "title": "Texto a 3D"
-    },
-    "image_to_3d": {
-      "title": "Imagen a 3D"
-    },
-    "text_image_to_3d": {
-      "title": "Texto e Imagen a 3D"
-    },
-    "unique_to_3d": {
-      "title": "Único a 3D"
-    },
-    "multi_image_to_3d": {
-      "title": "Multi Imagen a 3D"
-    },
-    "sketch_to_3d": {
-      "title": "Boceto a 3D"
-    },
+    "text_to_3d": { "title": "Texto a 3D" },
+    "image_to_3d": { "title": "Imagen a 3D" },
+    "text_image_to_3d": { "title": "Texto e Imagen a 3D" },
+    "unique_to_3d": { "title": "Único a 3D" },
+    "multi_image_to_3d": { "title": "Multi Imagen a 3D" },
+    "sketch_to_3d": { "title": "Boceto a 3D" },
     "common": {
       "generation_name_label": "Nombre de la Generación",
       "prompt_label": "Prompt",
       "style_label": "Estilo Visual",
-      "details_label": "Detalles Adicionales",
       "upload_image_label": "Sube tu Imagen",
       "upload_views_label": "Sube tus Vistas",
       "generate_button": "Generar Modelo 3D",
       "name_placeholder_generic": "Ej: Mi nueva creación",
       "prompt_placeholder_generic": "Describe detalladamente el modelo 3D...",
-      "details_placeholder_generic": "Ej: volando sobre pico nevado, atardecer",
       "drag_and_drop_prompt": "Arrastra una imagen o haz clic",
       "file_types": "PNG, JPG, JPEG (MAX. 10MB)",
       "drag_and_drop_views": "Arrastra o haz clic para subir la vista",
       "canvas_description_placeholder": "Describe tu boceto (opcional)...",
-      "canvas_generate_button": "Generar",
-      "pencil_tooltip": "Lápiz",
-      "eraser_tooltip": "Borrador",
-      "clear_canvas_tooltip": "Limpiar lienzo",
       "operation_takes_time": "Esta operación puede tardar varios minutos."
     },
     "styles": {
-      "none": "Sin Estilo", 
+      "none": "Sin Estilo",
       "disney": "Disney",
       "pixar": "Pixar",
       "realistic": "Realista",
@@ -431,7 +411,7 @@
       "generate_2d_button": "Generar Imagen 2D",
       "regenerate_2d_button": "Regenerar Imagen",
       "generate_3d_button": "Generar Modelo 3D",
-      "original_2d_label": "Ver Imagen",
+      "original_2d_label": "Imagen 2D",
       "download_2d_button": "Descargar Imagen"
     }
   },
@@ -474,8 +454,6 @@
       "El modelo 3D está casi listo..."
     ],
     "TextImg3D": [
-      "Interpretando tu descripción...",
-      "Generando una imagen 2D base...",
       "Analizando la imagen generada...",
       "Extruyendo la imagen a 3D...",
       "Refinando la forma y las texturas...",
