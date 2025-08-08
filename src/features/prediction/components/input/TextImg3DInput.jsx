@@ -24,11 +24,9 @@ export const TextImg3DInput = ({ isCollapsed }) => {
   const { user } = useAuth();
   const { dispatch, clearResult } = usePredictions();
   const predictionResult = usePredictionResult("TextImg3D");
-
   const [generationName, setGenerationName] = useState("");
   const [subject, setSubject] = useState("");
   const [selectedStyle, setSelectedStyle] = useState("none");
-
   const [currentStep, setCurrentStep] = useState(1);
   const [generatedImageUrl, setGeneratedImageUrl] = useState(null);
   const [lastPreviewUploadUrl, setLastPreviewUploadUrl] = useState(null);
