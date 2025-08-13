@@ -77,6 +77,7 @@ export const deleteGeneration = async (token, generation) => {
       "Unico a 3D": "Unico3D",
       "Multi Imagen a 3D": "MultiImagen3D",
       "Boceto a 3D": "Boceto3D",
+      "Estudio de Texturizado": "Retexturize3D",
     };
     
     const predictionType = readableToApiTypeMap[generation.prediction_type];
