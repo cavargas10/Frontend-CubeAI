@@ -11,7 +11,7 @@ import {
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { useModelUpload } from "../../hooks/useModelUpload";
 import { OriginalModelViewer } from "../shared/OriginalModelViewer";
-import { RetexturizeResult } from "../results/RetexturizeResult"; // <-- CAMBIO IMPORTANTE AQUÍ
+import { RetexturizeResult } from "../results/RetexturizeResult";
 
 export const RetexturizeInput = ({ isCollapsed }) => {
   const { t } = useTranslation();
@@ -35,8 +35,7 @@ export const RetexturizeInput = ({ isCollapsed }) => {
     resetModelUpload,
   } = useModelUpload();
 
-  const isButtonDisabled =
-    !generationName.trim() || !modelFile || !textureFile;
+  const isButtonDisabled = !generationName.trim() || !modelFile || !textureFile;
 
   return (
     <section
@@ -199,7 +198,6 @@ export const RetexturizeInput = ({ isCollapsed }) => {
                 Modelo Retexturizado
               </h2>
               <div className="flex-grow border-2 border-gray-200 dark:border-linea/20 rounded-2xl overflow-hidden">
-                {/* --- CAMBIO IMPORTANTE AQUÍ --- */}
                 <RetexturizeResult />
               </div>
             </div>
