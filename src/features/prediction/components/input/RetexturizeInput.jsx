@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Sparkle,
@@ -12,17 +12,23 @@ import { useImageUpload } from "../../hooks/useImageUpload";
 import { useModelUpload } from "../../hooks/useModelUpload";
 import { OriginalModelViewer } from "../shared/OriginalModelViewer";
 import { RetexturizeResult } from "../results/RetexturizeResult";
+import { usePredictionHandler } from "../../hooks/usePredictionHandler";
+import { useAuth } from "../../../auth/hooks/useAuth";
+import { usePredictions } from "../../context/PredictionContext";
+import { ProgressModal } from "../../../../components/modals/ProgressModal";
+import { ErrorModal } from "../../../../components/modals/ErrorModal";
 
 export const RetexturizeInput = ({ isCollapsed }) => {
   const { t } = useTranslation();
-
   const [generationName, setGenerationName] = useState("");
 
   const {
     imageFile: textureFile,
     imagePreview: texturePreview,
     handleFileChange: handleTextureChange,
+    resetImageState,
   } = useImageUpload();
+
   const {
     modelFile,
     modelUrl,
@@ -35,7 +41,61 @@ export const RetexturizeInput = ({ isCollapsed }) => {
     resetModelUpload,
   } = useModelUpload();
 
-  const isButtonDisabled = !generationName.trim() || !modelFile || !textureFile;
+  const { user } = useAuth();
+  const { dispatch, clearResult } = usePredictions();
+  const PREDICTION_TYPE = "Retexturize3D";
+
+  const {
+    submitPrediction,
+    isLoading: isSubmitting,
+    jobStatus,
+    result,
+    error: finalError,
+    reset,
+    clearError,
+  } = usePredictionHandler(user);
+
+  const resetComponentState = useCallback(() => {
+    setGenerationName("");
+    resetImageState();
+    resetModelUpload();
+    reset();
+    clearResult(PREDICTION_TYPE);
+  }, [resetImageState, resetModelUpload, reset, clearResult]);
+
+  useEffect(() => {
+    if (result) {
+      dispatch({
+        type: "SET_PREDICTION",
+        payload: { type: PREDICTION_TYPE, result },
+      });
+    }
+  }, [result, dispatch]);
+
+  useEffect(() => {
+    return () => {
+      resetComponentState();
+    };
+  }, []);
+
+  const handleLocalPrediction = async () => {
+    if (!generationName.trim() || !modelFile || !textureFile) {
+      return;
+    }
+    clearResult(PREDICTION_TYPE);
+    const formData = new FormData();
+    formData.append("generationName", generationName);
+    formData.append("model", modelFile);
+    formData.append("texture", textureFile);
+    await submitPrediction(PREDICTION_TYPE, formData);
+  };
+
+  const isFormDisabled = isSubmitting || !!jobStatus;
+  const isButtonDisabled =
+    isFormDisabled || !generationName.trim() || !modelFile || !textureFile;
+  const showProgress =
+    isFormDisabled && !finalError && jobStatus?.status !== "completed";
+  const showErrorModal = !!finalError;
 
   return (
     <section
@@ -61,7 +121,7 @@ export const RetexturizeInput = ({ isCollapsed }) => {
                 <div className="flex items-center gap-3 mb-2">
                   <TextAa size={18} className="text-azul-gradient" />
                   <h3 className="text-sm font-semibold">
-                    Nombre de la Generación
+                    {t("generation_pages.common.generation_name_label")}
                   </h3>
                 </div>
                 <input
@@ -69,6 +129,7 @@ export const RetexturizeInput = ({ isCollapsed }) => {
                   placeholder="Ej: Personaje con nueva textura"
                   value={generationName}
                   onChange={(e) => setGenerationName(e.target.value)}
+                  disabled={isFormDisabled}
                   className={`w-full p-2.5 rounded-lg bg-white dark:bg-principal/50 border-2 text-gray-800 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all ${
                     generationName.trim()
                       ? "border-azul-gradient"
@@ -80,10 +141,13 @@ export const RetexturizeInput = ({ isCollapsed }) => {
               <div className="flex-grow flex flex-col min-h-0">
                 <div className="flex items-center gap-3 mb-2 flex-shrink-0">
                   <ImageIcon size={18} className="text-azul-gradient" />
-                  <h3 className="text-sm font-semibold">Sube tu Imagen</h3>
+                  <h3 className="text-sm font-semibold">
+                    {t("generation_pages.common.upload_image_label")}
+                  </h3>
                 </div>
                 <div
                   className={`relative border-2 border-dashed rounded-lg p-2 text-center cursor-pointer transition-colors flex flex-col items-center justify-center flex-grow 
+                    ${isFormDisabled ? "opacity-50 cursor-not-allowed" : ""}
                     ${
                       texturePreview
                         ? "border-azul-gradient bg-azul-gradient/5"
@@ -91,6 +155,7 @@ export const RetexturizeInput = ({ isCollapsed }) => {
                     } 
                     hover:border-azul-gradient/50`}
                   onClick={() =>
+                    !isFormDisabled &&
                     document.getElementById("texture-upload").click()
                   }
                 >
@@ -100,6 +165,7 @@ export const RetexturizeInput = ({ isCollapsed }) => {
                     accept="image/*"
                     className="hidden"
                     onChange={handleTextureChange}
+                    disabled={isFormDisabled}
                   />
                   {texturePreview ? (
                     <div className="w-full h-full relative min-h-[150px]">
@@ -128,11 +194,12 @@ export const RetexturizeInput = ({ isCollapsed }) => {
 
               <div className="mt-auto flex-shrink-0">
                 <button
+                  onClick={handleLocalPrediction}
                   disabled={isButtonDisabled}
                   className="w-full text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-3 rounded-lg border-none flex items-center justify-center gap-2 transition-all hover:shadow-lg disabled:opacity-60 text-white"
                 >
                   <Sparkle size={22} weight="fill" />
-                  Generar Textura
+                  {t("generation_pages.retexturize_3d.texture_button")}
                 </button>
               </div>
             </div>
@@ -141,17 +208,19 @@ export const RetexturizeInput = ({ isCollapsed }) => {
           <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6 min-h-[400px] lg:min-h-0">
             <div className="flex flex-col">
               <h2 className="text-lg font-bold mb-2 text-center text-gray-700 dark:text-gray-300">
-                Modelo Original
+                {t("generation_pages.retexturize_3d.original_model_title")}
               </h2>
               <div
-                className={`flex-grow rounded-2xl overflow-hidden transition-colors relative border-2 ${
+                className={`flex-grow rounded-2xl overflow-hidden transition-colors relative border-2 
+                ${isFormDisabled ? "opacity-50 cursor-not-allowed" : ""}
+                ${
                   modelUrl
                     ? "border-gray-200 dark:border-linea/20"
                     : "border-dashed border-gray-300 dark:border-linea/30"
                 }`}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
+                onDragOver={!isFormDisabled ? handleDragOver : undefined}
+                onDragLeave={!isFormDisabled ? handleDragLeave : undefined}
+                onDrop={!isFormDisabled ? handleDrop : undefined}
               >
                 <input
                   id="model-upload-hidden"
@@ -159,13 +228,14 @@ export const RetexturizeInput = ({ isCollapsed }) => {
                   accept=".glb,.obj"
                   className="hidden"
                   onChange={handleModelChange}
+                  disabled={isFormDisabled}
                 />
                 <OriginalModelViewer modelUrl={modelUrl} modelKey={modelKey} />
 
                 <div
                   className={`absolute inset-0 z-10 transition-all duration-300 
                     ${
-                      isDragging
+                      isDragging && !isFormDisabled
                         ? "bg-azul-gradient/10 border-2 border-dashed border-azul-gradient rounded-2xl"
                         : "pointer-events-none"
                     }`}
@@ -173,17 +243,20 @@ export const RetexturizeInput = ({ isCollapsed }) => {
                   {!modelUrl ? (
                     <button
                       onClick={() =>
+                        !isFormDisabled &&
                         document.getElementById("model-upload-hidden").click()
                       }
                       className="w-full h-full pointer-events-auto"
                       aria-label="Subir modelo 3D"
+                      disabled={isFormDisabled}
                     />
                   ) : (
                     <div className="absolute top-2 right-2 pointer-events-auto">
                       <button
-                        onClick={resetModelUpload}
+                        onClick={!isFormDisabled ? resetModelUpload : undefined}
                         className="p-1.5 bg-red-500/80 hover:bg-red-500 text-white rounded-full shadow-lg backdrop-blur-sm transition-all opacity-50 hover:opacity-100"
                         title="Cambiar modelo"
+                        disabled={isFormDisabled}
                       >
                         <XCircle size={20} weight="fill" />
                       </button>
@@ -195,7 +268,7 @@ export const RetexturizeInput = ({ isCollapsed }) => {
 
             <div className="flex flex-col">
               <h2 className="text-lg font-bold mb-2 text-center text-gray-700 dark:text-gray-300">
-                Modelo Retexturizado
+                {t("generation_pages.retexturize_3d.retextured_model_title")}
               </h2>
               <div className="flex-grow border-2 border-gray-200 dark:border-linea/20 rounded-2xl overflow-hidden">
                 <RetexturizeResult />
@@ -204,6 +277,13 @@ export const RetexturizeInput = ({ isCollapsed }) => {
           </div>
         </div>
       </div>
+
+      <ProgressModal show={showProgress} jobStatus={jobStatus} />
+      <ErrorModal
+        showModal={showErrorModal}
+        closeModal={clearError}
+        errorMessage={finalError || t("errors.generic_error_occurred")}
+      />
     </section>
   );
 };

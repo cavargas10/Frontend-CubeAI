@@ -380,6 +380,14 @@
     "unique_to_3d": { "title": "Unique to 3D" },
     "multi_image_to_3d": { "title": "Multi-Image to 3D" },
     "sketch_to_3d": { "title": "Sketch to 3D" },
+    "retexturize_3d": {
+      "title": "Texture Studio",
+      "original_model_title": "Original Model",
+      "retextured_model_title": "Retextured Model",
+      "upload_model_title": "Upload a Model",
+      "upload_model_prompt": "Drag a file here or click",
+      "texture_button": "Generate Texture"
+    },
     "common": {
       "generation_name_label": "Generation Name",
       "prompt_label": "Prompt",
@@ -484,6 +492,14 @@
       "Applying the selected style...",
       "Adding final details...",
       "The 2D image is almost ready..."
+    ],
+    "Retexturize3D": [
+      "Analyzing original 3D model...",
+      "Interpreting reference image...",
+      "Projecting new texture...",
+      "Adjusting UV mapping...",
+      "Compiling the final model...",
+      "Almost ready, applying finishing touches..."
     ],
     "default": [
       "Initiating process...",

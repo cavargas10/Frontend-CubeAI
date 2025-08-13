@@ -25,6 +25,12 @@ export const usePredictionHandler = (user) => {
     setError(null);
   }, [stopPolling]);
 
+  // --- ¡NUEVA FUNCIÓN AÑADIDA! ---
+  // Esta función solo limpia el estado de error, que es lo que necesitamos.
+  const clearError = useCallback(() => {
+    setError(null);
+  }, []);
+
   const submitPrediction = useCallback(
     async (endpoint, payload) => {
       reset();
@@ -97,5 +103,6 @@ export const usePredictionHandler = (user) => {
     result,
     error,
     reset,
+    clearError, // <-- ¡LA EXPORTAMOS AQUÍ!
   };
 };

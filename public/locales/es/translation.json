@@ -380,6 +380,14 @@
     "unique_to_3d": { "title": "Único a 3D" },
     "multi_image_to_3d": { "title": "Multi Imagen a 3D" },
     "sketch_to_3d": { "title": "Boceto a 3D" },
+    "retexturize_3d": {
+      "title": "Estudio de Texturizado",
+      "original_model_title": "Modelo Original",
+      "retextured_model_title": "Modelo Retexturizado",
+      "upload_model_title": "Sube un Modelo",
+      "upload_model_prompt": "Arrastra un archivo aquí o haz clic",
+      "texture_button": "Generar Textura"
+    },
     "common": {
       "generation_name_label": "Nombre de la Generación",
       "prompt_label": "Prompt",
@@ -395,7 +403,7 @@
       "canvas_description_placeholder": "Describe tu boceto (opcional)...",
       "operation_takes_time": "Esta operación puede tardar varios minutos."
     },
-    "styles": {
+     "styles": {
       "none": "Sin Estilo",
       "disney": "Disney",
       "pixar": "Pixar",
@@ -484,6 +492,14 @@
       "Aplicando el estilo seleccionado...",
       "Añadiendo detalles finales...",
       "La imagen 2D está casi lista..."
+    ],
+    "Retexturize3D": [
+      "Analizando modelo 3D original...",
+      "Interpretando imagen de referencia...",
+      "Proyectando nueva textura...",
+      "Ajustando mapeo UV...",
+      "Compilando el modelo final...",
+      "Casi listo, aplicando los últimos detalles..."
     ],
     "default": [
       "Iniciando proceso...",
