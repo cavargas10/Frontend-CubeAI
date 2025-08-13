@@ -13,6 +13,7 @@ import { TextImg3DInput } from "../features/prediction/components/input/TextImg3
 import { Unico3DInput } from "../features/prediction/components/input/Unico3DInput";
 import { MultiImagen3DInput } from "../features/prediction/components/input/MultiImagen3DInput";
 import { Boceto3DInput } from "../features/prediction/components/input/Boceto3DInput";
+import { RetexturizeInput } from "../features/prediction/components/input/RetexturizeInput";
 
 export const DashboardLayout = () => {
   const { handleLogout, userData, refetchUserData } = useAuthContext();
@@ -27,6 +28,7 @@ export const DashboardLayout = () => {
     Unico3D: Unico3DInput,
     MultiImagen3D: MultiImagen3DInput,
     Boceto3D: Boceto3DInput,
+    Retexturize3D: RetexturizeInput, 
   };
 
   return (

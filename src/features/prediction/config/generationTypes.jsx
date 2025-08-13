@@ -5,6 +5,7 @@ import {
   Cube,
   Images,
   Scribble,
+  PaintBrush,
 } from "@phosphor-icons/react";
 
 export const GENERATION_TYPES = [
@@ -49,6 +50,13 @@ export const GENERATION_TYPES = [
     labelKey: "dashboard_layout.nav.sketch_to_3d",
     tabLabelKey: "visualizer_page.tabs.sketch_to_3d",
     icon: Scribble,
+  },
+  {
+    id: "Retexturize3D",
+    path: "retexturizar",
+    labelKey: "dashboard_layout.nav.retexturize_3d",
+    tabLabelKey: "visualizer_page.tabs.retexturize_3d",
+    icon: PaintBrush,
   },
 ];
 

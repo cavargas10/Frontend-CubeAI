@@ -268,7 +268,7 @@
       "close_menu": "Close menu"
     },
     "nav": {
-      "my_objects": "My Objects",
+      "my_objects": "My Generations",
       "tutorials": "Tutorials",
       "documentation": "Documentation",
       "ai_tools": "AI Tools",
@@ -277,11 +277,12 @@
       "text_to_image_to_3d": "Text to Image to 3D",
       "unique_to_3d": "Unique to 3D",
       "multi_image_to_3d": "Multi-Image to 3D",
-      "sketch_to_3d": "Sketch to 3D"
+      "sketch_to_3d": "Sketch to 3D",
+      "retexturize_3d": "Texture Studio"
     }
   },
   "visualizer_page": {
-    "title": "My Objects",
+    "title": "My Generations",
     "subtitle": "Welcome to your 3D creation space. Here you can manage and visualize your AI-generated 3D models. Explore the different categories and access your objects quickly and easily.",
     "section_title": "Created 3D Models",
     "viewer_title_prefix": "3D Viewer: ",
@@ -298,7 +299,8 @@
         "label": "Multi-Image to 3D",
         "short_label": "Multi 3D"
       },
-      "sketch_to_3d": { "label": "Sketch to 3D", "short_label": "Sketch 3D" }
+      "sketch_to_3d": { "label": "Sketch to 3D", "short_label": "Sketch 3D" },
+      "retexturize_3d": { "label": "Texture Studio", "short_label": "Textures" }
     },
     "history": {
       "loading": "Loading history...",

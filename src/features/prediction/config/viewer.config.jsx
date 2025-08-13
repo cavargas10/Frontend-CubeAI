@@ -77,6 +77,17 @@ export const viewerConfig = {
     },
     gridPosition: [0, -0.5, 0],
   },
+  Retexturize3D: {
+    ...baseConfig,
+    downloadFilename: "modelo_retexturizado.glb",
+    initialCameraPosition: [0, 0.5, -1.5],
+    orbitControlsConfig: {
+      ...baseConfig.orbitControlsConfig,
+      minDistance: 0.2,
+      maxDistance: 2.0,
+    },
+    gridPosition: [0, -0.5, 0],
+  },
   default: {
     ...baseConfig,
     downloadFilename: "modelo_3d.glb",

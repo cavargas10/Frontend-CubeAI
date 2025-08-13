@@ -268,7 +268,7 @@
       "close_menu": "Cerrar menú"
     },
     "nav": {
-      "my_objects": "Mis Objetos",
+      "my_objects": "Mis Generaciones",
       "tutorials": "Tutoriales",
       "documentation": "Documentación",
       "ai_tools": "Herramientas de IA",
@@ -277,11 +277,12 @@
       "text_to_image_to_3d": "Texto A Imagen A 3D",
       "unique_to_3d": "Unico A 3D",
       "multi_image_to_3d": "Multi Imagen a 3D",
-      "sketch_to_3d": "Boceto a 3D"
+      "sketch_to_3d": "Boceto a 3D",
+      "retexturize_3d": "Estudio de Texturizado"
     }
   },
   "visualizer_page": {
-    "title": "Mis Objetos",
+    "title": "Mis Generaciones",
     "subtitle": "Bienvenido a tu espacio de creación 3D. Aquí puedes gestionar y visualizar tus modelos 3D generados por IA. Explora las diferentes categorías y accede a tus objetos de manera rápida y sencilla.",
     "section_title": "Modelos 3D Creados",
     "viewer_title_prefix": "Visor 3D: ",
@@ -298,7 +299,8 @@
         "label": "Multi Imagen a 3D",
         "short_label": "Multi 3D"
       },
-      "sketch_to_3d": { "label": "Boceto a 3D", "short_label": "Boceto 3D" }
+      "sketch_to_3d": { "label": "Boceto a 3D", "short_label": "Boceto 3D" },
+      "retexturize_3d": { "label": "Estudio de Texturas", "short_label": "Texturas" }
     },
     "history": {
       "loading": "Cargando historial...",
