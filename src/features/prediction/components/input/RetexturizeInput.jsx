@@ -14,9 +14,22 @@ import { OriginalModelViewer } from "../shared/OriginalModelViewer";
 import { RetexturizeResult } from "../results/RetexturizeResult";
 import { usePredictionHandler } from "../../hooks/usePredictionHandler";
 import { useAuth } from "../../../auth/hooks/useAuth";
-import { usePredictions } from "../../context/PredictionContext";
+import { usePredictions, usePredictionResult } from "../../context/PredictionContext";
 import { ProgressModal } from "../../../../components/modals/ProgressModal";
 import { ErrorModal } from "../../../../components/modals/ErrorModal";
+import { uploadPredictionPreview } from "../../services/predictionApi"; 
+
+function dataURLtoBlob(dataurl) {
+  const arr = dataurl.split(","),
+    mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], { type: mime });
+}
 
 export const RetexturizeInput = ({ isCollapsed }) => {
   const { t } = useTranslation();
@@ -44,6 +57,7 @@ export const RetexturizeInput = ({ isCollapsed }) => {
   const { user } = useAuth();
   const { dispatch, clearResult } = usePredictions();
   const PREDICTION_TYPE = "Retexturize3D";
+  const predictionResult = usePredictionResult(PREDICTION_TYPE);
 
   const {
     submitPrediction,
@@ -89,6 +103,31 @@ export const RetexturizeInput = ({ isCollapsed }) => {
     formData.append("texture", textureFile);
     await submitPrediction(PREDICTION_TYPE, formData);
   };
+  const handlePreviewUpload = useCallback(
+    async (dataURL) => {
+      if (
+        !user ||
+        !predictionResult?.generation_name ||
+        predictionResult?.previewImageUrl
+      )
+        return;
+      try {
+        const token = await user.getIdToken();
+        const previewBlob = dataURLtoBlob(dataURL);
+        const formData = new FormData();
+        formData.append("preview", previewBlob, "preview.png");
+        formData.append(
+          "generation_name",
+          predictionResult.generation_name
+        );
+        formData.append("prediction_type_api", PREDICTION_TYPE);
+        await uploadPredictionPreview(token, formData);
+      } catch (error) {
+        console.error("Error al subir la previsualización:", error);
+      }
+    },
+    [user, predictionResult]
+  );
 
   const isFormDisabled = isSubmitting || !!jobStatus;
   const isButtonDisabled =
@@ -271,7 +310,7 @@ export const RetexturizeInput = ({ isCollapsed }) => {
                 {t("generation_pages.retexturize_3d.retextured_model_title")}
               </h2>
               <div className="flex-grow border-2 border-gray-200 dark:border-linea/20 rounded-2xl overflow-hidden">
-                <RetexturizeResult />
+                <RetexturizeResult onFirstLoad={handlePreviewUpload} />
               </div>
             </div>
           </div>
