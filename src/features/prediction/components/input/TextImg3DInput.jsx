@@ -38,6 +38,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
     result,
     error,
     reset: resetPredictionHandler,
+    clearError,
   } = usePredictionHandler(user);
 
   const styles = [
@@ -64,7 +65,9 @@ export const TextImg3DInput = ({ isCollapsed }) => {
     if (!result) return;
 
     if (result.generated_2d_image_url) {
-      const imageUrlWithCacheBuster = `${result.generated_2d_image_url}?t=${new Date().getTime()}`;
+      const imageUrlWithCacheBuster = `${
+        result.generated_2d_image_url
+      }?t=${new Date().getTime()}`;
       setGeneratedImageUrl(imageUrlWithCacheBuster);
       setCurrentStep(2);
       resetPredictionHandler();
@@ -81,7 +84,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
     return () => {
       resetComponentState();
     };
-  }, [resetComponentState]);
+  }, []);
 
   const handleImageGeneration = async () => {
     if (!generationName.trim() || !subject.trim()) return;
@@ -100,10 +103,13 @@ export const TextImg3DInput = ({ isCollapsed }) => {
 
   const handleModelGeneration = async () => {
     if (!generatedImageUrl) return;
-    await submitPrediction("TextImg3D", {
+    const payload = {
       generationName,
       imageUrl: generatedImageUrl,
-    });
+      prompt: subject,
+      selectedStyle: selectedStyle,
+    };
+    await submitPrediction("TextImg3D", payload);
   };
 
   const handleMainButtonClick = () => {
@@ -299,7 +305,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
       <ProgressModal show={showProgressModal} jobStatus={jobStatus} />
       <ErrorModal
         showModal={error}
-        closeModal={resetComponentState}
+        closeModal={clearError}
         errorMessage={error}
       />
     </section>
