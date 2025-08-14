@@ -30,7 +30,6 @@ export const TextImg3DInput = ({ isCollapsed }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [generatedImageUrl, setGeneratedImageUrl] = useState(null);
   const [lastPreviewUploadUrl, setLastPreviewUploadUrl] = useState(null);
-
   const {
     submitPrediction,
     isLoading,
@@ -273,11 +272,11 @@ export const TextImg3DInput = ({ isCollapsed }) => {
               {predictionResult ? (
                 <TextImg3DResult onFirstLoad={handlePreviewUpload} />
               ) : generatedImageUrl ? (
-                <div className="flex-1 flex flex-col items-center justify-center p-4 bg-gray-100 dark:bg-principal/50 overflow-hidden relative">
+                <div className="w-full h-full relative p-4 bg-gray-100 dark:bg-principal/50">
                   <img
                     src={generatedImageUrl}
                     alt={t("generation_pages.results.generated_2d_image")}
-                    className="w-full h-full object-contain rounded-lg shadow-2xl"
+                    className="absolute inset-0 w-full h-full object-contain"
                   />
                   {!isAnyProcessRunning && (
                     <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
