@@ -63,7 +63,7 @@ export const NavDash = ({
         )}
       </button>
       <div className="flex flex-col h-full">
-        <div className="flex-1 overflow-y-auto pb-4">
+        <div className="flex-1 overflow-y-auto pb-24 sm:pb-4">
           <div
             className={`${isCollapsed ? "px-3" : "px-4 sm:px-5 lg:px-6"} pt-3 sm:pt-4`}
           >
@@ -71,7 +71,7 @@ export const NavDash = ({
               <li>
                 <Link
                   to="visualizador"
-                  className={`flex items-center transition-all duration-200 ease-in-out group relative rounded-lg ${isCollapsed ? "justify-center py-3 px-2" : "py-3.5 sm:py-3 px-4 sm:px-3"} ${isActiveRoute("/dashboard/visualizador") ? "bg-gradient-to-r from-[#3333EA]/30 to-[#A975FF]/30 text-gray-900 dark:text-white font-semibold shadow-sm border-l-4 border-[#A975FF]" : "text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-bg-btn-dash hover:translate-x-0.5"}`}
+                  className={`flex items-center transition-all duration-200 ease-in-out group relative rounded-lg ${isCollapsed ? "justify-center py-2 px-2" : "py-3 px-3 sm:py-3 sm:px-3"} ${isActiveRoute("/dashboard/visualizador") ? "bg-gradient-to-r from-[#3333EA]/30 to-[#A975FF]/30 text-gray-900 dark:text-white font-semibold shadow-sm border-l-4 border-[#A975FF]" : "text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-bg-btn-dash hover:translate-x-0.5"}`}
                   onClick={handleLinkClick}
                   title={
                     isCollapsed ? t("dashboard_layout.nav.my_objects") : ""
@@ -83,10 +83,10 @@ export const NavDash = ({
                   <Compass
                     size={isCollapsed ? 26 : 24}
                     color="#6666ff"
-                    className={`flex-shrink-0 transition-all duration-300 ${isCollapsed ? "" : "mr-4 sm:mr-3"}`}
+                    className={`flex-shrink-0 transition-all duration-300 ${isCollapsed ? "" : "mr-3 sm:mr-3"}`}
                   />
                   <span
-                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ease-in-out ${isCollapsed ? "w-0 opacity-0 max-w-0" : "w-full opacity-100 max-w-full text-base sm:text-base font-medium"}`}
+                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ease-in-out ${isCollapsed ? "w-0 opacity-0 max-w-0" : "w-full opacity-100 max-w-full text-sm sm:text-base font-medium"}`}
                   >
                     {t("dashboard_layout.nav.my_objects")}
                   </span>
@@ -95,7 +95,7 @@ export const NavDash = ({
               <li>
                 <Link
                   to="tutorialdash"
-                  className={`flex items-center transition-all duration-200 ease-in-out group relative rounded-lg ${isCollapsed ? "justify-center py-3 px-2" : "py-3.5 sm:py-3 px-4 sm:px-3"} ${isActiveRoute("/dashboard/tutorialdash") ? "bg-gradient-to-r from-[#3333EA]/30 to-[#A975FF]/30 text-gray-900 dark:text-white font-semibold shadow-sm border-l-4 border-[#A975FF]" : "text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-bg-btn-dash hover:translate-x-0.5"}`}
+                  className={`flex items-center transition-all duration-200 ease-in-out group relative rounded-lg ${isCollapsed ? "justify-center py-2 px-2" : "py-3 px-3 sm:py-3 sm:px-3"} ${isActiveRoute("/dashboard/tutorialdash") ? "bg-gradient-to-r from-[#3333EA]/30 to-[#A975FF]/30 text-gray-900 dark:text-white font-semibold shadow-sm border-l-4 border-[#A975FF]" : "text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-bg-btn-dash hover:translate-x-0.5"}`}
                   onClick={handleLinkClick}
                   title={isCollapsed ? t("dashboard_layout.nav.tutorials") : ""}
                 >
@@ -105,10 +105,10 @@ export const NavDash = ({
                   <Video
                     size={isCollapsed ? 26 : 24}
                     color="#6666ff"
-                    className={`flex-shrink-0 transition-all duration-300 ${isCollapsed ? "" : "mr-4 sm:mr-3"}`}
+                    className={`flex-shrink-0 transition-all duration-300 ${isCollapsed ? "" : "mr-3 sm:mr-3"}`}
                   />
                   <span
-                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ease-in-out ${isCollapsed ? "w-0 opacity-0 max-w-0" : "w-full opacity-100 max-w-full text-base sm:text-base font-medium"}`}
+                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ease-in-out ${isCollapsed ? "w-0 opacity-0 max-w-0" : "w-full opacity-100 max-w-full text-sm sm:text-base font-medium"}`}
                   >
                     {t("dashboard_layout.nav.tutorials")}
                   </span>
@@ -118,7 +118,7 @@ export const NavDash = ({
                 <Link
                   to="/documentos"
                   target="_blank"
-                  className={`flex items-center transition-all duration-200 ease-in-out group relative rounded-lg ${isCollapsed ? "justify-center py-3 px-2" : "py-3.5 sm:py-3 px-4 sm:px-3"} ${isActiveRoute("/documentos") ? "bg-gradient-to-r from-[#3333EA]/30 to-[#A975FF]/30 text-gray-900 dark:text-white font-semibold shadow-sm border-l-4 border-[#A975FF]" : "text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-bg-btn-dash hover:translate-x-0.5"}`}
+                  className={`flex items-center transition-all duration-200 ease-in-out group relative rounded-lg ${isCollapsed ? "justify-center py-2 px-2" : "py-3 px-3 sm:py-3 sm:px-3"} ${isActiveRoute("/documentos") ? "bg-gradient-to-r from-[#3333EA]/30 to-[#A975FF]/30 text-gray-900 dark:text-white font-semibold shadow-sm border-l-4 border-[#A975FF]" : "text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-bg-btn-dash hover:translate-x-0.5"}`}
                   onClick={handleLinkClick}
                   title={
                     isCollapsed ? t("dashboard_layout.nav.documentation") : ""
@@ -130,14 +130,14 @@ export const NavDash = ({
                   <BookOpen
                     size={isCollapsed ? 26 : 24}
                     color="#6666ff"
-                    className={`flex-shrink-0 transition-all duration-300 ${isCollapsed ? "" : "mr-4 sm:mr-3"}`}
+                    className={`flex-shrink-0 transition-all duration-300 ${isCollapsed ? "" : "mr-3 sm:mr-3"}`}
                   />
                   <span
-                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ease-in-out flex items-center ${isCollapsed ? "w-0 opacity-0 max-w-0" : "w-full opacity-100 max-w-full text-base sm:text-base font-medium"}`}
+                    className={`whitespace-nowrap overflow-hidden transition-all duration-300 ease-in-out flex items-center ${isCollapsed ? "w-0 opacity-0 max-w-0" : "w-full opacity-100 max-w-full text-sm sm:text-base font-medium"}`}
                   >
                     {t("dashboard_layout.nav.documentation")}
                     <ArrowLineUpRight
-                      size={18}
+                      size={16}
                       color="#6A6B77"
                       className="ml-2 flex-shrink-0"
                     />
@@ -147,11 +147,11 @@ export const NavDash = ({
             </ul>
           </div>
           <div
-            className={`${isCollapsed ? "px-3" : "px-4 sm:px-4 lg:px-5"} pt-4 sm:pt-6`}
+            className={`${isCollapsed ? "px-3" : "px-4 sm:px-4 lg:px-5"} pt-3 sm:pt-6`}
           >
-            <div className="border-t border-gray-200 dark:border-linea/25 pt-4 sm:pt-5">
+            <div className="border-t border-gray-200 dark:border-linea/25 pt-3 sm:pt-5">
               <h3
-                className={`text-sm font-bold uppercase tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-azul-gradient to-morado-gradient transition-all duration-300 ease-in-out overflow-hidden ${isCollapsed ? "opacity-0 max-h-0 py-0 my-0" : `opacity-100 ${titleSectionVisibleHeight} pb-3 sm:pb-4 mb-1 sm:mb-1`}`}
+                className={`text-sm font-bold uppercase tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-azul-gradient to-morado-gradient transition-all duration-300 ease-in-out overflow-hidden ${isCollapsed ? "opacity-0 max-h-0 py-0 my-0" : `opacity-100 ${titleSectionVisibleHeight} pb-2 sm:pb-4 mb-1 sm:mb-1`}`}
               >
                 {t("dashboard_layout.nav.ai_tools")}
               </h3>
@@ -167,7 +167,7 @@ export const NavDash = ({
                     <li key={type.id}>
                       <Link
                         to={type.path}
-                        className={`flex items-center transition-all duration-200 ease-in-out group relative rounded-lg ${isCollapsed ? "justify-center py-2.5 px-2" : "py-2.5 sm:py-2.5 px-4 sm:px-2"} ${isActive ? "bg-gradient-to-r from-[#3333EA]/30 to-[#A975FF]/30 text-gray-900 dark:text-white font-semibold shadow-sm border-l-4 border-[#A975FF]" : "text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-bg-btn-dash hover:translate-x-0.5"}`}
+                        className={`flex items-center transition-all duration-200 ease-in-out group relative rounded-lg ${isCollapsed ? "justify-center py-2 px-2" : "py-2.5 sm:py-2.5 px-3 sm:px-2"} ${isActive ? "bg-gradient-to-r from-[#3333EA]/30 to-[#A975FF]/30 text-gray-900 dark:text-white font-semibold shadow-sm border-l-4 border-[#A975FF]" : "text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-bg-btn-dash hover:translate-x-0.5"}`}
                         onClick={handleLinkClick}
                         title={isCollapsed ? t(type.labelKey) : ""}
                       >
@@ -180,7 +180,7 @@ export const NavDash = ({
                           className={`flex-shrink-0 transition-all duration-300 ${isCollapsed ? "" : "mr-3 sm:mr-2"}`}
                         />
                         <span
-                          className={`whitespace-nowrap overflow-hidden transition-all duration-300 ease-in-out ${isCollapsed ? "w-0 opacity-0 max-w-0" : "w-full opacity-100 max-w-full text-base sm:text-base font-medium"}`}
+                          className={`whitespace-nowrap overflow-hidden transition-all duration-300 ease-in-out ${isCollapsed ? "w-0 opacity-0 max-w-0" : "w-full opacity-100 max-w-full text-sm sm:text-base font-medium"}`}
                         >
                           {t(type.labelKey)}
                         </span>
@@ -191,48 +191,41 @@ export const NavDash = ({
               </ul>
             </div>
           </div>
-          <div className="mt-6 block sm:hidden">
-            <div className={`${isCollapsed ? "px-3" : "px-4"} pb-4`}>
-              <div className="border-t border-gray-200 dark:border-linea/25 pt-4">
-                <ul className="space-y-2">
-                  <li>
-                    <Link
-                      to="configdash"
-                      className={`flex items-center transition-all duration-200 ease-in-out group relative rounded-lg py-3 px-4 ${isActiveRoute("/dashboard/configdash") ? "bg-gradient-to-r from-[#3333EA]/30 to-[#A975FF]/30 text-gray-900 dark:text-white font-semibold shadow-sm border-l-4 border-[#A975FF]" : "text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-bg-btn-dash hover:translate-x-0.5"}`}
-                      onClick={handleLinkClick}
-                    >
-                      {isActiveRoute("/dashboard/configdash") && (
-                        <span className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#3333EA] to-[#A975FF] rounded-r-sm"></span>
-                      )}
-                      <Gear
-                        size={22}
-                        color="#6666ff"
-                        className="flex-shrink-0 mr-4"
-                      />
-                      <span className="text-base font-medium">
-                        {t("dashboard_layout.header.settings")}
-                      </span>
-                    </Link>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => {
-                        handleLinkClick();
-                        handleLogout();
-                      }}
-                      className="w-full flex items-center transition-all duration-200 ease-in-out group relative rounded-lg py-3 px-4 text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/20 hover:text-red-600 dark:hover:text-red-300"
-                    >
-                      <SignOut
-                        size={22}
-                        className="flex-shrink-0 transform scale-x-[-1] mr-4"
-                      />
-                      <span className="text-base font-medium text-left">
-                        {t("dashboard_layout.header.logout")}
-                      </span>
-                    </button>
-                  </li>
-                </ul>
-              </div>
+        </div>
+
+        <div className="mt-0 block sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-principal border-t border-gray-200 dark:border-linea/25">
+          <div className={`${isCollapsed ? "px-3" : "px-4"} py-2`}>
+            <div className="flex items-center justify-between">
+              <Link
+                to="configdash"
+                onClick={handleLinkClick}
+                className={`flex items-center transition-all duration-150 ease-in-out group rounded-md py-2 px-3 ${isActiveRoute("/dashboard/configdash") ? "bg-gradient-to-r from-[#3333EA]/30 to-[#A975FF]/30 text-gray-900 dark:text-white font-semibold shadow-sm border-l-0" : "text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-bg-btn-dash"}`}
+              >
+                <Gear
+                  size={20}
+                  color="#6666ff"
+                  className="flex-shrink-0 mr-2"
+                />
+                <span className="text-sm font-medium">
+                  {t("dashboard_layout.header.settings")}
+                </span>
+              </Link>
+
+              <button
+                onClick={() => {
+                  handleLinkClick();
+                  handleLogout();
+                }}
+                className="ml-2 inline-flex items-center transition-all duration-150 ease-in-out group rounded-md py-2 px-3 text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/20 hover:text-red-600 dark:hover:text-red-300"
+              >
+                <SignOut
+                  size={20}
+                  className="flex-shrink-0 transform scale-x-[-1] mr-2"
+                />
+                <span className="text-sm font-medium">
+                  {t("dashboard_layout.header.logout")}
+                </span>
+              </button>
             </div>
           </div>
         </div>
