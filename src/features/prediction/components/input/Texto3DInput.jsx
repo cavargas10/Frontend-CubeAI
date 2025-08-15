@@ -1,5 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
-import { Sparkle, TextAa, TextT, PaintBrush } from "@phosphor-icons/react";
+import {
+  Sparkle,
+  TextAa,
+  TextT,
+  PaintBrush,
+  ArrowCounterClockwise,
+  FilePlus,
+} from "@phosphor-icons/react";
 import { ErrorModal } from "../../../../components/modals/ErrorModal";
 import { ProgressModal } from "../../../../components/modals/ProgressModal";
 import { Texto3DResult } from "../results/Texto3DResult";
@@ -11,6 +18,7 @@ import {
 } from "../../context/PredictionContext";
 import { uploadPredictionPreview } from "../../services/predictionApi";
 import { useTranslation } from "react-i18next";
+import { InlineSpinner } from "../../../../components/ui/InlineSpinner";
 
 function dataURLtoBlob(dataurl) {
   const arr = dataurl.split(","),
@@ -33,6 +41,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
   const [generationName, setGenerationName] = useState("");
   const [userPrompt, setUserPrompt] = useState("");
   const [selectedStyle, setSelectedStyle] = useState("none");
+  const [isResultReady, setIsResultReady] = useState(false);
   const {
     submitPrediction,
     isLoading: isSubmitting,
@@ -40,6 +49,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
     result,
     error: finalError,
     reset,
+    clearError,
   } = usePredictionHandler(user);
 
   const styles = [
@@ -55,6 +65,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
     setGenerationName("");
     setUserPrompt("");
     setSelectedStyle("none");
+    setIsResultReady(false);
     reset();
     clearResult(PREDICTION_TYPE);
   }, [clearResult, reset]);
@@ -65,6 +76,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
         type: "SET_PREDICTION",
         payload: { type: PREDICTION_TYPE, result },
       });
+      setIsResultReady(true);
     }
   }, [result, dispatch]);
 
@@ -72,13 +84,17 @@ export const Texto3DInput = ({ isCollapsed }) => {
     return () => {
       resetComponentState();
     };
-  }, [resetComponentState]);
+  }, []);
 
   const handleLocalPrediction = async () => {
     if (!generationName.trim() || !userPrompt.trim()) {
       return;
     }
-    clearResult(PREDICTION_TYPE);
+    if (isResultReady) {
+      clearResult(PREDICTION_TYPE);
+    }
+    setIsResultReady(false);
+
     const payload = {
       generationName,
       prompt: userPrompt,
@@ -212,14 +228,42 @@ export const Texto3DInput = ({ isCollapsed }) => {
               </div>
 
               <div className="mt-auto flex-shrink-0">
-                <button
-                  onClick={handleLocalPrediction}
-                  disabled={isButtonDisabled}
-                  className="w-full text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2.5 rounded-lg border-none flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-lg hover:shadow-morado-gradient/20 hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 disabled:cursor-not-allowed text-white"
-                >
-                  <Sparkle size={22} weight="fill" />
-                  {t("generation_pages.common.generate_button")}
-                </button>
+                {isFormDisabled ? (
+                  <button
+                    disabled
+                    className="w-full text-base font-semibold bg-gray-400 dark:bg-gray-600 py-2.5 rounded-lg border-none flex items-center justify-center gap-2 text-white cursor-wait"
+                  >
+                    <InlineSpinner className="h-5 w-5" />
+                    Generando...
+                  </button>
+                ) : isResultReady ? (
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={handleLocalPrediction}
+                      disabled={isButtonDisabled}
+                      className="flex-grow text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2.5 rounded-lg border-none flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-lg hover:shadow-morado-gradient/20 hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 disabled:cursor-not-allowed text-white"
+                    >
+                      <ArrowCounterClockwise size={20} weight="bold" />
+                      Regenerar
+                    </button>
+                    <button
+                      onClick={resetComponentState}
+                      className="flex-shrink-0 w-12 text-base font-semibold bg-gray-200 dark:bg-linea/50 text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-linea/80 py-2.5 rounded-lg border-none flex items-center justify-center gap-2 transition-all duration-300 hover:scale-105"
+                      title="Nuevo Proyecto"
+                    >
+                      <FilePlus size={20} weight="bold" />
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={handleLocalPrediction}
+                    disabled={isButtonDisabled}
+                    className="w-full text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2.5 rounded-lg border-none flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-lg hover:shadow-morado-gradient/20 hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 disabled:cursor-not-allowed text-white"
+                  >
+                    <Sparkle size={22} weight="fill" />
+                    {t("generation_pages.common.generate_button")}
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -233,7 +277,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
       <ProgressModal show={showProgress} jobStatus={jobStatus} />
       <ErrorModal
         showModal={showErrorModal}
-        closeModal={resetComponentState}
+        closeModal={clearError}
         errorMessage={finalError || t("errors.generic_error_occurred")}
       />
     </section>
