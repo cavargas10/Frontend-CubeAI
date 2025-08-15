@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useMemo } from "react";
 import { startGenerationJob, getJobStatus } from "../services/predictionApi";
 import { useTranslation } from "react-i18next";
 
@@ -25,11 +25,12 @@ export const usePredictionHandler = (user) => {
     setError(null);
   }, [stopPolling]);
 
-  // --- ¡NUEVA FUNCIÓN AÑADIDA! ---
-  // Esta función solo limpia el estado de error, que es lo que necesitamos.
   const clearError = useCallback(() => {
     setError(null);
-  }, []);
+    if (jobStatus?.status === 'failed') {
+      setJobStatus(null);
+    }
+  }, [jobStatus]);
 
   const submitPrediction = useCallback(
     async (endpoint, payload) => {
@@ -95,6 +96,10 @@ export const usePredictionHandler = (user) => {
     },
     [user, reset, stopPolling, t]
   );
+  const isJobActive = useMemo(() => {
+    return isLoading || jobStatus?.status === 'queued' || jobStatus?.status === 'processing';
+  }, [isLoading, jobStatus]);
+
 
   return {
     submitPrediction,
@@ -103,6 +108,7 @@ export const usePredictionHandler = (user) => {
     result,
     error,
     reset,
-    clearError, // <-- ¡LA EXPORTAMOS AQUÍ!
+    clearError,
+    isJobActive,
   };
 };

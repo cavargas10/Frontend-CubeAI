@@ -42,14 +42,15 @@ export const Texto3DInput = ({ isCollapsed }) => {
   const [userPrompt, setUserPrompt] = useState("");
   const [selectedStyle, setSelectedStyle] = useState("none");
   const [isResultReady, setIsResultReady] = useState(false);
+
   const {
     submitPrediction,
-    isLoading: isSubmitting,
     jobStatus,
     result,
     error: finalError,
     reset,
     clearError,
+    isJobActive,
   } = usePredictionHandler(user);
 
   const styles = [
@@ -129,11 +130,9 @@ export const Texto3DInput = ({ isCollapsed }) => {
     [user, prediction_text3d_result]
   );
 
-  const isFormDisabled = isSubmitting || !!jobStatus;
-  const isButtonDisabled =
-    isFormDisabled || !generationName.trim() || !userPrompt.trim();
-  const showProgress =
-    isFormDisabled && !finalError && jobStatus?.status !== "completed";
+  const isFormDisabled = isJobActive;
+  const isButtonDisabled = isJobActive || !generationName.trim() || !userPrompt.trim();
+  const showProgress = isJobActive && !finalError;
   const showErrorModal = !!finalError;
 
   return (
