@@ -8,14 +8,14 @@ export const ModelViewer = ({ url, showWireframe = false, showTexture = true, on
   const [error, setError] = useState(null);
   const originalMaterialsRef = useRef({});
   const wireframeObjectsRef = useRef([]);
-
   const gltf = useLoader(
     GLTFLoader,
     url,
     undefined,
-    (error) => {
-      console.error("Error loading model:", error);
-      setError(error);
+    () => {},
+    (err) => {
+      console.error("Error REAL al cargar el modelo:", err);
+      setError(err);
     }
   );
 

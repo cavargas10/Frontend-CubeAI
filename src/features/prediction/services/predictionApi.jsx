@@ -47,6 +47,24 @@ export const getJobStatus = async (token, jobId) => {
   }
 };
 
+export const regenerateGenerationJob = async (token, predictionType, generationName, payload) => {
+  try {
+    const response = await api.put(
+      `/generation/${predictionType}/${generationName}`,
+      payload,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    handleApiError(error, `Error al regenerar la tarea para ${generationName}`);
+  }
+};
+
 export const getGenerations = async (token, generationType) => {
   try {
     const response = await api.get(`/generation/history/${generationType}`, {
