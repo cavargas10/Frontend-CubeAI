@@ -65,6 +65,24 @@ export const regenerateGenerationJob = async (token, predictionType, generationN
   }
 };
 
+export const regenerateGenerationJobWithFiles = async (token, predictionType, generationName, formData) => {
+  try {
+    const response = await api.put(
+      `/generation/regenerate-with-files/${predictionType}/${generationName}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    handleApiError(error, `Error al regenerar (con archivos) para ${generationName}`);
+  }
+};
+
 export const getGenerations = async (token, generationType) => {
   try {
     const response = await api.get(`/generation/history/${generationType}`, {
