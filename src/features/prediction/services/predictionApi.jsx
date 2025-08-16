@@ -68,7 +68,7 @@ export const regenerateGenerationJob = async (token, predictionType, generationN
 export const regenerateGenerationJobWithFiles = async (token, predictionType, generationName, formData) => {
   try {
     const response = await api.put(
-      `/generation/regenerate-with-files/${predictionType}/${generationName}`,
+      `/generation/${predictionType}/${generationName}`,
       formData,
       {
         headers: {
