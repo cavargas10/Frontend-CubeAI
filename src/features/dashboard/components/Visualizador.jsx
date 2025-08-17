@@ -7,6 +7,8 @@ import { useTranslation } from "react-i18next";
 import { getGenerations } from "../../../features/prediction/services/predictionApi";
 import { useAuthContext } from "../../../features/auth/context/AuthContext";
 import { GENERATION_TYPES } from "../../../features/prediction/config/generationTypes";
+import { DetailsPanel } from "./DetailsPanel";
+import { BrandedSpinner } from "../../../components/ui/BrandedSpinner";
 
 export const Visualizador = ({ isCollapsed }) => {
   const { t } = useTranslation();
@@ -50,7 +52,6 @@ export const Visualizador = ({ isCollapsed }) => {
         setSelectedGenerationForViewer(null);
       }
     };
-
     loadGenerationFromUrl();
   }, [viewParam, typeParam, user, navigate, selectedTab]);
 
@@ -66,12 +67,11 @@ export const Visualizador = ({ isCollapsed }) => {
   const isViewerOpen = !!viewParam && !!selectedGenerationForViewer;
 
   const ViewerLoading = () => (
-    <div className="flex-grow flex flex-col items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-morado-gradient"></div>
-      <p className="mt-4 text-white">Cargando modelo...</p>
+    <div className="flex-grow flex flex-col items-center justify-center h-full">
+      <BrandedSpinner size="md" text="Cargando modelo..." />
     </div>
   );
-
+  
   return (
     <section
       className={`bg-white dark:bg-fondologin transition-all duration-300 ease-in-out w-full flex flex-col h-[calc(100vh-4rem)] ${
@@ -82,9 +82,10 @@ export const Visualizador = ({ isCollapsed }) => {
         {isLoadingViewer ? (
           <ViewerLoading />
         ) : isViewerOpen ? (
-          <div className="flex-grow flex flex-col min-h-0 bg-white dark:bg-gradient-to-br from-principal via-[#0F102F] to-principal border-2 border-gray-200 dark:border-linea/20 rounded-3xl shadow-lg dark:shadow-2xl dark:shadow-morado-gradient/10 overflow-hidden">
-            <div className="flex items-center justify-between p-3 sm:p-4 bg-gray-50 dark:bg-black/20 border-b border-gray-200 dark:border-linea/30 flex-shrink-0">
+          <div className="flex-grow flex flex-col min-h-0 bg-transparent rounded-3xl overflow-hidden">
+            <div className="flex items-center justify-between p-3 sm:p-4 mb-4 bg-gray-50 dark:bg-principal/30 border border-gray-200 dark:border-linea/20 rounded-2xl flex-shrink-0">
               <h3 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-azul-gradient to-morado-gradient text-transparent bg-clip-text truncate pr-4">
+                {t("visualizer_page.viewer_title_prefix")}
                 {selectedGenerationForViewer.generation_name}
               </h3>
               <button
@@ -95,17 +96,20 @@ export const Visualizador = ({ isCollapsed }) => {
                 <X size={20} weight="bold" />
               </button>
             </div>
-            <div className="flex-grow p-2 sm:p-4 min-h-0">
-              <div className="w-full h-full bg-gray-100 dark:bg-black/20 rounded-2xl overflow-hidden">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 flex-grow min-h-0">
+              <div className="lg:col-span-3 min-h-[400px] lg:min-h-0">
                 <ModelResultViewer
                   modelUrl={selectedGenerationForViewer.modelUrl}
                   downloadFilename={`${selectedGenerationForViewer.generation_name}.glb`}
                 />
               </div>
+              <div className="lg:col-span-1 min-h-[300px] lg:min-h-0">
+                <DetailsPanel generation={selectedGenerationForViewer} />
+              </div>
             </div>
           </div>
         ) : (
-          <div className="flex flex-col">
+          <div className="flex flex-col flex-grow">
             <div className="mb-8 flex-shrink-0">
               <div className="flex items-center gap-4 mb-3">
                 <div>
@@ -133,35 +137,19 @@ export const Visualizador = ({ isCollapsed }) => {
                     {GENERATION_TYPES.map((type) => {
                       const IconComponent = type.icon;
                       const isActive = selectedTab === type.id;
-                      const tabTranslations = t(type.tabLabelKey, {
-                        returnObjects: true,
-                      });
-
+                      const tabTranslations = t(type.tabLabelKey, { returnObjects: true });
                       return (
                         <button
                           key={type.id}
                           className={`relative flex items-center gap-1.5 px-2 lg:px-3 py-3 rounded-xl font-medium text-xs lg:text-sm transition-all duration-300 ease-in-out transform group whitespace-nowrap flex-1 min-w-0 justify-center
-                          ${
-                            isActive
-                              ? "bg-gradient-to-r from-azul-gradient to-morado-gradient text-white shadow-xl border border-white/20"
-                              : "bg-white dark:bg-bg-btn-dash/30 text-gray-500 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-bg-btn-dash hover:text-gray-800 dark:hover:text-white hover:scale-105 hover:shadow-lg border border-gray-200 dark:border-transparent dark:hover:border-linea/30"
-                          }`}
+                          ${isActive ? "bg-gradient-to-r from-azul-gradient to-morado-gradient text-white shadow-xl border border-white/20" : "bg-white dark:bg-bg-btn-dash/30 text-gray-500 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-bg-btn-dash hover:text-gray-800 dark:hover:text-white hover:scale-105 hover:shadow-lg border border-gray-200 dark:border-transparent dark:hover:border-linea/30"}`}
                           onClick={() => handleTabClick(type.id)}
                         >
-                          <IconComponent
-                            size={16}
-                            className={`transition-all duration-300 flex-shrink-0 ${isActive ? "text-white drop-shadow-sm" : "text-azul-gradient group-hover:text-white"}`}
-                          />
-                          <span
-                            className={`font-semibold tracking-wide truncate text-center ${isCollapsed ? "hidden sm:inline" : "hidden lg:inline"}`}
-                          >
-                            {isCollapsed
-                              ? tabTranslations.label
-                              : tabTranslations.short_label}
+                          <IconComponent size={16} className={`transition-all duration-300 flex-shrink-0 ${isActive ? "text-white drop-shadow-sm" : "text-azul-gradient group-hover:text-white"}`}/>
+                          <span className={`font-semibold tracking-wide truncate text-center ${isCollapsed ? "hidden sm:inline" : "hidden lg:inline"}`}>
+                            {isCollapsed ? tabTranslations.label : tabTranslations.short_label}
                           </span>
-                          {!isActive && (
-                            <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-azul-gradient/0 via-azul-gradient/5 to-morado-gradient/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                          )}
+                          {!isActive && (<div className="absolute inset-0 rounded-xl bg-gradient-to-r from-azul-gradient/0 via-azul-gradient/5 to-morado-gradient/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>)}
                         </button>
                       );
                     })}
