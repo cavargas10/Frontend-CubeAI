@@ -27,9 +27,11 @@ const ImagePreview = ({ src, alt, label }) => (
       className="w-full h-full object-contain p-2"
       loading="lazy"
     />
-    <div className="absolute inset-x-0 bottom-0 py-1 text-center bg-black/50 text-white text-xs backdrop-blur-sm">
-      {label}
-    </div>
+    {label && (
+      <div className="absolute inset-x-0 bottom-0 py-1 text-center bg-black/50 text-white text-xs backdrop-blur-sm">
+        {label}
+      </div>
+    )}
   </div>
 );
 
@@ -41,8 +43,6 @@ export const DetailsPanel = ({ generation }) => {
   const {
     generation_name,
     timestamp,
-    downloads,
-    prediction_type,
     raw_data = {},
   } = generation;
 
@@ -86,7 +86,7 @@ export const DetailsPanel = ({ generation }) => {
         
         {raw_data.input_image_urls && (
           <DetailItem icon={<ImageIcon size={16} />} label="Vistas de Entrada">
-            <div className="grid grid-cols-3 gap-2">
+            <div className="flex flex-col gap-3">
               <ImagePreview src={raw_data.input_image_urls.frontal} alt="Vista frontal" label="Frontal" />
               <ImagePreview src={raw_data.input_image_urls.lateral} alt="Vista lateral" label="Lateral" />
               <ImagePreview src={raw_data.input_image_urls.trasera} alt="Vista trasera" label="Trasera" />
@@ -112,19 +112,6 @@ export const DetailsPanel = ({ generation }) => {
               "{raw_data.description}"
             </p>
           </DetailItem>
-        )}
-      </div>
-
-      <div className="flex-shrink-0 pt-4">
-        {downloads && downloads.length > 0 && (
-          <a
-            href={downloads[0].url}
-            download={`${generation_name}.glb`}
-            className="w-full text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-3 rounded-lg flex items-center justify-center gap-2 transition-all hover:shadow-lg text-white"
-          >
-            <DownloadSimple size={20} weight="bold" />
-            Descargar {downloads[0].format}
-          </a>
         )}
       </div>
     </div>
