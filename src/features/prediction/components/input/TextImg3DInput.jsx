@@ -122,7 +122,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
   const handleConfirmRegenerateModel = async () => {
     setShowRegenerateModal(false);
     if (!user || !predictionResult) return;
-    clearResult(PREDICTION_TYPE);
+    clearResult(PREDICTION_TYPE);    
     const payload = { imageUrl: generatedImageUrl, prompt: subject, selectedStyle };
     await submitPrediction(PREDICTION_TYPE, payload, predictionResult.generation_name);
   };
@@ -247,17 +247,18 @@ export const TextImg3DInput = ({ isCollapsed }) => {
                     </button>
                   ) : currentStep === 2 ? (
                     <div className="flex items-center gap-2">
-                      <button onClick={handleModelGeneration} disabled={isButtonDisabled} className="flex-grow text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all hover:shadow-lg disabled:opacity-60 text-white">
-                          <Cube size={20} weight="bold" />
-                          {t("generation_pages.text_image_to_3d_steps.generate_3d_button")}
+                      <button onClick={handleImageGeneration} disabled={isButtonDisabled} className="w-1/2 text-sm font-semibold bg-gray-200 dark:bg-linea/50 text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-linea/80 py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all hover:scale-105">
+                          <ArrowCounterClockwise size={18} weight="bold" />
+                          {t("generation_pages.text_image_to_3d_steps.regenerate_2d_button")}
                       </button>
-                      <button onClick={handleImageGeneration} disabled={isButtonDisabled} className="flex-shrink-0 text-base font-semibold bg-gray-200 dark:bg-linea/50 py-2.5 rounded-lg px-4 flex items-center justify-center gap-2 transition-all hover:scale-105" title="Regenerar Imagen">
-                          <ArrowCounterClockwise size={20} weight="bold" />
+                      <button onClick={handleModelGeneration} disabled={isButtonDisabled} className="w-1/2 text-sm font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all hover:shadow-lg disabled:opacity-60 text-white">
+                          <Cube size={18} weight="bold" />
+                          {t("generation_pages.text_image_to_3d_steps.generate_3d_button")}
                       </button>
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
-                       <button onClick={handleRegenerateModelClick} disabled={isButtonDisabled} className="flex-grow text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all hover:shadow-lg disabled:opacity-60 text-white">
+                       <button onClick={handleRegenerateModelClick} disabled={isJobActive} className="flex-grow text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all hover:shadow-lg disabled:opacity-60 text-white">
                         <ArrowCounterClockwise size={20} weight="bold" />
                         Regenerar Modelo
                       </button>
