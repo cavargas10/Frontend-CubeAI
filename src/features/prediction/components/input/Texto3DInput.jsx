@@ -193,7 +193,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
                     )}
                     value={generationName}
                     onChange={(e) => setGenerationName(e.target.value)}
-                    disabled={isFormDisabled || isResultReady} // Un nombre no se puede cambiar en la regeneración
+                    disabled={isFormDisabled || isResultReady}
                     className={`w-full p-2 rounded-lg bg-white dark:bg-principal/50 border-2 text-gray-800 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300 disabled:opacity-70 ${
                       generationName.trim()
                         ? "border-azul-gradient"
@@ -256,7 +256,7 @@ export const Texto3DInput = ({ isCollapsed }) => {
                       className="w-full text-base font-semibold bg-gray-400 dark:bg-gray-600 py-2.5 rounded-lg border-none flex items-center justify-center gap-2 text-white cursor-wait"
                     >
                       <InlineSpinner className="h-5 w-5" />
-                      Generando...
+                      {t("generation_pages.common.generating_button")}
                     </button>
                   ) : isResultReady ? (
                     <div className="flex items-center gap-2">
@@ -266,12 +266,12 @@ export const Texto3DInput = ({ isCollapsed }) => {
                         className="flex-grow text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2.5 rounded-lg border-none flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-lg hover:shadow-morado-gradient/20 hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 disabled:cursor-not-allowed text-white"
                       >
                         <ArrowCounterClockwise size={20} weight="bold" />
-                        Regenerar
+                        {t("generation_pages.common.regenerate_button")}
                       </button>
                       <button
                         onClick={resetComponentState}
                         className="flex-shrink-0 w-12 text-base font-semibold bg-gray-200 dark:bg-linea/50 text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-linea/80 py-2.5 rounded-lg border-none flex items-center justify-center gap-2 transition-all duration-300 hover:scale-105"
-                        title="Nuevo Proyecto"
+                        title={t("generation_pages.common.new_project_button")}
                       >
                         <FilePlus size={20} weight="bold" />
                       </button>

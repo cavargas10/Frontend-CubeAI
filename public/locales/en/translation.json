@@ -248,7 +248,14 @@
       "req_lowercase": "Include at least one lowercase letter (a-z)",
       "req_number": "Contain at least one number (0-9)",
       "req_special": "Contain at least one special character (!@#$...)",
-      "understood_button": "Got it"
+      "understood_button": "Got it",
+      "regenerate_confirmation": {
+        "title": "Confirm Regeneration",
+        "message_prefix": "You are about to regenerate",
+        "message_suffix": "The current 3D model will be deleted and replaced by the new one.",
+        "confirm_button": "Yes, Regenerate",
+        "cancel_button": "Cancel"
+      }
     },
     "password_strength_labels": {
       "very_weak": "Very Weak",
@@ -388,6 +395,15 @@
       "upload_model_prompt": "Drag a file here or click",
       "texture_button": "Generate Texture"
     },
+    "details_panel": {
+      "creation_date": "Creation Date",
+      "input_image": "Input Image",
+      "input_views": "Input Views",
+      "generated_2d_image": "Generated 2D Image",
+      "texture_image": "Texture Image",
+      "sketch_description": "Sketch Description",
+      "download_button": "Download"
+    },
     "common": {
       "generation_name_label": "Generation Name",
       "prompt_label": "Prompt",
@@ -395,6 +411,10 @@
       "upload_image_label": "Upload your Image",
       "upload_views_label": "Upload your Views",
       "generate_button": "Generate 3D Model",
+      "regenerate_button": "Regenerate",
+      "regenerate_model_button": "Regenerate Model",
+      "new_project_button": "New Project",
+      "generating_button": "Generating...",
       "name_placeholder_generic": "e.g., My new creation",
       "prompt_placeholder_generic": "Describe the 3D model in detail...",
       "drag_and_drop_prompt": "Drag an image or click to upload",

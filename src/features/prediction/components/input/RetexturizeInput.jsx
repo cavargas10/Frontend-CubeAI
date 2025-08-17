@@ -138,7 +138,9 @@ export const RetexturizeInput = ({ isCollapsed }) => {
 
   const handlePreviewUpload = useCallback(
     async (dataURL) => {
-      if (!user || !predictionResult?.generation_name || predictionResult?.previewImageUrl) return;
+      if (
+        !user || !predictionResult?.generation_name || predictionResult?.previewImageUrl
+      ) return;
       try {
         const token = await user.getIdToken();
         const previewBlob = dataURLtoBlob(dataURL);
@@ -155,7 +157,8 @@ export const RetexturizeInput = ({ isCollapsed }) => {
   );
 
   const isFormDisabled = isJobActive;
-  const isButtonDisabled = isJobActive || !generationName.trim() || !modelFile || !textureFile;
+  const isButtonDisabled =
+    isJobActive || !generationName.trim() || !modelFile || !textureFile;
   const showErrorModal = !!finalError;
 
   return (
@@ -188,7 +191,7 @@ export const RetexturizeInput = ({ isCollapsed }) => {
                   </div>
                   <input
                     type="text"
-                    placeholder="Ej: Personaje con nueva textura"
+                    placeholder={t("generation_pages.common.name_placeholder_generic")}
                     value={generationName}
                     onChange={(e) => setGenerationName(e.target.value)}
                     disabled={isFormDisabled || isResultReady}
@@ -231,15 +234,15 @@ export const RetexturizeInput = ({ isCollapsed }) => {
                   {isFormDisabled ? (
                     <button disabled className="w-full text-base font-semibold bg-gray-400 dark:bg-gray-600 py-3 rounded-lg flex items-center justify-center gap-2 text-white cursor-wait">
                       <InlineSpinner className="h-5 w-5" />
-                      Generando...
+                      {t("generation_pages.common.generating_button")}
                     </button>
                   ) : isResultReady ? (
                      <div className="flex items-center gap-2">
                       <button onClick={handleRegenerateClick} disabled={isButtonDisabled} className="flex-grow text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-3 rounded-lg flex items-center justify-center gap-2 transition-all hover:shadow-lg disabled:opacity-60 text-white">
                         <ArrowCounterClockwise size={20} weight="bold" />
-                        Regenerar
+                        {t("generation_pages.common.regenerate_button")}
                       </button>
-                      <button onClick={resetComponentState} className="flex-shrink-0 w-12 text-base font-semibold bg-gray-200 dark:bg-linea/50 py-3 rounded-lg flex items-center justify-center transition-all hover:scale-105" title="Nuevo Proyecto">
+                      <button onClick={resetComponentState} className="flex-shrink-0 w-12 text-base font-semibold bg-gray-200 dark:bg-linea/50 py-3 rounded-lg flex items-center justify-center transition-all hover:scale-105" title={t("generation_pages.common.new_project_button")}>
                         <FilePlus size={20} weight="bold" />
                       </button>
                     </div>

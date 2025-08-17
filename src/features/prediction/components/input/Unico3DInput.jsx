@@ -231,7 +231,10 @@ export const Unico3DInput = ({ isCollapsed }) => {
                       </div>
                     ) : (
                       <div className="flex flex-col items-center justify-center p-4 min-h-[200px] sm:min-h-[220px] xl:min-h-0">
-                        <UploadSimple className="w-10 h-10 text-gray-400 mb-3" weight="light" />
+                        <UploadSimple
+                          className="w-10 h-10 text-gray-400 mb-3"
+                          weight="light"
+                        />
                         <p className="text-sm text-gray-500 dark:text-gray-300">
                           {t("generation_pages.common.drag_and_drop_prompt")}
                         </p>
@@ -247,7 +250,7 @@ export const Unico3DInput = ({ isCollapsed }) => {
                   {isFormDisabled ? (
                     <button disabled className="w-full text-base font-semibold bg-gray-400 dark:bg-gray-600 py-3 rounded-lg flex items-center justify-center gap-2 text-white cursor-wait">
                       <InlineSpinner className="h-5 w-5" />
-                      Generando...
+                      {t("generation_pages.common.generating_button")}
                     </button>
                   ) : isResultReady ? (
                     <div className="flex items-center gap-2">
@@ -257,12 +260,12 @@ export const Unico3DInput = ({ isCollapsed }) => {
                         className="flex-grow text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-3 rounded-lg flex items-center justify-center gap-2 transition-all hover:shadow-lg disabled:opacity-60 text-white"
                       >
                         <ArrowCounterClockwise size={20} weight="bold" />
-                        Regenerar
+                        {t("generation_pages.common.regenerate_button")}
                       </button>
                       <button
                         onClick={resetComponentState}
                         className="flex-shrink-0 w-12 text-base font-semibold bg-gray-200 dark:bg-linea/50 py-3 rounded-lg flex items-center justify-center transition-all hover:scale-105"
-                        title="Nuevo Proyecto"
+                        title={t("generation_pages.common.new_project_button")}
                       >
                         <FilePlus size={20} weight="bold" />
                       </button>
@@ -280,7 +283,6 @@ export const Unico3DInput = ({ isCollapsed }) => {
                 </div>
               </div>
             </div>
-
             <div className="xl:col-span-3 flex-grow">
               <div className="h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] xl:min-h-0 border-2 border-gray-200 dark:border-linea/20 rounded-3xl overflow-hidden">
                 <Unico3DResult onFirstLoad={handlePreviewUpload} />

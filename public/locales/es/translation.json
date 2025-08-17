@@ -248,7 +248,14 @@
       "req_lowercase": "Incluir al menos una letra minúscula (a-z)",
       "req_number": "Contener al menos un número (0-9)",
       "req_special": "Contener al menos un carácter especial (!@#$...)",
-      "understood_button": "Entendido"
+      "understood_button": "Entendido",
+      "regenerate_confirmation": {
+        "title": "Confirmar Regeneración",
+        "message_prefix": "Estás a punto de regenerar",
+        "message_suffix": "El modelo 3D actual será eliminado y reemplazado por el nuevo.",
+        "confirm_button": "Sí, Regenerar",
+        "cancel_button": "Cancelar"
+      }
     },
     "password_strength_labels": {
       "very_weak": "Muy débil",
@@ -388,6 +395,15 @@
       "upload_model_prompt": "Arrastra un archivo aquí o haz clic",
       "texture_button": "Generar Textura"
     },
+    "details_panel": {
+      "creation_date": "Fecha de Creación",
+      "input_image": "Imagen de Entrada",
+      "input_views": "Vistas de Entrada",
+      "generated_2d_image": "Imagen 2D Generada",
+      "texture_image": "Imagen de Textura",
+      "sketch_description": "Descripción del Boceto",
+      "download_button": "Descargar"
+    },
     "common": {
       "generation_name_label": "Nombre de la Generación",
       "prompt_label": "Prompt",
@@ -395,6 +411,10 @@
       "upload_image_label": "Sube tu Imagen",
       "upload_views_label": "Sube tus Vistas",
       "generate_button": "Generar Modelo 3D",
+      "regenerate_button": "Regenerar",
+      "regenerate_model_button": "Regenerar Modelo",
+      "new_project_button": "Nuevo Proyecto",
+      "generating_button": "Generando...",
       "name_placeholder_generic": "Ej: Mi nueva creación",
       "prompt_placeholder_generic": "Describe detalladamente el modelo 3D...",
       "drag_and_drop_prompt": "Arrastra una imagen o haz clic",

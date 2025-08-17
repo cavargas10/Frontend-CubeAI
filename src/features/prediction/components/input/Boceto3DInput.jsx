@@ -130,14 +130,20 @@ export const Boceto3DInput = ({ isCollapsed }) => {
   const handlePreviewUpload = useCallback(
     async (dataURL) => {
       if (
-        !user || !prediction_boceto3d_result?.generation_name || prediction_boceto3d_result?.previewImageUrl
-      ) return;
+        !user ||
+        !prediction_boceto3d_result?.generation_name ||
+        prediction_boceto3d_result?.previewImageUrl
+      )
+        return;
       try {
         const token = await user.getIdToken();
         const previewBlob = dataURLtoBlob(dataURL);
         const formData = new FormData();
         formData.append("preview", previewBlob, "preview.png");
-        formData.append("generation_name", prediction_boceto3d_result.generation_name);
+        formData.append(
+          "generation_name",
+          prediction_boceto3d_result.generation_name
+        );
         formData.append("prediction_type_api", PREDICTION_TYPE);
         await uploadPredictionPreview(token, formData);
       } catch (error) {
@@ -183,12 +189,16 @@ export const Boceto3DInput = ({ isCollapsed }) => {
                   </div>
                   <input
                     type="text"
-                    placeholder={t("generation_pages.common.name_placeholder_generic")}
+                    placeholder={t(
+                      "generation_pages.common.name_placeholder_generic"
+                    )}
                     value={generationName}
                     onChange={(e) => setGenerationName(e.target.value)}
                     disabled={isFormDisabled || isResultReady}
                     className={`w-full p-2 rounded-lg bg-white dark:bg-principal/50 border-2 text-gray-800 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300 disabled:opacity-70 ${
-                      generationName.trim() ? "border-azul-gradient" : "border-gray-300 dark:border-linea/30"
+                      generationName.trim()
+                        ? "border-azul-gradient"
+                        : "border-gray-300 dark:border-linea/30"
                     }`}
                   />
                 </div>
@@ -202,12 +212,16 @@ export const Boceto3DInput = ({ isCollapsed }) => {
                   </div>
                   <input
                     type="text"
-                    placeholder={t("generation_pages.common.canvas_description_placeholder")}
+                    placeholder={t(
+                      "generation_pages.common.canvas_description_placeholder"
+                    )}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     disabled={isFormDisabled}
                     className={`w-full p-2 rounded-lg bg-white dark:bg-principal/50 border-2 text-gray-800 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-azul-gradient/50 focus:border-azul-gradient transition-all duration-300 ${
-                      description.trim() ? "border-azul-gradient" : "border-gray-300 dark:border-linea/30"
+                      description.trim()
+                        ? "border-azul-gradient"
+                        : "border-gray-300 dark:border-linea/30"
                     }`}
                   />
                 </div>
@@ -239,11 +253,18 @@ export const Boceto3DInput = ({ isCollapsed }) => {
                     />
                     {imagePreview ? (
                       <div className="w-full h-full relative min-h-[150px] sm:min-h-[180px] xl:min-h-0">
-                        <img src={imagePreview} alt="Vista previa del boceto" className="absolute inset-0 w-full h-full object-contain rounded-lg"/>
+                        <img
+                          src={imagePreview}
+                          alt="Vista previa del boceto"
+                          className="absolute inset-0 w-full h-full object-contain rounded-lg"
+                        />
                       </div>
                     ) : (
                       <div className="flex flex-col items-center justify-center p-4 min-h-[150px] sm:min-h-[180px] xl:min-h-0">
-                        <UploadSimple className="w-8 h-8 text-gray-400 mb-2" weight="light" />
+                        <UploadSimple
+                          className="w-8 h-8 text-gray-400 mb-2"
+                          weight="light"
+                        />
                         <p className="text-sm text-gray-500 dark:text-gray-300">
                           {t("generation_pages.common.drag_and_drop_prompt")}
                         </p>
@@ -257,9 +278,12 @@ export const Boceto3DInput = ({ isCollapsed }) => {
 
                 <div className="mt-auto flex-shrink-0">
                   {isFormDisabled ? (
-                    <button disabled className="w-full text-base font-semibold bg-gray-400 dark:bg-gray-600 py-2.5 rounded-lg flex items-center justify-center gap-2 text-white cursor-wait">
+                    <button
+                      disabled
+                      className="w-full text-base font-semibold bg-gray-400 dark:bg-gray-600 py-2.5 rounded-lg flex items-center justify-center gap-2 text-white cursor-wait"
+                    >
                       <InlineSpinner className="h-5 w-5" />
-                      Generando...
+                      {t("generation_pages.common.generating_button")}
                     </button>
                   ) : isResultReady ? (
                     <div className="flex items-center gap-2">
@@ -269,12 +293,12 @@ export const Boceto3DInput = ({ isCollapsed }) => {
                         className="flex-grow text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all hover:shadow-lg disabled:opacity-60 text-white"
                       >
                         <ArrowCounterClockwise size={20} weight="bold" />
-                        Regenerar
+                        {t("generation_pages.common.regenerate_button")}
                       </button>
                       <button
                         onClick={resetComponentState}
                         className="flex-shrink-0 w-12 text-base font-semibold bg-gray-200 dark:bg-linea/50 py-2.5 rounded-lg flex items-center justify-center transition-all hover:scale-105"
-                        title="Nuevo Proyecto"
+                        title={t("generation_pages.common.new_project_button")}
                       >
                         <FilePlus size={20} weight="bold" />
                       </button>
@@ -299,7 +323,10 @@ export const Boceto3DInput = ({ isCollapsed }) => {
             </div>
           </div>
         </div>
-        <ProgressModal show={isJobActive && !finalError} jobStatus={jobStatus} />
+        <ProgressModal
+          show={isJobActive && !finalError}
+          jobStatus={jobStatus}
+        />
         <ErrorModal
           showModal={showErrorModal}
           closeModal={clearError}

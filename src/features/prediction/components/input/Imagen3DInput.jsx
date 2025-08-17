@@ -111,7 +111,7 @@ export const Imagen3DInput = ({ isCollapsed }) => {
 
     clearResult(PREDICTION_TYPE);
     setIsResultReady(false);
-    
+
     const formData = new FormData();
     formData.append("image", imageFile);
 
@@ -247,7 +247,7 @@ export const Imagen3DInput = ({ isCollapsed }) => {
                   {isFormDisabled ? (
                     <button disabled className="w-full text-base font-semibold bg-gray-400 dark:bg-gray-600 py-3 rounded-lg flex items-center justify-center gap-2 text-white cursor-wait">
                       <InlineSpinner className="h-5 w-5" />
-                      Generando...
+                      {t("generation_pages.common.generating_button")}
                     </button>
                   ) : isResultReady ? (
                     <div className="flex items-center gap-2">
@@ -257,12 +257,12 @@ export const Imagen3DInput = ({ isCollapsed }) => {
                         className="flex-grow text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-3 rounded-lg flex items-center justify-center gap-2 transition-all hover:shadow-lg disabled:opacity-60 text-white"
                       >
                         <ArrowCounterClockwise size={20} weight="bold" />
-                        Regenerar
+                        {t("generation_pages.common.regenerate_button")}
                       </button>
                       <button
                         onClick={resetComponentState}
                         className="flex-shrink-0 w-12 text-base font-semibold bg-gray-200 dark:bg-linea/50 py-3 rounded-lg flex items-center justify-center transition-all hover:scale-105"
-                        title="Nuevo Proyecto"
+                        title={t("generation_pages.common.new_project_button")}
                       >
                         <FilePlus size={20} weight="bold" />
                       </button>

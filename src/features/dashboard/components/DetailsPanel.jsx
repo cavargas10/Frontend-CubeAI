@@ -3,7 +3,6 @@ import {
   TextT,
   Image as ImageIcon,
   CalendarBlank,
-  DownloadSimple,
 } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 
@@ -66,12 +65,18 @@ export const DetailsPanel = ({ generation }) => {
           </h2>
         </DetailItem>
 
-        <DetailItem icon={<CalendarBlank size={16} />} label="Fecha de Creación">
+        <DetailItem
+          icon={<CalendarBlank size={16} />}
+          label={t("generation_pages.details_panel.creation_date")}
+        >
           {formatDate(timestamp)}
         </DetailItem>
 
         {raw_data.user_prompt && (
-          <DetailItem icon={<TextT size={16} />} label={t("generation_pages.common.prompt_label")}>
+          <DetailItem
+            icon={<TextT size={16} />}
+            label={t("generation_pages.common.prompt_label")}
+          >
             <p className="italic bg-gray-100 dark:bg-principal/50 p-2 rounded-md">
               "{raw_data.user_prompt}"
             </p>
@@ -79,36 +84,72 @@ export const DetailsPanel = ({ generation }) => {
         )}
 
         {raw_data.input_image_url && (
-          <DetailItem icon={<ImageIcon size={16} />} label="Imagen de Entrada">
-            <ImagePreview src={raw_data.input_image_url} alt="Imagen de entrada" />
+          <DetailItem
+            icon={<ImageIcon size={16} />}
+            label={t("generation_pages.details_panel.input_image")}
+          >
+            <ImagePreview
+              src={raw_data.input_image_url}
+              alt={t("generation_pages.details_panel.input_image")}
+            />
           </DetailItem>
         )}
-        
+
         {raw_data.input_image_urls && (
-          <DetailItem icon={<ImageIcon size={16} />} label="Vistas de Entrada">
+          <DetailItem
+            icon={<ImageIcon size={16} />}
+            label={t("generation_pages.details_panel.input_views")}
+          >
             <div className="flex flex-col gap-3">
-              <ImagePreview src={raw_data.input_image_urls.frontal} alt="Vista frontal" label="Frontal" />
-              <ImagePreview src={raw_data.input_image_urls.lateral} alt="Vista lateral" label="Lateral" />
-              <ImagePreview src={raw_data.input_image_urls.trasera} alt="Vista trasera" label="Trasera" />
+              <ImagePreview
+                src={raw_data.input_image_urls.frontal}
+                alt={t("methods.multi_image_to_3d.views.0")}
+                label={t("methods.multi_image_to_3d.views.0")}
+              />
+              <ImagePreview
+                src={raw_data.input_image_urls.lateral}
+                alt={t("methods.multi_image_to_3d.views.1")}
+                label={t("methods.multi_image_to_3d.views.1")}
+              />
+              <ImagePreview
+                src={raw_data.input_image_urls.trasera}
+                alt={t("methods.multi_image_to_3d.views.2")}
+                label={t("methods.multi_image_to_3d.views.2")}
+              />
             </div>
           </DetailItem>
         )}
 
         {raw_data.input_2d_image_url && (
-           <DetailItem icon={<ImageIcon size={16} />} label="Imagen 2D Generada">
-            <ImagePreview src={raw_data.input_2d_image_url} alt="Imagen 2D usada como entrada" />
+          <DetailItem
+            icon={<ImageIcon size={16} />}
+            label={t("generation_pages.details_panel.generated_2d_image")}
+          >
+            <ImagePreview
+              src={raw_data.input_2d_image_url}
+              alt={t("generation_pages.details_panel.generated_2d_image")}
+            />
           </DetailItem>
         )}
-        
+
         {raw_data.texture_image_url && (
-           <DetailItem icon={<ImageIcon size={16} />} label="Imagen de Textura">
-            <ImagePreview src={raw_data.texture_image_url} alt="Imagen de textura usada" />
+          <DetailItem
+            icon={<ImageIcon size={16} />}
+            label={t("generation_pages.details_panel.texture_image")}
+          >
+            <ImagePreview
+              src={raw_data.texture_image_url}
+              alt={t("generation_pages.details_panel.texture_image")}
+            />
           </DetailItem>
         )}
 
         {raw_data.description && (
-          <DetailItem icon={<TextT size={16} />} label="Descripción del Boceto">
-             <p className="italic bg-gray-100 dark:bg-principal/50 p-2 rounded-md">
+          <DetailItem
+            icon={<TextT size={16} />}
+            label={t("generation_pages.details_panel.sketch_description")}
+          >
+            <p className="italic bg-gray-100 dark:bg-principal/50 p-2 rounded-md">
               "{raw_data.description}"
             </p>
           </DetailItem>

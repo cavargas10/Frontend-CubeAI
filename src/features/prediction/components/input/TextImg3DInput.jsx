@@ -122,7 +122,8 @@ export const TextImg3DInput = ({ isCollapsed }) => {
   const handleConfirmRegenerateModel = async () => {
     setShowRegenerateModal(false);
     if (!user || !predictionResult) return;
-    clearResult(PREDICTION_TYPE);    
+    clearResult(PREDICTION_TYPE);
+    
     const payload = { imageUrl: generatedImageUrl, prompt: subject, selectedStyle };
     await submitPrediction(PREDICTION_TYPE, payload, predictionResult.generation_name);
   };
@@ -238,7 +239,7 @@ export const TextImg3DInput = ({ isCollapsed }) => {
                   {isJobActive ? (
                      <button disabled className="w-full text-base font-semibold bg-gray-400 dark:bg-gray-600 py-2.5 rounded-lg flex items-center justify-center gap-2 text-white cursor-wait">
                         <InlineSpinner className="h-5 w-5" />
-                        Generando...
+                        {t("generation_pages.common.generating_button")}
                     </button>
                   ) : currentStep === 1 ? (
                     <button onClick={handleImageGeneration} disabled={isButtonDisabled} className="w-full text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all hover:shadow-lg disabled:opacity-60 text-white">
@@ -256,13 +257,13 @@ export const TextImg3DInput = ({ isCollapsed }) => {
                           {t("generation_pages.text_image_to_3d_steps.generate_3d_button")}
                       </button>
                     </div>
-                  ) : (
+                  ) : ( // currentStep === 3
                     <div className="flex items-center gap-2">
                        <button onClick={handleRegenerateModelClick} disabled={isJobActive} className="flex-grow text-base font-semibold bg-gradient-to-r from-azul-gradient to-morado-gradient py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all hover:shadow-lg disabled:opacity-60 text-white">
                         <ArrowCounterClockwise size={20} weight="bold" />
-                        Regenerar Modelo
+                        {t("generation_pages.common.regenerate_model_button")}
                       </button>
-                      <button onClick={resetComponentState} className="flex-shrink-0 w-12 text-base font-semibold bg-gray-200 dark:bg-linea/50 py-2.5 rounded-lg flex items-center justify-center transition-all hover:scale-105" title="Nuevo Proyecto">
+                      <button onClick={resetComponentState} className="flex-shrink-0 w-12 text-base font-semibold bg-gray-200 dark:bg-linea/50 py-2.5 rounded-lg flex items-center justify-center transition-all hover:scale-105" title={t("generation_pages.common.new_project_button")}>
                         <FilePlus size={20} weight="bold" />
                       </button>
                     </div>

@@ -1,5 +1,6 @@
 import { Modal, Button } from "flowbite-react";
 import { Warning, ArrowCounterClockwise } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 
 export const RegenerateConfirmationModal = ({
   showModal,
@@ -7,6 +8,8 @@ export const RegenerateConfirmationModal = ({
   onConfirm,
   generationName,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <Modal show={showModal} size="md" popup={true} onClose={closeModal}>
       <Modal.Body className="p-0 bg-transparent">
@@ -16,18 +19,18 @@ export const RegenerateConfirmationModal = ({
               <Warning size={32} color="#fff" weight="bold" />
             </div>
             <h3 className="text-xl font-bold text-gray-800 dark:text-white">
-              Confirmar Regeneración
+              {t("auth.modals.regenerate_confirmation.title")}
             </h3>
           </div>
           <p className="mb-6 text-sm text-gray-600 dark:text-gray-300">
-            Estás a punto de regenerar{" "}
+            {t("auth.modals.regenerate_confirmation.message_prefix")}{" "}
             <strong className="text-amber-500 dark:text-amber-400">
               "{generationName}"
             </strong>
             .
             <br />
             <span className="font-semibold text-gray-800 dark:text-white mt-2 block">
-              El modelo 3D actual será eliminado y reemplazado por el nuevo.
+              {t("auth.modals.regenerate_confirmation.message_suffix")}
             </span>
           </p>
           <div className="flex justify-center gap-4">
@@ -36,13 +39,13 @@ export const RegenerateConfirmationModal = ({
               onClick={onConfirm}
             >
               <ArrowCounterClockwise size={18} weight="bold" />
-              Sí, Regenerar
+              {t("auth.modals.regenerate_confirmation.confirm_button")}
             </Button>
             <Button
               className="flex-1 bg-gray-200 dark:bg-linea/50 text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-linea/80 font-semibold rounded-xl transition-all"
               onClick={closeModal}
             >
-              Cancelar
+              {t("auth.modals.regenerate_confirmation.cancel_button")}
             </Button>
           </div>
         </div>
